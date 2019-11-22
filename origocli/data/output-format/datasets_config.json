@@ -1,0 +1,14 @@
+{
+  "Id": {
+    "name": "Id",
+    "key": "Id"
+  },
+  "Title": {
+    "name": "Title",
+    "key": "title"
+  },
+  "Publisher": {
+    "name": "Publisher",
+    "key": "publisher"
+  }
+}

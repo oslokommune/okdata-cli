@@ -1,0 +1,10 @@
+{
+  "Id": {
+    "name": "Id",
+    "key": "Id"
+  },
+  "Filename": {
+    "name": "Filename",
+    "key": "filename"
+  }
+}

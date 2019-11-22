@@ -1,0 +1,23 @@
+{
+  "Publisher": {
+    "name": "Publisher",
+    "key": "publisher"
+  },
+  "Frequency": {
+    "name": "Frequency",
+    "key": "frequency"
+  },
+  "Objective": {
+    "name": "Objective",
+    "key": "objective"
+  },
+  "ContactPoint": {
+    "name": "Contact Point",
+    "key": "contactPoint",
+    "fields": [
+      "name",
+      "phone",
+      "email"
+    ]
+  }
+}

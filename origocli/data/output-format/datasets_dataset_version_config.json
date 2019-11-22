@@ -1,0 +1,25 @@
+{
+  "Id": {
+    "name": "Id",
+    "key": "Id"
+  },
+  "Edition": {
+    "name": "Edition",
+    "key": "edition"
+  },
+  "StartTime": {
+    "name": "Start Time",
+    "key": "startTime"
+  },
+  "EndTime": {
+    "name": "End Time",
+    "key": "endTime"
+  },
+  "Link": {
+    "name": "Link",
+    "key": "_links",
+    "fields": [
+      "self"
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "Id": {
+    "name": "Id",
+    "key": "Id"
+  },
+  "Version": {
+    "name": "Version",
+    "key": "version"
+  },
+  "Link": {
+    "name": "Link",
+    "key": "_links",
+    "fields": [
+      "self"
+    ]
+  }
+}
