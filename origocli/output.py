@@ -1,5 +1,4 @@
 import os
-import sys
 import json
 from prettytable import PrettyTable
 import logging
@@ -8,7 +7,7 @@ log = logging.getLogger()
 
 
 def get_script_path():
-    return os.path.dirname(os.path.realpath(sys.argv[0]))
+    return os.path.dirname(__file__)
 
 
 # Create a output printer
@@ -71,6 +70,7 @@ class TableOutput(PrettyTable):
         for key in self.config:
             name = self.config[key]["name"]
             self.align[name] = "l"
+
 
 # TODO: merge many outputs to one array of elements when listing a version
 class JsonOutput:

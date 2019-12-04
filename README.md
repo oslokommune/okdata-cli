@@ -7,21 +7,17 @@ This is the first version of the Origo CLI, and should be treated as a alpha-ver
 
 Coming soon: ```pip install origocli```
 
-Until then: see setup below for manual configuration of CLI & SDK
+Until then: see setup below for manual configuration of CLI
 
 # Setup
 Requirement: python 3.7
 
 ```
-git clone git@github.oslo.kommune.no:origo-dataplatform/origo-sdk-python.git
-  # Follow README.md to configure SDK
-git clone git@github.oslo.kommune.no:origo-dataplatform/origo-cli.git
-cd origo-sdk-python
-python3 -m venv .venv
-. .venv/bin/activate
-make init
-export PATH=$PATH:/path/to/origo-cli/bin
-export PYTHONPATH=$PYTHONPATH:/path/to/origo-sdk-python
+$ git clone git@github.oslo.kommune.no:origo-dataplatform/origo-cli.git
+$ cd origo-cli
+$ python3 -m venv .venv
+$ . .venv/bin/activate
+$ pip install -e .
 ```
 
 # Tests

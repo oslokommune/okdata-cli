@@ -1,4 +1,4 @@
-from origocli.cli import get_command_class
+from bin.cli import get_command_class
 from origocli.commands.datasets import DatasetsCommand
 
 
