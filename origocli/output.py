@@ -72,6 +72,7 @@ class TableOutput(PrettyTable):
             name = self.config[key]["name"]
             self.align[name] = "l"
 
+
 # TODO: merge many outputs to one array of elements when listing a version
 class JsonOutput:
     def __init__(self, config):
