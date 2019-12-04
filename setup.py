@@ -3,8 +3,6 @@ import setuptools
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-# TODO: remove python-keycloak-client, PyJWT & urllib3 - these are really requirements
-#   from the SDK moved here temporarily
 setuptools.setup(
     name="origo-cli",
     version="0.0.1",
@@ -14,14 +12,6 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages=setuptools.find_packages(),
-    install_requires=[
-        "PrettyTable",
-        "origo-sdk-python",
-        "docopt",
-        "requests",
-        "python-keycloak-client",
-        "PyJWT",
-        "urllib3",
-    ],
+    install_requires=["PrettyTable", "origo-sdk-python", "docopt", "requests"],
     entry_points={"console_scripts": ["origo=bin.cli:main"]},
 )
