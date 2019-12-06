@@ -16,10 +16,12 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     install_requires=[
         "PrettyTable",
+        "origo-sdk-python",
         "docopt",
         "requests",
         "python-keycloak-client",
         "PyJWT",
         "urllib3",
     ],
+    entry_points={"console_scripts": ["origo=bin.cli:main"]},
 )
