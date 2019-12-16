@@ -19,5 +19,7 @@ jobs:
       run: python3 -m pip install tox black pip-tools
     - name: Test with tox
       run: make test
+      env:
+        TOX_PARALLEL_NO_SPINNER: 1
 
 
