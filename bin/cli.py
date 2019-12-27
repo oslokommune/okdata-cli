@@ -24,3 +24,7 @@ def get_command_class(argv):
     if argv[1] in commands:
         return commands[argv[1]]
     return False
+
+
+if __name__ == "__main__":
+    main()
