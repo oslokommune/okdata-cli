@@ -1,7 +1,7 @@
 """Oslo :: Datasets
 
 Usage:
-  origo datasets ls [--format=<format> --env=<env>] [options]
+  origo datasets ls [--format=<format> --env=<env> --filter=<filter>] [options]
   origo datasets ls <datasetid> [<versionid> <editionid>][--format=<format> --env=<env> options]
   origo datasets cp <filepath> <datasetid> [<versionid> <editionid> --format=<format> --env=<env> options]
   origo datasets create [--file=<file --format=<format> --env=<env> options]
