@@ -16,6 +16,12 @@ options:
 from origocli.command import Command
 from origocli.output import create_output
 from origocli.io import read_stdin_or_filepath
+from origocli.date import (
+    date_now,
+    date_add_years,
+    DATE_SHORT_FORMAT,
+    DATE_METADATA_EDITION_FORMAT,
+)
 
 from origo.data.dataset import Dataset
 from origo.data.upload import Upload
@@ -56,7 +62,7 @@ class DatasetsCommand(Command):
     def datasets(self):
         try:
             self.log.info("Listing datasets")
-            datset_list = self.ds.get_datasets(filter={})
+            datset_list = self.ds.get_datasets(filter=self.opt("filter"))
             out = create_output(self.opt("format"), "datasets_config.json")
             out.add_rows(datset_list)
             self.print("Available datasets", out)
@@ -195,16 +201,31 @@ class DatasetsCommand(Command):
         except Exception as e:
             self.log.exception(f"Failed badly: {e}")
 
-    def resolve_or_load_edition(self, dataset_id, version_id):
+    def resolve_or_create_edition(self, dataset_id, version_id):
         self.log.info(f"Trying to resolve edition for {version_id} on {dataset_id}")
         edition_id = self.arg("editionid") or self.opt("editionid")
         if edition_id is not None:
             self.log.info(f"Found edition in arguments: {edition_id}")
             return edition_id
 
-        latest_edition = self.ds.get_latest_edition(dataset_id, version_id)
-        (_, _, edition_id) = latest_edition["Id"].split("/")
-        self.log.info(f"Found edition in latest version: {edition_id}")
+        description = f"Auto-created edition for {dataset_id}/{version_id}"
+        now = date_now()
+        date_time = now.strftime(DATE_SHORT_FORMAT)
+        end_time = date_add_years(now, 1).strftime(DATE_SHORT_FORMAT)
+        data = {
+            "edition": now.strftime(DATE_METADATA_EDITION_FORMAT),
+            "description": description,
+            "startTime": date_time,
+            "endTime": end_time,
+        }
+        self.log.info(
+            f"Creating new edition for: {dataset_id}/{version_id} with data: {data}"
+        )
+
+        edition = self.ds.create_edition(dataset_id, version_id, data)
+        self.log.info(f"Created edition: {edition}")
+        (_, _, edition_id) = edition["Id"].split("/")
+        self.log.info(f"returning: {edition_id}")
         return edition_id
 
     # #################################### #
@@ -215,7 +236,7 @@ class DatasetsCommand(Command):
         (ns, dataset_id) = self.arg("datasetid").split(":")
         self.log.info(f"Copying file to dataset: {dataset_id}")
         version_id = self.resolve_or_load_versionid(dataset_id)
-        edition_id = self.resolve_or_load_edition(dataset_id, version_id)
+        edition_id = self.resolve_or_create_edition(dataset_id, version_id)
         try:
             upload = Upload()
             self.log.info(
