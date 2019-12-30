@@ -1,14 +1,12 @@
 from datetime import datetime, date
 
 DATE_SHORT_FORMAT = "%Y-%m-%d"
-DATE_METADATA_EDITION_FORMAT = "%Y%m%dT%H%M%S"
+DATE_METADATA_EDITION_FORMAT = "%Y-%m-%dT%H:%M:%S+02:00"
 
 
 def date_add_years(d, years):
-    """Return a date that's `years` years after the date (or datetime)
-    object `d`. Return the same calendar date (month and day) in the
-    destination year, if it exists, otherwise use the following day
-    (thus changing February 29 to March 1).
+    """
+    Add N-year(s) to a current date object
 
     See: https://stackoverflow.com/questions/15741618/add-one-year-in-current-date-python
     """
