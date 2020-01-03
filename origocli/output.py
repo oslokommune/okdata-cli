@@ -109,5 +109,8 @@ class JsonOutput:
         for row in rows:
             self.add_row(row)
 
+    def __repr__(self):
+        return json.dumps(self.out)
+
     def __str__(self):
         return json.dumps(self.out)
