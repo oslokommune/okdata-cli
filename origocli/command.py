@@ -44,7 +44,12 @@ class Command:
         if not is_json:
             print(str)
         # Normally a return json value from the API
-        if payload:
+        if payload and is_json:
+            try:
+                print(json.dumps(payload))
+            except Exception:
+                print(payload)
+        elif payload:
             print(payload)
 
     def print_success(self, str):

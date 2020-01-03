@@ -13,7 +13,7 @@ Until then: see setup below for manual configuration of CLI
 Requirement: python 3.7
 
 ```
-git clone git@github.oslo.kommune.no:origo-dataplatform/origo-cli.git
+git clone git@github.com:oslokommune/origo-cli.git
 cd origo-cli
 python3 -m venv .venv
 . .venv/bin/activate
