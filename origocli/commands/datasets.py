@@ -18,8 +18,6 @@ from origocli.output import create_output
 from origocli.io import read_stdin_or_filepath
 from origocli.date import (
     date_now,
-    date_add_years,
-    DATE_SHORT_FORMAT,
     DATE_METADATA_EDITION_FORMAT,
 )
 
@@ -75,6 +73,14 @@ class DatasetsCommand(Command):
         try:
             set = self.ds.get_dataset(dataset_id)
             versions = self.ds.get_versions(dataset_id)
+            latest = self.ds.get_latest_version(dataset_id)
+            if self.opt("format") == "json":
+                list = {}
+                list["dataset"] = set
+                list["versions"] = versions
+                list["latest"] = latest
+                self.print("", list)
+                return
 
             out = create_output(self.opt("format"), "datasets_dataset_config.json")
             out.add_rows([set])
@@ -87,7 +93,6 @@ class DatasetsCommand(Command):
             out.add_rows(versions)
             self.print(f"\n\nVersions available for: {dataset_id}", out)
 
-            latest = self.ds.get_latest_version(dataset_id)
             out = create_output(
                 self.opt("format"), "datasets_dataset_versions_config.json"
             )
@@ -181,9 +186,7 @@ class DatasetsCommand(Command):
                 "datasets_dataset_version_edition_distributions_config.json",
             )
             out.add_rows(distributions)
-            self.print("")
-            self.print("Files available: ")
-            self.print(out)
+            self.print("Files available: ", out)
         except Exception as e:
             self.log.exception(f"Failed: {e}")
 
@@ -210,13 +213,9 @@ class DatasetsCommand(Command):
 
         description = f"Auto-created edition for {dataset_id}/{version_id}"
         now = date_now()
-        date_time = now.strftime(DATE_SHORT_FORMAT)
-        end_time = date_add_years(now, 1).strftime(DATE_SHORT_FORMAT)
         data = {
             "edition": now.strftime(DATE_METADATA_EDITION_FORMAT),
             "description": description,
-            "startTime": date_time,
-            "endTime": end_time,
         }
         self.log.info(
             f"Creating new edition for: {dataset_id}/{version_id} with data: {data}"
