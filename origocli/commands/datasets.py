@@ -7,6 +7,7 @@ Usage:
   origo datasets create [--file=<file --format=<format> --env=<env> options]
   origo datasets create-version <datasetid> [--file=<file> --format=<format> --env=<env> options]
   origo datasets create-edition <datasetid> [<versionid>] [--file=<file> --format=<format --env=<env> options]
+  origo datasets create-distribution <datasetid> [<versionid> <editionid>] [--file=<file> --format=<format --env=<env> options]
 
 options:
   -h --help
@@ -41,14 +42,19 @@ class DatasetsCommand(Command):
             self.create_dataset()
         elif self.cmd("cp") is True:
             self.copy_file()
+        elif (
+            self.arg("datasetid") is not None
+            and self.cmd("create-distribution") is True
+        ):
+            self.create_distribution()
+        elif self.arg("datasetid") is not None and self.cmd("create-edition") is True:
+            self.create_edition()
+        elif self.arg("datasetid") is not None and self.cmd("create-version") is True:
+            self.create_version()
         elif self.arg("editionid") is not None or self.opt("editionid") is not None:
             self.edition_information()
         elif self.arg("versionid") is not None or self.opt("versionid") is not None:
             self.version()
-        elif self.arg("datasetid") is not None and self.cmd("create-version") is True:
-            self.create_version()
-        elif self.arg("datasetid") is not None and self.cmd("create-edition") is True:
-            self.create_edition()
         elif self.arg("datasetid") is not None:
             self.dataset()
         else:
@@ -226,6 +232,28 @@ class DatasetsCommand(Command):
         (_, _, edition_id) = edition["Id"].split("/")
         self.log.info(f"returning: {edition_id}")
         return edition_id
+
+    # #################################### #
+    # Distribution
+    # #################################### #
+    def create_distribution(self):
+        payload = read_stdin_or_filepath(self.opt("file"))
+        dataset_id = self.arg("datasetid")
+        version_id = self.resolve_or_load_versionid(dataset_id)
+        edition_id = self.resolve_or_create_edition(dataset_id, version_id)
+        self.log.info(
+            f"Creating distribution for {edition_id} on {dataset_id}/{version_id} with payload: {payload}"
+        )
+        try:
+            distribution = self.ds.create_distribution(
+                dataset_id, version_id, edition_id, payload
+            )
+            self.print(
+                f"Created distribution for {version_id} on {dataset_id}", distribution
+            )
+            return distribution
+        except Exception as e:
+            self.log.exception(f"Failed badly: {e}")
 
     # #################################### #
     # File handling
