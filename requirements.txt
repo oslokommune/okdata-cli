@@ -6,17 +6,8 @@
 #
 certifi==2019.11.28       # via requests
 chardet==3.0.4            # via requests
-docopt==0.6.2
-ecdsa==0.14.1             # via python-jose
-future==0.18.2            # via python-jose
+docopt-ng==0.7.2
 idna==2.8                 # via requests
-origo-sdk-python==0.0.6
 prettytable==0.7.2
-pyasn1==0.4.8             # via rsa
-pyjwt==1.7.1              # via origo-sdk-python
-python-jose==3.0.1        # via python-keycloak-client
-python-keycloak-client==0.2.2  # via origo-sdk-python
 requests==2.22.0
-rsa==4.0                  # via python-jose
-six==1.13.0               # via ecdsa, python-jose
-urllib3==1.25.7           # via origo-sdk-python, requests
+urllib3==1.25.7           # via requests

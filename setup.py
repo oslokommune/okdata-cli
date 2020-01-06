@@ -12,6 +12,6 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages=setuptools.find_packages(),
-    install_requires=["PrettyTable", "origo-sdk-python", "docopt", "requests"],
+    install_requires=["PrettyTable", "docopt-ng", "requests"],
     entry_points={"console_scripts": ["origo=bin.cli:main"]},
 )
