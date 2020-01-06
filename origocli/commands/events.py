@@ -1,7 +1,4 @@
-
-
-from origocli.command import Command
-from origocli.commands.common import BaseCommand
+from origocli.command import BaseCommand
 from origocli.io import read_stdin_or_filepath
 
 from origo.event.post_event import PostEvent
@@ -34,7 +31,7 @@ class EventsCommand(BaseCommand):
         if self.cmd("put") is True:
             self.put_event()
         else:
-            Command.help()
+            print(BaseCommand.__doc__)
 
     def put_event(self):
         payload = read_stdin_or_filepath(self.opt("file"))

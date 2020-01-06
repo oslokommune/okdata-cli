@@ -4,7 +4,7 @@ from origo.pipelines.client import PipelineApiClient
 from origo.pipelines.resources.pipeline import Pipeline
 from origo.pipelines.resources.pipeline_instance import PipelineInstance
 
-from origocli.commands.common import BaseCommand
+from origocli.command import BaseCommand
 
 class PipelinesLsInstances(BaseCommand):
     """

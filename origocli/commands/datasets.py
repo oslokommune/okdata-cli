@@ -1,12 +1,4 @@
-from origocli.command import Command
-from origocli.commands.common import BaseCommand
-from origocli.output import create_output
-from origocli.io import read_stdin_or_filepath
-
-from origo.data.dataset import Dataset
-from origo.data.upload import Upload
-
-from origocli.command import Command
+from origocli.command import BaseCommand
 from origocli.output import create_output
 from origocli.io import read_stdin_or_filepath
 from origocli.date import (
