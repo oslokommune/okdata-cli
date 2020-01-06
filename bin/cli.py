@@ -9,7 +9,7 @@ from origocli.commands.pipelines import PipelinesCommand, BaseCommand
 def main():
     argv = sys.argv
     if len(argv) < 2 or argv[1] == "help":
-        Command.help()
+        print(BaseCommand.__doc__)
         return False
 
     command = get_command_class(argv)

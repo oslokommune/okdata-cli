@@ -15,12 +15,13 @@ Options:
 """
 
 from origocli.command import Command
+from origocli.commands.common import BaseCommand
 from origocli.io import read_stdin_or_filepath
 
 from origo.event.post_event import PostEvent
 
 
-class EventsCommand(Command):
+class EventsCommand(BaseCommand):
     def __init__(self):
         super().__init__(__doc__)
         env = self.opt("env")

@@ -18,6 +18,12 @@ class BaseCommand:
     usage:
       origo [command] [options]
 
+    Commands available:
+      datasets
+      events
+      pipeline
+      help
+
     options:
       -d --debug
     """
