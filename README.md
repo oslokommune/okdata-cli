@@ -13,11 +13,20 @@ Until then: see setup below for manual configuration of CLI
 Requirement: python 3.7
 
 ```
-$ git clone git@github.oslo.kommune.no:origo-dataplatform/origo-cli.git
-$ cd origo-cli
-$ python3 -m venv .venv
-$ . .venv/bin/activate
-$ pip install -e .
+git clone git@github.com:oslokommune/origo-cli.git
+cd origo-cli
+python3 -m venv .venv
+. .venv/bin/activate
+pip install -e .
+```
+
+When developing towards the origo-sdk-python library:
+```
+cd origo-cli
+python3 -m venv .venv
+. .venv/bin/activate
+export PYTHONPATH=$PYTHONPATH:/Users/eide/Documents/workspace/oslokommune/origo-sdk-python/
+python3 bin/cli.py datasets ls
 ```
 
 # Tests
