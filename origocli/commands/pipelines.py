@@ -6,6 +6,7 @@ from origo.pipelines.resources.pipeline_instance import PipelineInstance
 
 from origocli.command import BaseCommand
 
+
 class PipelinesLsInstances(BaseCommand):
     """
     usage: origo pipelines ls instances --pipeline-arn=<pipeline-arn> [options]
@@ -17,6 +18,7 @@ class PipelinesLsInstances(BaseCommand):
     sdk: PipelineApiClient
 
     def __init__(self, sdk):
+        super().__init__()
         self.sdk = sdk
         self.handler = self.default
 
@@ -39,8 +41,10 @@ class PipelineInstanceCreateCommand(BaseCommand):
     options:
       -d --debug
     """
-    sdk : PipelineApiClient
+    sdk: PipelineApiClient
+
     def __init__(self, sdk):
+        super().__init__()
         self.sdk = sdk
         self.handler = self.default
 
@@ -48,6 +52,7 @@ class PipelineInstanceCreateCommand(BaseCommand):
         content = self.handle_input()
         instance = self.sdk.create_pipeline_instance(content)
         self.pretty_json(instance)
+
 
 class PipelineInstances(BaseCommand):
     """
@@ -63,6 +68,7 @@ class PipelineInstances(BaseCommand):
     sdk: PipelineApiClient
 
     def __init__(self, sdk):
+        super().__init__()
         self.sdk = sdk
         self.handler = self.default
         self.sub_commands = {
@@ -73,12 +79,12 @@ class PipelineInstances(BaseCommand):
         dataset_id = self.arg("dataset-id")
         version = self.arg("version")
         if dataset_id and version:
-            result = next(filter(lambda instance: instance["datasetUri"] == f"output/{dataset_id}/{version}", self.sdk.get_pipeline_instances()))
+            result = next(filter(lambda instance: instance["datasetUri"] == f"output/{dataset_id}/{version}",
+                                 self.sdk.get_pipeline_instances()))
             self.pretty_json(result)
         else:
             result = self.sdk.get_pipeline_instances()
             self.print_success(PipelineInstance, result)
-
 
 
 class PipelinesLsCommand(BaseCommand):
@@ -93,6 +99,7 @@ class PipelinesLsCommand(BaseCommand):
     sdk: PipelineApiClient
 
     def __init__(self, sdk):
+        super().__init__()
         self.sdk = sdk
         self.handler = self.default
         self.sub_commands = {
@@ -104,6 +111,7 @@ class PipelinesLsCommand(BaseCommand):
         data = self.sdk.get_pipelines()
         self.print_success(Pipeline, data)
 
+
 class PipelinesCreateCommand(BaseCommand):
     """
     usage:
@@ -113,8 +121,10 @@ class PipelinesCreateCommand(BaseCommand):
     options:
       -d --debug
     """
-    sdk : PipelineApiClient
+    sdk: PipelineApiClient
+
     def __init__(self, sdk):
+        super().__init__()
         self.sdk = sdk
         self.handler = self.default
 
@@ -122,6 +132,7 @@ class PipelinesCreateCommand(BaseCommand):
         content = self.handle_input()
         pipeline = self.sdk.create_pipeline(content)
         self.pretty_json(pipeline)
+
 
 class PipelinesCommand(BaseCommand):
     """
@@ -139,6 +150,7 @@ class PipelinesCommand(BaseCommand):
     """
 
     def __init__(self):
+        super().__init__()
         self.sdk = PipelineApiClient()
         self.sdk.login()
         self.handler = self.default

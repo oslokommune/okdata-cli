@@ -21,6 +21,7 @@ class EventsCommand(BaseCommand):
 
     """
     def __init__(self):
+        super().__init__()
         env = self.opt("env")
         self.sdk = PostEvent(env=env)
         self.sdk.login()

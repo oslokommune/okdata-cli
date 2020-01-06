@@ -33,6 +33,9 @@ class BaseCommand:
     handler: ()
     sdk = SDK()
 
+    def __init__(self):
+        self.args = docopt(str(self.__doc__))
+
     def handle(self):
         self.args = docopt(str(self.__doc__))
         if self.sub_commands:

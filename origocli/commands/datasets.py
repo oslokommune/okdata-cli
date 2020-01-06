@@ -25,6 +25,7 @@ class DatasetsCommand(BaseCommand):
       -d --debug
     """
     def __init__(self):
+        super().__init__()
         env = self.opt("env")
         self.sdk = Dataset(env=env)
         self.sdk.login()

@@ -1,6 +1,5 @@
 import sys
 
-from origocli.command import Command
 from origocli.commands.datasets import DatasetsCommand
 from origocli.commands.events import EventsCommand
 from origocli.commands.pipelines import PipelinesCommand, BaseCommand
