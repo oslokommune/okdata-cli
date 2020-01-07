@@ -9,6 +9,7 @@ from origocli.date import (
 from origo.data.dataset import Dataset
 from origo.data.upload import Upload
 
+
 class DatasetsCommand(BaseCommand):
     """Oslo :: Datasets
 
@@ -24,6 +25,7 @@ class DatasetsCommand(BaseCommand):
       -h --help
       -d --debug
     """
+
     def __init__(self):
         super().__init__()
         env = self.opt("env")

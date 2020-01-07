@@ -6,6 +6,7 @@ from docopt import docopt, DocoptExit
 from origo.sdk import SDK
 from pygments import highlight, lexers, formatters
 
+
 class BaseCommand:
     """usage:
   origo [command] <options>
@@ -23,6 +24,7 @@ Options
   --profile=<profile>
   --stage=<stage>
 """
+
     log = logging.getLogger(__name__)
     sub_commands = None
     args: dict
@@ -44,7 +46,6 @@ Options
                 except DocoptExit as d:
                     self.log.debug(d.usage)
                     continue
-
 
         if not hasattr(self, "handler"):
             self.log.info("command was implemented without a default handler")
@@ -79,7 +80,9 @@ Options
 
     def pretty_json(self, data):
         output = json.dumps(data, indent=2)
-        colorful_json = highlight(output, lexers.JsonLexer(), formatters.TerminalFormatter())
+        colorful_json = highlight(
+            output, lexers.JsonLexer(), formatters.TerminalFormatter()
+        )
         print(colorful_json)
 
     def print_success(self, table, data):
@@ -94,5 +97,3 @@ Options
     @staticmethod
     def help():
         print(BaseCommand.__doc__)
-
-

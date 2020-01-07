@@ -20,6 +20,7 @@ class EventsCommand(BaseCommand):
       -d --debug
 
     """
+
     def __init__(self):
         super().__init__()
         env = self.opt("env")

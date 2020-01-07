@@ -27,7 +27,8 @@ def create_output(format, configfile):
         return JsonOutput(config)
     return TableOutput(config)
 
-def table_config_from_schema(resource, exclude = None):
+
+def table_config_from_schema(resource, exclude=None):
     if exclude is None:
         exclude = []
 
@@ -35,16 +36,19 @@ def table_config_from_schema(resource, exclude = None):
         for property in properties:
             body = properties[property]
             if "properties" not in body:
-                yield body["title"], {
-                    "name": body["title"],
-                    "key": property
-                }
+                yield body["title"], {"name": body["title"], "key": property}
             else:
                 _for(body["properties"])
 
-    with open(os.path.dirname(inspect.getfile(resource)) + f"/schemas/{resource.__resource_name__}.json", "r") as f:
+    with open(
+        os.path.dirname(inspect.getfile(resource))
+        + f"/schemas/{resource.__resource_name__}.json",
+        "r",
+    ) as f:
         schema = json.loads(f.read())
-        config = {key: body for key, body in _for(schema["properties"]) if key not in exclude}
+        config = {
+            key: body for key, body in _for(schema["properties"]) if key not in exclude
+        }
         return TableOutput(config)
 
 

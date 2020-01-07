@@ -24,7 +24,7 @@ def get_command_class(argv):
     commands = {
         "datasets": DatasetsCommand,
         "events": EventsCommand,
-        "pipelines": Pipelines
+        "pipelines": Pipelines,
     }
     if argv[1] in commands:
         return commands[argv[1]]
