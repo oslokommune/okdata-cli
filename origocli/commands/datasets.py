@@ -51,7 +51,7 @@ class DatasetsCommand(BaseCommand):
         elif self.arg("datasetid") is not None:
             self.dataset()
         else:
-            Command.help()
+            BaseCommand.help()
 
     # #################################### #
     # Datasets

@@ -32,7 +32,7 @@ class EventsCommand(BaseCommand):
         if self.cmd("put") is True:
             self.put_event()
         else:
-            print(BaseCommand.__doc__)
+            BaseCommand.help()
 
     def put_event(self):
         payload = read_stdin_or_filepath(self.opt("file"))

@@ -2,13 +2,13 @@ import sys
 
 from origocli.commands.datasets import DatasetsCommand
 from origocli.commands.events import EventsCommand
-from origocli.commands.pipelines import PipelinesCommand, BaseCommand
+from origocli.commands.pipelines import Pipelines, BaseCommand
 
 
 def main():
     argv = sys.argv
     if len(argv) < 2 or argv[1] == "help":
-        print(BaseCommand.__doc__)
+        BaseCommand.help()
         return False
 
     command = get_command_class(argv)
@@ -16,7 +16,7 @@ def main():
     if command is not False:
         instance = command()
         return instance.handle()
-    print(BaseCommand.__doc__)
+    BaseCommand.help()
     return False
 
 
@@ -24,7 +24,7 @@ def get_command_class(argv):
     commands = {
         "datasets": DatasetsCommand,
         "events": EventsCommand,
-        "pipelines": PipelinesCommand
+        "pipelines": Pipelines
     }
     if argv[1] in commands:
         return commands[argv[1]]
