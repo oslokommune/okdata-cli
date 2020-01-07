@@ -56,6 +56,7 @@ class PipelinesLsInstances(Ls, PipelineIntanceOutput):
       -d --debug
 
     """
+
     sdk: PipelineApiClient
 
     def default(self):
@@ -75,6 +76,7 @@ class PipelinesLs(Ls, PipelineOutput):
     options:
       -d --debug
     """
+
 
 class Create(BaseCommand):
     sdk: PipelineApiClient
@@ -128,7 +130,7 @@ class Pipelines(BaseCommand):
             PipelinesLs,
             PipelinesCreate,
             PipelineInstances,
-            PipelinesLsInstances
+            PipelinesLsInstances,
         ]
 
     def default(self):
@@ -166,7 +168,11 @@ class PipelineInstanceLs(Ls, PipelineIntanceOutput):
         version = self.arg("version")
         data = self.sdk.list(self.type)
         if dataset_id and version:
-            data = filter(lambda instance: instance["datasetUri"] == f"output/{dataset_id}/{version}", data)
+            data = filter(
+                lambda instance: instance["datasetUri"]
+                == f"output/{dataset_id}/{version}",
+                data,
+            )
         self.print_success(self.config, data)
 
 
@@ -182,6 +188,7 @@ class PipelineInstances(BaseCommand, PipelineIntanceOutput):
       -d --debug
 
     """
+
     sdk: PipelineApiClient
 
     def __init__(self, sdk):
@@ -198,8 +205,13 @@ class PipelineInstances(BaseCommand, PipelineIntanceOutput):
         dataset_id = self.arg("dataset-id")
         version = self.arg("version")
         if dataset_id and version:
-            result = next(filter(lambda instance: instance["datasetUri"] == f"output/{dataset_id}/{version}",
-                                 self.sdk.get_pipeline_instances()))
+            result = next(
+                filter(
+                    lambda instance: instance["datasetUri"]
+                    == f"output/{dataset_id}/{version}",
+                    self.sdk.get_pipeline_instances(),
+                )
+            )
             self.pretty_json(result)
         else:
             result = self.sdk.get_pipeline_instances()
@@ -213,6 +225,7 @@ class PipelineInstanceWizard(BaseCommand, PipelineIntanceOutput):
     options:
       -d --debug
     """
+
     sdk: PipelineApiClient
 
     def __init__(self, sdk):
@@ -229,48 +242,57 @@ class PipelineInstanceWizard(BaseCommand, PipelineIntanceOutput):
             if current not in datasets:
                 possible_matches = process.extractBests(current, datasets, limit=3)
                 possible_matches = [match[0] for match in possible_matches]
-                raise ValidationError(False,
-                                      reason=f"Dataset does not exist. Similar datasets ids include: {possible_matches}")
+                raise ValidationError(
+                    False,
+                    reason=f"Dataset does not exist. Similar datasets ids include: {possible_matches}",
+                )
             return True
 
         pipelines = self.sdk.get_pipelines()
         arns = [pipeline["arn"] for pipeline in pipelines]
         questions_1 = [
-            inquirer.List("pipeline",
-                          message="Select a pipeline",
-                          choices=arns),
-            inquirer.Text("dataset-id",
-                          message="What is the output dataset ID ?",
-                          validate=validate_dataset)
-
+            inquirer.List("pipeline", message="Select a pipeline", choices=arns),
+            inquirer.Text(
+                "dataset-id",
+                message="What is the output dataset ID ?",
+                validate=validate_dataset,
+            ),
         ]
 
         answers = inquirer.prompt(questions_1)
-        versions = [version["version"] for version in ds_client.get_versions(answers["dataset-id"])]
+        versions = [
+            version["version"]
+            for version in ds_client.get_versions(answers["dataset-id"])
+        ]
 
         questions_2 = [
-            inquirer.List("version",
-                          message="Select a version",
-                          choices=versions),
-            inquirer.Editor("transformation", message="Provide a transformation object"),
-            inquirer.Text("schema-id",
-                          message="Use a schema? Please enter schema-id (empty for no schema)",
-                          default=""),
-            inquirer.List("create-edition",
-                          message="Should a new edition be created after this pipeline succeeds? (default: True)",
-                          choices=[True, False])
+            inquirer.List("version", message="Select a version", choices=versions),
+            inquirer.Editor(
+                "transformation", message="Provide a transformation object"
+            ),
+            inquirer.Text(
+                "schema-id",
+                message="Use a schema? Please enter schema-id (empty for no schema)",
+                default="",
+            ),
+            inquirer.List(
+                "create-edition",
+                message="Should a new edition be created after this pipeline succeeds? (default: True)",
+                choices=[True, False],
+            ),
         ]
 
         answers.update(inquirer.prompt(questions_2))
 
-        pipeline_instance, error = PipelineInstance(self.sdk,
-                         id=answers["dataset-id"],
-                         pipelineArn=answers["pipeline"],
-                         datasetUri=f"output/{answers['dataset-id']}/{answers['version']}",
-                         schemaId=answers["schema-id"],
-                         transformation=json.loads(answers["transformation"]),
-                         useLatestEdition=not answers["create-edition"]
-                         ).create()
+        pipeline_instance, error = PipelineInstance(
+            self.sdk,
+            id=answers["dataset-id"],
+            pipelineArn=answers["pipeline"],
+            datasetUri=f"output/{answers['dataset-id']}/{answers['version']}",
+            schemaId=answers["schema-id"],
+            transformation=json.loads(answers["transformation"]),
+            useLatestEdition=not answers["create-edition"],
+        ).create()
 
         if error:
             self.log.exception(error)
