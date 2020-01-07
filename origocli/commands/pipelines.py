@@ -1,6 +1,10 @@
 import json
+import sys
 from typing import Type
 
+import inquirer
+from inquirer.errors import ValidationError
+from origo.data.dataset import Dataset
 from origo.pipelines.client import PipelineApiClient
 from origo.pipelines.resources.pipeline import Pipeline
 from origo.pipelines.resources.pipeline_base import PipelineBase
@@ -8,6 +12,7 @@ from origo.pipelines.resources.pipeline_instance import PipelineInstance
 
 from origocli.command import BaseCommand
 from origocli.output import table_config_from_schema, TableOutput
+from fuzzywuzzy import fuzz, process
 
 
 class PipelineOutput:
@@ -17,6 +22,7 @@ class PipelineOutput:
     ]
     type = Pipeline
     config = table_config_from_schema(type, excluded)
+
 
 class PipelineIntanceOutput:
     excluded = [
@@ -104,6 +110,7 @@ class Pipelines(BaseCommand):
       origo pipelines --pipeline-arn=<pipeline-arn> [options]
       origo pipelines instances ls [(<dataset-id> <version>)] [options]
       origo pipelines instances create (<file> | -)
+      origo pipelines instances wizard
       origo pipelines ls [options]
       origo pipelines ls-instances --pipeline-arn=<pipeline-arn> [options]
       origo pipelines create (<file> | -)
@@ -134,7 +141,6 @@ class Pipelines(BaseCommand):
         self.pretty_json(output_dict)
 
 
-
 class PipelineInstancesCreate(Create, PipelineIntanceOutput):
     """
     usage:
@@ -153,6 +159,7 @@ class PipelineInstanceLs(Ls, PipelineIntanceOutput):
     options:
       -d --debug
     """
+
     def default(self):
         self.log.info(f"{self.type} ls")
         dataset_id = self.arg("dataset-id")
@@ -167,6 +174,7 @@ class PipelineInstances(BaseCommand, PipelineIntanceOutput):
     """
     usage:
       origo pipelines instances ls [(<dataset-id> <version>)] [options]
+      origo pipelines instances wizard
       origo pipelines instances create - [options]
       origo pipelines instances create <file> [options]
 
@@ -183,6 +191,7 @@ class PipelineInstances(BaseCommand, PipelineIntanceOutput):
         self.sub_commands = [
             PipelineInstancesCreate,
             PipelineInstanceLs,
+            PipelineInstanceWizard,
         ]
 
     def default(self):
@@ -195,3 +204,77 @@ class PipelineInstances(BaseCommand, PipelineIntanceOutput):
         else:
             result = self.sdk.get_pipeline_instances()
             self.print_success(self.config, result)
+
+
+class PipelineInstanceWizard(BaseCommand, PipelineIntanceOutput):
+    """usage:
+      origo pipelines instances wizard [options]
+
+    options:
+      -d --debug
+    """
+    sdk: PipelineApiClient
+
+    def __init__(self, sdk):
+        super().__init__()
+        self.sdk = sdk
+        self.handler = self.default
+
+    def default(self):
+        ds_client = Dataset(config=self.sdk.config, auth=self.sdk.auth)
+        datasets = ds_client.get_datasets()
+        datasets = [dataset["Id"] for dataset in datasets]
+
+        def validate_dataset(answers, current):
+            if current not in datasets:
+                possible_matches = process.extractBests(current, datasets, limit=3)
+                possible_matches = [match[0] for match in possible_matches]
+                raise ValidationError(False,
+                                      reason=f"Dataset does not exist. Similar datasets ids include: {possible_matches}")
+            return True
+
+        pipelines = self.sdk.get_pipelines()
+        arns = [pipeline["arn"] for pipeline in pipelines]
+        questions_1 = [
+            inquirer.List("pipeline",
+                          message="Select a pipeline",
+                          choices=arns),
+            inquirer.Text("dataset-id",
+                          message="What is the output dataset ID ?",
+                          validate=validate_dataset)
+
+        ]
+
+        answers = inquirer.prompt(questions_1)
+        versions = [version["version"] for version in ds_client.get_versions(answers["dataset-id"])]
+
+        questions_2 = [
+            inquirer.List("version",
+                          message="Select a version",
+                          choices=versions),
+            inquirer.Editor("transformation", message="Provide a transformation object"),
+            inquirer.Text("schema-id",
+                          message="Use a schema? Please enter schema-id (empty for no schema)",
+                          default=""),
+            inquirer.List("create-edition",
+                          message="Should a new edition be created after this pipeline succeeds? (default: True)",
+                          choices=[True, False])
+        ]
+
+        answers.update(inquirer.prompt(questions_2))
+
+        pipeline_instance, error = PipelineInstance(self.sdk,
+                         id=answers["dataset-id"],
+                         pipelineArn=answers["pipeline"],
+                         datasetUri=f"output/{answers['dataset-id']}/{answers['version']}",
+                         schemaId=answers["schema-id"],
+                         transformation=json.loads(answers["transformation"]),
+                         useLatestEdition=not answers["create-edition"]
+                         ).create()
+
+        if error:
+            self.log.exception(error)
+            self.log.exception(error.response.text)
+            sys.exit(1)
+        self.print("Success!")
+        self.pretty_json(pipeline_instance)
