@@ -12,7 +12,7 @@ from origo.pipelines.resources.pipeline_instance import PipelineInstance
 
 from origocli.command import BaseCommand
 from origocli.output import table_config_from_schema, TableOutput
-from fuzzywuzzy import fuzz, process
+from fuzzywuzzy import process
 
 
 class PipelineOutput:

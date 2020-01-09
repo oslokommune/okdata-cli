@@ -15,4 +15,3 @@ def test_command_get_cmd():
     assert cmd.cmd("notexisting") is None
     assert cmd.arg("notexisting") is None
     assert cmd.opt("notexisting") is None
-
