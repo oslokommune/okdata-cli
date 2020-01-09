@@ -9,10 +9,9 @@ from pygments import highlight, lexers, formatters
 
 class BaseCommand:
     """usage:
-  origo [command] <options>
-  origo help
-  origo [command] help
-  origo [command] [subcommand] help
+  origo datasets [options]
+  origo pipelines [options]
+  origo events [options]
 
 Commands available:
   datasets
@@ -21,18 +20,18 @@ Commands available:
   help
 
 Options
-  --profile=<profile>
-  --stage=<stage>
+  -d --debug
+  --format=<format>
 """
 
     log = logging.getLogger(__name__)
     sub_commands = None
     args: dict
     handler: ()
-    sdk = SDK()
 
-    def __init__(self):
+    def __init__(self, sdk=SDK()):
         self.args = docopt(str(self.__doc__))
+        self.sdk = sdk
         if self.opt("debug"):
             logging.basicConfig(level=logging.DEBUG)
 
@@ -96,4 +95,4 @@ Options
 
     @staticmethod
     def help():
-        print(BaseCommand.__doc__)
+        print(BaseCommand.__doc__, end="")
