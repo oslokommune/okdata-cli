@@ -29,11 +29,13 @@ Options
     args: dict
     handler: ()
 
-    def __init__(self, sdk=SDK()):
+    def __init__(self, sdk=None):
         self.args = docopt(str(self.__doc__))
         self.sdk = sdk
         if self.opt("debug"):
             logging.basicConfig(level=logging.DEBUG)
+        if self.sdk is None:
+            self.sdk = SDK(env=self.opt("env"))
 
     def handle(self):
         self.args = docopt(str(self.__doc__))
