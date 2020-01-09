@@ -1,3 +1,4 @@
+import inspect
 import os
 import json
 from prettytable import PrettyTable
@@ -25,6 +26,30 @@ def create_output(format, configfile):
     if format == "json":
         return JsonOutput(config)
     return TableOutput(config)
+
+
+def table_config_from_schema(resource, exclude=None):
+    if exclude is None:
+        exclude = []
+
+    def _for(properties):
+        for property in properties:
+            body = properties[property]
+            if "properties" not in body:
+                yield body["title"], {"name": body["title"], "key": property}
+            else:
+                _for(body["properties"])
+
+    with open(
+        os.path.dirname(inspect.getfile(resource))
+        + f"/schemas/{resource.__resource_name__}.json",
+        "r",
+    ) as f:
+        schema = json.loads(f.read())
+        config = {
+            key: body for key, body in _for(schema["properties"]) if key not in exclude
+        }
+        return TableOutput(config)
 
 
 class TableOutput(PrettyTable):

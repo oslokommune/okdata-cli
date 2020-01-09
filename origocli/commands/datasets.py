@@ -1,20 +1,4 @@
-"""Oslo :: Datasets
-
-Usage:
-  origo datasets ls [--format=<format> --env=<env> --filter=<filter>] [options]
-  origo datasets ls <datasetid> [<versionid> <editionid>][--format=<format> --env=<env> options]
-  origo datasets cp <filepath> <datasetid> [<versionid> <editionid> --format=<format> --env=<env> options]
-  origo datasets create [--file=<file --format=<format> --env=<env> options]
-  origo datasets create-version <datasetid> [--file=<file> --format=<format> --env=<env> options]
-  origo datasets create-edition <datasetid> [<versionid>] [--file=<file> --format=<format --env=<env> options]
-  origo datasets create-distribution <datasetid> [<versionid> <editionid>] [--file=<file> --format=<format --env=<env> options]
-
-options:
-  -h --help
-  -d --debug
-"""
-
-from origocli.command import Command
+from origocli.command import BaseCommand
 from origocli.output import create_output
 from origocli.io import read_stdin_or_filepath
 from origocli.date import (
@@ -26,15 +10,32 @@ from origo.data.dataset import Dataset
 from origo.data.upload import Upload
 
 
-class DatasetsCommand(Command):
+class DatasetsCommand(BaseCommand):
+    """Oslo :: Datasets
+
+    Usage:
+      origo datasets ls [--format=<format> --env=<env> --filter=<filter>] [options]
+      origo datasets ls <datasetid> [<versionid> <editionid>][--format=<format> --env=<env> options]
+      origo datasets cp <filepath> <datasetid> [<versionid> <editionid> --format=<format> --env=<env> options]
+      origo datasets create [--file=<file --format=<format> --env=<env> options]
+      origo datasets create-version <datasetid> [--file=<file> --format=<format> --env=<env> options]
+      origo datasets create-edition <datasetid> [<versionid>] [--file=<file> --format=<format --env=<env> options]
+      origo datasets create-distribution <datasetid> [<versionid> <editionid>] [--file=<file> --format=<format --env=<env> options]
+
+    options:
+      -h --help
+      -d --debug
+    """
+
     def __init__(self):
-        super().__init__(__doc__)
+        super().__init__()
         env = self.opt("env")
-        self.ds = Dataset(env=env)
-        self.ds.login()
+        self.sdk = Dataset(env=env)
+        self.sdk.login()
+        self.handler = self.default
 
     # TODO: do a better mapping from rules to commands here...?
-    def handle(self):
+    def default(self):
         self.log.info("DatasetsCommand.handle()")
         if self.arg("datasetid") is None and self.cmd("ls") is True:
             self.datasets()
@@ -58,7 +59,7 @@ class DatasetsCommand(Command):
         elif self.arg("datasetid") is not None:
             self.dataset()
         else:
-            Command.help()
+            BaseCommand.help()
 
     # #################################### #
     # Datasets
@@ -66,7 +67,7 @@ class DatasetsCommand(Command):
     def datasets(self):
         try:
             self.log.info("Listing datasets")
-            datset_list = self.ds.get_datasets(filter=self.opt("filter"))
+            datset_list = self.sdk.get_datasets(filter=self.opt("filter"))
             out = create_output(self.opt("format"), "datasets_config.json")
             out.add_rows(datset_list)
             self.print("Available datasets", out)
@@ -77,9 +78,9 @@ class DatasetsCommand(Command):
         dataset_id = self.arg("datasetid")
         self.log.info(f"DatasetsCommand.handle_dataset({dataset_id})")
         try:
-            set = self.ds.get_dataset(dataset_id)
-            versions = self.ds.get_versions(dataset_id)
-            latest = self.ds.get_latest_version(dataset_id)
+            set = self.sdk.get_dataset(dataset_id)
+            versions = self.sdk.get_versions(dataset_id)
+            latest = self.sdk.get_latest_version(dataset_id)
             if self.opt("format") == "json":
                 list = {}
                 list["dataset"] = set
@@ -111,7 +112,7 @@ class DatasetsCommand(Command):
         payload = read_stdin_or_filepath(self.opt("file"))
         self.log.info(f"Creating dataset with payload: {payload}")
         try:
-            dataset = self.ds.create_dataset(payload)
+            dataset = self.sdk.create_dataset(payload)
             dataset_id = dataset["Id"]
             self.log.info(f"Created dataset with id: {dataset_id}")
             self.print(f"Created dataset: {dataset_id}", dataset)
@@ -132,7 +133,7 @@ class DatasetsCommand(Command):
         version_id = self.arg("versionid") or self.opt("versionid")
         self.log.info(f"Listing version for: {dataset_id}, {version_id}")
         try:
-            editions = self.ds.get_editions(dataset_id, version_id)
+            editions = self.sdk.get_editions(dataset_id, version_id)
             out = create_output(
                 self.opt("format"), "datasets_dataset_version_config.json"
             )
@@ -150,7 +151,7 @@ class DatasetsCommand(Command):
             f"Creating version for dataset: {dataset_id} with payload: {payload}"
         )
         try:
-            version = self.ds.create_version(dataset_id, payload)
+            version = self.sdk.create_version(dataset_id, payload)
             version_id = version["Id"]
             self.log.info(f"Created version: {version_id} on dataset: {dataset_id}")
             self.print(f"Created version: {version_id}", version)
@@ -163,7 +164,7 @@ class DatasetsCommand(Command):
         if version_id is not None:
             self.log.info(f"Found version in arguments: {version_id}")
             return version_id
-        latest_version = self.ds.get_latest_version(dataset_id)
+        latest_version = self.sdk.get_latest_version(dataset_id)
         self.log.info(
             f"Found version in latest dataset version: {latest_version['version']}"
         )
@@ -178,13 +179,13 @@ class DatasetsCommand(Command):
         edition_id = self.arg("editionid") or self.opt("editionid")
         self.log.info(f"Listing edition for: {dataset_id}, {version_id}, {edition_id}")
         try:
-            edition = self.ds.get_edition(dataset_id, version_id, edition_id)
+            edition = self.sdk.get_edition(dataset_id, version_id, edition_id)
             out = create_output(
                 self.opt("format"), "datasets_dataset_version_edition_config.json"
             )
             out.add_rows([edition])
             print(out)
-            distributions = self.ds.get_distributions(
+            distributions = self.sdk.get_distributions(
                 dataset_id, version_id, edition_id
             )
             out = create_output(
@@ -204,7 +205,7 @@ class DatasetsCommand(Command):
             f"Creating edition for {version_id} on {dataset_id} with payload: {payload}"
         )
         try:
-            edition = self.ds.create_edition(dataset_id, version_id, payload)
+            edition = self.sdk.create_edition(dataset_id, version_id, payload)
             self.print(f"Created edition for {version_id} on {dataset_id}", edition)
             return edition
         except Exception as e:
@@ -227,7 +228,7 @@ class DatasetsCommand(Command):
             f"Creating new edition for: {dataset_id}/{version_id} with data: {data}"
         )
 
-        edition = self.ds.create_edition(dataset_id, version_id, data)
+        edition = self.sdk.create_edition(dataset_id, version_id, data)
         self.log.info(f"Created edition: {edition}")
         (_, _, edition_id) = edition["Id"].split("/")
         self.log.info(f"returning: {edition_id}")
@@ -245,7 +246,7 @@ class DatasetsCommand(Command):
             f"Creating distribution for {edition_id} on {dataset_id}/{version_id} with payload: {payload}"
         )
         try:
-            distribution = self.ds.create_distribution(
+            distribution = self.sdk.create_distribution(
                 dataset_id, version_id, edition_id, payload
             )
             self.print(
