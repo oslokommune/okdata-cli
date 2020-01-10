@@ -30,10 +30,7 @@ class EventsCommand(BaseCommand):
 
     def default(self):
         self.log.info("EventsCommand.handle()")
-        if self.cmd("put") is True:
-            self.put_event()
-        else:
-            BaseCommand.help()
+        self.put_event()
 
     def put_event(self):
         payload = read_stdin_or_filepath(self.opt("file"))
