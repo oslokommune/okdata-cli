@@ -17,5 +17,10 @@ def mock_print_success(mocker):
 
 
 @pytest.fixture
+def mock_print(mocker):
+    return mocker.patch(f"{BASECMD_QUAL}.print")
+
+
+@pytest.fixture
 def mock_pretty_json(mocker):
     return mocker.patch(f"{BASECMD_QUAL}.pretty_json")
