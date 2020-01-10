@@ -22,6 +22,8 @@ from origocli.commands.pipelines import (
 pipeline_qual = f"{Pipeline.__module__}.{Pipeline.__name__}"
 pipeline_client_qual = f"{PipelineApiClient.__module__}.{PipelineApiClient.__name__}"
 
+sdk = PipelineApiClient()
+
 
 class TestPipelines:
     def test_handler(self, mocker, capsys):
@@ -54,7 +56,6 @@ class TestPipelines:
 class TestCreate:
     def test_handler(self, mocker, capsys):
         set_argv("pipelines", "create", "something.json")
-        sdk = PipelineApiClient()
         mocker.patch("builtins.open", mocker.mock_open(read_data="open_file"))
         mocker.patch(
             f"{pipeline_qual}.from_json", return_value=Pipeline(sdk, "", "", "")
@@ -97,8 +98,6 @@ class TestPipelinesLs:
 class TestPipelinesLsInstances:
     def test_handler(self, mocker):
         set_argv("pipelines", "ls-instances", "--pipeline-arn", "pipeline-arn")
-        sdk = PipelineApiClient()
-
         print_result = mocker.patch(f"{BASECMD_QUAL}.print_success")
         pipeline = mocker.patch(
             f"{pipeline_client_qual}.get_pipeline",
@@ -124,7 +123,6 @@ class TestPipelinesLsInstances:
 
     def test_handler_with_http_error(self, mocker, caplog):
         set_argv("pipelines", "ls-instances", "--pipeline-arn", "pipeline-arn")
-        sdk = PipelineApiClient()
         caplog.set_level(logging.ERROR)
         try:
             requests.get("https://httpstat.us/400").raise_for_status()
@@ -152,7 +150,6 @@ class TestPipelinesLsInstances:
 class TestPipelineInstanceLs:
     def test_handler_all(self, mocker, mock_print_success):
         set_argv("pipelines", "instances", "ls")
-        sdk = PipelineApiClient()
         list = mocker.patch(
             f"{pipeline_client_qual}.list",
             return_value=[
@@ -195,7 +192,6 @@ class TestPipelineInstanceLs:
 class TestPipelineInstances:
     def test_handler_all(self, mocker, mock_print_success):
         set_argv("pipelines", "instances", "ls")
-        sdk = PipelineApiClient()
         cmd = PipelineInstances(sdk)
         list = mocker.patch(
             f"{pipeline_client_qual}.list",
@@ -215,7 +211,6 @@ class TestPipelineInstances:
 
     def test_handler_dataset_version(self, mocker, mock_pretty_json):
         set_argv("pipelines", "instances", "ls", "dataset-id", "version-2")
-        sdk = PipelineApiClient()
         cmd = PipelineInstances(sdk)
         list = mocker.patch(
             f"{pipeline_client_qual}.list",
