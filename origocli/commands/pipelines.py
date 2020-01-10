@@ -60,10 +60,11 @@ class PipelinesLsInstances(Ls, PipelineIntanceOutput):
     sdk: PipelineApiClient
 
     def default(self):
-        arn = self.args.get("--pipeline-arn")
+        arn = self.opt("pipeline-arn")
         instances, error = self.sdk.get_pipeline(arn).list_instances()
         if error:
-            raise error
+            self.log.exception(error)
+            return
         ddicts = list(map(lambda x: x.__dict__, instances))
         self.print_success(self.config, ddicts)
 
@@ -92,6 +93,7 @@ class Create(BaseCommand):
         resource, error = self.type.from_json(self.sdk, content).create()
         if error:
             self.log.exception(error)
+            return
         self.pretty_json(resource)
 
 
@@ -168,11 +170,7 @@ class PipelineInstanceLs(Ls, PipelineIntanceOutput):
         version = self.arg("version")
         data = self.sdk.list(self.type)
         if dataset_id and version:
-            data = filter(
-                lambda instance: instance["datasetUri"]
-                == f"output/{dataset_id}/{version}",
-                data,
-            )
+            data = [instance for instance in data if instance["datasetUri"] == f"output/{dataset_id}/{version}"]
         self.print_success(self.config, data)
 
 
@@ -234,6 +232,7 @@ class PipelineInstanceWizard(BaseCommand, PipelineIntanceOutput):
         self.handler = self.default
 
     def default(self):
+        self.log.warning("==EXPERIMENTAL FEATURE==")
         ds_client = Dataset(config=self.sdk.config, auth=self.sdk.auth)
         datasets = ds_client.get_datasets()
         datasets = [dataset["Id"] for dataset in datasets]
@@ -297,6 +296,6 @@ class PipelineInstanceWizard(BaseCommand, PipelineIntanceOutput):
         if error:
             self.log.exception(error)
             self.log.exception(error.response.text)
-            sys.exit(1)
+            return
         self.print("Success!")
         self.pretty_json(pipeline_instance)
