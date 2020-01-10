@@ -79,14 +79,16 @@ Options
         if payload:
             print(payload)
 
-    def pretty_json(self, data):
+    @staticmethod
+    def pretty_json(data):
         output = json.dumps(data, indent=2)
         colorful_json = highlight(
             output, lexers.JsonLexer(), formatters.TerminalFormatter()
         )
         print(colorful_json)
 
-    def print_success(self, table, data):
+    @staticmethod
+    def print_success(table, data):
         for row in data:
             table.add_row(row)
         print(table)

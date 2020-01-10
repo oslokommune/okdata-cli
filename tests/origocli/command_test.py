@@ -1,17 +1,12 @@
 import io
-import sys
 
 from origocli.command import BaseCommand
 from origocli.output import TableOutput
-
-
-def _set_argv(*args):
-    old_sys_argv = sys.argv
-    sys.argv = [old_sys_argv[0]] + list(args)
+from conftest import set_argv
 
 
 def test_docopt():
-    _set_argv("datasets", "--debug", "--format", "yaml")
+    set_argv("datasets", "--debug", "--format", "yaml")
 
     cmd = BaseCommand()
 
@@ -24,20 +19,20 @@ def test_docopt():
 
 
 def test_cmd_empty_handler():
-    _set_argv("datasets", "--debug", "--format", "yaml")
+    set_argv("datasets", "--debug", "--format", "yaml")
     cmd = BaseCommand()
     assert cmd.handle() is None
 
 
 def test_cmd_with_handler():
-    _set_argv("datasets", "--debug", "--format", "yaml")
+    set_argv("datasets", "--debug", "--format", "yaml")
     cmd = BaseCommand()
     cmd.handler = lambda: True
     assert cmd.handle() is True
 
 
 def test_cmd_with_sub_command():
-    _set_argv("datasets", "--debug", "--format", "yaml")
+    set_argv("datasets", "--debug", "--format", "yaml")
     cmd = BaseCommand()
     sub_cmd = BaseCommand
     cmd.sub_commands = [sub_cmd]
@@ -52,7 +47,7 @@ def test_invalid_docopt_for_subcommand():
             illegal usage
         """
 
-    _set_argv("datasets", "--debug", "--format", "yaml")
+    set_argv("datasets", "--debug", "--format", "yaml")
 
     cmd = BaseCommand()
     cmd.sub_commands = [SubCommand]
@@ -70,7 +65,7 @@ class FileCommand(BaseCommand):
 
 def test_handle_input_from_file(mocker):
     mocker.patch("builtins.open", mocker.mock_open(read_data="open_file"))
-    _set_argv("datasets", "--file", "input.json")
+    set_argv("datasets", "--file", "input.json")
     cmd = FileCommand()
     content = cmd.handle_input()
     assert content == "open_file"
@@ -78,14 +73,14 @@ def test_handle_input_from_file(mocker):
 
 def test_handle_input_from_stdin(monkeypatch):
     monkeypatch.setattr("sys.stdin", io.StringIO("stdin"))
-    _set_argv("datasets", "-")
+    set_argv("datasets", "-")
     cmd = FileCommand()
     content = cmd.handle_input()
     assert content == "stdin"
 
 
 def test_pretty_json(capsys):
-    _set_argv("datasets")
+    set_argv("datasets")
     cmd = BaseCommand()
     cmd.pretty_json({"Hello": {"foo": "bar"}})
     captured = capsys.readouterr()
@@ -96,7 +91,7 @@ def test_pretty_json(capsys):
 
 
 def test_pretty_print_success(capsys):
-    _set_argv("datasets")
+    set_argv("datasets")
     cmd = BaseCommand()
     config = {
         "name": {"name": "name", "key": "name"},
@@ -116,7 +111,7 @@ def test_pretty_print_success(capsys):
 
 
 def test_help(capsys):
-    _set_argv("datasets")
+    set_argv("datasets")
     cmd = BaseCommand()
     cmd.help()
     captured = capsys.readouterr()
