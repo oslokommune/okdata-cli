@@ -15,6 +15,7 @@ def set_argv(*args):
 def mock_print_success(mocker):
     return mocker.patch(f"{BASECMD_QUAL}.print_success")
 
+
 @pytest.fixture
 def mock_pretty_json(mocker):
     return mocker.patch(f"{BASECMD_QUAL}.pretty_json")

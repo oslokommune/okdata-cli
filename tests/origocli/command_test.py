@@ -1,5 +1,4 @@
 import io
-import sys
 
 from origocli.command import BaseCommand
 from origocli.output import TableOutput

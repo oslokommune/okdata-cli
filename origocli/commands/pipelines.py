@@ -1,5 +1,4 @@
 import json
-import sys
 from typing import Type
 
 import inquirer
@@ -170,7 +169,11 @@ class PipelineInstanceLs(Ls, PipelineIntanceOutput):
         version = self.arg("version")
         data = self.sdk.list(self.type)
         if dataset_id and version:
-            data = [instance for instance in data if instance["datasetUri"] == f"output/{dataset_id}/{version}"]
+            data = [
+                instance
+                for instance in data
+                if instance["datasetUri"] == f"output/{dataset_id}/{version}"
+            ]
         self.print_success(self.config, data)
 
 

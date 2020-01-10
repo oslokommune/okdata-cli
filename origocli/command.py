@@ -5,7 +5,6 @@ import sys
 from docopt import docopt, DocoptExit
 from origo.sdk import SDK
 from pygments import highlight, lexers, formatters
-from requests import HTTPError
 
 
 class BaseCommand:
