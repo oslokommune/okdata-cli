@@ -9,6 +9,7 @@ from jsonschema import ValidationError as SchemaValidationError
 from origo.data.dataset import Dataset
 from origo.pipelines.client import PipelineApiClient
 from origo.pipelines.resources.pipeline_instance import PipelineInstance
+from requests import HTTPError
 
 from origocli.command import BaseCommand
 
@@ -72,10 +73,22 @@ def select_version(sdk: Dataset, dataset_id):
 def pipeline_instance_wizard(sdk: Dataset, dataset: dict = None, pipeline=None):
     if dataset is None:
         dataset = select_dataset(sdk)
+    version = select_version(sdk, dataset["Id"])
     if pipeline is None:
         pipeline = select_pipeline(PipelineApiClient(config=sdk.config, auth=sdk.auth))
 
-    version = select_version(sdk, dataset["Id"])
+    try:
+        transformation_schema = json.loads(pipeline["transformation_schema"])
+        example = json.dumps(json_schema_example(transformation_schema), indent=2)
+        example = example.replace("{", "{{")
+        example = example.replace("}", "}}")
+    except Exception:
+        example = ""
+        transformation_schema = None
+
+    transformation_q = inquirer.Text("transformation", message="Provide a transformation object", default=example)
+    transformation_q.kind = "editor"
+
     questions = [
         inquirer.Text(
                 "schema-id",
@@ -87,29 +100,29 @@ def pipeline_instance_wizard(sdk: Dataset, dataset: dict = None, pipeline=None):
                 message="Should a new edition be created after this pipeline succeeds?",
                 choices=[True, False],
         ),
-        inquirer.Editor("transformation", message="Provide a transformation object"),
+        transformation_q
     ]
 
     answers = inquirer.prompt(questions)
 
-    while True:
+    while transformation_schema is not None:
         try:
             jsonschema.validate(json.loads(answers["transformation"]),
-                                schema=json.loads(pipeline["transformation_schema"]))
+                                schema=transformation_schema)
         except SchemaValidationError as e:
             print("Input must match the transformation Schema: ")
             BaseCommand.pretty_json(e.schema)
             print(e.__repr__())
             answers.update(
-                inquirer.prompt([inquirer.Editor("transformation", message="Provide a transformation object")]))
+                inquirer.prompt([transformation_q]))
         except JSONDecodeError:
             print("Not valid JSON!")
             answers.update(
-                    inquirer.prompt([inquirer.Editor("transformation", message="Provide a transformation object")]))
+                    inquirer.prompt([transformation_q]))
         else:
             break
 
-    pipeline_instance, error = PipelineInstance(
+    pipeline_instance = PipelineInstance(
             sdk,
             id=dataset['Id'],
             pipelineArn=pipeline["arn"],
@@ -117,9 +130,33 @@ def pipeline_instance_wizard(sdk: Dataset, dataset: dict = None, pipeline=None):
             schemaId=answers["schema-id"],
             transformation=json.loads(answers["transformation"]),
             useLatestEdition=not answers["create-edition"],
-    ).create()
+    )
+    response, error = pipeline_instance.create()
 
     if error:
-        raise SystemExit(error)
+        raise SystemExit(error, error.response.text)
 
     return pipeline_instance
+
+
+def zero_init(type):
+    if type == "string":
+        return ""
+    elif type == "integer" or type == "number":
+        return 0
+    elif type == "boolean":
+        return False
+    elif type == "null":
+        return None
+    else:
+        raise Exception("illegal Json schema type: ", type)
+
+
+def json_schema_example(schema):
+    example = {}
+    for name, prop in schema["properties"].items():
+        if prop["type"] == "object":
+            example[name] = json_schema_example(prop)
+        else:
+            example[name] = zero_init(prop["type"])
+    return example
