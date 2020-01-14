@@ -8,6 +8,7 @@ from inquirer.errors import ValidationError
 from jsonschema import ValidationError as SchemaValidationError
 from origo.data.dataset import Dataset
 from origo.pipelines.client import PipelineApiClient
+from origo.pipelines.resources.pipeline_input import PipelineInput
 from origo.pipelines.resources.pipeline_instance import PipelineInstance
 from origocli.command import BaseCommand
 
@@ -139,6 +140,17 @@ def pipeline_instance_wizard(sdk: Dataset, dataset: dict = None, pipeline=None):
     )
     response, error = pipeline_instance.create()
 
+    if error:
+        raise SystemExit(error, error.response.text)
+
+    pipeline_input = PipelineInput(
+        sdk,
+        datasetUri=f"input/{dataset['Id']}/{version['version']}",
+        stage="incoming",
+        pipelineInstanceId=pipeline_instance.id,
+    )
+
+    response, error = pipeline_input.create()
     if error:
         raise SystemExit(error, error.response.text)
 
