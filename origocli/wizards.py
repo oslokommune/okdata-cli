@@ -9,8 +9,6 @@ from jsonschema import ValidationError as SchemaValidationError
 from origo.data.dataset import Dataset
 from origo.pipelines.client import PipelineApiClient
 from origo.pipelines.resources.pipeline_instance import PipelineInstance
-from requests import HTTPError
-
 from origocli.command import BaseCommand
 
 
@@ -35,18 +33,21 @@ def select_dataset(sdk: Dataset, datasets=None):
             possible_matches = [match[0] for match in possible_matches]
             reason = f"Dataset does not exist. Similar datasets ids include: {' '.join(possible_matches)}"
             raise ValidationError(
-                    False,
-                    reason=reason,
+                False, reason=reason,
             )
         return True
 
-    q = [inquirer.Text(
+    q = [
+        inquirer.Text(
             "dataset-id",
             message="What is the output dataset ID ?",
             validate=validate_dataset,
-    )]
+        )
+    ]
     answers = inquirer.prompt(q)
-    return next(dataset for dataset in datasets if answers["dataset-id"] == dataset["Id"])
+    return next(
+        dataset for dataset in datasets if answers["dataset-id"] == dataset["Id"]
+    )
 
 
 def select_pipeline(sdk: PipelineApiClient, pipelines=None):
@@ -56,7 +57,9 @@ def select_pipeline(sdk: PipelineApiClient, pipelines=None):
 
     q = [inquirer.List("pipeline", message="Select a pipeline", choices=arns)]
     answers = inquirer.prompt(q)
-    return next(pipeline for pipeline in pipelines if answers["pipeline"] == pipeline["arn"])
+    return next(
+        pipeline for pipeline in pipelines if answers["pipeline"] == pipeline["arn"]
+    )
 
 
 def select_version(sdk: Dataset, dataset_id):
@@ -67,7 +70,9 @@ def select_version(sdk: Dataset, dataset_id):
 
     q = [inquirer.List("version", message="Select a version", choices=all_versions)]
     answers = inquirer.prompt(q)
-    return next(version for version in versions if answers["version"] == version["version"])
+    return next(
+        version for version in versions if answers["version"] == version["version"]
+    )
 
 
 def pipeline_instance_wizard(sdk: Dataset, dataset: dict = None, pipeline=None):
@@ -86,50 +91,51 @@ def pipeline_instance_wizard(sdk: Dataset, dataset: dict = None, pipeline=None):
         example = ""
         transformation_schema = None
 
-    transformation_q = inquirer.Text("transformation", message="Provide a transformation object", default=example)
+    transformation_q = inquirer.Text(
+        "transformation", message="Provide a transformation object", default=example
+    )
     transformation_q.kind = "editor"
 
     questions = [
         inquirer.Text(
-                "schema-id",
-                message="Use a schema? Please enter schema-id (empty for no schema)",
-                default="",
+            "schema-id",
+            message="Use a schema? Please enter schema-id (empty for no schema)",
+            default="",
         ),
         inquirer.List(
-                "create-edition",
-                message="Should a new edition be created after this pipeline succeeds?",
-                choices=[True, False],
+            "create-edition",
+            message="Should a new edition be created after this pipeline succeeds?",
+            choices=[True, False],
         ),
-        transformation_q
+        transformation_q,
     ]
 
     answers = inquirer.prompt(questions)
 
     while transformation_schema is not None:
         try:
-            jsonschema.validate(json.loads(answers["transformation"]),
-                                schema=transformation_schema)
+            jsonschema.validate(
+                json.loads(answers["transformation"]), schema=transformation_schema
+            )
         except SchemaValidationError as e:
             print("Input must match the transformation Schema: ")
             BaseCommand.pretty_json(e.schema)
             print(e.__repr__())
-            answers.update(
-                inquirer.prompt([transformation_q]))
+            answers.update(inquirer.prompt([transformation_q]))
         except JSONDecodeError:
             print("Not valid JSON!")
-            answers.update(
-                    inquirer.prompt([transformation_q]))
+            answers.update(inquirer.prompt([transformation_q]))
         else:
             break
 
     pipeline_instance = PipelineInstance(
-            sdk,
-            id=dataset['Id'],
-            pipelineArn=pipeline["arn"],
-            datasetUri=f"output/{dataset['Id']}/{version['version']}",
-            schemaId=answers["schema-id"],
-            transformation=json.loads(answers["transformation"]),
-            useLatestEdition=not answers["create-edition"],
+        sdk,
+        id=dataset["Id"],
+        pipelineArn=pipeline["arn"],
+        datasetUri=f"output/{dataset['Id']}/{version['version']}",
+        schemaId=answers["schema-id"],
+        transformation=json.loads(answers["transformation"]),
+        useLatestEdition=not answers["create-edition"],
     )
     response, error = pipeline_instance.create()
 
