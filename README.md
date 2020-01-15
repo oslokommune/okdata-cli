@@ -121,3 +121,45 @@ $ origo datasets cp /tmp/test.txt ds:my-dataset
 The `cp` command operates with a `ds` prefix to specify
 
 If an error occurs: ensure that the latest version have a edition
+
+## Using a pipeline
+When you can upload a file to an edition, you can attach a Pipeline to the dataset.
+The easiest way is by using the Pipeline Instance Wizard:
+`origo pipelines intances wizard` 
+
+### Wizard
+1. Input a dataset id and select a version which the pipeline should write to
+2. Select a pipeline
+3. Input a transformation json object.
+    3. A empty version of the transformation object is provided. All properties may not be required
+4. Input a schema ID or leave it blank
+5. Select whether or not the pipeline should create a new edition when completing a pipeline run.
+
+When you upload a new data file, the pipeline will automatically start. 
+
+### Manually
+The requirements is a Pipeline Instance which refers to an existing Pipeline, and an output dataset. 
+Lookup available Pipelines with `origo pipelines ls` 
+
+pipeline_instance.json
+```
+{
+    "pipelineArn": "arn:some:aws:id:to:123456789101:test-pipeline",
+    "id": "my-dataset",
+    "datasetUri": "output/my-dataset/1",
+    "transformation": { "step1": "..." },
+    "useLatestEdition": false
+}
+```
+Pipeline Instance contains information about what to do in a pipeline. But a Pipeline Input is also required to indicate what will trigger the Instance.
+
+Create by `origo pipelines instances create --file pipeline_instance.json`
+
+pipeline_input.json
+```
+{
+    "datasetUri": "input/my-dataset/1",
+    "stage": "incoming",
+    "pipelineInstanceId": "my-dataset"
+}
+```
