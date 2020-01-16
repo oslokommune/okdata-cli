@@ -17,6 +17,7 @@ from origocli.commands.pipelines import (
     PipelinesLsInstances,
     PipelineInstanceLs,
     PipelineInstances,
+    SchemasLs,
 )
 
 pipeline_qual = f"{Pipeline.__module__}.{Pipeline.__name__}"
@@ -231,3 +232,10 @@ class TestPipelineInstances:
             ).__dict__
             in mock_pretty_json.call_args[0]
         )
+
+
+class TestSchemas:
+    def test_handler_all(self, mocker, mock_print_success):
+        set_argv("pipelines", "schemas", "ls")
+        cmd = SchemasLs(sdk)
+        assert cmd
