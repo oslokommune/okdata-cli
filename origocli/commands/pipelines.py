@@ -129,8 +129,8 @@ class PipelinesCreate(Create, PipelineOutput):
 class SchemasCreate(Create, PipelineOutput):
     """
     usage:
-      origo pipelines schema create - [options]
-      origo pipelines schema create <file> [options]
+      origo pipelines schemas create - [options]
+      origo pipelines schemas create <file> [options]
 
     options:
       -d --debug
