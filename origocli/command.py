@@ -97,6 +97,5 @@ Options
         if self.opt("format") == "json":
             print(f"{str}")
 
-    @staticmethod
-    def help():
-        print(BaseCommand.__doc__, end="")
+    def help(self):
+        print(self.__doc__, end="")

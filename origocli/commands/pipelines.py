@@ -8,10 +8,19 @@ from origo.pipelines.client import PipelineApiClient
 from origo.pipelines.resources.pipeline import Pipeline
 from origo.pipelines.resources.pipeline_base import PipelineBase
 from origo.pipelines.resources.pipeline_instance import PipelineInstance
+from origo.pipelines.resources.schema import Schema
 
 from origocli.command import BaseCommand
 from origocli.output import table_config_from_schema, TableOutput
 from fuzzywuzzy import process
+
+
+class SchemaOutput:
+    excluded = [
+        "The Schema Schema",
+    ]
+    type = Schema
+    config = table_config_from_schema(type, excluded)
 
 
 class PipelineOutput:
@@ -78,6 +87,16 @@ class PipelinesLs(Ls, PipelineOutput):
     """
 
 
+class SchemasLs(Ls, SchemaOutput):
+    """origo::pipelines::ls
+    usage:
+      origo pipelines schemas ls [options]
+
+    options:
+      -d --debug
+    """
+
+
 class Create(BaseCommand):
     sdk: PipelineApiClient
     type: Type[PipelineBase]
@@ -107,6 +126,17 @@ class PipelinesCreate(Create, PipelineOutput):
     """
 
 
+class SchemasCreate(Create, PipelineOutput):
+    """
+    usage:
+      origo pipelines schemas create - [options]
+      origo pipelines schemas create <file> [options]
+
+    options:
+      -d --debug
+    """
+
+
 class Pipelines(BaseCommand):
     """
     usage:
@@ -117,6 +147,9 @@ class Pipelines(BaseCommand):
       origo pipelines ls [options]
       origo pipelines ls-instances --pipeline-arn=<pipeline-arn> [options]
       origo pipelines create (<file> | -)
+      origo pipelines schemas [--id=<id>] [options]
+      origo pipelines schemas ls [options]
+      origo pipelines schemas create (<file> | -) [options]
 
     options:
       -d --debug
@@ -132,6 +165,7 @@ class Pipelines(BaseCommand):
             PipelinesCreate,
             PipelineInstances,
             PipelinesLsInstances,
+            Schemas,
         ]
 
     def default(self):
@@ -142,6 +176,33 @@ class Pipelines(BaseCommand):
             "transformation_schema": json.loads(pipeline.transformation_schema),
         }
         self.pretty_json(output_dict)
+
+
+class Schemas(BaseCommand):
+    """
+    usage:
+      origo pipelines schemas [--id=<id>] [options]
+      origo pipelines schemas ls [options]
+      origo pipelines schemas create (<file> | -) [options]
+
+    options:
+      -d --debug
+    """
+
+    sdk: PipelineApiClient
+
+    def __init__(self, sdk):
+        super().__init__()
+        self.sdk = sdk
+        self.handler = self.default
+        self.sub_commands = [SchemasLs, SchemasCreate]
+
+    def default(self):
+        if self.opt("help"):
+            return self.help()
+        schema = self.sdk.get_schema(self.opt("id"))
+        schema.schema = json.loads(schema.schema)
+        self.pretty_json(schema.__dict__)
 
 
 class PipelineInstancesCreate(Create, PipelineIntanceOutput):
