@@ -60,6 +60,7 @@ File: dataset.json
 {
     "title": "My dataset",
     "description": "My dataset description",
+    "theme": ["environment"],
     "keywords": ["keyword", "for-indexing"],
     "accessRights": "public",
     "confidentiality": "green",
