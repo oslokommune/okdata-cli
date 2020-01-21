@@ -9,6 +9,8 @@ from origocli.date import (
 from origo.data.dataset import Dataset
 from origo.data.upload import Upload
 
+import json
+
 
 class DatasetsCommand(BaseCommand):
     """Oslo :: Datasets
@@ -86,7 +88,7 @@ class DatasetsCommand(BaseCommand):
                 list["dataset"] = set
                 list["versions"] = versions
                 list["latest"] = latest
-                self.print("", list)
+                self.print("", json.dumps(list))
                 return
 
             out = create_output(self.opt("format"), "datasets_dataset_config.json")
