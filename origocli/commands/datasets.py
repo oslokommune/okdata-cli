@@ -19,7 +19,7 @@ class DatasetsCommand(BaseCommand):
       origo datasets ls [--format=<format> --env=<env> --filter=<filter>] [options]
       origo datasets ls <datasetid> [<versionid> <editionid>][--format=<format> --env=<env> options]
       origo datasets cp <filepath> <datasetid> [<versionid> <editionid> --format=<format> --env=<env> options]
-      origo datasets create [--file=<file --format=<format> --env=<env> options]
+      origo datasets create [--file=<file> --format=<format> --env=<env> options]
       origo datasets create-version <datasetid> [--file=<file> --format=<format> --env=<env> options]
       origo datasets create-edition <datasetid> [<versionid>] [--file=<file> --format=<format --env=<env> options]
       origo datasets create-distribution <datasetid> [<versionid> <editionid>] [--file=<file> --format=<format --env=<env> options]
