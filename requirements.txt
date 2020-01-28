@@ -16,7 +16,7 @@ importlib-metadata==1.4.0  # via jsonschema
 inquirer==2.6.3
 jsonschema==3.2.0         # via origo-sdk-python
 more-itertools==8.1.0     # via zipp
-origo-sdk-python==0.0.14
+origo-sdk-python==0.0.15
 prettytable==0.7.2
 pyasn1==0.4.8             # via python-jose, rsa
 pygments==2.5.2
