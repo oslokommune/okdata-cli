@@ -152,3 +152,35 @@ $ origo datasets cp /tmp/test.txt ds:my-dataset
 The `cp` command operates with a `ds` prefix to specify
 
 If an error occurs: ensure that the latest version have a edition
+
+## Creating Event Streams
+
+In order to create an event stream you will need to [create a dataset](#create-dataset) and [create a 
+version](#create-version) for the dataset. If such already exist you are good to go.
+
+Create:
+```
+$ origo event_streams create <datasetid> <version>
+```
+Get:
+```
+$ origo event_streams ls <datasetid> <version>
+```
+Delete:
+```
+$ origo event_streams delete <datasetid> <version>
+```
+
+## Sending Events
+
+In order to send events you need to [create an event stream](#creating-event-streams). 
+If such already exist you are good to go.
+
+Sending single json-events and lists of json-events can be done as follows:
+```
+$ echo '{"hello": "world"}' | origo events put test-event 1
+$ echo '[{"hello": "world"}, {"world": "hello"}]' | origo events put test-event 1
+$ cat /tmp/event.json | origo events put test-event 1
+$ origo events put test-event 1 --file=/tmp/event.json
+```
+

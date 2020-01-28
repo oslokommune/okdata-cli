@@ -2,6 +2,7 @@ import sys
 
 from origocli.command import BaseCommand
 from origocli.commands.datasets import DatasetsCommand
+from origocli.commands.event_streams import EventStreamCommand
 from origocli.commands.events import EventsCommand
 from origocli.commands.pipelines import Pipelines
 
@@ -26,6 +27,7 @@ def get_command_class(argv):
         "datasets": DatasetsCommand,
         "events": EventsCommand,
         "pipelines": Pipelines,
+        "event_streams": EventStreamCommand,
     }
     if argv[1] in commands:
         return commands[argv[1]]
