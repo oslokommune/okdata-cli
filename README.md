@@ -11,36 +11,6 @@ Until then: see setup below for manual configuration of CLI
 
 # Setup
 
-Environment variables:
-
-Default, will pick up configuration from current environment.
-The credentials is resolved automatically if you do not set a specific Auth config, in the following order:
-
-1. _Client Credentials_: If you have added client_id / client_secret to the config. Or if you use the
-environment variable equivalent: `ORIGO_CLIENT_ID` / `ORIGO_CLIENT_SECRET`.
-2. _Username And Password_:  If you have added username / password to the config. Or if you use the
-environment variable equivalent: `ORIGO_USERNAME` / `ORIGO_PASSWORD`.
-```
-# keycloak user
-export ORIGO_USERNAME=my-user
-
-# keycloak password for ORIGO_USERNAME
-export ORIGO_PASSWORD=my-password
-
-# keycloak client
-export ORIGO_CLIENT_ID=my-machine-client
-
-# keycloak secret for ORIGO_CLIENT_ID
-export ORIGO_CLIENT_SECRET=some-generated-secure-string
-
-
-# overrides default environment (dev), but will be trumped by --env=<environment> on the commandline
-export ORIGO_ENVIRONMENT=dev|prod
-
-# If you are sending events and have been assigned a API key
-export ORIGO_API_KEY=your-api-key
-```
-
 Requirement: python 3.7
 
 ```
@@ -66,6 +36,36 @@ $ make test
 ```
 
 # Usage
+Environment variables:
+
+Default, will pick up configuration from current environment.
+The credentials is resolved automatically if you do not set a specific Auth config, in the following order:
+
+Note!
+
+You do not need to set all four of: `ORIGO_USERNAME, ORIGO_PASSWORD, ORIGO_CLIENT_ID, ORIGO_CLIENT_SECRET`.
+If you have been provided client_credentials then set: `ORIGO_CLIENT_ID, ORIGO_CLIENT_SECRET`. 
+Otherwise set: `ORIGO_CLIENT_ID, ORIGO_CLIENT_SECRET`
+```
+# keycloak user
+export ORIGO_USERNAME=my-user
+
+# keycloak password for ORIGO_USERNAME
+export ORIGO_PASSWORD=my-password
+
+# keycloak client
+export ORIGO_CLIENT_ID=my-machine-client
+
+# keycloak secret for ORIGO_CLIENT_ID
+export ORIGO_CLIENT_SECRET=some-generated-secure-string
+
+
+# overrides default environment (dev), but will be trumped by --env=<environment> on the commandline
+export ORIGO_ENVIRONMENT=dev|prod
+
+# If you are sending events and have been assigned a API key
+export ORIGO_API_KEY=your-api-key
+```
 ```
 $ origo help
 $ origo <command> help
