@@ -40,6 +40,10 @@ class ElasticsearchQueryCommand(BaseCommand):
         last_day = data["last_day"]["events"]
         last_week = data["last_week"]["events"]
 
+        payload = None
+        if self.opt("format") == "json":
+            payload = json.dumps(data)
+
         self.print("Events ...")
         self.print("Last hour\tLast day\tLast week")
-        self.print(f"{last_hour}\t\t{last_day}\t\t{last_week}", json.dumps(data))
+        self.print(f"{last_hour}\t\t{last_day}\t\t{last_week}", payload)
