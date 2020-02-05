@@ -90,7 +90,7 @@ Options
         print(colorful_json)
 
     @staticmethod
-    def print_success(table, data):
+    def print_success(table, data=""):
         for row in data:
             table.add_row(row)
         print(table)
