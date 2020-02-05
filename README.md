@@ -45,7 +45,7 @@ Note!
 
 You do not need to set all four of: `ORIGO_USERNAME, ORIGO_PASSWORD, ORIGO_CLIENT_ID, ORIGO_CLIENT_SECRET`.
 If you have been provided client_credentials then set: `ORIGO_CLIENT_ID, ORIGO_CLIENT_SECRET`. 
-Otherwise set: `ORIGO_CLIENT_ID, ORIGO_CLIENT_SECRET`
+Otherwise set: `ORIGO_USERNAME, ORIGO_PASSWORD`
 ```
 # keycloak user
 export ORIGO_USERNAME=my-user
