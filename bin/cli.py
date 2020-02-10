@@ -5,7 +5,6 @@ from origocli.commands.datasets import DatasetsCommand
 from origocli.commands.event_streams import EventStreamCommand
 from origocli.commands.events import EventsCommand
 from origocli.commands.pipelines import Pipelines
-from origocli.commands.elasticsearch_queries import ElasticsearchQueryCommand
 
 
 def main():
@@ -29,7 +28,6 @@ def get_command_class(argv):
         "events": EventsCommand,
         "pipelines": Pipelines,
         "event_streams": EventStreamCommand,
-        "esq": ElasticsearchQueryCommand,
     }
     if argv[1] in commands:
         return commands[argv[1]]

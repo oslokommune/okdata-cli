@@ -13,14 +13,12 @@ class BaseCommand:
   origo pipelines [options]
   origo events [options]
   origo event_streams [options]
-  origo esq [options]
 
 Commands available:
   datasets
   pipelines
   events
   event_streams
-  esq
   help
 
 Options
