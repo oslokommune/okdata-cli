@@ -2,7 +2,7 @@
 init:
 	pip3 install tox black pip-tools
 	pip-compile
-	pip3 install -rrequirements.txt
+	pip3 install -e .
 
 .PHONY: format
 format:
