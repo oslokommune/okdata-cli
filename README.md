@@ -18,27 +18,13 @@ git clone git@github.com:oslokommune/origo-cli.git
 cd origo-cli
 python3 -m venv .venv
 . .venv/bin/activate
-pip install -e .
-```
-
-When developing towards the origo-sdk-python library:
-```
-cd origo-cli
-python3 -m venv .venv
-. .venv/bin/activate
-export PYTHONPATH=$PYTHONPATH:/Users/eide/Documents/workspace/oslokommune/origo-sdk-python/
-python3 bin/cli.py datasets ls
-```
-
-# Tests
-```
-$ make test
+make init
 ```
 
 # Usage
 Environment variables:
 
-Default, will pick up configuration from current environment.
+The cli will by default pick up configuration from current environment.
 The credentials is resolved automatically if you do not set a specific Auth config, in the following order:
 
 Note!
@@ -181,9 +167,9 @@ If such already exist you are good to go.
 
 Sending single json-events and lists of json-events can be done as follows:
 ```
-$ echo '{"hello": "world"}' | origo events put test-event 1
-$ echo '[{"hello": "world"}, {"world": "hello"}]' | origo events put test-event 1
-$ cat /tmp/event.json | origo events put test-event 1
-$ origo events put test-event 1 --file=/tmp/event.json
+$ echo '{"hello": "world"}' | origo events put <datasetid> <version>
+$ echo '[{"hello": "world"}, {"world": "hello"}]' | origo events put <datasetid> <version>
+$ cat /tmp/event.json | origo events put <datasetid> <version>
+$ origo events put <datasetid> <version> --file=/tmp/event.json
 ```
 
