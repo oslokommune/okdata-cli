@@ -1,9 +1,10 @@
 import sys
+from docopt import docopt
 
 from origocli.command import BaseCommand
 from origocli.commands.datasets import DatasetsCommand
 from origocli.commands.event_streams import EventStreamCommand
-from origocli.commands.events import EventsCommand
+from origocli.commands.events import EventsRegistry
 from origocli.commands.pipelines import Pipelines
 
 
@@ -25,7 +26,7 @@ def main():
 def get_command_class(argv):
     commands = {
         "datasets": DatasetsCommand,
-        "events": EventsCommand,
+        "events": EventsRegistry,
         "pipelines": Pipelines,
         "event_streams": EventStreamCommand,
     }
@@ -34,5 +35,41 @@ def get_command_class(argv):
     return False
 
 
+class RootCommand(BaseCommand):
+    """Oslo
+
+Usage:
+  origo [-d|--debug] [--format=<format>] <command> [<args>...]
+
+Commands available:
+  datasets
+  pipelines
+  events
+  event_streams
+  help
+
+Options
+  -d --debug
+  --format=<format>
+"""
+
+    sub_commands = {
+        "datasets": DatasetsCommand,
+        "events": EventsRegistry,
+        "pipelines": Pipelines,
+        "event_stream": EventStreamCommand,
+    }
+
+
 if __name__ == "__main__":
-    main()
+    args = docopt(RootCommand.__doc__, options_first=True)
+    argv = [args["<command>"]] + args["<args>"]
+    root = RootCommand(args)
+    CommandCls = root()
+
+    while CommandCls:
+        options_first = CommandCls.sub_commands and True or False
+        new_args = docopt(CommandCls.__doc__, options_first=options_first, argv=argv)
+        args = {**args, **new_args}
+        instance = CommandCls(args)
+        CommandCls = instance()

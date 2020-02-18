@@ -2,59 +2,36 @@ import json
 import logging
 import sys
 
-from docopt import docopt, DocoptExit
-from origo.sdk import SDK
 from pygments import highlight, lexers, formatters
 
 
 class BaseCommand:
-    """usage:
-  origo datasets [options]
-  origo pipelines [options]
-  origo events [options]
-  origo event_streams [options]
-
-Commands available:
-  datasets
-  pipelines
-  events
-  event_streams
-  help
-
-Options
-  -d --debug
-  --format=<format>
-"""
-
     log = logging.getLogger(__name__)
     sub_commands = None
     args: dict
     handler: ()
 
-    def __init__(self, sdk=None):
-        self.args = docopt(str(self.__doc__))
-        self.sdk = sdk
+    def __init__(self, args):
+        self.args = args
         if self.opt("debug"):
             logging.basicConfig(level=logging.DEBUG)
-        if self.sdk is None:
-            self.sdk = SDK(env=self.opt("env"))
 
-    def handle(self):
-        self.args = docopt(str(self.__doc__))
+    def __call__(self):
         if self.sub_commands:
-            for cmd in self.sub_commands:
-                try:
-                    self.log.debug(f"Checking if sub_command '{cmd.__name__}' is valid")
-                    return cmd(self.sdk).handle()
-                except DocoptExit as d:
-                    self.log.debug(d.usage)
-                    continue
+            command = self.current_command()
+            if command in self.sub_commands:
+                return self.sub_commands[command]
 
         if not hasattr(self, "handler"):
             self.log.info("command was implemented without a default handler")
-            print(self.__doc__)
-            return None
-        return self.handler()
+            print(self.__doc__, end="")
+        else:
+            self.handler()
+
+        return None
+
+    def current_command(self):
+        return self.arg("command")
 
     def cmd(self, key):
         return self.args.get(key)
