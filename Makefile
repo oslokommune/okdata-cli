@@ -1,6 +1,6 @@
 .PHONY: init
 init:
-	python3 -m pip install tox black pip-tools
+	pip3 install tox black pip-tools
 	pip-compile
 	pip3 install -rrequirements.txt
 
