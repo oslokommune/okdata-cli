@@ -162,6 +162,9 @@ Create:
 ```
 $ origo event_streams create <datasetid> <version>
 ```
+Note! You can not start sending event to the stream right away. You must wait until
+the stream status is ACTIVE. To poll for the stream-status you can use the following (Get) `origo event_streams ls` - command.
+
 Get:
 ```
 $ origo event_streams ls <datasetid> <version>
