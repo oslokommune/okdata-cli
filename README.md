@@ -21,6 +21,8 @@ python3 -m venv .venv
 make init
 ```
 
+see [python documentation](doc/python.md) for installing python 3.7 on Ubuntu 1804 or Rasberry Pi
+
 # Usage
 Environment variables:
 
