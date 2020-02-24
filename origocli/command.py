@@ -106,12 +106,13 @@ Options
         response_body.update({"error": 1})
         try:
             feedback = generate_error_feedback(
-                message=response_body["message"], errors=response_body["errors"]
+                message=response_body["message"],
+                errors=response_body.get("errors", None),
             )
+            self.print(feedback, payload=response_body)
         except KeyError:
             self.log.debug("Got unexpected response body from api.")
             self.print(response_body, payload=response_body)
-        self.print(feedback, payload=response_body)
 
 
 def generate_error_feedback(message, errors=None):
