@@ -78,8 +78,8 @@ Options
         if not is_json:
             print(str)
         # Normally a return json value from the API
-        if payload and is_json:
-            print(json.dumps(payload))
+        if payload:
+            print(payload)
 
     @staticmethod
     def pretty_json(data):
@@ -104,15 +104,19 @@ Options
 
     def print_error_response(self, response_body):
         response_body.update({"error": 1})
-        try:
-            feedback = generate_error_feedback(
-                message=response_body["message"],
-                errors=response_body.get("errors", None),
-            )
-            self.print(feedback, payload=response_body)
-        except KeyError:
-            self.log.debug("Got unexpected response body from api.")
-            self.print(response_body, payload=response_body)
+
+        if self.opt("format") == "json":
+            print(response_body)
+        else:
+            try:
+                feedback = generate_error_feedback(
+                    message=response_body["message"],
+                    errors=response_body.get("errors", None),
+                )
+                print(feedback)
+            except KeyError:
+                self.log.debug("Got unexpected response body from api.")
+                print(response_body)
 
 
 def generate_error_feedback(message, errors=None):
