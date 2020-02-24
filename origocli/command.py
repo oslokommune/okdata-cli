@@ -78,7 +78,7 @@ Options
         if not is_json:
             print(str)
         # Normally a return json value from the API
-        if payload:
+        if payload and is_json:
             print(payload)
 
     @staticmethod
@@ -101,3 +101,21 @@ Options
 
     def help(self):
         print(self.__doc__, end="")
+
+    def print_error_response(self, response_body):
+        try:
+            feedback = generate_error_feedback(
+                message=response_body["message"], errors=response_body["errors"]
+            )
+        except KeyError:
+            self.log.debug("Got unexpected response body from api.")
+            self.print(response_body, payload=response_body)
+        self.print(feedback, payload=response_body)
+
+
+def generate_error_feedback(message, errors=None):
+    feedback = f"\nOperation failed with message: {message}"
+    if errors:
+        feedback += f"\nCause:\n\t{errors}"
+
+    return f"{feedback}\n"
