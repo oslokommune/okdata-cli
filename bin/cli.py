@@ -14,7 +14,7 @@ def main():
     argv = sys.argv
     if len(argv) < 2 or argv[1] == "help":
         BaseCommand().help()
-        return False
+        return
 
     command = get_command_class(argv)
 
@@ -32,7 +32,6 @@ def main():
 
     else:
         BaseCommand().help()
-        return False
 
 
 def get_command_class(argv):

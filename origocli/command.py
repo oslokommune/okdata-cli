@@ -79,7 +79,7 @@ Options
             print(str)
         # Normally a return json value from the API
         if payload and is_json:
-            print(payload)
+            print(json.dumps(payload))
 
     @staticmethod
     def pretty_json(data):
@@ -103,6 +103,7 @@ Options
         print(self.__doc__, end="")
 
     def print_error_response(self, response_body):
+        response_body.update({"error": 1})
         try:
             feedback = generate_error_feedback(
                 message=response_body["message"], errors=response_body["errors"]
