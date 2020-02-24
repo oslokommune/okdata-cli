@@ -1,5 +1,4 @@
 import json
-from requests.exceptions import HTTPError
 
 from origocli.command import BaseCommand
 

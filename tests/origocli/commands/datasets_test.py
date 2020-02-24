@@ -1,4 +1,3 @@
-import logging
 from datetime import datetime
 
 import pytest
@@ -67,15 +66,6 @@ class TestDatasetsLs:
         assert output_with_argument(output, [dataset, dataset])
         assert mock_print.called_once
 
-    def test_datasets_error(self, mocker, mock_print):
-        cmd = create_cmd(mocker, "ls")
-        cmd.sdk.get_datasets.side_effect = Exception("test")
-        cmd.handler()
-        logging.basicConfig(level=logging.DEBUG)
-
-        cmd.log.exception.assert_called_once_with(f"Failed badly: test")
-        assert not mock_print.called
-
     def test_dataset(self, mock_print, mocker, output):
         cmd = create_cmd(mocker, "ls", dataset["Id"])
         cmd.handler()
@@ -97,16 +87,6 @@ class TestDatasetsLs:
         assert cmd.sdk.get_versions.called
         assert cmd.sdk.get_latest_version.called
         assert not cmd.log.exception.called
-
-    def test_dataset_error(self, mocker, mock_print):
-        cmd = create_cmd(mocker, "ls", dataset["Id"])
-        cmd.sdk.get_latest_version.side_effect = Exception("test")
-        cmd.handler()
-        assert cmd.sdk.get_dataset.called
-        assert cmd.sdk.get_versions.called
-        assert cmd.sdk.get_latest_version.called
-        assert cmd.log.exception.called
-        assert not mock_print.called
 
     def test_version(self, mocker, output):
         cmd = create_cmd(mocker, "ls", dataset["Id"], version["version"])

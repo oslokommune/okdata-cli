@@ -65,9 +65,9 @@ class DatasetsCommand(BaseCommand):
     # #################################### #
     def datasets(self):
         self.log.info("Listing datasets")
-        datset_list = self.sdk.get_datasets(filter=self.opt("filter"))
+        dataset_list = self.sdk.get_datasets(filter=self.opt("filter"))
         out = create_output(self.opt("format"), "datasets_config.json")
-        out.add_rows(datset_list)
+        out.add_rows(dataset_list)
         self.print("Available datasets", out)
 
     def dataset(self):
@@ -75,7 +75,7 @@ class DatasetsCommand(BaseCommand):
         self.log.info(f"DatasetsCommand.handle_dataset({dataset_id})")
 
         set = self.sdk.get_dataset(dataset_id)
-        versions = self.sdk.get_versionsa(dataset_id)
+        versions = self.sdk.get_versions(dataset_id)
         latest = self.sdk.get_latest_version(dataset_id)
         if self.opt("format") == "json":
             list = {}
