@@ -31,7 +31,6 @@ class DatasetsCommand(BaseCommand):
         super().__init__()
         env = self.opt("env")
         self.sdk = Dataset(env=env)
-        self.sdk.login()
         self.handler = self.default
 
     # TODO: do a better mapping from rules to commands here...?
@@ -65,59 +64,48 @@ class DatasetsCommand(BaseCommand):
     # Datasets
     # #################################### #
     def datasets(self):
-        try:
-            self.log.info("Listing datasets")
-            datset_list = self.sdk.get_datasets(filter=self.opt("filter"))
-            out = create_output(self.opt("format"), "datasets_config.json")
-            out.add_rows(datset_list)
-            self.print("Available datasets", out)
-        except Exception as e:
-            self.log.exception(f"Failed badly: {e}")
+        self.log.info("Listing datasets")
+        datset_list = self.sdk.get_datasets(filter=self.opt("filter"))
+        out = create_output(self.opt("format"), "datasets_config.json")
+        out.add_rows(datset_list)
+        self.print("Available datasets", out)
 
     def dataset(self):
         dataset_id = self.arg("datasetid")
         self.log.info(f"DatasetsCommand.handle_dataset({dataset_id})")
-        try:
-            set = self.sdk.get_dataset(dataset_id)
-            versions = self.sdk.get_versions(dataset_id)
-            latest = self.sdk.get_latest_version(dataset_id)
-            if self.opt("format") == "json":
-                list = {}
-                list["dataset"] = set
-                list["versions"] = versions
-                list["latest"] = latest
-                self.print("", list)
-                return
 
-            out = create_output(self.opt("format"), "datasets_dataset_config.json")
-            out.add_rows([set])
-            self.print(f"Dataset: {dataset_id}", out)
+        set = self.sdk.get_dataset(dataset_id)
+        versions = self.sdk.get_versionsa(dataset_id)
+        latest = self.sdk.get_latest_version(dataset_id)
+        if self.opt("format") == "json":
+            list = {}
+            list["dataset"] = set
+            list["versions"] = versions
+            list["latest"] = latest
+            self.print("", list)
+            return
 
-            self.print(f"\n\nVersions available for: {dataset_id}")
-            out = create_output(
-                self.opt("format"), "datasets_dataset_versions_config.json"
-            )
-            out.add_rows(versions)
-            self.print(f"\n\nVersions available for: {dataset_id}", out)
+        out = create_output(self.opt("format"), "datasets_dataset_config.json")
+        out.add_rows([set])
+        self.print(f"Dataset: {dataset_id}", out)
 
-            out = create_output(
-                self.opt("format"), "datasets_dataset_versions_config.json"
-            )
-            out.add_rows([latest])
-            self.print(f"\n\nLatest version for: {dataset_id}", out)
-        except Exception as e:
-            self.log.exception(f"Failed badly: {e}")
+        self.print(f"\n\nVersions available for: {dataset_id}")
+        out = create_output(self.opt("format"), "datasets_dataset_versions_config.json")
+        out.add_rows(versions)
+        self.print(f"\n\nVersions available for: {dataset_id}", out)
+
+        out = create_output(self.opt("format"), "datasets_dataset_versions_config.json")
+        out.add_rows([latest])
+        self.print(f"\n\nLatest version for: {dataset_id}", out)
 
     def create_dataset(self):
         payload = read_stdin_or_filepath(self.opt("file"))
         self.log.info(f"Creating dataset with payload: {payload}")
-        try:
-            dataset = self.sdk.create_dataset(payload)
-            dataset_id = dataset["Id"]
-            self.log.info(f"Created dataset with id: {dataset_id}")
-            self.print(f"Created dataset: {dataset_id}", dataset)
-        except Exception as e:
-            self.log.exception(f"Failed badly: {e}")
+
+        dataset = self.sdk.create_dataset(payload)
+        dataset_id = dataset["Id"]
+        self.log.info(f"Created dataset with id: {dataset_id}")
+        self.print(f"Created dataset: {dataset_id}", dataset)
 
     # #################################### #
     # Version
@@ -132,17 +120,11 @@ class DatasetsCommand(BaseCommand):
         dataset_id = self.arg("datasetid")
         version_id = self.arg("versionid") or self.opt("versionid")
         self.log.info(f"Listing version for: {dataset_id}, {version_id}")
-        try:
-            editions = self.sdk.get_editions(dataset_id, version_id)
-            out = create_output(
-                self.opt("format"), "datasets_dataset_version_config.json"
-            )
-            out.add_rows(editions)
-            self.print(
-                f"Editions available for: {dataset_id}, version: {version_id}", out
-            )
-        except Exception as e:
-            self.log.exception(f"Failed badly: {e}")
+
+        editions = self.sdk.get_editions(dataset_id, version_id)
+        out = create_output(self.opt("format"), "datasets_dataset_version_config.json")
+        out.add_rows(editions)
+        self.print(f"Editions available for: {dataset_id}, version: {version_id}", out)
 
     def create_version(self):
         dataset_id = self.arg("datasetid")
@@ -150,13 +132,11 @@ class DatasetsCommand(BaseCommand):
         self.log.info(
             f"Creating version for dataset: {dataset_id} with payload: {payload}"
         )
-        try:
-            version = self.sdk.create_version(dataset_id, payload)
-            version_id = version["Id"]
-            self.log.info(f"Created version: {version_id} on dataset: {dataset_id}")
-            self.print(f"Created version: {version_id}", version)
-        except Exception as e:
-            self.log.exception(f"Failed badly: {e}")
+
+        version = self.sdk.create_version(dataset_id, payload)
+        version_id = version["Id"]
+        self.log.info(f"Created version: {version_id} on dataset: {dataset_id}")
+        self.print(f"Created version: {version_id}", version)
 
     def resolve_or_load_versionid(self, dataset_id):
         self.log.info(f"Trying to resolve versionid for {dataset_id}")
@@ -178,24 +158,20 @@ class DatasetsCommand(BaseCommand):
         version_id = self.arg("versionid") or self.opt("versionid")
         edition_id = self.arg("editionid") or self.opt("editionid")
         self.log.info(f"Listing edition for: {dataset_id}, {version_id}, {edition_id}")
-        try:
-            edition = self.sdk.get_edition(dataset_id, version_id, edition_id)
-            out = create_output(
-                self.opt("format"), "datasets_dataset_version_edition_config.json"
-            )
-            out.add_rows([edition])
-            print(out)
-            distributions = self.sdk.get_distributions(
-                dataset_id, version_id, edition_id
-            )
-            out = create_output(
-                self.opt("format"),
-                "datasets_dataset_version_edition_distributions_config.json",
-            )
-            out.add_rows(distributions)
-            self.print("Files available: ", out)
-        except Exception as e:
-            self.log.exception(f"Failed: {e}")
+
+        edition = self.sdk.get_edition(dataset_id, version_id, edition_id)
+        out = create_output(
+            self.opt("format"), "datasets_dataset_version_edition_config.json"
+        )
+        out.add_rows([edition])
+        print(out)
+        distributions = self.sdk.get_distributions(dataset_id, version_id, edition_id)
+        out = create_output(
+            self.opt("format"),
+            "datasets_dataset_version_edition_distributions_config.json",
+        )
+        out.add_rows(distributions)
+        self.print("Files available: ", out)
 
     def create_edition(self):
         payload = read_stdin_or_filepath(self.opt("file"))
@@ -204,12 +180,10 @@ class DatasetsCommand(BaseCommand):
         self.log.info(
             f"Creating edition for {version_id} on {dataset_id} with payload: {payload}"
         )
-        try:
-            edition = self.sdk.create_edition(dataset_id, version_id, payload)
-            self.print(f"Created edition for {version_id} on {dataset_id}", edition)
-            return edition
-        except Exception as e:
-            self.log.exception(f"Failed badly: {e}")
+
+        edition = self.sdk.create_edition(dataset_id, version_id, payload)
+        self.print(f"Created edition for {version_id} on {dataset_id}", edition)
+        return edition
 
     def resolve_or_create_edition(self, dataset_id, version_id):
         self.log.info(f"Trying to resolve edition for {version_id} on {dataset_id}")
@@ -245,16 +219,14 @@ class DatasetsCommand(BaseCommand):
         self.log.info(
             f"Creating distribution for {edition_id} on {dataset_id}/{version_id} with payload: {payload}"
         )
-        try:
-            distribution = self.sdk.create_distribution(
-                dataset_id, version_id, edition_id, payload
-            )
-            self.print(
-                f"Created distribution for {version_id} on {dataset_id}", distribution
-            )
-            return distribution
-        except Exception as e:
-            self.log.exception(f"Failed badly: {e}")
+
+        distribution = self.sdk.create_distribution(
+            dataset_id, version_id, edition_id, payload
+        )
+        self.print(
+            f"Created distribution for {version_id} on {dataset_id}", distribution
+        )
+        return distribution
 
     # #################################### #
     # File handling
@@ -265,15 +237,9 @@ class DatasetsCommand(BaseCommand):
         self.log.info(f"Copying file to dataset: {dataset_id}")
         version_id = self.resolve_or_load_versionid(dataset_id)
         edition_id = self.resolve_or_create_edition(dataset_id, version_id)
-        try:
-            upload = Upload()
-            self.log.info(
-                f"Will copy file to: {dataset_id}, {version_id}, {edition_id})"
-            )
-            res = upload.upload(
-                self.arg("filepath"), dataset_id, version_id, edition_id
-            )
-            self.log.info(f"Upload returned: {res}")
-            self.print_success("Uploaded file")
-        except Exception as e:
-            self.log.exception(f"Failed: {e}")
+
+        upload = Upload()
+        self.log.info(f"Will copy file to: {dataset_id}, {version_id}, {edition_id})")
+        res = upload.upload(self.arg("filepath"), dataset_id, version_id, edition_id)
+        self.log.info(f"Upload returned: {res}")
+        self.print_success("Uploaded file")
