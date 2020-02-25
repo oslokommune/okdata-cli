@@ -22,7 +22,7 @@ def main():
         instance = command()
         try:
             instance.sdk.login()
-            return instance.handle()
+            instance.handle()
         except HTTPError as he:
             instance.print_error_response(he.response.json())
         except ApiAuthenticateError:
