@@ -103,6 +103,10 @@ Options
         print(self.__doc__, end="")
 
     def print_error_response(self, response_body):
+        if type(response_body) != dict:
+            print(response_body)
+            return
+
         response_body.update({"error": 1})
 
         if self.opt("format") == "json":

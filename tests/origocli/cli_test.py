@@ -1,5 +1,4 @@
 import sys
-import io
 import json
 from requests.models import Response
 
@@ -23,23 +22,19 @@ def test_get_command_class():
     assert cmd is DatasetsCommand
 
 
-def test_main_http_error(raise_http_error):
+def test_main_http_error(raise_http_error, capsys):
     sys.argv = ["origo", "datasets", "create"]
-    captured_output = io.StringIO()
-    sys.stdout = captured_output
     main()
     expected_output = generate_error_feedback(
         bad_request_response_body["message"], bad_request_response_body["errors"]
     )
-    assert captured_output.getvalue().strip("\n") == expected_output.strip("\n")
+    assert capsys.readouterr().out.strip("\n") == expected_output.strip("\n")
 
 
-def test_main_auth_error(auth_failed):
+def test_main_auth_error(auth_failed, capsys):
     sys.argv = ["origo", "datasets", "create"]
-    captured_output = io.StringIO()
-    sys.stdout = captured_output
     main()
-    assert captured_output.getvalue().strip("\n") == "Invalid credentials"
+    assert capsys.readouterr().out.strip("\n") == "Invalid credentials"
 
 
 @pytest.fixture()
