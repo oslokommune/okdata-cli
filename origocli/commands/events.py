@@ -31,13 +31,15 @@ class EventsCommand(BaseCommand):
         env = self.opt("env")
 
         config = Config(env=env)
-        auth = Authenticate(config)
-        auth.login()
+        self.auth = Authenticate(config)
 
-        self.post_event_sdk = PostEvent(auth=auth, env=env)
-        self.esq_sdk = ElasticsearchQueries(auth=auth, env=env)
+        self.post_event_sdk = PostEvent(auth=self.auth, env=env)
+        self.esq_sdk = ElasticsearchQueries(auth=self.auth, env=env)
 
         self.handler = self.default
+
+    def login(self):
+        self.auth.login()
 
     def default(self):
         self.log.info("EventsCommand.handle()")

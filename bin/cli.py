@@ -21,7 +21,7 @@ def main():
     if command:
         instance = command()
         try:
-            instance.sdk.login()
+            instance.login()
             instance.handle()
         except HTTPError as he:
             instance.print_error_response(he.response.json())

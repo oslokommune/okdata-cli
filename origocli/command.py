@@ -81,6 +81,9 @@ Options
         if payload:
             print(payload)
 
+    def login(self):
+        self.sdk.login()
+
     @staticmethod
     def pretty_json(data):
         output = json.dumps(data, indent=2)
