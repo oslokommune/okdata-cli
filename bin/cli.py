@@ -1,4 +1,7 @@
 import sys
+from requests.exceptions import HTTPError
+
+from origo.exceptions import ApiAuthenticateError
 
 from origocli.command import BaseCommand
 from origocli.commands.datasets import DatasetsCommand
@@ -11,15 +14,24 @@ def main():
     argv = sys.argv
     if len(argv) < 2 or argv[1] == "help":
         BaseCommand().help()
-        return False
+        return
 
     command = get_command_class(argv)
 
-    if command is not False:
+    if command:
         instance = command()
-        return instance.handle()
-    BaseCommand().help()
-    return False
+        try:
+            instance.login()
+            instance.handle()
+        except HTTPError as he:
+            instance.print_error_response(he.response.json())
+        except ApiAuthenticateError:
+            instance.print("Invalid credentials")
+        except Exception as e:
+            instance.log.exception(f"Failed badly: {e}")
+
+    else:
+        BaseCommand().help()
 
 
 def get_command_class(argv):

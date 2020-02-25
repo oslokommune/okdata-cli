@@ -1,5 +1,4 @@
 import json
-from requests.exceptions import HTTPError
 
 from origocli.command import BaseCommand
 
@@ -28,24 +27,17 @@ class EventStreamCommand(BaseCommand):
         super().__init__()
         env = self.opt("env")
         self.sdk = EventStreamClient(env=env)
-        self.sdk.login()
         self.handler = self.default
 
     def default(self):
-        try:
-            if self.cmd("create"):
-                self.create()
-            elif self.cmd("ls"):
-                self.ls()
-            elif self.cmd("delete"):
-                self.delete()
-            else:
-                self.print("Invalid command")
-        except HTTPError as e:
-            self.print(f"Operation failed.\nReason: {e.response.json()['message']}")
-        except Exception as e:
-            self.log.info(f"Failed: {e}")
-            self.print(f"Operation failed: {repr(e)}")
+        if self.cmd("create"):
+            self.create()
+        elif self.cmd("ls"):
+            self.ls()
+        elif self.cmd("delete"):
+            self.delete()
+        else:
+            self.print("Invalid command")
 
     def create(self):
         dataset_id = self.arg("datasetid")

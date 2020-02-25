@@ -81,6 +81,9 @@ Options
         if payload:
             print(payload)
 
+    def login(self):
+        self.sdk.login()
+
     @staticmethod
     def pretty_json(data):
         output = json.dumps(data, indent=2)
@@ -101,3 +104,31 @@ Options
 
     def help(self):
         print(self.__doc__, end="")
+
+    def print_error_response(self, response_body):
+        if type(response_body) != dict:
+            print(response_body)
+            return
+
+        response_body.update({"error": 1})
+
+        if self.opt("format") == "json":
+            print(json.dumps(response_body))
+        else:
+            try:
+                feedback = generate_error_feedback(
+                    message=response_body["message"],
+                    errors=response_body.get("errors", None),
+                )
+                print(feedback)
+            except KeyError:
+                self.log.debug("Got unexpected response body from api.")
+                print(response_body)
+
+
+def generate_error_feedback(message, errors=None):
+    feedback = f"\nOperation failed with message: {message}"
+    if errors:
+        feedback += f"\nCause:\n\t{errors}"
+
+    return f"{feedback}\n"

@@ -1,9 +1,8 @@
 import json
-
 from origo.config import Config
 from origo.auth.auth import Authenticate
 from origo.event.post_event import PostEvent
-from origo.elasticsearch.queries import ElasticsearchQueries, NotDatasetOwnerError
+from origo.elasticsearch.queries import ElasticsearchQueries
 
 from origocli.command import BaseCommand
 from origocli.io import read_stdin_or_filepath
@@ -32,13 +31,15 @@ class EventsCommand(BaseCommand):
         env = self.opt("env")
 
         config = Config(env=env)
-        auth = Authenticate(config)
-        auth.login()
+        self.auth = Authenticate(config)
 
-        self.post_event_sdk = PostEvent(auth=auth, env=env)
-        self.esq_sdk = ElasticsearchQueries(auth=auth, env=env)
+        self.post_event_sdk = PostEvent(auth=self.auth, env=env)
+        self.esq_sdk = ElasticsearchQueries(auth=self.auth, env=env)
 
         self.handler = self.default
+
+    def login(self):
+        self.auth.login()
 
     def default(self):
         self.log.info("EventsCommand.handle()")
@@ -53,24 +54,16 @@ class EventsCommand(BaseCommand):
     def put_event(self):
         payload = read_stdin_or_filepath(self.opt("file"))
         self.log.info(f"Putting event with payload: {payload}")
-        try:
-            datasetid = self.arg("datasetid")
-            versionid = self.arg("versionid")
-            self.post_event_sdk.post_event(payload, datasetid, versionid)
-            self.print("Done putting event")
-        except Exception as e:
-            self.log.info(f"Failed: {e}")
-            self.print(f"Could not put event: {repr(e)}")
+
+        datasetid = self.arg("datasetid")
+        versionid = self.arg("versionid")
+        self.post_event_sdk.post_event(payload, datasetid, versionid)
+        self.print("Done putting event")
 
     def event_stat(self):
         dataset_id = self.arg("datasetid")
-        data = None
 
-        try:
-            data = self.esq_sdk.event_stat(dataset_id)
-        except NotDatasetOwnerError:
-            self.print(f"You are not the owner of: {dataset_id}")
-            return
+        data = self.esq_sdk.event_stat(dataset_id)
 
         last_hour = data["last_hour"]["events"]
         last_day = data["last_day"]["events"]
