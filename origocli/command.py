@@ -106,7 +106,7 @@ Options
         response_body.update({"error": 1})
 
         if self.opt("format") == "json":
-            print(response_body)
+            print(json.dumps(response_body))
         else:
             try:
                 feedback = generate_error_feedback(
