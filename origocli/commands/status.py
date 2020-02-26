@@ -38,9 +38,8 @@ class StatusCommand(BaseCommand):
     @staticmethod
     def add_status_for_id_rows(out, statusid, statuses):
         finished = False
-        # Note: Values here come from common-python
-        run_status = "STARTED"
-        status = "OK"
+        run_status = statuses[-1]["run_status"]
+        status = statuses[-1]["status"]
         for el in statuses:
             if el["run_status"] == "FINISHED":
                 el["done"] = False
@@ -48,11 +47,6 @@ class StatusCommand(BaseCommand):
                     el["done"] = True
                     finished = True
                 out.add_row(el)
-            else:
-                # Outputting just one element: pick up the last one that is available,
-                # that isn't in run_status=FINISHED
-                run_status = el["run_status"]
-                status = el["status"]
 
         if not finished:
             out.add_row(
@@ -65,7 +59,7 @@ class StatusCommand(BaseCommand):
             )
 
     def full_history_for_status(self, statusid, statuses):
-        if len(statuses) > 0:
+        if statuses:
             out = create_output(self.opt("format"), "status_history_config.json")
             out.add_rows(statuses)
             self.print(f"Status for: {statusid}", out)
