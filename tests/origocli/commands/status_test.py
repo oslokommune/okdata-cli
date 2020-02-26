@@ -8,10 +8,10 @@ def test_get_status(mock_status_sdk, mocker):
     set_argv("status", "my-uu-ii-dd")
     cmd = StatusCommand()
     mocker.spy(cmd.sdk, "get_status")
-    mocker.spy(cmd, "add_status_for_id_rows")
+    mocker.spy(StatusCommand, "add_status_for_id_rows")
     cmd.handler()
     cmd.sdk.get_status.assert_called_once_with("my-uu-ii-dd")
-    cmd.add_status_for_id_rows.assert_called_once()
+    StatusCommand.add_status_for_id_rows.assert_called_once()
 
 
 def test_get_status_with_history(mock_status_sdk, mocker):

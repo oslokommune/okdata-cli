@@ -35,7 +35,8 @@ class StatusCommand(BaseCommand):
         else:
             self.print("Invalid command")
 
-    def add_status_for_id_rows(self, out, statusid, statuses):
+    @staticmethod
+    def add_status_for_id_rows(out, statusid, statuses):
         finished = False
         # Note: Values here come from common-python
         run_status = "STARTED"
@@ -48,11 +49,10 @@ class StatusCommand(BaseCommand):
                     finished = True
                 out.add_row(el)
             else:
-                # Check against baseline values:
-                if el["run_status"] != "STARTED":
-                    run_status = el["run_status"]
-                if el["status"] != "OK":
-                    status = el["status"]
+                # Outputting just one element: pick up the last one that is available,
+                # that isn't in run_status=FINISHED
+                run_status = el["run_status"]
+                status = el["status"]
 
         if not finished:
             out.add_row(
@@ -84,5 +84,5 @@ class StatusCommand(BaseCommand):
         else:
             out = create_output(self.opt("format"), "status_config.json")
             out.output_singular_object = True
-            self.add_status_for_id_rows(out, statusid, statuses)
+            StatusCommand.add_status_for_id_rows(out, statusid, statuses)
             self.print(f"Status for: {statusid}", out)
