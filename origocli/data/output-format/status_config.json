@@ -1,0 +1,18 @@
+{
+  "done": {
+    "name": "Done",
+    "key": "done"
+  },
+  "statusid": {
+    "name": "Status ID",
+    "key": "id"
+  },
+  "runstatus": {
+    "name": "Run status",
+      "key": "run_status"
+  },
+  "status": {
+    "name": "Status",
+    "key": "status"
+  }
+}

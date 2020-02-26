@@ -55,6 +55,7 @@ def table_config_from_schema(resource, exclude=None):
 class TableOutput(PrettyTable):
     def __init__(self, config):
         self.config = config
+        self.output_singlular_object = False
         column_headers = []
         for key in self.config:
             name = self.config[key]["name"]
@@ -101,6 +102,9 @@ class TableOutput(PrettyTable):
 class JsonOutput:
     def __init__(self, config):
         self.config = config
+        # set to True it will return a single object from self.out when printed. This will make it
+        # easier to pass output to jq without having to access out[0] from the CLI
+        self.output_singular_object = False
         self.out = []
 
     def field_values(self, row, row_key, key):
@@ -138,4 +142,6 @@ class JsonOutput:
         return json.dumps(self.out)
 
     def __str__(self):
+        if len(self.out) == 1 and self.output_singular_object is True:
+            return json.dumps(self.out[0])
         return json.dumps(self.out)

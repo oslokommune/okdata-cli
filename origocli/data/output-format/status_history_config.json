@@ -1,0 +1,38 @@
+{
+  "statusid": {
+    "name": "Status ID",
+    "key": "id"
+  },
+  "eventid": {
+    "name": "Event ID",
+    "key": "event_id"
+  },
+  "started": {
+    "name": "Started",
+    "key": "date_started"
+  },
+  "ended": {
+    "name": "Ended",
+    "key": "date_end"
+  },
+  "application": {
+    "name": "Application",
+    "key": "application"
+  },
+  "applicationid": {
+    "name": "Application ID",
+    "key": "application_id"
+  },
+  "handler": {
+    "name": "Handler",
+    "key": "handler"
+  },
+  "runstatus": {
+    "name": "Run status",
+      "key": "run_status"
+  },
+  "status": {
+    "name": "Status",
+    "key": "status"
+  }
+}
