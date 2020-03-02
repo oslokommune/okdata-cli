@@ -1,5 +1,5 @@
 from datetime import datetime
-
+import json
 import pytest
 from origo.data.dataset import Dataset
 
@@ -81,7 +81,8 @@ class TestDatasetsLs:
         cmd = create_cmd(mocker, "ls", dataset["Id"], "--format", "json")
         cmd.handler()
         mock_print.assert_called_once_with(
-            "", {"dataset": dataset, "versions": [version], "latest": version}
+            "",
+            json.dumps({"dataset": dataset, "versions": [version], "latest": version}),
         )
         assert cmd.sdk.get_dataset.called
         assert cmd.sdk.get_versions.called
