@@ -1,3 +1,4 @@
+import json
 from origocli.command import BaseCommand
 from origocli.output import create_output
 from origocli.io import read_stdin_or_filepath
@@ -82,20 +83,20 @@ class DatasetsCommand(BaseCommand):
             list["dataset"] = set
             list["versions"] = versions
             list["latest"] = latest
-            self.print("", list)
+            self.print("", json.dumps(list))
             return
 
         out = create_output(self.opt("format"), "datasets_dataset_config.json")
         out.add_rows([set])
         self.print(f"Dataset: {dataset_id}", out)
 
-        self.print(f"\n\nVersions available for: {dataset_id}")
         out = create_output(self.opt("format"), "datasets_dataset_versions_config.json")
         out.add_rows(versions)
         self.print(f"\n\nVersions available for: {dataset_id}", out)
 
         out = create_output(self.opt("format"), "datasets_dataset_versions_config.json")
         out.add_rows([latest])
+
         self.print(f"\n\nLatest version for: {dataset_id}", out)
 
     def create_dataset(self):
