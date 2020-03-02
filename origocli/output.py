@@ -55,7 +55,7 @@ def table_config_from_schema(resource, exclude=None):
 class TableOutput(PrettyTable):
     def __init__(self, config):
         self.config = config
-        self.output_singlular_object = False
+        self.output_singular_object = False
         column_headers = []
         for key in self.config:
             name = self.config[key]["name"]
