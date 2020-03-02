@@ -243,4 +243,7 @@ class DatasetsCommand(BaseCommand):
         self.log.info(f"Will copy file to: {dataset_id}, {version_id}, {edition_id})")
         res = upload.upload(self.arg("filepath"), dataset_id, version_id, edition_id)
         self.log.info(f"Upload returned: {res}")
-        self.print(f"Uploaded file, status id: {res['status']}", res)
+        out = create_output(self.opt("format"), "datasets_copy_file_config.json")
+        out.output_singular_object = True
+        out.add_row(res)
+        self.print(f"Uploaded file, status id: {res['status']}", out)
