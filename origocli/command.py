@@ -79,7 +79,12 @@ Options
             print(str)
         # Normally a return json value from the API
         if payload:
-            print(payload)
+            # If it is a pure dict we want to json dump it out in order to correctly
+            # use it together with jq on the commandline
+            if isinstance(payload, dict):
+                print(json.dumps(payload))
+            else:
+                print(payload)
 
     def login(self):
         self.sdk.login()
