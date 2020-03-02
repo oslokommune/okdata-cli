@@ -1,0 +1,10 @@
+{
+  "Upload": {
+    "name": "Upload status",
+    "key": "upload"
+  },
+  "Status": {
+    "name": "Status",
+    "key": "status"
+  }
+}
