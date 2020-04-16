@@ -79,9 +79,9 @@ Options
             print(str)
         # Normally a return json value from the API
         if payload:
-            # If it is a pure dict we want to json dump it out in order to correctly
+            # If it is a pure dict or list we want to json dump it out in order to correctly
             # use it together with jq on the commandline
-            if isinstance(payload, dict):
+            if isinstance(payload, dict) or isinstance(payload, list):
                 print(json.dumps(payload))
             else:
                 print(payload)
