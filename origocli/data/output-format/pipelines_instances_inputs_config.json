@@ -1,0 +1,14 @@
+{
+  "datasetUri": {
+    "name": "Dataset URI",
+    "key": "datasetUri"
+  },
+  "stage": {
+    "name": "Stage",
+    "key": "stage"
+  },
+  "pipelineInstanceId": {
+    "name": "Pipeline instance",
+    "key": "pipelineInstanceId"
+  }
+}

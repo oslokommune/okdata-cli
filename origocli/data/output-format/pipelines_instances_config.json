@@ -1,0 +1,14 @@
+{
+  "Id": {
+    "name": "Id",
+    "key": "id"
+  },
+  "DatasetUri": {
+    "name": "Dataset URI",
+    "key": "datasetUri"
+  },
+  "PipelineArn": {
+    "name": "Pipeline ARN",
+    "key": "pipelineArn"
+  }
+}
