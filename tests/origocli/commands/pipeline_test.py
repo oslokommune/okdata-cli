@@ -63,11 +63,17 @@ class TestCreate:
         mocker.patch(
             f"{pipeline_qual}.from_json", return_value=Pipeline(sdk, "", "", "")
         )
-        mocker.patch(f"{pipeline_qual}.create", return_value=['"pipeline-arn"', None])
+        create = mocker.patch(
+            f"{pipeline_qual}.create", return_value=['"pipeline-arn"', None]
+        )
         cmd = PipelinesCreate(sdk)
         cmd.handler()
         captured = capsys.readouterr()
-        print(f"CAP3: {captured.out}")
+        assert create.called
+        assert (
+            captured.out.strip()
+            == '{"arn": "arn", "template": "", "transformation_schema": ""}'
+        )
 
     def test_handler_with_create_error(self, mocker):
         set_argv("pipelines", "create", "something.json", "--format=json")
@@ -90,6 +96,7 @@ class TestCreate:
         cmd = PipelinesCreate(sdk)
         try:
             cmd.handler()
+            assert False
         except Exception:
             assert True
 
