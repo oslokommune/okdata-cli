@@ -1,3 +1,7 @@
+import re
+import os
+import shutil
+
 from origocli.command import BaseCommand
 from origocli.output import create_output
 from origocli.io import read_stdin_or_filepath
@@ -21,6 +25,7 @@ class DatasetsCommand(BaseCommand):
       origo datasets create-version <datasetid> [--file=<file> --format=<format> --env=<env> options]
       origo datasets create-edition <datasetid> [<versionid>] [--file=<file> --format=<format --env=<env> options]
       origo datasets create-distribution <datasetid> [<versionid> <editionid>] [--file=<file> --format=<format --env=<env> options]
+      origo datasets boilerplate <pipeline> <name> [options]
 
     options:
       -h --help
@@ -36,7 +41,9 @@ class DatasetsCommand(BaseCommand):
     # TODO: do a better mapping from rules to commands here...?
     def default(self):
         self.log.info("DatasetsCommand.handle()")
-        if self.arg("datasetid") is None and self.cmd("ls") is True:
+        if self.cmd("boilerplate") is True:
+            self.boilerplate()
+        elif self.arg("datasetid") is None and self.cmd("ls") is True:
             self.datasets()
         elif self.arg("datasetid") is None and self.cmd("create") is True:
             self.create_dataset()
@@ -59,6 +66,57 @@ class DatasetsCommand(BaseCommand):
             self.dataset()
         else:
             BaseCommand.help()
+
+    def boilerplate(self):
+        self.log.info("Creating boilerplate")
+        name = self.arg("name").strip()
+        pattern = re.compile("^[a-zA-Z0-9\-]+$")
+        if pattern.match(name) is None:
+            self.print(
+                f"Error: {name} is not valid, only 'a-z', 'A-Z', '0-9' and '-' are valid characters"
+            )
+            return
+
+        valid_pipelines = ["csv-to-parquet"]
+        pipeline = self.arg("pipeline")
+        if not pipeline in valid_pipelines:
+            self.print(f"Error: pipeline {pipeline} does not exist!")
+            self.print(
+                f"\tValid pipelines: {', '.join(str(x) for x in valid_pipelines)}"
+            )
+            return
+
+        # For now we only create the folder in current directory, we can later
+        # supply support for --dir=<dir> if needed
+        basedir = "."
+        outdir = f"{basedir}/{name}"
+        self.log.info(f"Creating: {name} boilerplate to {outdir}")
+        if os.path.exists(outdir):
+            shutil.rmtree(outdir)
+        os.mkdir(name)
+        currentdir = os.path.dirname(os.path.realpath(__file__))
+        boilerplatedir = f"{currentdir}/../data/boilerplate"
+        inputfiles = [
+            "bin/run.sh",
+            "dataset/dataset.json",
+            "dataset/dataset-version.json",
+            "dataset/dataset-version-edition.json",
+            f"pipeline/{pipeline}/pipeline.json",
+            "pipeline/pipeline-input.json",
+            "data/hello_world.csv",
+        ]
+        for file in inputfiles:
+            tmp = file.split("/")
+            fromfile = f"{boilerplatedir}/{file}"
+            tofile = f"{outdir}/{tmp[-1]}"
+            self.log.info(f"Copying from {fromfile} to {tofile}")
+            shutil.copyfile(fromfile, tofile)
+        self.log.info("Done creating boilerplate")
+        self.print(f"Boilerplate set up in folder: {outdir}\n")
+        self.print(
+            f"Edit the following files: \n\t{outdir}/dataset.json\n\t{outdir}/dataset-version-edition.json"
+        )
+        self.print(f"\nFollow instructions in {outdir}/run.sh\n")
 
     # #################################### #
     # Datasets
@@ -244,5 +302,11 @@ class DatasetsCommand(BaseCommand):
         self.log.info(f"Upload returned: {res}")
         out = create_output(self.opt("format"), "datasets_copy_file_config.json")
         out.output_singular_object = True
-        out.add_row(res)
-        self.print(f"Uploaded file, status id: {res['status']}", out)
+        data = {
+            "dataset": dataset_id,
+            "file": self.arg("filepath"),
+            "uploaded": res["result"],
+            "statusid": res["status"],
+        }
+        out.add_row(data)
+        self.print(f"Uploaded file to dataset: {dataset_id}", out)

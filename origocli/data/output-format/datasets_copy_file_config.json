@@ -1,10 +1,18 @@
 {
-  "Upload": {
-    "name": "Upload status",
-    "key": "upload"
+  "Dataset": {
+    "name": "Dataset",
+    "key": "dataset"
   },
-  "Status": {
-    "name": "Status",
-    "key": "status"
+  "File": {
+    "name": "Local file",
+    "key": "file"
+  },
+  "Uploaded": {
+    "name": "Upload status",
+    "key": "uploaded"
+  },
+  "StatusID": {
+    "name": "Status ID",
+    "key": "statusid"
   }
 }
