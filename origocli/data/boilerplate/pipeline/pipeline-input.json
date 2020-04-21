@@ -1,0 +1,5 @@
+{
+    "pipelineInstanceId": "PIPELINEINSTANCE",
+    "datasetUri": "input/ID/VERSION",
+    "stage": "raw"
+}

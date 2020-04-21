@@ -10,6 +10,7 @@ from pygments import highlight, lexers, formatters
 class BaseCommand:
     """usage:
   origo datasets [options]
+  origo status [options]
   origo pipelines [options]
   origo events [options]
   origo event_streams [options]

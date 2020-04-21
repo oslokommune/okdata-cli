@@ -29,7 +29,14 @@ def main():
         except ApiAuthenticateError:
             instance.print("Invalid credentials")
         except Exception as e:
-            instance.log.exception(f"Failed badly: {e}")
+            instance.print(
+                "A Exception occured",
+                {
+                    "error": 1,
+                    "message": "Origo CLI failed with exception, see log output for more information",
+                },
+            )
+            instance.log.exception(f"Origo CLI failed with: {e}")
 
     else:
         BaseCommand().help()

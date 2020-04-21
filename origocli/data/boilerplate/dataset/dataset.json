@@ -1,0 +1,14 @@
+{
+    "title": "Boilerplate test",
+    "description": "Describe the boilerplate test",
+    "keywords": ["boilerplate", "test"],
+    "accessRights": "restricted",
+    "confidentiality": "green",
+    "objective": "The objective for this boilerplate",
+    "contactPoint": {
+        "name": "Contact Name",
+        "email": "my.address@example.org",
+        "phone": "12345678"
+    },
+    "publisher": "Publisher Name"
+}
