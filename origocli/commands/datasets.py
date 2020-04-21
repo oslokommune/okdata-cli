@@ -70,7 +70,7 @@ class DatasetsCommand(BaseCommand):
     def boilerplate(self):
         self.log.info("Creating boilerplate")
         name = self.arg("name").strip()
-        pattern = re.compile("^[a-zA-Z0-9\-]+$")
+        pattern = re.compile("^[a-zA-Z0-9-]+$")
         if pattern.match(name) is None:
             self.print(
                 f"Error: {name} is not valid, only 'a-z', 'A-Z', '0-9' and '-' are valid characters"
@@ -79,7 +79,7 @@ class DatasetsCommand(BaseCommand):
 
         valid_pipelines = ["csv-to-parquet"]
         pipeline = self.arg("pipeline")
-        if not pipeline in valid_pipelines:
+        if pipeline not in valid_pipelines:
             self.print(f"Error: pipeline {pipeline} does not exist!")
             self.print(
                 f"\tValid pipelines: {', '.join(str(x) for x in valid_pipelines)}"
