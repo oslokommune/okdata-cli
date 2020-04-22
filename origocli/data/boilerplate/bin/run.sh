@@ -7,7 +7,11 @@
 #   version fails: set dataset_id to the ID you get from the output of this script, then comment out the
 #   "Dataset" block further below
 
-# Requires: jq
+if ! [ -x "$(command -v jq)" ]; then
+  echo 'Error: jq is not installed.' >&2
+  exit 1
+fi
+
 echo "Update json files in this directory before running"
 echo "### Uncomment this line to run ###\n" && exit 1
 
@@ -73,7 +77,7 @@ edition_id=`echo $edition_id | cut -d "/" -f 3`
 echo "Created edition: $edition_id"
 
 ######### Pipeline instance #########
-cat $pipeline_instance_file | sed "s/ID/$dataset_id/" | sed "s/VERSION/$version_id/" > generated_pipeline.json
+cat $pipeline_instance_file | sed "s/DATASET_ID/$dataset_id/" | sed "s/DATASET_VERSION/$version_id/" > generated_pipeline.json
 pipeline=`origo pipelines instances create generated_pipeline.json --format=json`
 error=`echo $pipeline | jq -r '.error'`
 if [[ "$error" =~ ^[1]+$ ]]; then
@@ -85,7 +89,7 @@ pipeline_id=`echo $pipeline | jq -r '.id'`
 echo "Created pipeline instance $pipeline_id for dataset: $dataset_id "
 
 ######### Pipeline input #########
-cat $pipeline_input_file | sed "s/ID/$dataset_id/" | sed "s/VERSION/$version_id/" | sed "s/PIPELINEINSTANCE/$pipeline_id/"  > generated_pipeline_input.json
+cat $pipeline_input_file | sed "s/DATASET_ID/$dataset_id/" | sed "s/DATASET_VERSION/$version_id/" | sed "s/PIPELINEINSTANCE/$pipeline_id/"  > generated_pipeline_input.json
 input=`origo pipelines inputs create generated_pipeline_input.json --format=json`
 error=`echo $input | jq -r '.error'`
 if [[ "$error" =~ ^[1]+$ ]]; then
@@ -104,6 +108,10 @@ if [[ "$error" =~ ^[1]+$ ]]; then
   exit
 fi
 status_id=`echo "$upload" | jq  -r '.statusid'`
+if [[ $status_id == false ]]; then
+  echo "Error: File uploaded to origo, but could not get the status ID of the upload"
+  exit
+fi
 echo "Uploaded test file to dataset $dataset_id, status id for upload is $status_id"
 
 ######### Check status for the newly uploaded file #########
