@@ -14,8 +14,8 @@
     }
   },
   "useLatestEdition": true,
-  "id": "ID",
-  "datasetUri": "output/ID/VERSION",
+  "id": "DATASET_ID",
+  "datasetUri": "output/DATASET_ID/DATASET_VERSION",
   "schemaId": "",
   "transformation": {}
 }
