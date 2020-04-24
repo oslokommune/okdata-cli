@@ -16,7 +16,7 @@ setuptools.setup(
         "PrettyTable",
         "docopt",
         "requests",
-        "origo-sdk-python>=0.1.0",
+        "origo-sdk-python>=0.1.1",
         "inquirer",
         "fuzzywuzzy",
         "python-Levenshtein",
