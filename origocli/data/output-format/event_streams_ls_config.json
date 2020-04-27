@@ -1,0 +1,18 @@
+{
+  "ID": {
+    "name": "Stream ID",
+    "key": "id"
+  },
+  "Owner": {
+    "name": "Owner",
+    "key": "createdBy"
+  },
+  "CreatedAt": {
+    "name": "Created date",
+    "key": "createdAt"
+  },
+  "Status": {
+    "name": "Status",
+    "key": "status"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "ID": {
+    "name": "Stream ID",
+    "key": "id"
+  },
+  "Status": {
+    "name": "Status",
+    "key": "status"
+  }
+}

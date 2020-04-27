@@ -1,0 +1,18 @@
+{
+  "Timespan": {
+    "name": "Timespan",
+    "key": "timespan"
+  },
+  "From": {
+    "name": "From",
+    "key": "from"
+  },
+  "To": {
+    "name": "To",
+    "key": "to"
+  },
+  "Events": {
+    "name": "Events",
+    "key": "events"
+  }
+}

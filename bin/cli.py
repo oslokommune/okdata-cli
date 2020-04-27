@@ -1,5 +1,8 @@
+import json
 import sys
+
 from requests.exceptions import HTTPError
+from keycloak.exceptions import KeycloakGetError
 
 from origo.exceptions import ApiAuthenticateError
 
@@ -27,7 +30,16 @@ def main():
         except HTTPError as he:
             instance.print_error_response(he.response.json())
         except ApiAuthenticateError:
-            instance.print("Invalid credentials")
+            instance.print(
+                "An error occured (ApiAuthenticateError): Invalid credentials",
+                {"error": 1, "message": "Invalid credentials"},
+            )
+        except KeycloakGetError as e:
+            error = json.loads(e.error_message)
+            instance.log.info(f"Keycloak reported: {e}")
+            instance.print(
+                f"An error occured (KeycloakGetError): {error['error_description']}"
+            )
         except Exception as e:
             instance.print(
                 "A Exception occured",

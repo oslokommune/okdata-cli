@@ -6,25 +6,30 @@ from docopt import docopt, DocoptExit
 from origo.sdk import SDK
 from pygments import highlight, lexers, formatters
 
+BASE_COMMAND_OPTIONS = """
+  -h, --help          # Print this help
+  -d, --debug         # Output debug information while executing task
+  --format=<value>    # Output format: table OR json
+  --env=<value>       # Environment to run command in: prod OR dev"""
+
 
 class BaseCommand:
-    """usage:
+    __doc__ = f"""usage:
   origo datasets [options]
   origo status [options]
   origo pipelines [options]
   origo events [options]
   origo event_streams [options]
+  origo -h | --help
 
 Commands available:
   datasets
+  status
   pipelines
   events
   event_streams
-  help
 
-Options
-  -d --debug
-  --format=<format>
+Options:{BASE_COMMAND_OPTIONS}
 """
 
     log = logging.getLogger(__name__)
@@ -133,8 +138,8 @@ Options
 
 
 def generate_error_feedback(message, errors=None):
-    feedback = f"\nOperation failed with message: {message}"
+    feedback = f"An error occured: {message}"
     if errors:
         feedback += f"\nCause:\n\t{errors}"
 
-    return f"{feedback}\n"
+    return f"{feedback}"
