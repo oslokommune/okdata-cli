@@ -1,0 +1,11 @@
+{
+    "Dataset": {
+      "name": "Dataset ID",
+      "key": "dataset_id"
+    },
+    "Access": {
+      "name": "Access",
+      "key": "has_access"
+    }
+  }
+  
