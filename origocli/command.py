@@ -14,12 +14,14 @@ class BaseCommand:
   origo pipelines [options]
   origo events [options]
   origo event_streams [options]
+  origo webhook_tokens [options]
 
 Commands available:
   datasets
   pipelines
   events
   event_streams
+  webhook_tokens
   help
 
 Options
