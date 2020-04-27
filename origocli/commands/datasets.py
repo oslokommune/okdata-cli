@@ -29,7 +29,7 @@ class DatasetsCommand(BaseCommand):
       origo datasets create-edition <datasetid> [<versionid>] [--file=<file> --format=<format --env=<env> options]
       origo datasets create-distribution <datasetid> [<versionid> <editionid>] [--file=<file> --format=<format --env=<env> options]
       origo datasets boilerplate <datasetid> [options]
-      origo datasets create-access <datasetid> <principalid> [--format=<format> options]
+      origo datasets create-access <datasetid> <userid> [--format=<format> options]
       origo datasets check-access <datasetid> [--format=<format> options]
 
     options:
@@ -326,7 +326,7 @@ class DatasetsCommand(BaseCommand):
     # #################################### #
     def create_access(self):
         dataset_id = self.arg("datasetid")
-        principal_id = self.arg("principalid")
+        principal_id = self.arg("userid")
         self.log.info("Creating access to {dataset_id} for {principal_id}")
         response = self.simple_dataset_auth_sdk.create_dataset_access(
             dataset_id, principal_id

@@ -62,6 +62,7 @@ $ origo <command> help
 ## Commands available
 * datasets
 * events
+* webhook_tokens
 * help
 
 ## List all datasets
@@ -141,6 +142,21 @@ The `cp` command operates with a `ds` prefix to specify
 
 If an error occurs: ensure that the latest version have a edition
 
+## Dataset access
+
+Give user full access rights to a given dataset:
+
+```
+$ origo datasets create-access <datasetid> <userid>
+```
+
+Check if you have access to a given dataset:
+
+```
+$ origo datasets check-access <datasetid>
+```
+
+
 ## Creating Event Streams
 
 In order to create an event stream you will need to [create a dataset](#create-dataset) and [create a 
@@ -175,3 +191,16 @@ $ cat /tmp/event.json | origo events put <datasetid> <version>
 $ origo events put <datasetid> <version> --file=/tmp/event.json
 ```
 
+## Webhook tokens
+
+Create a new webhook token:
+
+```
+$ origo webhook_tokens create <datasetid> <service>
+```
+
+Delete (invalidate) specified webhook token:
+
+```
+$ origo webhook_tokens delete <datasetid> <token>
+```
