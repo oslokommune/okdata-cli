@@ -9,6 +9,7 @@ from origocli.commands.event_streams import EventStreamCommand
 from origocli.commands.events import EventsCommand
 from origocli.commands.pipelines import Pipelines
 from origocli.commands.status import StatusCommand
+from origocli.commands.webhook_tokens import WebhookTokensCommand
 
 
 def main():
@@ -49,6 +50,7 @@ def get_command_class(argv):
         "pipelines": Pipelines,
         "event_streams": EventStreamCommand,
         "status": StatusCommand,
+        "webhook_tokens": WebhookTokensCommand,
     }
     if argv[1] in commands:
         return commands[argv[1]]
