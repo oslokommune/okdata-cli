@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="origo-cli",
-    version="0.1.0",
+    version="0.2.0",
     author="Oslo Origo",
     author_email="dataplattform@oslo.kommune.no",
     description="CLI for origo",
