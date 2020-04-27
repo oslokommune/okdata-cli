@@ -12,6 +12,9 @@ from origocli.date import (
 
 from origo.data.dataset import Dataset
 from origo.data.upload import Upload
+from origo.dataset_authorizer.simple_dataset_authorizer_client import (
+    SimpleDatasetAuthorizerClient,
+)
 
 
 class DatasetsCommand(BaseCommand):
@@ -25,6 +28,8 @@ Usage:
   origo datasets create-version <datasetid> [--file=<file> --format=<format> --env=<env> options]
   origo datasets create-edition <datasetid> [<versionid>] [--file=<file> --format=<format --env=<env> options]
   origo datasets create-distribution <datasetid> [<versionid> <editionid>] [--file=<file> --format=<format --env=<env> options]
+  origo datasets create-access <datasetid> <userid> [--format=<format> options]
+  origo datasets check-access <datasetid> [--format=<format> options]
   origo datasets boilerplate <pipeline> <name> [options]
 
 Examples:
@@ -32,7 +37,7 @@ Examples:
   origo datasets ls --filter=bydelsfakta --format=json
   origo datasets create --file=dataset.json
   origo datasets cp /tmp/file.csv ds:my-dataset-id
-  origo dataests boilerplate csv-to-parquet name-of-output-folder
+  origo datasets boilerplate csv-to-parquet name-of-output-folder
 
 Options:{BASE_COMMAND_OPTIONS}
     """
@@ -41,6 +46,7 @@ Options:{BASE_COMMAND_OPTIONS}
         super().__init__()
         env = self.opt("env")
         self.sdk = Dataset(env=env)
+        self.simple_dataset_auth_sdk = SimpleDatasetAuthorizerClient(env=env)
         self.handler = self.default
 
     # TODO: do a better mapping from rules to commands here...?
@@ -48,6 +54,10 @@ Options:{BASE_COMMAND_OPTIONS}
         self.log.info("DatasetsCommand.handle()")
         if self.cmd("boilerplate") is True:
             self.boilerplate()
+        elif self.cmd("create-access") is True:
+            self.create_access()
+        elif self.cmd("check-access") is True:
+            self.check_access()
         elif self.arg("datasetid") is None and self.cmd("ls") is True:
             self.datasets()
         elif self.arg("datasetid") is None and self.cmd("create") is True:
@@ -315,3 +325,25 @@ Options:{BASE_COMMAND_OPTIONS}
         }
         out.add_row(data)
         self.print(f"Uploaded file to dataset: {dataset_id}", out)
+
+    # #################################### #
+    # Access
+    # #################################### #
+    def create_access(self):
+        dataset_id = self.arg("datasetid")
+        principal_id = self.arg("userid")
+        self.log.info("Creating access to {dataset_id} for {principal_id}")
+        response = self.simple_dataset_auth_sdk.create_dataset_access(
+            dataset_id, principal_id
+        )
+        self.print("Access to {dataset_id} created for {principal_id}", response)
+
+    def check_access(self):
+        dataset_id = self.arg("datasetid")
+        self.log.info(f"Checking access to dataset: {dataset_id}")
+        response = self.simple_dataset_auth_sdk.check_dataset_access(dataset_id)
+        self.log.info(f"Dataset access check for {dataset_id} returned: {response}")
+        has_access = response["access"]
+        self.print(
+            "Caller has access to dataset" if has_access else "No access", response
+        )
