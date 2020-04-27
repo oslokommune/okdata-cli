@@ -1,0 +1,18 @@
+{
+  "Stream": {
+    "name": "Stream name",
+    "key": "stream"
+  },
+  "Version": {
+    "name": "Version",
+    "key": "version"
+  },
+  "Source": {
+    "name": "Event source",
+    "key": "source"
+  },
+  "Status": {
+    "name": "Status",
+    "key": "status"
+  }
+}

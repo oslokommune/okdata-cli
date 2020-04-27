@@ -2,7 +2,7 @@ import re
 import os
 import shutil
 
-from origocli.command import BaseCommand
+from origocli.command import BaseCommand, BASE_COMMAND_OPTIONS
 from origocli.output import create_output
 from origocli.io import read_stdin_or_filepath
 from origocli.date import (
@@ -18,23 +18,28 @@ from origo.dataset_authorizer.simple_dataset_authorizer_client import (
 
 
 class DatasetsCommand(BaseCommand):
-    """Oslo :: Datasets
+    __doc__ = f"""Oslo :: Datasets
 
-    Usage:
-      origo datasets ls [--format=<format> --env=<env> --filter=<filter>] [options]
-      origo datasets ls <datasetid> [<versionid> <editionid>][--format=<format> --env=<env> options]
-      origo datasets cp <filepath> <datasetid> [<versionid> <editionid> --format=<format> --env=<env> options]
-      origo datasets create [--file=<file --format=<format> --env=<env> options]
-      origo datasets create-version <datasetid> [--file=<file> --format=<format> --env=<env> options]
-      origo datasets create-edition <datasetid> [<versionid>] [--file=<file> --format=<format --env=<env> options]
-      origo datasets create-distribution <datasetid> [<versionid> <editionid>] [--file=<file> --format=<format --env=<env> options]
-      origo datasets boilerplate <datasetid> [options]
-      origo datasets create-access <datasetid> <userid> [--format=<format> options]
-      origo datasets check-access <datasetid> [--format=<format> options]
+Usage:
+  origo datasets ls [--format=<format>  --env=<env> --filter=<filter> options]
+  origo datasets ls <datasetid> [<versionid> <editionid>][--format=<format> --env=<env> options]
+  origo datasets cp <filepath> <datasetid> [<versionid> <editionid> --format=<format> --env=<env> options]
+  origo datasets create [--file=<file> --format=<format> --env=<env> options]
+  origo datasets create-version <datasetid> [--file=<file> --format=<format> --env=<env> options]
+  origo datasets create-edition <datasetid> [<versionid>] [--file=<file> --format=<format --env=<env> options]
+  origo datasets create-distribution <datasetid> [<versionid> <editionid>] [--file=<file> --format=<format --env=<env> options]
+  origo datasets create-access <datasetid> <userid> [--format=<format> options]
+  origo datasets check-access <datasetid> [--format=<format> options]
+  origo datasets boilerplate <pipeline> <name> [options]
 
-    options:
-      -h --help
-      -d --debug
+Examples:
+  origo datasets ls --filter=bydelsfakta
+  origo datasets ls --filter=bydelsfakta --format=json
+  origo datasets create --file=dataset.json
+  origo datasets cp /tmp/file.csv ds:my-dataset-id
+  origo datasets boilerplate csv-to-parquet name-of-output-folder
+
+Options:{BASE_COMMAND_OPTIONS}
     """
 
     def __init__(self):

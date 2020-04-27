@@ -1,28 +1,28 @@
-from origocli.command import BaseCommand
+from origocli.command import BaseCommand, BASE_COMMAND_OPTIONS
 from origocli.output import create_output
 
 from origo.status import Status
 
 
 class StatusCommand(BaseCommand):
-    """Oslo :: Status
+    __doc__ = f"""Oslo :: Status
 
-    Usage:
-      origo status <statusid> [options --history]
+Usage:
+  origo status <statusid> [options --history]
 
-    Get the status of a process in origo
-        Add --history to get the full history of the status ID
-        To get a true/false value from the statusid: `origo status <statusid> --format=json | jq ".done"`
+Examples:
+  origo status status-id-from-system
+  origo status status-id-from-system --format=json | jq ".done"
+  origo status status-id-from-system --history
 
-    Options:
-      -d --debug
-      --format=<format>
+Options:{BASE_COMMAND_OPTIONS}
+  --history
     """
 
     def __init__(self):
         super().__init__()
         env = self.opt("env")
-        self.sdk = Status(env)
+        self.sdk = Status(env=env)
         self.handler = self.default
 
     def login(self):

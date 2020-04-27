@@ -34,7 +34,8 @@ def test_main_http_error(raise_http_error, capsys):
 def test_main_auth_error(auth_failed, capsys):
     sys.argv = ["origo", "datasets", "create"]
     main()
-    assert capsys.readouterr().out.strip("\n") == "Invalid credentials"
+    captured = capsys.readouterr().out.strip("\n")
+    assert "An error occured (ApiAuthenticateError)" in captured
 
 
 @pytest.fixture()
