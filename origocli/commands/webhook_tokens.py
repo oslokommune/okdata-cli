@@ -35,8 +35,9 @@ class WebhookTokensCommand(BaseCommand):
         dataset_id = self.arg("datasetid")
         service = self.arg("service")
         response = self.sdk.create_webhook_token(dataset_id, service)
+        token = response["token"]
         self.print(
-            f"Webhook token created for service {service} on dataset {dataset_id}",
+            f"Webhook token created for service {service} on dataset {dataset_id}: {token}",
             response,
         )
 
