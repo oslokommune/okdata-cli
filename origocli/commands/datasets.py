@@ -331,7 +331,9 @@ Options:{BASE_COMMAND_OPTIONS}
     # Access
     # #################################### #
     def create_access(self):
-        out = create_output(self.opt("format"), "datasets_dataset_access_create_config.json")
+        out = create_output(
+            self.opt("format"), "datasets_dataset_access_create_config.json"
+        )
         out.output_singular_object = True
         dataset_id = self.arg("datasetid")
         principal_id = self.arg("userid")
@@ -344,11 +346,12 @@ Options:{BASE_COMMAND_OPTIONS}
             "status": resp["message"],
         }
         out.add_row(data)
-        out.align_rows()
         self.print("Creating dataset access", out)
 
     def check_access(self):
-        out = create_output(self.opt("format"), "datasets_dataset_access_check_config.json")
+        out = create_output(
+            self.opt("format"), "datasets_dataset_access_check_config.json"
+        )
         out.output_singular_object = True
         dataset_id = self.arg("datasetid")
         resp = self.simple_dataset_auth_sdk.check_dataset_access(dataset_id)
@@ -357,5 +360,4 @@ Options:{BASE_COMMAND_OPTIONS}
             "has_access": resp["access"],
         }
         out.add_row(data)
-        out.align_rows()
         self.print("Checking dataset access", out)

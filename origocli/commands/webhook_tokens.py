@@ -1,4 +1,5 @@
-from origocli.command import BaseCommand
+from origocli.command import BaseCommand, BASE_COMMAND_OPTIONS
+from origocli.output import create_output
 
 from origo.dataset_authorizer.simple_dataset_authorizer_client import (
     SimpleDatasetAuthorizerClient,
@@ -6,15 +7,17 @@ from origo.dataset_authorizer.simple_dataset_authorizer_client import (
 
 
 class WebhookTokensCommand(BaseCommand):
-    """Oslo :: Webhook tokens
+    __doc__ = f"""Oslo :: Webhook tokens
 
-    Usage:
-      origo webhook_tokens create <datasetid> <service> [--format=<format> options]
-      origo webhook_tokens delete <datasetid> <token> [--format=<format> options]
+Usage:
+  origo webhooks create-token <datasetid> <service> [options]
+  origo webhooks delete-token <datasetid> <token> [options]
 
-    Options:
-      -d --debug
-      -h --help
+Examples:
+  origo webhooks create-token some-dataset-id some-service-name --format=json
+  origo webhooks delete-token some-dataset-id some-webhook-token
+
+Options:{BASE_COMMAND_OPTIONS}
     """
 
     def __init__(self):
@@ -24,25 +27,32 @@ class WebhookTokensCommand(BaseCommand):
         self.handler = self.default
 
     def default(self):
-        if self.cmd("create"):
-            self.create()
-        elif self.cmd("delete"):
-            self.delete()
+        if self.cmd("create-token"):
+            self.create_token()
+        elif self.cmd("delete-token"):
+            self.delete_token()
         else:
             self.print("Invalid command")
 
-    def create(self):
+    def create_token(self):
+        out = create_output(self.opt("format"), "webhooks_token_config.json")
+        out.output_singular_object = True
         dataset_id = self.arg("datasetid")
         service = self.arg("service")
-        response = self.sdk.create_webhook_token(dataset_id, service)
-        token = response["token"]
-        self.print(
-            f"Webhook token created for service {service} on dataset {dataset_id}: {token}",
-            response,
-        )
+        resp = self.sdk.create_webhook_token(dataset_id, service)
+        out.add_row(resp)
+        self.print("Creating webhook token", out)
 
-    def delete(self):
+    def delete_token(self):
+        out = create_output(self.opt("format"), "webhooks_token_delete_config.json")
+        out.output_singular_object = True
         dataset_id = self.arg("datasetid")
-        token = self.arg("token")
-        response = self.sdk.delete_webhook_token(dataset_id, token)
-        self.print(response["message"], response)
+        webhook_token = self.arg("token")
+        resp = self.sdk.delete_webhook_token(dataset_id, webhook_token)
+        data = {
+            "dataset_id": dataset_id,
+            "webhook_token": webhook_token,
+            "status": resp["message"],
+        }
+        out.add_row(data)
+        self.print("Deleting webhook token", out)

@@ -1,0 +1,31 @@
+{
+    "Token": {
+      "name": "Token",
+      "key": "token"
+    },
+    "Dataset": {
+      "name": "Dataset ID",
+      "key": "dataset_id"
+    },
+    "Service": {
+      "name": "Service",
+      "key": "service"
+    },
+    "Creation": {
+      "name": "Created",
+      "key": "created_at"
+    },
+    "Expiration": {
+      "name": "Expires",
+      "key": "expires_at"
+    },
+    "Creator": {
+      "name": "Created by",
+      "key": "created_by"
+    },
+    "Active": {
+      "name": "Active",
+      "key": "is_active"
+    }
+  }
+  

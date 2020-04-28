@@ -13,7 +13,7 @@ webhook_token = "27580f43-7674-4033-87e2-285db632903d"
 
 
 def test_create(mock_simple_dataset_auth_sdk, mocker):
-    set_argv("webhook_tokens", "create", dataset_id, service_name)
+    set_argv("webhooks", "create-token", dataset_id, service_name)
     cmd = WebhookTokensCommand()
     mocker.spy(cmd.sdk, "create_webhook_token")
     cmd.handler()
@@ -21,7 +21,7 @@ def test_create(mock_simple_dataset_auth_sdk, mocker):
 
 
 def test_delete(mock_simple_dataset_auth_sdk, mocker):
-    set_argv("webhook_tokens", "delete", dataset_id, webhook_token)
+    set_argv("webhooks", "delete-token", dataset_id, webhook_token)
     cmd = WebhookTokensCommand()
     mocker.spy(cmd.sdk, "delete_webhook_token")
     cmd.handler()

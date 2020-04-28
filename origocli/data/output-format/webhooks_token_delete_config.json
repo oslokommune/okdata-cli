@@ -1,0 +1,15 @@
+{
+    "Dataset": {
+      "name": "Dataset ID",
+      "key": "dataset_id"
+    },
+    "Token": {
+      "name": "Token",
+      "key": "webhook_token"
+    },
+    "Status": {
+      "name": "Status",
+      "key": "status"
+    }
+  }
+  
