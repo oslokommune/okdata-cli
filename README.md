@@ -76,7 +76,7 @@ $ origo datasets ls my-dataset my-edition
 
 ## Create dataset
 File: dataset.json
-```
+```json
 {
     "title": "My dataset",
     "description": "My dataset description",
@@ -89,8 +89,7 @@ File: dataset.json
         "email": "contact.name@example.org",
         "phone": "999555111"
     },
-    "publisher": "my organization",
-    "processing_stage": "raw"
+    "publisher": "my organization"
 }
 
 ```
