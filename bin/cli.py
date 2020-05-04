@@ -62,7 +62,7 @@ def get_command_class(argv):
         "pipelines": Pipelines,
         "event_streams": EventStreamCommand,
         "status": StatusCommand,
-        "webhook_tokens": WebhookTokensCommand,
+        "webhooks": WebhookTokensCommand,
     }
     if argv[1] in commands:
         return commands[argv[1]]

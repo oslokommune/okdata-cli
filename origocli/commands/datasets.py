@@ -26,10 +26,10 @@ Usage:
   origo datasets cp <filepath> <datasetid> [<versionid> <editionid> --format=<format> --env=<env> options]
   origo datasets create [--file=<file> --format=<format> --env=<env> options]
   origo datasets create-version <datasetid> [--file=<file> --format=<format> --env=<env> options]
-  origo datasets create-edition <datasetid> [<versionid>] [--file=<file> --format=<format --env=<env> options]
-  origo datasets create-distribution <datasetid> [<versionid> <editionid>] [--file=<file> --format=<format --env=<env> options]
-  origo datasets create-access <datasetid> <userid> [--format=<format> options]
-  origo datasets check-access <datasetid> [--format=<format> options]
+  origo datasets create-edition <datasetid> [<versionid>] [--file=<file> --format=<format> --env=<env> options]
+  origo datasets create-distribution <datasetid> [<versionid> <editionid>] [--file=<file> --format=<format> --env=<env> options]
+  origo datasets create-access <datasetid> <userid> [--format=<format> --env=<env> options]
+  origo datasets check-access <datasetid> [--format=<format> --env=<env> options]
   origo datasets boilerplate <pipeline> <name> [options]
 
 Examples:
@@ -324,26 +324,40 @@ Options:{BASE_COMMAND_OPTIONS}
             "statusid": res["status"],
         }
         out.add_row(data)
+        out.align_rows()
         self.print(f"Uploaded file to dataset: {dataset_id}", out)
 
     # #################################### #
     # Access
     # #################################### #
     def create_access(self):
+        out = create_output(
+            self.opt("format"), "datasets_dataset_access_create_config.json"
+        )
+        out.output_singular_object = True
         dataset_id = self.arg("datasetid")
         principal_id = self.arg("userid")
-        self.log.info("Creating access to {dataset_id} for {principal_id}")
-        response = self.simple_dataset_auth_sdk.create_dataset_access(
+        resp = self.simple_dataset_auth_sdk.create_dataset_access(
             dataset_id, principal_id
         )
-        self.print("Access to {dataset_id} created for {principal_id}", response)
+        data = {
+            "dataset_id": dataset_id,
+            "principal_id": principal_id,
+            "status": resp["message"],
+        }
+        out.add_row(data)
+        self.print("Creating dataset access", out)
 
     def check_access(self):
-        dataset_id = self.arg("datasetid")
-        self.log.info(f"Checking access to dataset: {dataset_id}")
-        response = self.simple_dataset_auth_sdk.check_dataset_access(dataset_id)
-        self.log.info(f"Dataset access check for {dataset_id} returned: {response}")
-        has_access = response["access"]
-        self.print(
-            "Caller has access to dataset" if has_access else "No access", response
+        out = create_output(
+            self.opt("format"), "datasets_dataset_access_check_config.json"
         )
+        out.output_singular_object = True
+        dataset_id = self.arg("datasetid")
+        resp = self.simple_dataset_auth_sdk.check_dataset_access(dataset_id)
+        data = {
+            "dataset_id": dataset_id,
+            "has_access": resp["access"],
+        }
+        out.add_row(data)
+        self.print("Checking dataset access", out)

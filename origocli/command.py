@@ -20,7 +20,7 @@ class BaseCommand:
   origo pipelines [options]
   origo events [options]
   origo event_streams [options]
-  origo webhook_tokens [options]
+  origo webhooks [options]
   origo -h | --help
 
 Commands available:
@@ -29,7 +29,7 @@ Commands available:
   pipelines
   events
   event_streams
-  webhook_tokens
+  webhooks
 
 Options:{BASE_COMMAND_OPTIONS}
 """

@@ -1,0 +1,15 @@
+{
+    "Dataset": {
+      "name": "Dataset ID",
+      "key": "dataset_id"
+    },
+    "User": {
+      "name": "User ID",
+      "key": "principal_id"
+    },
+    "Status": {
+      "name": "Status",
+      "key": "status"
+    }
+  }
+  

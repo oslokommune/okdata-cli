@@ -62,7 +62,7 @@ $ origo <command> help
 ## Commands available
 * datasets
 * events
-* webhook_tokens
+* webhooks
 * help
 
 ## List all datasets
@@ -195,11 +195,11 @@ $ origo events put <datasetid> <version> --file=/tmp/event.json
 Create a new webhook token:
 
 ```
-$ origo webhook_tokens create <datasetid> <service>
+$ origo webhooks create-token <datasetid> <service>
 ```
 
 Delete (invalidate) specified webhook token:
 
 ```
-$ origo webhook_tokens delete <datasetid> <token>
+$ origo webhooks delete-token <datasetid> <token>
 ```
