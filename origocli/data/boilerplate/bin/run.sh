@@ -17,7 +17,7 @@ echo "### Uncomment this line to run ###\n" && exit 1
 
 ACCOUNT_ID=""
 if [ "$ACCOUNT_ID" = '' ]; then
-  echo "Update ACCOUNT_ID to the one provided by Origo, then run this script again"
+  echo "Update ACCOUNT_ID in this script to the one provided by Origo, then run this script again"
   exit 1
 fi
 

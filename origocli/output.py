@@ -86,6 +86,7 @@ class TableOutput(PrettyTable):
             value = self.get_row_value(row, key)
             row_data.append(value)
         super().add_row(row_data)
+        self.align_rows()
 
     def add_rows(self, rows):
         for row in rows:
