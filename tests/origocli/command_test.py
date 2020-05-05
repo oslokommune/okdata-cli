@@ -102,7 +102,7 @@ def test_pretty_print_success(capsys):
     assert (
         captured.out
         == """+-------+-------+
-|  name |  key  |
+| name  | key   |
 +-------+-------+
 | hello | world |
 +-------+-------+
