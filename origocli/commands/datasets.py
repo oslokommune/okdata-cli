@@ -129,7 +129,7 @@ Options:{BASE_COMMAND_OPTIONS}
         self.log.info("Done creating boilerplate")
         self.print(f"Boilerplate set up in folder: {outdir}\n")
         self.print(
-            f"Edit the following files: \n\t{outdir}/dataset.json\n\t{outdir}/dataset-version-edition.json"
+            f"Edit the following files: \n\t{outdir}/run.sh\n\t{outdir}/dataset.json\n\t{outdir}/dataset-version-edition.json"
         )
         self.print(f"\nFollow instructions in {outdir}/run.sh\n")
 
@@ -324,7 +324,6 @@ Options:{BASE_COMMAND_OPTIONS}
             "statusid": res["status"],
         }
         out.add_row(data)
-        out.align_rows()
         self.print(f"Uploaded file to dataset: {dataset_id}", out)
 
     # #################################### #
