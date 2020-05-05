@@ -8,14 +8,14 @@ class EventStreamCommand(BaseCommand):
     __doc__ = f"""Oslo :: Event streams
 
 Usage:
-  origo event_streams create <datasetid> <version> [options]
-  origo event_streams ls <datasetid> <version> [options]
-  origo event_streams delete <datasetid> <version> [options]
+  origo event-streams create <datasetid> <version> [options]
+  origo event-streams ls <datasetid> <version> [options]
+  origo event-streams delete <datasetid> <version> [options]
 
 Examples:
-  origo event_streams create some-dataset-id 1
-  origo event_streams ls test-event-stream 1 --format=json | jq ".status" -r
-  origo event_streams delete some-dataset-id 1
+  origo event-streams create some-dataset-id 1
+  origo event-streams ls test-event-stream 1 --format=json | jq ".status" -r
+  origo event-streams delete some-dataset-id 1
 
 Options:{BASE_COMMAND_OPTIONS}
     """

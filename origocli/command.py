@@ -19,7 +19,7 @@ class BaseCommand:
   origo status [options]
   origo pipelines [options]
   origo events [options]
-  origo event_streams [options]
+  origo event-streams [options]
   origo webhooks [options]
   origo -h | --help
 
@@ -28,7 +28,7 @@ Commands available:
   status
   pipelines
   events
-  event_streams
+  event-streams
   webhooks
 
 Options:{BASE_COMMAND_OPTIONS}

@@ -60,7 +60,7 @@ def get_command_class(argv):
         "datasets": DatasetsCommand,
         "events": EventsCommand,
         "pipelines": Pipelines,
-        "event_streams": EventStreamCommand,
+        "event-streams": EventStreamCommand,
         "status": StatusCommand,
         "webhooks": WebhookTokensCommand,
     }

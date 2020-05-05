@@ -163,23 +163,23 @@ version](#create-version) for the dataset. If such already exist you are good to
 
 Create:
 ```
-$ origo event_streams create <datasetid> <version>
+$ origo event-streams create <datasetid> <version>
 ```
 Note! You can not start sending event to the stream right away. You must wait until
-the stream status is ACTIVE. To poll for the stream-status you can use the following (Get) `origo event_streams ls` - command.
+the stream status is ACTIVE. To poll for the stream-status you can use the following (Get) `origo event-streams ls` - command.
 
 Get:
 ```
-$ origo event_streams ls <datasetid> <version>
+$ origo event-streams ls <datasetid> <version>
 ```
 Delete:
 ```
-$ origo event_streams delete <datasetid> <version>
+$ origo event-streams delete <datasetid> <version>
 ```
 
 ## Sending Events
 
-In order to send events you need to [create an event stream](#creating-event-streams). 
+In order to send events you need to [create an event stream](#creating-event-streams).
 If such already exist you are good to go.
 
 Sending single json-events and lists of json-events can be done as follows:

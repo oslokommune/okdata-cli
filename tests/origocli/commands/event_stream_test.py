@@ -6,7 +6,7 @@ from origo.event.event_stream_client import EventStreamClient
 
 
 def test_create(mock_event_stream_sdk, mocker):
-    set_argv("event_streams", "create", "some-dataset-id", "1")
+    set_argv("event-streams", "create", "some-dataset-id", "1")
     cmd = EventStreamCommand()
     mocker.spy(cmd.sdk, "create_event_stream")
     cmd.handler()
@@ -14,7 +14,7 @@ def test_create(mock_event_stream_sdk, mocker):
 
 
 def test_ls(mock_event_stream_sdk, mocker):
-    set_argv("event_streams", "ls", "some-dataset-id", "1")
+    set_argv("event-streams", "ls", "some-dataset-id", "1")
     cmd = EventStreamCommand()
     mocker.spy(cmd.sdk, "get_event_stream_info")
     cmd.handler()
@@ -22,7 +22,7 @@ def test_ls(mock_event_stream_sdk, mocker):
 
 
 def test_delete(mock_event_stream_sdk, mocker):
-    set_argv("event_streams", "delete", "some-dataset-id", "1")
+    set_argv("event-streams", "delete", "some-dataset-id", "1")
     cmd = EventStreamCommand()
     mocker.spy(cmd.sdk, "delete_event_stream")
     cmd.handler()
