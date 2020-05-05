@@ -19,6 +19,12 @@ fi
 echo "Update json files in this directory before running"
 echo "### Uncomment this line to run ###\n" && exit 1
 
+ACCOUNT_ID=""
+if [ "$ACCOUNT_ID" = '' ]; then
+  echo "Update ACCOUNT_ID to the one provided by Origo, then run this script again"
+  exit 1
+fi
+
 echo "Creating a dataset, edition, pipeline and uploading a file to test"
 echo "Please wait....."
 
@@ -81,7 +87,7 @@ edition_id=`echo $edition_id | cut -d "/" -f 3`
 echo "Created edition: $edition_id"
 
 ######### Pipeline instance #########
-cat $pipeline_instance_file | sed "s/DATASET_ID/$dataset_id/" | sed "s/DATASET_VERSION/$version_id/" > generated_pipeline.json
+cat $pipeline_instance_file | sed "s/DATASET_ID/$dataset_id/" | sed "s/DATASET_VERSION/$version_id/" | sed "s/ACCOUNT_ID/$ACCOUNT_ID/" > generated_pipeline.json
 pipeline=`origo pipelines instances create generated_pipeline.json --format=json`
 error=`echo $pipeline | jq -r '.error'`
 if [[ "$error" =~ ^[1]+$ ]]; then
