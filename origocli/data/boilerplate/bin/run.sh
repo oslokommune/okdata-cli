@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Create dataset and pipeline to process any data pushed to the dataset
 
 # This is the first edition of the script, if it fails: please review the setup and
@@ -6,6 +6,10 @@
 #   If a dataset_id is created and you have to re-run the script because creating the
 #   version fails: set dataset_id to the ID you get from the output of this script, then comment out the
 #   "Dataset" block further below
+if [ "$BASH_VERSION" = '' ]; then
+  echo "This script should only be run with bash, support of other shells will come later"
+  exit 1
+fi
 
 if ! [ -x "$(command -v jq)" ]; then
   echo 'Error: jq is not installed.' >&2
