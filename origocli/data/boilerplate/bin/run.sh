@@ -17,7 +17,7 @@ if ! [ -x "$(command -v jq)" ]; then
 fi
 
 echo "Update json files in this directory before running"
-echo "### Uncomment this line to run ###\n" && exit 1
+echo "### Comment out this line to run ###\n" && exit 1
 
 ACCOUNT_ID=""
 if [ "$ACCOUNT_ID" = '' ]; then
