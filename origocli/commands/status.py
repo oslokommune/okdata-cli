@@ -65,7 +65,7 @@ Options:{BASE_COMMAND_OPTIONS}
             self.print(f"Status for: {statusid}", out)
         else:
             self.print(
-                f"No history found for status",
+                "No history found for status",
                 {"error": 1, "message": "No statuses found"},
             )
 
