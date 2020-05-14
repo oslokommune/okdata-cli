@@ -12,6 +12,7 @@ from origocli.date import (
 
 from origo.data.dataset import Dataset
 from origo.data.upload import Upload
+from origo.data.download import Download
 from origo.dataset_authorizer.simple_dataset_authorizer_client import (
     SimpleDatasetAuthorizerClient,
 )
@@ -30,6 +31,7 @@ Usage:
   origo datasets create-distribution <datasetid> [<versionid> <editionid>] [--file=<file> --format=<format> --env=<env> options]
   origo datasets create-access <datasetid> <userid> [--format=<format> --env=<env> options]
   origo datasets check-access <datasetid> [--format=<format> --env=<env> options]
+  origo datasets download <datasetid> [<versionid> <editionid> <output_path>] [--format=<format> --env=<env> options]
   origo datasets boilerplate <pipeline> <name> [options]
 
 Examples:
@@ -47,6 +49,7 @@ Options:{BASE_COMMAND_OPTIONS}
         env = self.opt("env")
         self.sdk = Dataset(env=env)
         self.simple_dataset_auth_sdk = SimpleDatasetAuthorizerClient(env=env)
+        self.download = Download(env=env)
         self.handler = self.default
 
     # TODO: do a better mapping from rules to commands here...?
@@ -64,6 +67,8 @@ Options:{BASE_COMMAND_OPTIONS}
             self.create_dataset()
         elif self.cmd("cp") is True:
             self.copy_file()
+        elif self.cmd("download") is True:
+            self.download_files()
         elif (
             self.arg("datasetid") is not None
             and self.cmd("create-distribution") is True
@@ -325,6 +330,13 @@ Options:{BASE_COMMAND_OPTIONS}
         }
         out.add_row(data)
         self.print(f"Uploaded file to dataset: {dataset_id}", out)
+
+    def download_files(self):
+        dataset_id = self.arg("datasetid")
+        version = self.resolve_or_load_versionid(dataset_id)
+        edition = self.resolve_or_create_edition(dataset_id, version)
+
+        output_path = f""
 
     # #################################### #
     # Access
