@@ -27,7 +27,7 @@ class PipelinesLs(BasePipelinesCommand):
         out = create_output(self.opt("format"), "pipelines_config.json")
         pipelines = self.sdk.get_pipelines()
         out.add_rows(pipelines)
-        self.print(f"Available pipelines", out)
+        self.print("Available pipelines", out)
 
 
 class PipelinesCreate(BasePipelinesCommand):
