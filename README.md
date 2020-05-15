@@ -11,7 +11,7 @@ Until then: see setup below for manual configuration of CLI
 
 # Setup
 
-Requirement: python 3.7
+Requirement: Python 3.6+
 
 ```
 git clone git@github.com:oslokommune/origo-cli.git
@@ -20,8 +20,6 @@ python3 -m venv .venv
 . .venv/bin/activate
 make init
 ```
-
-see [python documentation](doc/python.md) for installing python 3.7 on Ubuntu 1804 or Rasberry Pi
 
 # Usage
 Environment variables:
@@ -32,7 +30,7 @@ The credentials is resolved automatically if you do not set a specific Auth conf
 Note!
 
 You do not need to set all four of: `ORIGO_USERNAME, ORIGO_PASSWORD, ORIGO_CLIENT_ID, ORIGO_CLIENT_SECRET`.
-If you have been provided client_credentials then set: `ORIGO_CLIENT_ID, ORIGO_CLIENT_SECRET`. 
+If you have been provided client_credentials then set: `ORIGO_CLIENT_ID, ORIGO_CLIENT_SECRET`.
 Otherwise set: `ORIGO_USERNAME, ORIGO_PASSWORD`
 ```
 # keycloak user
@@ -158,7 +156,7 @@ $ origo datasets check-access <datasetid>
 
 ## Creating Event Streams
 
-In order to create an event stream you will need to [create a dataset](#create-dataset) and [create a 
+In order to create an event stream you will need to [create a dataset](#create-dataset) and [create a
 version](#create-version) for the dataset. If such already exist you are good to go.
 
 Create:
@@ -179,7 +177,7 @@ $ origo event_streams delete <datasetid> <version>
 
 ## Sending Events
 
-In order to send events you need to [create an event stream](#creating-event-streams). 
+In order to send events you need to [create an event stream](#creating-event-streams).
 If such already exist you are good to go.
 
 Sending single json-events and lists of json-events can be done as follows:

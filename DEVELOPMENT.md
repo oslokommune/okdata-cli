@@ -2,7 +2,8 @@
 
 ## Setup
 
-Requirement: python 3.7
+Requirement: Python 3.6+
+
 Setup:
 ```
 git clone git@github.com:oslokommune/origo-cli.git
