@@ -49,7 +49,6 @@ Options:{BASE_COMMAND_OPTIONS}
         env = self.opt("env")
         self.sdk = Dataset(env=env)
         self.simple_dataset_auth_sdk = SimpleDatasetAuthorizerClient(env=env)
-        self.simple_dataset_auth_sdk = SimpleDatasetAuthorizerClient(env=env)
         self.download = Download(env=env)
         self.handler = self.default
 
