@@ -1,0 +1,14 @@
+{
+  "Source": {
+    "name": "File source",
+    "key": "source"
+  },
+  "Target": {
+    "name": "File destination",
+    "key": "target"
+  },
+  "StatusID": {
+    "name": "Status ID",
+    "key": "statusid"
+  }
+}
