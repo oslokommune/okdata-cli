@@ -4,7 +4,7 @@ import shutil
 
 from origocli.command import BaseCommand, BASE_COMMAND_OPTIONS
 from origocli.output import create_output
-from origocli.io import read_stdin_or_filepath
+from origocli.io import read_stdin_or_filepath, resolve_output_filepath
 from origocli.date import (
     date_now,
     DATE_METADATA_EDITION_FORMAT,
@@ -371,14 +371,14 @@ Options:{BASE_COMMAND_OPTIONS}
             ]
 
         downloaded_files = self.download.download(
-            dataset_id, version, edition, os.getcwd()
+            dataset_id, version, edition, resolve_output_filepath(target)
         )
         self.log.info(f"Upload returned: {downloaded_files}")
         out = create_output(self.opt("format"), "datasets_copy_file_config_2.json")
         out.output_singular_object = True
         data = {
             "source": f"ds://{'/'.join([dataset_id, version, edition])}",
-            "target": downloaded_files["files"],
+            "target": "\n".join(downloaded_files["files"]),
             "statusid": "n/a",
         }
         out.add_row(data)

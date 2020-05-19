@@ -1,6 +1,7 @@
 import sys
 import json
 import logging
+import os
 
 log = logging.getLogger()
 
@@ -19,3 +20,13 @@ def read_stdin_or_filepath(file):
         payload = json.loads(data)
     # TODO: raise DataNotFoundException()
     return payload
+
+
+def resolve_output_filepath(target):
+    path_components = target.split("/")
+    if path_components[0] == ".":
+        path_components[0] = os.getcwd()
+    if path_components[-1] == "":
+        path_components.pop()
+
+    return "/".join(path_components)
