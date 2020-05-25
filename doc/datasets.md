@@ -32,6 +32,11 @@ To start exploring the datasets in Origo you do not need to log in, but: based o
 
 *Note*: For the correct, up to date, schema definition, please see [metadata-api schema catalogue](https://github.oslo.kommune.no/origo-dataplatform/metadata-api/tree/master/schema) (for now this is ), the datasets below are for demonstration purposes
 
+To search for a specific dataset you can use the `--filter` option to search for only a dddsubset of datasets available
+```bash
+origo datasets ls --filter=<my-filter-string>
+```
+
 # Create dataset
 
 File: dataset.json
