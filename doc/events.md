@@ -7,19 +7,19 @@ origo event_streams -h
 ```
 
 TOC:
-* [What is a event](#what-is-a-event)
+* [What is an event](#what-is-an-event)
 * [Create event stream](#create-event-stream)
 * [Event status](#event-status)
 * [Delete event stream](#delete-event-stream)
 * [Sending events](#sending-events)
 * [Consuming events](#consuming-events)
 
-# What is a event
+# What is an event
 Documentation is available on [github](https://oslokommune.github.io/dataplattform/)
 
 
 # Create Event Streams
-A event stream is connected to a [dataset](datasets.md), and before you can continue with events you need to [create a dataset](datasets.md#create-dataset) and a [version](datasets.md#create-version) for that dataset. If this already exist you can continue with the following steps:
+An event stream is connected to a [dataset](datasets.md), and before you can continue with events you need to [create a dataset](datasets.md#create-dataset) and a [version](datasets.md#create-version) for that dataset. If this already exist you can continue with the following steps:
 
 Create:
 ```bash
@@ -38,7 +38,7 @@ origo event_streams ls <datasetid> <versionid> --format=json | jq -r '.status'
 ```
 
 # Delete event stream
-Deleting a event stream can be done by executing:
+Deleting an event stream can be done by executing:
 ```bash
 origo event_streams delete <datasetid> <versionid>
 ```

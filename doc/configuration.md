@@ -5,7 +5,7 @@ Configuration
 * [Environment](#environment)
 
 # Authentication
-All CRUD operations needs a authenticated user in order to be executed. Some `ls` operations will not require a authenticated user, but might return a subset of available resources compared to that of a logged in user.
+All CRUD operations need an authenticated user in order to be executed. Some `ls` operations will not require a authenticated user, but might return a subset of available resources compared to that of a logged in user.
 
 The user is loaded from the environment where `origo` is executed.
 

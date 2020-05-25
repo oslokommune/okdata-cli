@@ -30,7 +30,7 @@ origo datasets ls <datasetid> <versionid> <editionid>
 ```
 To start exploring the datasets in Origo you do not need to log in, but: based on the permissions set on each dataset you might get different lists
 
-*Note*: For the correct, up to date, schema definition, please see [metadata-api schema catalogue](https://github.oslo.kommune.no/origo-dataplatform/metadata-api/tree/master/schema) (for now this is ), the datasets below are for demonstration purposes
+*Note*: For the correct, up to date, schema definition, please see [metadata-api schema catalogue](https://github.oslo.kommune.no/origo-dataplatform/metadata-api/tree/master/schema), the datasets below are for demonstration purposes
 
 To search for a specific dataset you can use the `--filter` option to search for only a subset of datasets available
 ```bash

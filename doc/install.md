@@ -6,7 +6,7 @@ Origo CLI requires the following to run:
 * `python 3.6`
 * `make` and build tools for installing python modules, see output from `make init` below to see any other requirements you must install in order to install Origo CLI
 
-In addition it is recommended to use a tool like `jq` to parse and make automated descions based on output.
+In addition it is recommended to use a tool like `jq` to parse and make automated decisions based on output.
 
 # Install
 Origo CLI is not yet installable as a application via pip (coming soon), but must be downloaded from github in order to be set up
