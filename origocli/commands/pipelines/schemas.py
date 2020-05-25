@@ -20,7 +20,7 @@ class SchemasLs(BasePipelinesCommand):
         )
         schemas = self.sdk.get_schemas()
         out.add_rows(schemas)
-        self.print(f"List of Schemas available", out)
+        self.print("List of Schemas available", out)
 
 
 class SchemasCreate(BasePipelinesCommand):
