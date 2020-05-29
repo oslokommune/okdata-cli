@@ -369,7 +369,7 @@ Options:{BASE_COMMAND_OPTIONS}
         if len(dataset_components) == 1:
             [dataset_id] = dataset_components
             version = self.sdk.get_latest_version(dataset_id)["version"]
-            edition = self.resolve_or_create_edition(dataset_id, version)
+            edition = self.get_latest_or_create_edition(dataset_id, version)
         elif len(dataset_components) == 2:
             [dataset_id, version] = dataset_components
             edition = self.get_latest_or_create_edition(dataset_id, version)
