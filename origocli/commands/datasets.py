@@ -24,7 +24,7 @@ class DatasetsCommand(BaseCommand):
 Usage:
   origo datasets ls [--format=<format>  --env=<env> --filter=<filter> options]
   origo datasets ls <datasetid> [<versionid> <editionid>][--format=<format> --env=<env> options]
-  origo datasets cp <source> <target> [--format=<format> --env=<env> options]
+  origo datasets cp <source> <target> [<versionid> <editionid> --format=<format> --env=<env> options]
   origo datasets create [--file=<file> --format=<format> --env=<env> options]
   origo datasets create-version <datasetid> [--file=<file> --format=<format> --env=<env> options]
   origo datasets create-edition <datasetid> [<versionid>] [--file=<file> --format=<format> --env=<env> options]
@@ -320,8 +320,34 @@ Options:{BASE_COMMAND_OPTIONS}
 
     def upload_file(self, source, target):
         upload = Upload()
-        dataset_uri = target[5:]
+        if target.startswith("ds://"):
+            dataset_uri = target[5:]
+            dataset_id, version, edition = self._dataset_components_from_uri_upload(
+                dataset_uri
+            )
+        elif target.startswith("ds:"):
+            (ns, dataset_id) = target.split(":")
+            self.log.info(f"Copying file to dataset: {dataset_id}")
+            version = self.resolve_or_load_versionid(dataset_id)
+            edition = self.resolve_or_create_edition(dataset_id, version)
+
+        self.log.info(f"Will copy file to: {dataset_id}, {version}, {edition})")
+        res = upload.upload(source, dataset_id, version, edition)
+        self.log.info(f"Upload returned: {res}")
+        out = create_output(self.opt("format"), "datasets_copy_file_config.json")
+        out.output_singular_object = True
+        data = {
+            "dataset": dataset_id,
+            "file": source,
+            "uploaded": res["result"],
+            "statusid": res["status"],
+        }
+        out.add_row(data)
+        self.print(f"Uploaded file to dataset: {dataset_id}", out)
+
+    def _dataset_components_from_uri_upload(self, dataset_uri):
         dataset_components = dataset_uri.split("/")
+
         if len(dataset_components) == 1:
             [dataset_id] = dataset_components
             version = self.sdk.get_latest_version(dataset_id)
@@ -337,19 +363,7 @@ Options:{BASE_COMMAND_OPTIONS}
                 -1
             ]
 
-        self.log.info(f"Will copy file to: {dataset_id}, {version}, {edition})")
-        res = upload.upload(source, dataset_id, version, edition)
-        self.log.info(f"Upload returned: {res}")
-        out = create_output(self.opt("format"), "datasets_copy_file_config.json")
-        out.output_singular_object = True
-        data = {
-            "dataset": dataset_id,
-            "file": source,
-            "uploaded": res["result"],
-            "statusid": res["status"],
-        }
-        out.add_row(data)
-        self.print(f"Uploaded file to dataset: {dataset_id}", out)
+        return dataset_id, version, edition
 
     def download_files(self, source, target):
         dataset_uri = source[5:]
