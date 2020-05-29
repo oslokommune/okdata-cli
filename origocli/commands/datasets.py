@@ -288,7 +288,7 @@ Options:{BASE_COMMAND_OPTIONS}
         return edition_id
 
     def get_latest_or_create_edition(self, dataset_id, version):
-        self.log.info(f"Trying to resolve edition for {version} on {dataset_id}")
+        self.log.info(f"Resolving edition for dataset-uri: {dataset_id}/{version}")
         try:
             return self.sdk.get_latest_edition(dataset_id, version)["Id"].split("/")[-1]
         except HTTPError as he:
@@ -298,9 +298,9 @@ Options:{BASE_COMMAND_OPTIONS}
                     "description": f"Auto-created edition for {dataset_id}/{version}",
                 }
                 self.log.info(
-                    f"Creating new edition for: {dataset_id}/{version} with data: {data}"
+                    f"Creating new edition for dataset-uri: {dataset_id}/{version}"
                 )
-                return self.sdk.create_edition(dataset_id, version, data)
+                return self.sdk.create_edition(dataset_id, version, data)["Id"].split("/")[-1]
             else:
                 raise he
 
