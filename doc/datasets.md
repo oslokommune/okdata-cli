@@ -150,6 +150,19 @@ To upload a file to a specific version and edition:
 origo datasets cp /tmp/test.txt ds:<datasetid> <versionid> <editionid>
 ```
 
+The `cp` command also supports a `ds://` prefix to specify a dataset uri e.g `ds://my-dataset/my-version/my-edition`.
+
+# Download file from dataset
+
+The `$ origo datasets cp` can also be used to download data form a dataset uri.
+```
+$ origo datasets cp ds://my-dataset/my-version/my-edition my/target/directory
+```
+If no version or edition is provided, then the CLI will by default choose the latest version and edition (if these exist).
+
+If the target directory does not exist on local machine, the CLI will create the directory. The cli also supports the use of `.` to
+specify working directory as output path.
+
 # Dataset access
 
 Give a user full access rights to a given dataset:
