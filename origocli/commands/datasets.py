@@ -1,6 +1,7 @@
 import re
 import os
 import shutil
+from requests.exceptions import HTTPError
 
 from origocli.command import BaseCommand, BASE_COMMAND_OPTIONS
 from origocli.output import create_output
@@ -286,6 +287,23 @@ Options:{BASE_COMMAND_OPTIONS}
         self.log.info(f"returning: {edition_id}")
         return edition_id
 
+    def get_latest_or_create_edition(self, dataset_id, version):
+        self.log.info(f"Trying to resolve edition for {version} on {dataset_id}")
+        try:
+            return self.sdk.get_latest_edition(dataset_id, version)["Id"].split("/")[-1]
+        except HTTPError as he:
+            if he.response.status_code == 404:
+                data = {
+                    "edition": date_now().strftime(DATE_METADATA_EDITION_FORMAT),
+                    "description": f"Auto-created edition for {dataset_id}/{version}",
+                }
+                self.log.info(
+                    f"Creating new edition for: {dataset_id}/{version} with data: {data}"
+                )
+                return self.sdk.create_edition(dataset_id, version, data)
+            else:
+                raise he
+
     # #################################### #
     # Distribution
     # #################################### #
@@ -354,7 +372,7 @@ Options:{BASE_COMMAND_OPTIONS}
             edition = self.resolve_or_create_edition(dataset_id, version)
         elif len(dataset_components) == 2:
             [dataset_id, version] = dataset_components
-            edition = self.resolve_or_create_edition(dataset_id, version)
+            edition = self.get_latest_or_create_edition(dataset_id, version)
         else:
             [dataset_id, version, edition] = dataset_components
 
