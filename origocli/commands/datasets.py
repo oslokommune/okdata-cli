@@ -300,7 +300,9 @@ Options:{BASE_COMMAND_OPTIONS}
                 self.log.info(
                     f"Creating new edition for dataset-uri: {dataset_id}/{version}"
                 )
-                return self.sdk.create_edition(dataset_id, version, data)["Id"].split("/")[-1]
+                return self.sdk.create_edition(dataset_id, version, data)["Id"].split(
+                    "/"
+                )[-1]
             else:
                 raise he
 
