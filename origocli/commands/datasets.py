@@ -68,8 +68,6 @@ Options:{BASE_COMMAND_OPTIONS}
             self.create_dataset()
         elif self.cmd("cp") is True:
             self.copy_file()
-        elif self.cmd("download") is True:
-            self.download_files()
         elif (
             self.arg("datasetid") is not None
             and self.cmd("create-distribution") is True
