@@ -1,0 +1,17 @@
+{
+  "pipelineArn": "arn:aws:states:eu-west-1:ACCOUNT_ID:stateMachine:dataplatform-data-copy",
+  "taskConfig": {
+    "write_to_processed": {
+      "write_to_latest": "1",
+      "output_stage": "processed"
+    },
+    "write_to_latest": {
+      "output_stage": "processed"
+    }
+  },
+  "useLatestEdition": true,
+  "id": "DATASET_ID",
+  "datasetUri": "output/DATASET_ID/DATASET_VERSION",
+  "schemaId": "",
+  "transformation": {}
+}

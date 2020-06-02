@@ -96,7 +96,7 @@ Options:{BASE_COMMAND_OPTIONS}
             )
             return
 
-        valid_pipelines = ["csv-to-parquet"]
+        valid_pipelines = ["csv-to-parquet", "data-copy"]
         pipeline = self.arg("pipeline")
         if pipeline not in valid_pipelines:
             self.print(f"Error: pipeline {pipeline} does not exist!")
