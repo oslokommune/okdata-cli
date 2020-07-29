@@ -19,6 +19,8 @@ fi
 echo "Update json files in this directory before running"
 echo "### Comment out this line to run ###\n" && exit 1
 
+# The ACCOUNT_ID is different from ORIGO_ENVIRONMENT=dev and ORIGO_ENVIRONMENT=prod
+# Make sure to use the correct ID as supplied by Origo
 ACCOUNT_ID=""
 if [ "$ACCOUNT_ID" = '' ]; then
   echo "Update ACCOUNT_ID in this script to the one provided by Origo, then run this script again"
@@ -43,8 +45,11 @@ dataset_data=`cat $dataset_file`
 if [[ $dataset_data =~ "boilerplate" || $dataset_data =~ "my.address@example.org" || $dataset_data =~ "Publisher Name" ]]
 then
    echo "Error: $dataset_file has not been updated correctly - please change the data to represent the dataset you want to create and the organization creating it!"
+   echo "Note: Change all occurence of 'boilerplate', confidentiality can be 'green', 'yellow' or 'red', contact and publisher must be a real contact point"
    exit
 fi
+
+
 version_data=`cat $dataset_version_edition_file`
 if [[ $version_data =~ "Boilerplate" || $version_data =~ "2020-00-00" ]]
 then
@@ -89,6 +94,10 @@ echo "Created edition: $edition_id"
 ######### Pipeline instance #########
 cat $pipeline_instance_file | sed "s/DATASET_ID/$dataset_id/" | sed "s/DATASET_VERSION/$version_id/" | sed "s/ACCOUNT_ID/$ACCOUNT_ID/" > generated_pipeline.json
 pipeline=`origo pipelines instances create generated_pipeline.json --format=json`
+if [[ $pipeline == "" ]]; then
+    echo "Could not create pipeline instance - did you enter correct account id?"
+    exit
+fi
 error=`echo $pipeline | jq -r '.error'`
 if [[ "$error" =~ ^[1]+$ ]]; then
   echo "Could not create instance"

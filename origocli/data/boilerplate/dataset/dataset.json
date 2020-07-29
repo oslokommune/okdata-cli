@@ -3,7 +3,7 @@
     "description": "Describe the boilerplate test",
     "keywords": ["boilerplate", "test"],
     "accessRights": "restricted",
-    "confidentiality": "green",
+    "confidentiality": "confidentiality",
     "objective": "The objective for this boilerplate",
     "contactPoint": {
         "name": "Contact Name",
