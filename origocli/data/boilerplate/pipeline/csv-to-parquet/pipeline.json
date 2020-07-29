@@ -1,6 +1,10 @@
 {
   "pipelineArn": "arn:aws:states:eu-west-1:ACCOUNT_ID:stateMachine:dataplatform-csv-to-parquet",
   "taskConfig": {
+    "csv_validator": {
+      "schema": "",
+      "delimiter": ","
+    },
     "csv_to_parquet": {
       "format": "parquetng",
       "chunksize": 100000
