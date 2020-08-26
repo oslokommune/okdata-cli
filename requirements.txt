@@ -10,7 +10,6 @@ certifi==2020.4.5.1       # via requests
 chardet==3.0.4            # via requests
 docopt==0.6.2             # via origo-cli (setup.py)
 ecdsa==0.15               # via python-jose
-fuzzywuzzy==0.18.0        # via origo-cli (setup.py)
 idna==2.9                 # via requests
 importlib-metadata==1.6.0  # via jsonschema
 inquirer==2.6.3           # via origo-cli (setup.py)
@@ -24,7 +23,6 @@ pyrsistent==0.16.0        # via jsonschema
 python-editor==1.0.4      # via inquirer
 python-jose==3.1.0        # via python-keycloak
 python-keycloak==0.20.0   # via origo-sdk-python
-python-levenshtein==0.12.0  # via origo-cli (setup.py)
 readchar==2.0.1           # via inquirer
 requests==2.23.0          # via origo-cli (setup.py), origo-sdk-python, python-keycloak
 rsa==4.0                  # via python-jose

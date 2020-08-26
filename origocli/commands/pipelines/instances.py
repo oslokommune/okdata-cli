@@ -1,7 +1,6 @@
 import json
 import inquirer
 from inquirer.errors import ValidationError
-from fuzzywuzzy import process
 
 from origo.data.dataset import Dataset
 from origo.pipelines.resources.pipeline_instance import PipelineInstance
@@ -132,11 +131,8 @@ class PipelineInstanceWizard(BasePipelinesCommand):
 
         def validate_dataset(answers, current):
             if current not in datasets:
-                possible_matches = process.extractBests(current, datasets, limit=3)
-                possible_matches = [match[0] for match in possible_matches]
                 raise ValidationError(
-                    False,
-                    reason=f"Dataset does not exist. Similar datasets ids include: {possible_matches}",
+                    False, reason="Dataset does not exist.",
                 )
             return True
 
