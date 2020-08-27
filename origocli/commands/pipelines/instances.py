@@ -132,7 +132,8 @@ class PipelineInstanceWizard(BasePipelinesCommand):
         def validate_dataset(answers, current):
             if current not in datasets:
                 raise ValidationError(
-                    False, reason="Dataset does not exist.",
+                    False,
+                    reason="Dataset does not exist.",
                 )
             return True
 
