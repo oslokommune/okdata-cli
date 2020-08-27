@@ -18,8 +18,6 @@ setuptools.setup(
         "requests",
         "origo-sdk-python>=0.2.2",
         "inquirer",
-        "fuzzywuzzy",
-        "python-Levenshtein",
         "pygments",
     ],
     entry_points={"console_scripts": ["origo=bin.cli:main"]},
