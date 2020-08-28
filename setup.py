@@ -14,6 +14,15 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/oslokommune/origo-cli/",
     packages=setuptools.find_packages(".", exclude=["tests*"]),
+    package_data={
+        "origocli": [
+            "data/boilerplate/bin/*",
+            "data/boilerplate/data/*",
+            "data/boilerplate/dataset/*",
+            "data/boilerplate/pipeline/*",
+            "data/output-format/*",
+        ],
+    },
     install_requires=[
         "PrettyTable",
         "docopt",
