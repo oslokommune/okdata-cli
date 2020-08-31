@@ -1,18 +1,6 @@
 from origocli.output import create_output
 from origocli.commands.eventsng.base import BaseEventsCommand
 
-# ############ TODO: REMOVE
-# data = {
-#     "status": "ACTIVE",
-#     "updated_by": "janedoe",
-#     "updated_at": "2020-08-26T08:07:21.903672+00:00",
-#     "id": "vannmalinger-fra-lmc-test/1",
-#     "create_raw": True,
-#     "deleted": False,
-#     "confidentiality": "yellow",
-# }
-# ############ TODO: REMOVE
-
 
 class EventsCreateStream(BaseEventsCommand):
     """

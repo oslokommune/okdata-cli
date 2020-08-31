@@ -20,17 +20,12 @@ class EventsLsSinks(BaseEventsCommand):
 
         if sink_id:
             out.output_singular_object = True
-            # data = self.sdk.get_sink(datasetid, versionid, sink_id)
-            data = {"status": "ACTIVE", "type": "elasticsearch", "id": "ujw6g"}
+            data = self.sdk.get_sink(datasetid, version, sink_id)
             out.add_row(data)
             self.print(f"Sink for {datasetid}/{version}", out)
             return
 
-        # data = self.sdk.get_sinks(datasetid, versionid)
-        data = [
-            {"status": "ACTIVE", "type": "elasticsearch", "id": "ujw6g"},
-            {"status": "ACTIVE", "type": "s3", "id": "aasd2"},
-        ]
+        data = self.sdk.get_sinks(datasetid, version)
         out.add_rows(data)
         self.print(f"Sinks for {datasetid}/{version}", out)
 
@@ -52,8 +47,7 @@ class EventsAddSink(BaseEventsCommand):
 
         out = create_output(self.opt("format"), "events_sink_config.json")
         out.output_singular_object = True
-        # data = self.sdk.add_sink(datasetid, versionid, sink_type=sink_type)
-        data = {"status": "ACTIVE", "type": sink_type, "id": "ujw6g"}
+        data = self.sdk.add_sink(datasetid, version, sink_type=sink_type)
         out.add_row(data)
         self.print(f"Adding sink for {datasetid}/{version}", out)
 
@@ -75,6 +69,5 @@ class EventsRemoveSink(BaseEventsCommand):
 
         out = create_output(self.opt("format"), "events_sink_config.json")
         out.output_singular_object = True
-        # data = self.sdk.remove_sink(datasetid, versionid, sink_id=sink_id)
-        data = {"message": f"Deleted sink {sink_id} from stream {datasetid}/{version}"}
+        data = self.sdk.remove_sink(datasetid, version, sink_id=sink_id)
         self.print(data["message"])
