@@ -1,0 +1,15 @@
+{
+  "Id": {
+    "name": "Id",
+    "key": "id"
+  },
+  "Type": {
+    "name": "Type",
+    "key": "type"
+  },
+  "Status": {
+    "name": "Status",
+    "key": "status"
+  }
+}
+  

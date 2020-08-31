@@ -1,0 +1,30 @@
+{
+  "ID": {
+    "name": "Stream ID",
+    "key": "id"
+  },
+  "Raw": {
+    "name": "Raw",
+    "key": "create_raw"
+  },
+  "Confidentiality": {
+    "name": "Confidentiality",
+    "key": "confidentiality"
+  },
+  "UpdatedBy": {
+    "name": "Updated by",
+    "key": "updated_by"
+  },
+  "CreatedAt": {
+    "name": "Updated date",
+    "key": "updated_at"
+  },
+  "Deleted": {
+    "name": "Deleted",
+    "key": "deleted"
+  },
+  "Status": {
+    "name": "Status",
+    "key": "status"
+  }
+}
