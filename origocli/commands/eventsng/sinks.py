@@ -20,7 +20,7 @@ class EventsLsSinks(BaseEventsCommand):
 
         if sink_id:
             out.output_singular_object = True
-            data = self.sdk.get_sink(datasetid, version, sink_id)
+            data = self.sdk.get_sink(datasetid, version, sink_id=sink_id)
             out.add_row(data)
             self.print(f"Sink for {datasetid}/{version}", out)
             return
@@ -67,7 +67,5 @@ class EventsRemoveSink(BaseEventsCommand):
         version = self.arg("version")
         sink_id = self.opt("sink-id")
 
-        out = create_output(self.opt("format"), "events_sink_config.json")
-        out.output_singular_object = True
         data = self.sdk.remove_sink(datasetid, version, sink_id=sink_id)
         self.print(data["message"])
