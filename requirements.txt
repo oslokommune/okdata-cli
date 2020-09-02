@@ -8,27 +8,30 @@ attrs==19.3.0             # via jsonschema
 blessings==1.7            # via inquirer
 certifi==2020.4.5.1       # via requests
 chardet==3.0.4            # via requests
-docopt==0.6.2             # via origo-cli (setup.py)
+docopt==0.6.2
 ecdsa==0.15               # via python-jose
 idna==2.9                 # via requests
 importlib-metadata==1.6.0  # via jsonschema
-inquirer==2.6.3           # via origo-cli (setup.py)
+inquirer==2.6.3
 jsonschema==3.2.0         # via origo-sdk-python
-origo-sdk-python==0.2.2   # via origo-cli (setup.py)
-prettytable==0.7.2        # via origo-cli (setup.py), origo-sdk-python
+origo-sdk-python==0.2.3
+prettytable==0.7.2
+prompt-toolkit==3.0.6     # via questionary
 pyasn1==0.4.8             # via python-jose, rsa
-pygments==2.6.1           # via origo-cli (setup.py)
+pygments==2.6.1
 pyjwt==1.7.1              # via origo-sdk-python
 pyrsistent==0.16.0        # via jsonschema
 python-editor==1.0.4      # via inquirer
 python-jose==3.1.0        # via python-keycloak
 python-keycloak==0.20.0   # via origo-sdk-python
+questionary==1.5.2
 readchar==2.0.1           # via inquirer
-requests==2.23.0          # via origo-cli (setup.py), origo-sdk-python, python-keycloak
+requests==2.23.0
 rsa==4.0                  # via python-jose
 six==1.14.0               # via blessings, ecdsa, jsonschema, pyrsistent, python-jose
 urllib3==1.25.9           # via origo-sdk-python, requests
+wcwidth==0.2.5            # via prompt-toolkit
 zipp==3.1.0               # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
-# setuptools
+# setuptools==50.0.3        # via jsonschema

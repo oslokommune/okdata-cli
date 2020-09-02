@@ -1,6 +1,6 @@
 .PHONY: init
 init:
-	pip3 install tox black pip-tools
+	pip3 install tox black pip-tools wheel
 	pip-compile
 	pip3 install -e .
 

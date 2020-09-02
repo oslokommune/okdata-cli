@@ -7,10 +7,10 @@ from origo.sdk import SDK
 from pygments import highlight, lexers, formatters
 
 BASE_COMMAND_OPTIONS = """
-  -h, --help          # Print this help
-  -d, --debug         # Output debug information while executing task
-  --format=<value>    # Output format: table OR json
-  --env=<value>       # Environment to run command in: prod OR dev"""
+  -h, --help                # Print this help
+  -d, --debug               # Output debug information while executing task
+  --format=<value>          # Output format: table OR json
+  --env=<value>             # Environment to run command in: prod OR dev"""
 
 
 class BaseCommand:

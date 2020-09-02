@@ -18,9 +18,10 @@ setuptools.setup(
         "PrettyTable",
         "docopt",
         "requests",
-        "origo-sdk-python>=0.2.2",
+        "origo-sdk-python>=0.2.3",
         "inquirer",
         "pygments",
+        "questionary",
     ],
     entry_points={"console_scripts": ["origo=bin.cli:main"]},
     classifiers=[
