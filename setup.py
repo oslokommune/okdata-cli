@@ -25,11 +25,13 @@ setuptools.setup(
     },
     install_requires=[
         "PrettyTable",
+        "Sphinx",
         "docopt",
-        "requests",
-        "origo-sdk-python>=0.2.2",
         "inquirer",
+        "origo-sdk-python>=0.2.2",
         "pygments",
+        "recommonmark",
+        "requests",
     ],
     entry_points={"console_scripts": ["origo=bin.cli:main"]},
     classifiers=[
