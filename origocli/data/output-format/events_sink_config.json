@@ -1,0 +1,23 @@
+
+{
+  "Id": {
+    "name": "Id",
+    "key": "id"
+  },
+  "Type": {
+    "name": "Type",
+    "key": "type"
+  },
+  "Status": {
+    "name": "Status",
+    "key": "status"
+  },
+  "UpdatedBy": {
+    "name": "Updated by",
+    "key": "updated_by"
+  },
+  "CreatedAt": {
+    "name": "Updated date",
+    "key": "updated_at"
+  }
+}

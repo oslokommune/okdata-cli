@@ -1,0 +1,30 @@
+{
+  "ID": {
+      "name": "Id",
+      "key": "id"
+  },
+  "Raw": {
+      "name": "Raw",
+      "key": "create_raw"
+  },
+  "Confidentiality": {
+      "name": "Confidentiality",
+      "key": "confidentiality"
+  },
+  "Deleted": {
+      "name": "Deleted",
+      "key": "deleted"
+  },
+  "Status": {
+      "name": "Status",
+      "key": "status"
+  },
+  "UpdatedBy": {
+      "name": "Updated by",
+      "key": "updated_by"
+  },
+  "CreatedAt": {
+      "name": "Updated date",
+      "key": "updated_at"
+  }
+}
