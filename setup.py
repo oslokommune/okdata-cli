@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="origo-cli",
-    version="0.2.0",
+    version="0.3.2",
     author="Oslo Origo",
     author_email="dataplattform@oslo.kommune.no",
     description="CLI for services provided by Oslo Origo",
@@ -14,13 +14,24 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/oslokommune/origo-cli/",
     packages=setuptools.find_packages(".", exclude=["tests*"]),
+    package_data={
+        "origocli": [
+            "data/boilerplate/bin/*",
+            "data/boilerplate/data/*",
+            "data/boilerplate/dataset/*",
+            "data/boilerplate/pipeline/*",
+            "data/output-format/*",
+        ],
+    },
     install_requires=[
         "PrettyTable",
+        "Sphinx",
         "docopt",
-        "requests",
-        "origo-sdk-python>=0.2.3",
         "inquirer",
+        "origo-sdk-python>=0.2.3",
         "pygments",
+        "recommonmark",
+        "requests",
         "questionary",
     ],
     entry_points={"console_scripts": ["origo=bin.cli:main"]},
