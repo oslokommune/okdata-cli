@@ -1,15 +1,10 @@
-import re
-import os
-import shutil
 from requests.exceptions import HTTPError
 
 from origocli.command import BaseCommand, BASE_COMMAND_OPTIONS
+from origocli.commands.datasets import DatasetsBoilerplateCommand
 from origocli.output import create_output
 from origocli.io import read_stdin_or_filepath, resolve_output_filepath
-from origocli.date import (
-    date_now,
-    DATE_METADATA_EDITION_FORMAT,
-)
+from origocli.date import date_now, DATE_METADATA_EDITION_FORMAT
 
 from origo.data.dataset import Dataset
 from origo.data.upload import Upload
@@ -33,16 +28,22 @@ Usage:
   origo datasets create-access <datasetid> <userid> [--format=<format> --env=<env> options]
   origo datasets check-access <datasetid> [--format=<format> --env=<env> options]
   origo datasets download <datasetid> [<versionid> <editionid> <output_path>] [--format=<format> --env=<env> options]
-  origo datasets boilerplate <pipeline> <name> [options]
+  origo datasets boilerplate <name> [--file=<file> --prompt=<prompt> --pipeline=<pipeline> options]
 
 Examples:
   origo datasets ls --filter=bydelsfakta
   origo datasets ls --filter=bydelsfakta --format=json
   origo datasets create --file=dataset.json
   origo datasets cp /tmp/file.csv ds:my-dataset-id
-  origo datasets boilerplate csv-to-parquet name-of-output-folder
+  origo datasets boilerplate oslo-traffic-data
+  origo datasets boilerplate oslo-traffic-data --file=/tmp/initial-file.csv
+  origo datasets boilerplate oslo-traffic-data --pipeline=data-copy --prompt=no
+  origo datasets boilerplate geodata-from-my-iot-devices
 
 Options:{BASE_COMMAND_OPTIONS}
+  --file=<file>             # Use this file for configuration or upload
+  --prompt=<prompt>         # Use input prompt to collect data, default "no"
+  --pipeline=<pipeline>     # Required when --prompt=no
     """
 
     def __init__(self):
@@ -52,13 +53,12 @@ Options:{BASE_COMMAND_OPTIONS}
         self.simple_dataset_auth_sdk = SimpleDatasetAuthorizerClient(env=env)
         self.download = Download(env=env)
         self.handler = self.default
+        self.sub_commands = [DatasetsBoilerplateCommand]
 
     # TODO: do a better mapping from rules to commands here...?
     def default(self):
         self.log.info("DatasetsCommand.handle()")
-        if self.cmd("boilerplate") is True:
-            self.boilerplate()
-        elif self.cmd("create-access") is True:
+        if self.cmd("create-access") is True:
             self.create_access()
         elif self.cmd("check-access") is True:
             self.check_access()
@@ -85,57 +85,6 @@ Options:{BASE_COMMAND_OPTIONS}
             self.dataset()
         else:
             BaseCommand.help()
-
-    def boilerplate(self):
-        self.log.info("Creating boilerplate")
-        name = self.arg("name").strip()
-        pattern = re.compile("^[a-zA-Z0-9-]+$")
-        if pattern.match(name) is None:
-            self.print(
-                f"Error: {name} is not valid, only 'a-z', 'A-Z', '0-9' and '-' are valid characters"
-            )
-            return
-
-        valid_pipelines = ["csv-to-parquet", "data-copy"]
-        pipeline = self.arg("pipeline")
-        if pipeline not in valid_pipelines:
-            self.print(f"Error: pipeline {pipeline} does not exist!")
-            self.print(
-                f"\tValid pipelines: {', '.join(str(x) for x in valid_pipelines)}"
-            )
-            return
-
-        # For now we only create the folder in current directory, we can later
-        # supply support for --dir=<dir> if needed
-        basedir = "."
-        outdir = f"{basedir}/{name}"
-        self.log.info(f"Creating: {name} boilerplate to {outdir}")
-        if os.path.exists(outdir):
-            shutil.rmtree(outdir)
-        os.mkdir(name)
-        currentdir = os.path.dirname(os.path.realpath(__file__))
-        boilerplatedir = f"{currentdir}/../data/boilerplate"
-        inputfiles = [
-            "bin/run.sh",
-            "dataset/dataset.json",
-            "dataset/dataset-version.json",
-            "dataset/dataset-version-edition.json",
-            f"pipeline/{pipeline}/pipeline.json",
-            "pipeline/pipeline-input.json",
-            "data/hello_world.csv",
-        ]
-        for file in inputfiles:
-            tmp = file.split("/")
-            fromfile = f"{boilerplatedir}/{file}"
-            tofile = f"{outdir}/{tmp[-1]}"
-            self.log.info(f"Copying from {fromfile} to {tofile}")
-            shutil.copyfile(fromfile, tofile)
-        self.log.info("Done creating boilerplate")
-        self.print(f"Boilerplate set up in folder: {outdir}\n")
-        self.print(
-            f"Edit the following files: \n\t{outdir}/run.sh\n\t{outdir}/dataset.json\n\t{outdir}/dataset-version-edition.json"
-        )
-        self.print(f"\nFollow instructions in {outdir}/run.sh\n")
 
     # #################################### #
     # Datasets
@@ -443,9 +392,6 @@ Options:{BASE_COMMAND_OPTIONS}
         out.output_singular_object = True
         dataset_id = self.arg("datasetid")
         resp = self.simple_dataset_auth_sdk.check_dataset_access(dataset_id)
-        data = {
-            "dataset_id": dataset_id,
-            "has_access": resp["access"],
-        }
+        data = {"dataset_id": dataset_id, "has_access": resp["access"]}
         out.add_row(data)
         self.print("Checking dataset access", out)

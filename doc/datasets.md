@@ -178,11 +178,25 @@ origo datasets check-access <datasetid>
 # Boilerplate
 The process of setting up a full dataset, version, edition with a properly configured pipeline that will process your data involves a few steps. A boilerplate command is provided for you to create a full set of files and configurations that will set everything up, all you have to do is to update a few files with the correct information, and you will be up and running in no time.
 
-Currently there is only a single pipeline available: `csv-to-parquet`, but we are working on more, and if you have been given a custom pipeline from Origo you can still use the boilerplate functionality, you just need to update the pipeline.json file generated with one you will get from us.
+Currently there are two pipelines available: `csv-to-parquet` and `data-copy`, but we are working on more, and if you have been given a custom pipeline from Origo you can still use the boilerplate functionality, you just need to update the pipeline.json file generated with one you will get from us.
+
+* data-copy: a pipeline that does not alter the original input-data, use for excel, doc or any other file that your dataset contains
+* csv-to-parquet: generate parquet files from CSV input file
 
 To create a set of files run the following command, this will create a folder in the current working directory called `my-dataset`:
 ```bash
-origo datasets boilerplate csv-to-parquet my-dataset
+origo datasets boilerplate my-dataset
+```
+The boilerplate command will give a input prompt to gather all necessary information needed in order to generate a dataset with corresponding pipeline.
+
+When running the command (see output of the boilerplate command) a default file will be uploaded to test the pipeline, to override this add a `--file=<file>`
+```bash
+origo datasets boilerplate my-dataset --file=/tmp/file_to_upload.csv
+```
+
+If you don't need, or want to customise the files before running the supplied script, you can skip the prompt, but you then need to supply one of the pipelines available:
+```bash
+origo datasets boilerplate my-dataset --pipeline=data-copy --prompt=no
 ```
 
 The output of the command will notify you on which files you will need to update before running the supplied `run.sh` command

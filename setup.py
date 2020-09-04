@@ -28,10 +28,11 @@ setuptools.setup(
         "Sphinx",
         "docopt",
         "inquirer",
-        "origo-sdk-python>=0.2.2",
+        "origo-sdk-python>=0.2.3",
         "pygments",
         "recommonmark",
         "requests",
+        "questionary",
     ],
     entry_points={"console_scripts": ["origo=bin.cli:main"]},
     classifiers=[
