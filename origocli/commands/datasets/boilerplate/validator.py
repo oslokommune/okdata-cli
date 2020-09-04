@@ -60,6 +60,8 @@ class TitleValidator(Validator):
 class KeywordValidator(Validator):
     def validate(self, document):
         keywords = [x.strip() for x in document.text.split(",")]
+        if len(keywords) == 0:
+            return True
         have_valid_keywords = False
         for keyword in keywords:
             keyword = keyword.strip()
