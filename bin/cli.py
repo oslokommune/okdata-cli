@@ -8,8 +8,6 @@ from origo.exceptions import ApiAuthenticateError
 
 from origocli.command import BaseCommand
 from origocli.commands.datasets import DatasetsCommand
-
-# from origocli.commands.event_streams import EventStreamCommand
 from origocli.commands.events import EventsCommand
 from origocli.commands.pipelines import Pipelines
 from origocli.commands.status import StatusCommand
