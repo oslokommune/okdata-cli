@@ -12,7 +12,7 @@ boilerplate_questions = [
     {
         "type": "text",
         "name": "id",
-        "message": "Environment ID (as provided by Origo)",
+        "message": "Kjøremiljø ID (Som gitt til deg av Origo)",
         "validate": EnvironmentValidator,
     },
     {"type": "text", "name": "title", "message": "Tittel", "validate": TitleValidator},
