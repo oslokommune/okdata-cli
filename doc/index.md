@@ -2,7 +2,7 @@
 
 Origo CLI provides a unified interface to the services provided by Oslo Origo.
 
-Content:
+Contents:
 * [Install/setup](install.md)
   * [Python requirements and setup](python.md)
 * [Configuration](configuration.md)
