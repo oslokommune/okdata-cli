@@ -1,28 +1,28 @@
-Pipelines
-=====
-To see all operations available on events:
-```
+# Pipelines
+
+To see all operations available on pipelines:
+```bash
 origo pipelines -h
 ```
 
-TOC:
+Contents:
 * [What is a pipeline](#what-is-a-pipeline)
 * [Standard pipelines](#standard-pipelines)
 * [Create pipeline](#create-pipeline)
 
-# What is a pipeline
-Documentation is available on [github](https://oslokommune.github.io/dataplattform/)
+## What is a pipeline
+Documentation is available on [GitHub](https://oslokommune.github.io/dataplattform/).
 
-# Standard pipelines
-For processing data through the Origo dataplatform there will be several generic pipelines that is made available for you
+## Standard pipelines
+There are several generic pipelines available for processing data through the Origo dataplatform.
 
-## CSV to Parquet
-Process data from `csv` to `parquet` ([what is parquet](https://en.wikipedia.org/wiki/Apache_Parquet)).
+### CSV to Parquet
+Process data from CSV to [Parquet](https://en.wikipedia.org/wiki/Apache_Parquet).
 
 Configuration:
 ```
 TBD
 ```
 
-# Create pipeline
+## Create pipeline
 TBD

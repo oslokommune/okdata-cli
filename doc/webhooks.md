@@ -1,20 +1,20 @@
-Webhooks
-=====
+# Webhooks
+
 To see all operations available for webhooks:
-```
+```bash
 origo webhooks -h
 ```
 
-TOC:
+Contents:
 * [What is a webhook](#what-is-a-webhook)
 * [Create token](#create-token)
 * [Delete token](#delete-token)
 
 
-# What is webhook
-Documentation is available on [github](https://oslokommune.github.io/dataplattform/)
+## What is a webhook
+Documentation is available on [GitHub](https://oslokommune.github.io/dataplattform/).
 
-# Create token
+## Create token
 
 Create a new webhook token:
 
@@ -22,7 +22,7 @@ Create a new webhook token:
 origo webhooks create-token <datasetid> <service>
 ```
 
-# Delete token
+## Delete token
 Delete (invalidate) specified webhook token:
 
 ```bash
