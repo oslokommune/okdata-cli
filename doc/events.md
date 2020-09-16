@@ -29,12 +29,20 @@ origo events create-stream <dataset-uri>
 # Event status
 A stream status must be `ACTIVE` before you can start [sending events](#sending-events) to it. To poll for the streams status manually:
 ```bash
+<<<<<<< HEAD
 origo events describe <dataset-uri>
+=======
+origo events cat <dataset-uri>
+>>>>>>> DP-934: Rename certain event-stream commands
 ```
 
 Or you can check the value of status by passing the output to `jq`:
 ```bash
+<<<<<<< HEAD
 origo events describe <dataset-uri> --format=json | jq -r '.stream.status'
+=======
+origo events cat <dataset-uri> --format=json | jq -r '.stream.status'
+>>>>>>> DP-934: Rename certain event-stream commands
 ```
 
 ## Delete event stream
@@ -51,7 +59,11 @@ You can send events to your stream in different ways.
 
 Single JSON events can be sent by piping a JSON string to the `events` command:
 ```bash
+<<<<<<< HEAD
 echo '{"hello": "world"}' | origo events put <dataset-uri>
+=======
+$ echo '{"hello": "world"}' | origo events put <dataset-uri>
+>>>>>>> DP-934: Rename certain event-stream commands
 ```
 
 Given a file `event.json`:
@@ -69,13 +81,18 @@ cat event.json | origo events put <dataset-uri>
 or reference it:
 
 ```bash
+<<<<<<< HEAD
 origo events put ds:my-dataset/1 --file=/tmp/event.json
+=======
+$ cat event.json | origo events put <dataset-uri>
+$ origo events put my-dataset 1 --file=/tmp/event.json
+>>>>>>> DP-934: Rename certain event-stream commands
 ```
 
 ### Sending multiple json events
 You can also send multiple events by piping them to the `events` command:
 ```bash
-echo '[{"hello": "world"}, {"world": "hello"}]' | origo events put <datasetid> <versionid>
+echo '[{"hello": "world"}, {"world": "hello"}]' | origo events put <dataset-uri>
 ```
 
 Given a file `events.json`:
@@ -127,6 +144,6 @@ origo events disable-sink <dataset-uri> --sink-type=<sink_type>
 It is possible to "subscribe" to an event stream using the WebSocket protocol. This feature can be enabled/disabled on demand:
 
 ```bash
-origo events enable-subscribable <dataset-uri>
-origo events disable-subscribable <dataset-uri>
+origo events enable-subscription <dataset-uri>
+origo events disable-subscription <dataset-uri>
 ```

@@ -45,8 +45,8 @@ def output_with_argument(output, argument):
     return False
 
 
-def test_ls_stream(mock_event_stream_sdk, mocker, mock_print):
-    set_argv("events", "ls", f"ds:{dataset_id}/{version}")
+def test_cat_stream(mock_event_stream_sdk, mocker, mock_print):
+    set_argv("events", "cat", f"ds:{dataset_id}/{version}")
     add_row = mocker.spy(TableOutput, "add_row")
     add_rows = mocker.spy(TableOutput, "add_rows")
     cmd = EventsCommand()
@@ -87,55 +87,55 @@ def test_delete_stream(mock_event_stream_sdk, mocker, mock_print):
     mock_print.assert_called_once()
 
 
-def test_enable_subscribable(mock_event_stream_sdk, mocker, mock_print):
-    set_argv("events", "enable-subscribable", f"ds:{dataset_id}/{version}")
+def test_enable_subscription(mock_event_stream_sdk, mocker, mock_print):
+    set_argv("events", "enable-subscription", f"ds:{dataset_id}/{version}")
     add_row = mocker.spy(TableOutput, "add_row")
     cmd = EventsCommand()
-    mocker.spy(cmd.sdk, "enable_subscribable")
+    mocker.spy(cmd.sdk, "enable_subscription")
     cmd.handler()
-    cmd.sdk.enable_subscribable.assert_called_once_with(dataset_id, version)
+    cmd.sdk.enable_subscription.assert_called_once_with(dataset_id, version)
     assert output_with_argument(add_row, subscribable_item)
     mock_print.assert_called_once()
 
 
-def test_disable_subscribable(mock_event_stream_sdk, mocker, mock_print):
-    set_argv("events", "disable-subscribable", f"ds:{dataset_id}/{version}")
+def test_disable_subscription(mock_event_stream_sdk, mocker, mock_print):
+    set_argv("events", "disable-subscription", f"ds:{dataset_id}/{version}")
     add_row = mocker.spy(TableOutput, "add_row")
     cmd = EventsCommand()
-    mocker.spy(cmd.sdk, "disable_subscribable")
+    mocker.spy(cmd.sdk, "disable_subscription")
     cmd.handler()
-    cmd.sdk.disable_subscribable.assert_called_once_with(dataset_id, version)
+    cmd.sdk.disable_subscription.assert_called_once_with(dataset_id, version)
     assert output_with_argument(add_row, subscribable_item)
     mock_print.assert_called_once()
 
 
-def test_add_sink(mock_event_stream_sdk, mocker, mock_print):
+def test_enable_sink(mock_event_stream_sdk, mocker, mock_print):
     set_argv(
         "events",
-        "add-sink",
+        "enable-sink",
         f"ds:{dataset_id}/{version}",
         "--sink-type",
         sink_item["type"],
     )
     add_row = mocker.spy(TableOutput, "add_row")
     cmd = EventsCommand()
-    mocker.spy(cmd.sdk, "add_sink")
+    mocker.spy(cmd.sdk, "enable_sink")
     cmd.handler()
-    cmd.sdk.add_sink.assert_called_once_with(
+    cmd.sdk.enable_sink.assert_called_once_with(
         dataset_id, version, sink_type=sink_item["type"]
     )
     assert output_with_argument(add_row, sink_item)
     mock_print.assert_called_once()
 
 
-def test_remove_sink(mock_event_stream_sdk, mocker, mock_print):
+def test_disable_sink(mock_event_stream_sdk, mocker, mock_print):
     set_argv(
-        "events", "remove-sink", f"ds:{dataset_id}/{version}", "--sink-id", sink_id
+        "events", "disable-sink", f"ds:{dataset_id}/{version}", "--sink-id", sink_id
     )
     cmd = EventsCommand()
-    mocker.spy(cmd.sdk, "remove_sink")
+    mocker.spy(cmd.sdk, "disable_sink")
     cmd.handler()
-    cmd.sdk.remove_sink.assert_called_once_with(dataset_id, version, sink_id=sink_id)
+    cmd.sdk.disable_sink.assert_called_once_with(dataset_id, version, sink_id=sink_id)
     mock_print.assert_called_once_with(sink_deleted_response["message"])
 
 
@@ -198,10 +198,10 @@ def mock_event_stream_sdk(monkeypatch):
     def get_subscribable(self, dataset_id, version):
         return subscribable_item
 
-    def enable_subscribable(self, dataset_id, version):
+    def enable_subscription(self, dataset_id, version):
         return subscribable_item
 
-    def disable_subscribable(self, dataset_id, version):
+    def disable_subscription(self, dataset_id, version):
         return subscribable_item
 
     def get_sinks(self, dataset_id, version):
@@ -210,19 +210,19 @@ def mock_event_stream_sdk(monkeypatch):
     def get_sink(self, dataset_id, version, sink_id):
         return [sink_item]
 
-    def add_sink(self, dataset_id, version, sink_type):
+    def enable_sink(self, dataset_id, version, sink_type):
         return sink_item
 
-    def remove_sink(self, dataset_id, version, sink_id):
+    def disable_sink(self, dataset_id, version, sink_id):
         return sink_deleted_response
 
     monkeypatch.setattr(EventStreamClient, "get_event_stream_info", get_event_stream)
     monkeypatch.setattr(EventStreamClient, "create_event_stream", create_event_stream)
     monkeypatch.setattr(EventStreamClient, "delete_event_stream", delete_event_stream)
     monkeypatch.setattr(EventStreamClient, "get_subscribable", get_subscribable)
-    monkeypatch.setattr(EventStreamClient, "enable_subscribable", enable_subscribable)
-    monkeypatch.setattr(EventStreamClient, "disable_subscribable", disable_subscribable)
+    monkeypatch.setattr(EventStreamClient, "enable_subscription", enable_subscription)
+    monkeypatch.setattr(EventStreamClient, "disable_subscription", disable_subscription)
     monkeypatch.setattr(EventStreamClient, "get_sink", get_sink)
     monkeypatch.setattr(EventStreamClient, "get_sinks", get_sinks)
-    monkeypatch.setattr(EventStreamClient, "add_sink", add_sink)
-    monkeypatch.setattr(EventStreamClient, "remove_sink", remove_sink)
+    monkeypatch.setattr(EventStreamClient, "enable_sink", enable_sink)
+    monkeypatch.setattr(EventStreamClient, "disable_sink", disable_sink)

@@ -13,23 +13,23 @@ class EventsCommand(BaseCommand):
     __doc__ = f"""Oslo :: Events
 
 Usage:
-  origo events ls <dataset-uri> [options]
+  origo events cat <dataset-uri> [options]
   origo events create-stream <dataset-uri> [--skip-raw] [options]
   origo events delete-stream <dataset-uri> [options]
-  origo events enable-subscribable <dataset-uri> [options]
-  origo events disable-subscribable <dataset-uri> [options]
-  origo events add-sink <dataset-uri> --sink-type=<sink_type> [options]
-  origo events remove-sink <dataset-uri> --sink-id=<sink_id> [options]
+  origo events enable-subscription <dataset-uri> [options]
+  origo events disable-subscription <dataset-uri> [options]
+  origo events enable-sink <dataset-uri> --sink-type=<sink_type> [options]
+  origo events disable-sink <dataset-uri> --sink-id=<sink_id> [options]
   origo events put <dataset-uri> [--file=<file> options]
   origo events stat <dataset-uri> [options]
 
 Examples:
-  origo events ls ds:my-dataset-id/1
-  origo events ls my-dataset-id/1
-  origo events ls my-dataset-id
+  origo events cat ds:my-dataset-id/1
+  origo events cat my-dataset-id/1
+  origo events cat my-dataset-id
   origo events create-stream ds:my-dataset-id/1
-  origo events add-sink ds:my-dataset-id/1 --sink-type=s3
-  origo events remove-sink ds:my-dataset-id/1 --sink-id=ab12c
+  origo events enable-sink ds:my-dataset-id/1 --sink-type=s3
+  origo events disable-sink ds:my-dataset-id/1 --sink-id=ab12c
   echo '{{"hello": "world"}}' | origo events put ds:my-dataset-id/1
   echo '[{{"hello": "world"}}, {{"world": "hello"}}]' | origo events put ds:my-dataset-id/1
   cat /tmp/event.json | origo events put ds:my-dataset-id/1
@@ -53,30 +53,26 @@ Options:{BASE_COMMAND_OPTIONS}
     def default(self):
         self.log.info("EventsCommand.handle()")
 
-        if self.cmd("ls"):
+        if self.cmd("cat"):
             self.stream()
         elif self.cmd("create-stream"):
             self.create_stream()
         elif self.cmd("delete-stream"):
             self.delete_stream()
-        elif self.cmd("enable-subscribable"):
-            self.enable_subscribable()
-        elif self.cmd("disable-subscribable"):
-            self.disable_subscribable()
-        elif self.cmd("add-sink"):
-            self.add_sink()
-        elif self.cmd("remove-sink"):
-            self.remove_sink()
+        elif self.cmd("enable-subscription"):
+            self.enable_subscription()
+        elif self.cmd("disable-subscription"):
+            self.disable_subscription()
+        elif self.cmd("enable-sink"):
+            self.enable_sink()
+        elif self.cmd("disable-sink"):
+            self.disable_sink()
         elif self.cmd("put"):
             self.put_event()
         elif self.cmd("stat"):
             self.event_stat()
         else:
             self.help()
-
-    def streams(self):
-        # TODO: List all events streams for given dataset
-        pass
 
     def stream(self):
         dataset_id, version = self._resolve_dataset_uri()
@@ -126,39 +122,39 @@ Options:{BASE_COMMAND_OPTIONS}
         out.add_row(event_stream)
         self.print(f"Deleting event stream for {dataset_id}/{version}", out)
 
-    def enable_subscribable(self):
+    def enable_subscription(self):
         dataset_id, version = self._resolve_dataset_uri()
-        subscribable = self.sdk.enable_subscribable(dataset_id, version)
+        subscribable = self.sdk.enable_subscription(dataset_id, version)
         out = create_output(self.opt("format"), "events_subscribable_config.json")
         out.output_singular_object = True
         out.add_row(subscribable)
         self.print(
-            f"Enabling subscribable event stream for {dataset_id}/{version}", out
+            f"Enabling subscription for event stream {dataset_id}/{version}", out
         )
 
-    def disable_subscribable(self):
+    def disable_subscription(self):
         dataset_id, version = self._resolve_dataset_uri()
-        subscribable = self.sdk.disable_subscribable(dataset_id, version)
+        subscribable = self.sdk.disable_subscription(dataset_id, version)
         out = create_output(self.opt("format"), "events_subscribable_config.json")
         out.output_singular_object = True
         out.add_row(subscribable)
         self.print(
-            f"Disabling subscribable event stream for {dataset_id}/{version}", out
+            f"Disabling subscription for event stream {dataset_id}/{version}", out
         )
 
-    def add_sink(self):
+    def enable_sink(self):
         dataset_id, version = self._resolve_dataset_uri()
         sink_type = self.opt("sink-type")
-        sink = self.sdk.add_sink(dataset_id, version, sink_type=sink_type)
+        sink = self.sdk.enable_sink(dataset_id, version, sink_type=sink_type)
         out = create_output(self.opt("format"), "events_sink_config.json")
         out.output_singular_object = True
         out.add_row(sink)
-        self.print(f"Adding sink for {dataset_id}/{version}", out)
+        self.print(f"Enabling {sink_type} sink for {dataset_id}/{version}", out)
 
-    def remove_sink(self):
+    def disable_sink(self):
         dataset_id, version = self._resolve_dataset_uri()
         sink_id = self.opt("sink-id")
-        response = self.sdk.remove_sink(dataset_id, version, sink_id=sink_id)
+        response = self.sdk.disable_sink(dataset_id, version, sink_id=sink_id)
         if self.opt("format") == "json":
             self.print("", response)
             return
