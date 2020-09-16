@@ -46,7 +46,7 @@ def output_with_argument(output, argument):
 
 
 def test_ls_stream(mock_event_stream_sdk, mocker, mock_print):
-    set_argv("events", "ls", dataset_id, version)
+    set_argv("events", "ls", f"ds:{dataset_id}/{version}")
     add_row = mocker.spy(TableOutput, "add_row")
     add_rows = mocker.spy(TableOutput, "add_rows")
     cmd = EventsCommand()
@@ -64,7 +64,7 @@ def test_ls_stream(mock_event_stream_sdk, mocker, mock_print):
 
 
 def test_create_stream(mock_event_stream_sdk, mocker, mock_print):
-    set_argv("events", "create-stream", dataset_id, version, "--skip-raw")
+    set_argv("events", "create-stream", f"ds:{dataset_id}/{version}", "--skip-raw")
     add_row = mocker.spy(TableOutput, "add_row")
     cmd = EventsCommand()
     mocker.spy(cmd.sdk, "create_event_stream")
@@ -77,7 +77,7 @@ def test_create_stream(mock_event_stream_sdk, mocker, mock_print):
 
 
 def test_delete_stream(mock_event_stream_sdk, mocker, mock_print):
-    set_argv("events", "delete-stream", dataset_id, version)
+    set_argv("events", "delete-stream", f"ds:{dataset_id}/{version}")
     add_row = mocker.spy(TableOutput, "add_row")
     cmd = EventsCommand()
     mocker.spy(cmd.sdk, "delete_event_stream")
@@ -88,7 +88,7 @@ def test_delete_stream(mock_event_stream_sdk, mocker, mock_print):
 
 
 def test_enable_subscribable(mock_event_stream_sdk, mocker, mock_print):
-    set_argv("events", "enable-subscribable", dataset_id, version)
+    set_argv("events", "enable-subscribable", f"ds:{dataset_id}/{version}")
     add_row = mocker.spy(TableOutput, "add_row")
     cmd = EventsCommand()
     mocker.spy(cmd.sdk, "enable_subscribable")
@@ -99,7 +99,7 @@ def test_enable_subscribable(mock_event_stream_sdk, mocker, mock_print):
 
 
 def test_disable_subscribable(mock_event_stream_sdk, mocker, mock_print):
-    set_argv("events", "disable-subscribable", dataset_id, version)
+    set_argv("events", "disable-subscribable", f"ds:{dataset_id}/{version}")
     add_row = mocker.spy(TableOutput, "add_row")
     cmd = EventsCommand()
     mocker.spy(cmd.sdk, "disable_subscribable")
@@ -111,7 +111,11 @@ def test_disable_subscribable(mock_event_stream_sdk, mocker, mock_print):
 
 def test_add_sink(mock_event_stream_sdk, mocker, mock_print):
     set_argv(
-        "events", "add-sink", dataset_id, version, "--sink-type", sink_item["type"]
+        "events",
+        "add-sink",
+        f"ds:{dataset_id}/{version}",
+        "--sink-type",
+        sink_item["type"],
     )
     add_row = mocker.spy(TableOutput, "add_row")
     cmd = EventsCommand()
@@ -125,7 +129,9 @@ def test_add_sink(mock_event_stream_sdk, mocker, mock_print):
 
 
 def test_remove_sink(mock_event_stream_sdk, mocker, mock_print):
-    set_argv("events", "remove-sink", dataset_id, version, "--sink-id", sink_id)
+    set_argv(
+        "events", "remove-sink", f"ds:{dataset_id}/{version}", "--sink-id", sink_id
+    )
     cmd = EventsCommand()
     mocker.spy(cmd.sdk, "remove_sink")
     cmd.handler()
@@ -134,7 +140,7 @@ def test_remove_sink(mock_event_stream_sdk, mocker, mock_print):
 
 
 def test_put_event(mock_event_stream_sdk, mocker, mock_print):
-    set_argv("events", "put", dataset_id, version, "--file", "input.json")
+    set_argv("events", "put", f"ds:{dataset_id}/{version}", "--file", "input.json")
     input_json = {"test": "event"}
     read_input = mocker.patch(
         f"{EventsCommand.__module__}.read_json", return_value=input_json
@@ -147,6 +153,35 @@ def test_put_event(mock_event_stream_sdk, mocker, mock_print):
 
     assert read_input.called_once
     assert post_event.called_once_with(input_json, "dataset-id", "version-1")
+
+
+def test_resolve_dataset_uri():
+    cmd = EventsCommand()
+
+    for dataset_uri in [
+        dataset_id,
+        f"{dataset_id}/{version}",
+        f"{dataset_id}/{version}/",
+        f"ds:{dataset_id}",
+        f"ds:{dataset_id}/{version}",
+        f"ds:{dataset_id}/{version}/",
+        f"ds:{dataset_id}/{version}/abc",
+    ]:
+        cmd.args["<dataset-uri>"] = dataset_uri
+        assert cmd._resolve_dataset_uri() == (dataset_id, version)
+
+
+def test_resolve_dataset_uri_invalid():
+    cmd = EventsCommand()
+
+    for dataset_uri in [
+        f"ds://{dataset_id}/{version}",
+        f"ds://{dataset_id}/{version}",
+        f"ab:{dataset_id}/{version}",
+    ]:
+        cmd.args["<dataset-uri>"] = dataset_uri
+        with pytest.raises(SystemExit):
+            cmd._resolve_dataset_uri()
 
 
 @pytest.fixture()

@@ -1,3 +1,5 @@
+import re
+
 from origo.event.post_event import PostEvent
 from origo.elasticsearch.queries import ElasticsearchQueries
 from origo.event.event_stream_client import EventStreamClient
@@ -11,27 +13,29 @@ class EventsCommand(BaseCommand):
     __doc__ = f"""Oslo :: Events
 
 Usage:
-  origo events ls <datasetid> <versionid> [options]
-  origo events create-stream <datasetid> <versionid> [--skip-raw] [options]
-  origo events delete-stream <datasetid> <versionid> [options]
-  origo events enable-subscribable <datasetid> <versionid> [options]
-  origo events disable-subscribable <datasetid> <versionid> [options]
-  origo events add-sink <datasetid> <versionid> --sink-type=<sink_type> [options]
-  origo events remove-sink <datasetid> <versionid> --sink-id=<sink_id> [options]
-  origo events put <datasetid> <versionid> [--file=<file> options]
-  origo events stat <datasetid> [options]
+  origo events ls <dataset-uri> [options]
+  origo events create-stream <dataset-uri> [--skip-raw] [options]
+  origo events delete-stream <dataset-uri> [options]
+  origo events enable-subscribable <dataset-uri> [options]
+  origo events disable-subscribable <dataset-uri> [options]
+  origo events add-sink <dataset-uri> --sink-type=<sink_type> [options]
+  origo events remove-sink <dataset-uri> --sink-id=<sink_id> [options]
+  origo events put <dataset-uri> [--file=<file> options]
+  origo events stat <dataset-uri> [options]
 
 Examples:
-  origo events ls my-dataset-id 1
-  origo events create-stream my-dataset-id 1
-  origo events add-sink my-dataset-id 1 --sink-type=s3
-  origo events remove-sink my-dataset-id 1 --sink-id=ab12c
-  echo '{{"hello": "world"}}' | origo events put test-event 1
-  echo '[{{"hello": "world"}}, {{"world": "hello"}}]' | origo events put test-event 1
-  cat /tmp/event.json | origo events put test-event 1
-  origo events put test-event 1 --file=/tmp/event.json
-  origo events stat test-event
-  origo events stat test-event --format=json | jq ".last_hour.events"
+  origo events ls ds:my-dataset-id/1
+  origo events ls my-dataset-id/1
+  origo events ls my-dataset-id
+  origo events create-stream ds:my-dataset-id/1
+  origo events add-sink ds:my-dataset-id/1 --sink-type=s3
+  origo events remove-sink ds:my-dataset-id/1 --sink-id=ab12c
+  echo '{{"hello": "world"}}' | origo events put ds:my-dataset-id/1
+  echo '[{{"hello": "world"}}, {{"world": "hello"}}]' | origo events put ds:my-dataset-id/1
+  cat /tmp/event.json | origo events put ds:my-dataset-id/1
+  origo events put ds:my-dataset-id/1 --file=/tmp/event.json
+  origo events stat ds:my-dataset-id
+  origo events stat ds:my-dataset-id --format=json | jq ".last_hour.events"
 
 Options:{BASE_COMMAND_OPTIONS}
     """
@@ -50,10 +54,7 @@ Options:{BASE_COMMAND_OPTIONS}
         self.log.info("EventsCommand.handle()")
 
         if self.cmd("ls"):
-            if self.arg("versionid"):
-                self.stream()
-            else:
-                self.streams()
+            self.stream()
         elif self.cmd("create-stream"):
             self.create_stream()
         elif self.cmd("delete-stream"):
@@ -78,12 +79,11 @@ Options:{BASE_COMMAND_OPTIONS}
         pass
 
     def stream(self):
-        dataset_id = self.arg("datasetid")
-        version_id = self.arg("versionid")
+        dataset_id, version = self._resolve_dataset_uri()
 
-        event_stream = self.sdk.get_event_stream_info(dataset_id, version_id)
-        subscribable = self.sdk.get_subscribable(dataset_id, version_id)
-        sinks = self.sdk.get_sinks(dataset_id, version_id)
+        event_stream = self.sdk.get_event_stream_info(dataset_id, version)
+        subscribable = self.sdk.get_subscribable(dataset_id, version)
+        sinks = self.sdk.get_sinks(dataset_id, version)
 
         if self.opt("format") == "json":
             out = {}
@@ -96,7 +96,7 @@ Options:{BASE_COMMAND_OPTIONS}
         out = create_output(self.opt("format"), "events_stream_config.json")
         out.output_singular_object = True
         out.add_row(event_stream)
-        self.print(f"Event stream: {dataset_id}/{version_id}", out)
+        self.print(f"Event stream: {dataset_id}/{version}", out)
 
         out = create_output(self.opt("format"), "events_subscribable_config.json")
         out.output_singular_object = True
@@ -108,81 +108,73 @@ Options:{BASE_COMMAND_OPTIONS}
         self.print("\n\nSinks for event stream:", out)
 
     def create_stream(self):
-        dataset_id = self.arg("datasetid")
-        version_id = self.arg("versionid")
+        dataset_id, version = self._resolve_dataset_uri()
         create_raw = not self.opt("skip-raw")
         event_stream = self.sdk.create_event_stream(
-            dataset_id, version_id, create_raw=create_raw
+            dataset_id, version, create_raw=create_raw
         )
         out = create_output(self.opt("format"), "events_stream_config.json")
         out.output_singular_object = True
         out.add_row(event_stream)
-        self.print(f"Creating event stream for {dataset_id}/{version_id}", out)
+        self.print(f"Creating event stream for {dataset_id}/{version}", out)
 
     def delete_stream(self):
-        dataset_id = self.arg("datasetid")
-        version_id = self.arg("versionid")
-        event_stream = self.sdk.delete_event_stream(dataset_id, version_id)
+        dataset_id, version = self._resolve_dataset_uri()
+        event_stream = self.sdk.delete_event_stream(dataset_id, version)
         out = create_output(self.opt("format"), "events_stream_config.json")
         out.output_singular_object = True
         out.add_row(event_stream)
-        self.print(f"Deleting event stream for {dataset_id}/{version_id}", out)
+        self.print(f"Deleting event stream for {dataset_id}/{version}", out)
 
     def enable_subscribable(self):
-        dataset_id = self.arg("datasetid")
-        version_id = self.arg("versionid")
-        subscribable = self.sdk.enable_subscribable(dataset_id, version_id)
+        dataset_id, version = self._resolve_dataset_uri()
+        subscribable = self.sdk.enable_subscribable(dataset_id, version)
         out = create_output(self.opt("format"), "events_subscribable_config.json")
         out.output_singular_object = True
         out.add_row(subscribable)
         self.print(
-            f"Enabling subscribable event stream for {dataset_id}/{version_id}", out
+            f"Enabling subscribable event stream for {dataset_id}/{version}", out
         )
 
     def disable_subscribable(self):
-        dataset_id = self.arg("datasetid")
-        version_id = self.arg("versionid")
-        subscribable = self.sdk.disable_subscribable(dataset_id, version_id)
+        dataset_id, version = self._resolve_dataset_uri()
+        subscribable = self.sdk.disable_subscribable(dataset_id, version)
         out = create_output(self.opt("format"), "events_subscribable_config.json")
         out.output_singular_object = True
         out.add_row(subscribable)
         self.print(
-            f"Disabling subscribable event stream for {dataset_id}/{version_id}", out
+            f"Disabling subscribable event stream for {dataset_id}/{version}", out
         )
 
     def add_sink(self):
-        dataset_id = self.arg("datasetid")
-        version_id = self.arg("versionid")
+        dataset_id, version = self._resolve_dataset_uri()
         sink_type = self.opt("sink-type")
-        sink = self.sdk.add_sink(dataset_id, version_id, sink_type=sink_type)
+        sink = self.sdk.add_sink(dataset_id, version, sink_type=sink_type)
         out = create_output(self.opt("format"), "events_sink_config.json")
         out.output_singular_object = True
         out.add_row(sink)
-        self.print(f"Adding sink for {dataset_id}/{version_id}", out)
+        self.print(f"Adding sink for {dataset_id}/{version}", out)
 
     def remove_sink(self):
-        dataset_id = self.arg("datasetid")
-        version_id = self.arg("versionid")
+        dataset_id, version = self._resolve_dataset_uri()
         sink_id = self.opt("sink-id")
-        response = self.sdk.remove_sink(dataset_id, version_id, sink_id=sink_id)
+        response = self.sdk.remove_sink(dataset_id, version, sink_id=sink_id)
         if self.opt("format") == "json":
             self.print("", response)
             return
         self.print(response["message"])
 
     def put_event(self):
-        datasetid = self.arg("datasetid")
-        versionid = self.arg("versionid")
-
+        dataset_id, version = self._resolve_dataset_uri()
         out = create_output(self.opt("format"), "events_put_event_config.json")
         out.output_singular_object = True
         payload = read_json(self.opt("file"))
         self.log.info(f"Putting event with payload: {payload}")
 
-        self.post_event_sdk.post_event(payload, datasetid, versionid)
+        self.post_event_sdk.post_event(payload, dataset_id, version)
         data = {
-            "stream": datasetid,
-            "version": versionid,
+            "stream": dataset_id,
+            "version": version,
             "source": self.opt("file") or "stdin",
             "status": "Commited",
         }
@@ -190,7 +182,7 @@ Options:{BASE_COMMAND_OPTIONS}
         self.print("Put event status", out)
 
     def event_stat(self):
-        dataset_id = self.arg("datasetid")
+        dataset_id, version = self._resolve_dataset_uri()
         out = create_output(self.opt("format"), "events_stat_config.json")
 
         data = self.esq_sdk.event_stat(dataset_id)
@@ -206,3 +198,20 @@ Options:{BASE_COMMAND_OPTIONS}
             outdata = [hour, day, week]
             out.add_rows(outdata)
             self.print(f"Events for {dataset_id}", out)
+
+    def _resolve_dataset_uri(self):
+        dataset_uri = self.arg("dataset-uri").lower()
+        uri_pattern = r"^(?:ds:)?([a-z0-9\-]+)(?:\/|$)(?:([0-9]+))?"
+        match = re.match(uri_pattern, dataset_uri)
+
+        if not match:
+            self.log.error(
+                'Error: Invalid dataset URI, expects pattern "[ds:]<dataset_id>[/<version>]"'
+            )
+            raise SystemExit
+
+        [dataset_id, version] = match.groups()
+
+        version = version if version else "1"
+
+        return dataset_id, version
