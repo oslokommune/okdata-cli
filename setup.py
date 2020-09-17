@@ -27,6 +27,11 @@ setuptools.setup(
         "PrettyTable",
         "Sphinx",
         "docopt",
+<<<<<<< HEAD
+=======
+        "requests",
+        "origo-sdk-python>=0.2.5",
+>>>>>>> Update SDK requirement
         "inquirer",
         "origo-sdk-python>=0.2.6",
         "pygments",
