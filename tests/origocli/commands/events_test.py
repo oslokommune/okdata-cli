@@ -192,7 +192,7 @@ def test_resolve_dataset_uri_invalid():
         f"ab:{dataset_id}/{version}",
     ]:
         cmd.args["<dataset-uri>"] = dataset_uri
-        with pytest.raises(SystemExit):
+        with pytest.raises(ValueError):
             cmd._resolve_dataset_uri()
 
 

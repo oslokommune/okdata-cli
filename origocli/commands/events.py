@@ -207,10 +207,9 @@ Options:{BASE_COMMAND_OPTIONS}
         match = re.match(uri_pattern, dataset_uri, re.VERBOSE)
 
         if not match:
-            self.log.error(
-                'Error: Invalid dataset URI, expects pattern "[ds:]<dataset_id>[/<version>]"'
+            raise ValueError(
+                'Invalid dataset URI, expects pattern "[ds:]<dataset_id>[/<version>]"'
             )
-            raise SystemExit
 
         [dataset_id, version] = match.groups()
 
