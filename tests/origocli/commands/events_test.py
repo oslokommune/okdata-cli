@@ -157,26 +157,38 @@ def test_put_event(mock_event_stream_sdk, mocker, mock_print):
 
 def test_resolve_dataset_uri():
     cmd = EventsCommand()
-
-    for dataset_uri in [
-        dataset_id,
-        f"{dataset_id}/{version}",
-        f"{dataset_id}/{version}/",
-        f"ds:{dataset_id}",
-        f"ds:{dataset_id}/{version}",
-        f"ds:{dataset_id}/{version}/",
-        f"ds:{dataset_id}/{version}/abc",
+    for did, v in [
+        (dataset_id, version),
+        ("arsrapport", "2"),
+        ("dette-er-1-test", "10"),
+        ("dataset-0-100-x-test", "1"),
+        ("mange-versjoner", "192"),
     ]:
-        cmd.args["<dataset-uri>"] = dataset_uri
-        assert cmd._resolve_dataset_uri() == (dataset_id, version)
+        for dataset_uri in [did, f"ds:{did}"]:
+            cmd.args["<dataset-uri>"] = dataset_uri
+            assert cmd._resolve_dataset_uri() == (did, "1")
+        for dataset_uri in [f"{did}/{v}", f"ds:{did}/{v}"]:
+            cmd.args["<dataset-uri>"] = dataset_uri
+            assert cmd._resolve_dataset_uri() == (did, v)
 
 
 def test_resolve_dataset_uri_invalid():
     cmd = EventsCommand()
 
     for dataset_uri in [
+        "årsrapport/1",
+        f"{dataset_id}/",
+        f"{dataset_id}/0",
+        f"{dataset_id}/01",
+        f"{dataset_id}/test",
+        f"{dataset_id}/{version}/",
+        f"{dataset_id}/{version}/20200101T111213",
+        f"ds:{dataset_id}/",
+        f"ds:{dataset_id}/{version}/",
+        f"ds:{dataset_id}/{version}/20200101T111213",
+        f"ds:{dataset_id}/{version}/20200101T111213/",
         f"ds://{dataset_id}/{version}",
-        f"ds://{dataset_id}/{version}",
+        f"ds://{dataset_id}/{version}/",
         f"ab:{dataset_id}/{version}",
     ]:
         cmd.args["<dataset-uri>"] = dataset_uri
