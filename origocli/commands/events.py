@@ -197,8 +197,14 @@ Options:{BASE_COMMAND_OPTIONS}
 
     def _resolve_dataset_uri(self):
         dataset_uri = self.arg("dataset-uri").lower()
-        uri_pattern = r"^(?:ds:)?([a-z0-9\-]+)(?:\/|$)(?:([0-9]+))?"
-        match = re.match(uri_pattern, dataset_uri)
+        uri_pattern = r"""
+            ^                           # beginning of string
+            (?:ds:)?                    # non-capturing group, optional "ds:" prefix
+            ([a-z0-9\-]+)               # match one or more characters in range a-z/0-9, and "-" (dataset id)
+            (?:\/([1-9]|[1-9][0-9]+))?  # match digits > 1 prefixed with "/" if present (version)
+            $                           # end of string
+        """
+        match = re.match(uri_pattern, dataset_uri, re.VERBOSE)
 
         if not match:
             self.log.error(
