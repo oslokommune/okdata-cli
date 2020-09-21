@@ -1,4 +1,5 @@
 import re
+import json
 
 from origo.event.post_event import PostEvent
 from origo.elasticsearch.queries import ElasticsearchQueries
@@ -20,7 +21,7 @@ Usage:
   origo events disable-subscription <dataset-uri> [options]
   origo events enable-sink <dataset-uri> --sink-type=<sink_type> [options]
   origo events disable-sink <dataset-uri> --sink-id=<sink_id> [options]
-  origo events put <dataset-uri> [--file=<file> options]
+  origo events put <dataset-uri> [(--file=<file> | --data=<data>) options]
   origo events stat <dataset-uri> [options]
 
 Examples:
@@ -33,6 +34,7 @@ Examples:
   echo '{{"hello": "world"}}' | origo events put ds:my-dataset-id/1
   echo '[{{"hello": "world"}}, {{"world": "hello"}}]' | origo events put ds:my-dataset-id/1
   cat /tmp/event.json | origo events put ds:my-dataset-id/1
+  origo events put ds:my-dataset-id/1 --data='{{"hello": "world"}}'
   origo events put ds:my-dataset-id/1 --file=/tmp/event.json
   origo events stat ds:my-dataset-id
   origo events stat ds:my-dataset-id --format=json | jq ".last_hour.events"
@@ -165,6 +167,10 @@ Options:{BASE_COMMAND_OPTIONS}
         out = create_output(self.opt("format"), "events_put_event_config.json")
         out.output_singular_object = True
         payload = read_json(self.opt("file"))
+        if self.opt("data") is not None:
+            payload = json.loads(self.opt("data"))
+        else:
+            payload = read_json(self.opt("file"))
         self.log.info(f"Putting event with payload: {payload}")
 
         self.post_event_sdk.post_event(payload, dataset_id, version)
