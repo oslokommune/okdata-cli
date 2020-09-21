@@ -66,4 +66,4 @@ Options:{BASE_COMMAND_OPTIONS}
         dataset_id = self.arg("datasetid")
         webhook_tokens = self.sdk.list_webhook_tokens(dataset_id)
         out.add_rows(webhook_tokens)
-        self.print(f"Webhook tokens registered on dataset {dataset_id}", webhook_tokens)
+        self.print(f"Webhook tokens registered on dataset {dataset_id}: ", out)
