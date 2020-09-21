@@ -28,6 +28,14 @@ def test_delete(mock_simple_dataset_auth_sdk, mocker):
     cmd.sdk.delete_webhook_token.assert_called_once_with(dataset_id, webhook_token)
 
 
+def test_list_webhook_tokens(mock_simple_dataset_auth_sdk, mocker):
+    set_argv("webhooks", "list-token", dataset_id)
+    cmd = WebhookTokensCommand()
+    mocker.spy(cmd.sdk, "list_webhook_tokens")
+    cmd.handler()
+    cmd.sdk.list_webhook_tokens.assert_called_once_with(dataset_id)
+
+
 @pytest.fixture()
 def mock_simple_dataset_auth_sdk(monkeypatch):
     def create_webhook_token_return(self, dataset_id, version):
@@ -35,6 +43,19 @@ def mock_simple_dataset_auth_sdk(monkeypatch):
 
     def delete_webhook_token_return(self, dataset_id, token):
         return {"message": "Deleted"}
+
+    def list_webhook_tokens_return(self, dataset_id):
+        return [
+            {
+                "token": "7271646a-8530-4ed3-a042-4485fbbd7460",
+                "created_by": "janedoe",
+                "dataset_id": "some-dataset",
+                "service": "service-account-some-service",
+                "created_at": "2020-07-09T06:57:36+00:00",
+                "expires_at": "2022-07-09T06:57:36+00:00",
+                "is_active": True,
+            }
+        ]
 
     monkeypatch.setattr(
         SimpleDatasetAuthorizerClient,
@@ -46,4 +67,10 @@ def mock_simple_dataset_auth_sdk(monkeypatch):
         SimpleDatasetAuthorizerClient,
         "delete_webhook_token",
         delete_webhook_token_return,
+    )
+
+    monkeypatch.setattr(
+        SimpleDatasetAuthorizerClient,
+        "list_webhook_tokens",
+        list_webhook_tokens_return,
     )
