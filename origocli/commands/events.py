@@ -199,9 +199,11 @@ Options:{BASE_COMMAND_OPTIONS}
         dataset_uri = self.arg("dataset-uri").lower()
         uri_pattern = r"""
             ^                           # beginning of string
-            (?:ds:)?                    # non-capturing group, optional "ds:" prefix
-            ([a-z0-9\-]+)               # match one or more characters in range a-z/0-9, and "-" (dataset id)
-            (?:\/([1-9]|[1-9][0-9]+))?  # match digits > 1 prefixed with "/" if present (version)
+            (?:ds:)?                    # match optional "ds:" prefix (non-capturing group)
+            ([a-z0-9\-]+)               # match and capture dataset id; one or more characters in range a-z/0-9, and "-"
+            (?:\/                       # match optional dataset version (non-capturing group, exclude leading "/")
+                ([1-9]|[1-9][0-9]+)         # match and capture digits > 1 (if present)
+            )?
             $                           # end of string
         """
         match = re.match(uri_pattern, dataset_uri, re.VERBOSE)
