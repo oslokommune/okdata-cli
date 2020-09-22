@@ -12,10 +12,12 @@ class WebhookTokensCommand(BaseCommand):
 Usage:
   origo webhooks create-token <datasetid> <service> [options]
   origo webhooks delete-token <datasetid> <token> [options]
+  origo webhooks list-tokens <datasetid> [options]
 
 Examples:
   origo webhooks create-token some-dataset-id some-service-name --format=json
   origo webhooks delete-token some-dataset-id some-webhook-token
+  origo webhooks list-tokens some-dataset-id
 
 Options:{BASE_COMMAND_OPTIONS}
     """
@@ -31,6 +33,8 @@ Options:{BASE_COMMAND_OPTIONS}
             self.create_token()
         elif self.cmd("delete-token"):
             self.delete_token()
+        elif self.cmd("list-tokens"):
+            self.list_tokens()
         else:
             self.print("Invalid command")
 
@@ -56,3 +60,10 @@ Options:{BASE_COMMAND_OPTIONS}
         }
         out.add_row(data)
         self.print("Deleting webhook token", out)
+
+    def list_tokens(self):
+        out = create_output(self.opt("format"), "webhook_token_list_config.json")
+        dataset_id = self.arg("datasetid")
+        webhook_tokens = self.sdk.list_webhook_tokens(dataset_id)
+        out.add_rows(webhook_tokens)
+        self.print(f"Webhook tokens registered on dataset {dataset_id}: ", out)

@@ -22,6 +22,15 @@ Create a new webhook token:
 origo webhooks create-token <datasetid> <service>
 ```
 
+
+## List tokens
+
+Lists all active webhook tokens for a dataset:
+
+```bash
+origo webhooks list-tokens <datasetid>
+```
+
 ## Delete token
 Delete (invalidate) specified webhook token:
 
