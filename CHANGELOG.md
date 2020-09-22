@@ -1,3 +1,7 @@
+## 0.3.3
+
+* Add command `origo webhooks list-tokens` for listing webhook tokens for a dataset.
+
 ## 0.3.2
 
 * Use Sphinx for documentation generation.
