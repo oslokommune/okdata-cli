@@ -29,7 +29,7 @@ def test_delete(mock_simple_dataset_auth_sdk, mocker):
 
 
 def test_list_webhook_tokens(mock_simple_dataset_auth_sdk, mocker):
-    set_argv("webhooks", "list-token", dataset_id)
+    set_argv("webhooks", "list-tokens", dataset_id)
     cmd = WebhookTokensCommand()
     mocker.spy(cmd.sdk, "list_webhook_tokens")
     cmd.handler()
