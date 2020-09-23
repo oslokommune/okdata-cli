@@ -146,18 +146,29 @@ hello, world
 world, hello
 ```
 
-Upload the file with the `cp` command to the `<datasetid>` dataset. Note the `ds`-prefix for the upload command, this specifies to upload to a specific dataset.
-When `version` or `edition` are not specified it will result in auto-discovery of the latest edition on the latest version.
+Upload the file with the `cp` command to the `<datasetid>` dataset. Note the
+`ds:` prefix for the target dataset.
+
+To upload a file to a specific version and edition:
+```bash
+origo datasets cp /tmp/test.txt ds:<datasetid>/<versionid>/<editionid>
+```
+
+By using the special edition ID `latest`, the file will be uploaded to the
+latest edition.
+
+If no version or edition is provided, a new edition will be created for the
+latest version automatically:
+
 ```bash
 origo datasets cp /tmp/test.txt ds:<datasetid>
 ```
 
-To upload a file to a specific version and edition:
-```bash
-origo datasets cp /tmp/test.txt ds:<datasetid> <versionid> <editionid>
-```
+Or to upload to a new edition of a specific version:
 
-The `cp` command also supports a `ds://` prefix to specify a dataset URI, e.g. `ds://my-dataset/my-version/my-edition`.
+```bash
+origo datasets cp /tmp/test.txt ds:<datasetid>/<versionid>
+```
 
 ### Inspecting the upload status
 
@@ -203,10 +214,17 @@ echo "Uploaded file is processed and ready to be consumed"
 ## Download file from dataset
 
 The `origo datasets cp` command can also be used to download data form a dataset URI:
+
 ```bash
-origo datasets cp ds://my-dataset/my-version/my-edition my/target/directory
+origo datasets cp ds:<datasetid>/<versionid>/<editionid> my/target/directory
 ```
-If no version or edition is provided, the latest version and edition will be used by default (if they exist).
+
+If no version or edition is provided, the latest version and edition will be
+used by default (if they exist):
+
+```bash
+origo datasets cp ds:<datasetid> my/target/directory
+```
 
 The target directory will be created if it doesn't already eixst on the local filesystem. The CLI also supports the use of `.` to specify the current working directory as output target.
 

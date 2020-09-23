@@ -1,4 +1,17 @@
-## 0.3.3
+## ?.?.?
+
+* New syntax for the `origo datasets cp` command. Four different URI formats are
+  now supported when specifying the dataset to upload to or download from:
+
+  - `ds:{dataset_id}`
+  - `ds:{dataset_id}/{version}`
+  - `ds:{dataset_id}/{version}/latest`
+  - `ds:{dataset_id}/{version}/{edition}`
+
+  The two first forms will automatically create new editions on upload.
+
+  Note that support for the `ds://` prefix and support for providing positional
+  versions and editions has been removed.
 
 * Add command `origo webhooks list-tokens` for listing webhook tokens for a dataset.
 
