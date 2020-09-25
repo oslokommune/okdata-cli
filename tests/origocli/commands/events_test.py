@@ -11,6 +11,7 @@ pipeline_client_qual = f"{PostEvent.__module__}.{PostEvent.__name__}"
 dataset_id = "test-dataset"
 version = "1"
 sink_id = "abc123"
+sink_type = "s3"
 event_stream_item = {
     "status": "ACTIVE",
     "updated_by": "knut",
@@ -28,13 +29,13 @@ subscribable_item = {
 }
 sink_item = {
     "id": sink_id,
-    "type": "s3",
+    "type": sink_type,
     "status": "ACTIVE",
     "updated_by": "janedone",
     "updated_at": "2020-08-20T06:51:42.786699+00:00",
 }
 sink_deleted_response = {
-    "message": f"Deleted sink {sink_id} from stream {dataset_id}/{version}"
+    "message": f"Disabled sink of type {sink_type} for stream {dataset_id}/{version}"
 }
 
 
@@ -130,12 +131,14 @@ def test_enable_sink(mock_event_stream_sdk, mocker, mock_print):
 
 def test_disable_sink(mock_event_stream_sdk, mocker, mock_print):
     set_argv(
-        "events", "disable-sink", f"ds:{dataset_id}/{version}", "--sink-id", sink_id
+        "events", "disable-sink", f"ds:{dataset_id}/{version}", "--sink-type", sink_type
     )
     cmd = EventsCommand()
     mocker.spy(cmd.sdk, "disable_sink")
     cmd.handler()
-    cmd.sdk.disable_sink.assert_called_once_with(dataset_id, version, sink_id=sink_id)
+    cmd.sdk.disable_sink.assert_called_once_with(
+        dataset_id, version, sink_type=sink_type
+    )
     mock_print.assert_called_once_with(sink_deleted_response["message"])
 
 
@@ -230,13 +233,13 @@ def mock_event_stream_sdk(monkeypatch):
     def get_sinks(self, dataset_id, version):
         return [sink_item]
 
-    def get_sink(self, dataset_id, version, sink_id):
+    def get_sink(self, dataset_id, version, sink_type):
         return [sink_item]
 
     def enable_sink(self, dataset_id, version, sink_type):
         return sink_item
 
-    def disable_sink(self, dataset_id, version, sink_id):
+    def disable_sink(self, dataset_id, version, sink_type):
         return sink_deleted_response
 
     monkeypatch.setattr(EventStreamClient, "get_event_stream_info", get_event_stream)

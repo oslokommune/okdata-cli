@@ -20,7 +20,7 @@ Usage:
   origo events enable-subscription <dataset-uri> [options]
   origo events disable-subscription <dataset-uri> [options]
   origo events enable-sink <dataset-uri> --sink-type=<sink_type> [options]
-  origo events disable-sink <dataset-uri> --sink-id=<sink_id> [options]
+  origo events disable-sink <dataset-uri> --sink-type=<sink_type> [options]
   origo events put <dataset-uri> [(--file=<file> | --data=<data>) options]
   origo events stat <dataset-uri> [options]
 
@@ -30,7 +30,7 @@ Examples:
   origo events describe my-dataset-id
   origo events create-stream ds:my-dataset-id/1
   origo events enable-sink ds:my-dataset-id/1 --sink-type=s3
-  origo events disable-sink ds:my-dataset-id/1 --sink-id=ab12c
+  origo events disable-sink ds:my-dataset-id/1 --sink-type=elasticsearch
   echo '{{"hello": "world"}}' | origo events put ds:my-dataset-id/1
   echo '[{{"hello": "world"}}, {{"world": "hello"}}]' | origo events put ds:my-dataset-id/1
   cat /tmp/event.json | origo events put ds:my-dataset-id/1
@@ -155,8 +155,8 @@ Options:{BASE_COMMAND_OPTIONS}
 
     def disable_sink(self):
         dataset_id, version = self._resolve_dataset_uri()
-        sink_id = self.opt("sink-id")
-        response = self.sdk.disable_sink(dataset_id, version, sink_id=sink_id)
+        sink_type = self.opt("sink-type")
+        response = self.sdk.disable_sink(dataset_id, version, sink_type=sink_type)
         if self.opt("format") == "json":
             self.print("", response)
             return
