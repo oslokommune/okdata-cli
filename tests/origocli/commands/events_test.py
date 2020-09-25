@@ -45,8 +45,8 @@ def output_with_argument(output, argument):
     return False
 
 
-def test_cat_stream(mock_event_stream_sdk, mocker, mock_print):
-    set_argv("events", "cat", f"ds:{dataset_id}/{version}")
+def test_describe_stream(mock_event_stream_sdk, mocker, mock_print):
+    set_argv("events", "describe", f"ds:{dataset_id}/{version}")
     add_row = mocker.spy(TableOutput, "add_row")
     add_rows = mocker.spy(TableOutput, "add_rows")
     cmd = EventsCommand()

@@ -30,19 +30,27 @@ origo events create-stream <dataset-uri>
 A stream status must be `ACTIVE` before you can start [sending events](#sending-events) to it. To poll for the streams status manually:
 ```bash
 <<<<<<< HEAD
+<<<<<<< HEAD
 origo events describe <dataset-uri>
 =======
 origo events cat <dataset-uri>
 >>>>>>> DP-934: Rename certain event-stream commands
+=======
+origo events describe <dataset-uri>
+>>>>>>> DP-934: Use describe command in favour of cat
 ```
 
 Or you can check the value of status by passing the output to `jq`:
 ```bash
 <<<<<<< HEAD
+<<<<<<< HEAD
 origo events describe <dataset-uri> --format=json | jq -r '.stream.status'
 =======
 origo events cat <dataset-uri> --format=json | jq -r '.stream.status'
 >>>>>>> DP-934: Rename certain event-stream commands
+=======
+origo events describe <dataset-uri> --format=json | jq -r '.stream.status'
+>>>>>>> DP-934: Use describe command in favour of cat
 ```
 
 ## Delete event stream

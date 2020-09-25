@@ -14,7 +14,7 @@ class EventsCommand(BaseCommand):
     __doc__ = f"""Oslo :: Events
 
 Usage:
-  origo events cat <dataset-uri> [options]
+  origo events describe <dataset-uri> [options]
   origo events create-stream <dataset-uri> [--skip-raw] [options]
   origo events delete-stream <dataset-uri> [options]
   origo events enable-subscription <dataset-uri> [options]
@@ -25,9 +25,9 @@ Usage:
   origo events stat <dataset-uri> [options]
 
 Examples:
-  origo events cat ds:my-dataset-id/1
-  origo events cat my-dataset-id/1
-  origo events cat my-dataset-id
+  origo events describe ds:my-dataset-id/1
+  origo events describe my-dataset-id/1
+  origo events describe my-dataset-id
   origo events create-stream ds:my-dataset-id/1
   origo events enable-sink ds:my-dataset-id/1 --sink-type=s3
   origo events disable-sink ds:my-dataset-id/1 --sink-id=ab12c
@@ -55,7 +55,7 @@ Options:{BASE_COMMAND_OPTIONS}
     def default(self):
         self.log.info("EventsCommand.handle()")
 
-        if self.cmd("cat"):
+        if self.cmd("describe"):
             self.stream()
         elif self.cmd("create-stream"):
             self.create_stream()
