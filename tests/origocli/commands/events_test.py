@@ -10,7 +10,6 @@ pipeline_client_qual = f"{PostEvent.__module__}.{PostEvent.__name__}"
 
 dataset_id = "test-dataset"
 version = "1"
-sink_id = "abc123"
 sink_type = "s3"
 event_stream_item = {
     "status": "ACTIVE",
@@ -28,7 +27,6 @@ subscribable_item = {
     "enabled": False,
 }
 sink_item = {
-    "id": sink_id,
     "type": sink_type,
     "status": "ACTIVE",
     "updated_by": "janedone",
@@ -162,28 +160,36 @@ def test_resolve_dataset_uri():
     cmd = EventsCommand()
 
     for dataset_uri in [
+        f"ds:{dataset_id}",
         f"ds:{dataset_id}/{version}",
         "ds:arsrapport/2",
+        "ds:dette-er-1-test",
         "ds:dette-er-1-test/10",
         "ds:dataset-0-100-x-test/1",
         "ds:mange-versjoner/192",
     ]:
         cmd.args["<dataset-uri>"] = dataset_uri
-        assert cmd._resolve_dataset_uri() == tuple(dataset_uri[3:].split("/"))
+        expected_dataset_id, _, expected_version = dataset_uri[3:].partition("/")
+        expected_version = expected_version if expected_version else "1"
+        assert cmd._resolve_dataset_uri() == (expected_dataset_id, expected_version)
 
 
 def test_resolve_dataset_uri_unprefixed():
     cmd = EventsCommand()
 
     for dataset_uri in [
+        dataset_id,
         f"{dataset_id}/{version}",
         "arsrapport/2",
+        "dette-er-1-test",
         "dette-er-1-test/10",
         "dataset-0-100-x-test/1",
         "mange-versjoner/192",
     ]:
         cmd.args["<dataset-uri>"] = dataset_uri
-        assert cmd._resolve_dataset_uri() == tuple(dataset_uri.split("/"))
+        expected_dataset_id, _, expected_version = dataset_uri.partition("/")
+        expected_version = expected_version if expected_version else "1"
+        assert cmd._resolve_dataset_uri() == (expected_dataset_id, expected_version)
 
 
 def test_resolve_dataset_uri_invalid():
