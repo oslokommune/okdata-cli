@@ -29,28 +29,12 @@ origo events create-stream <dataset-uri>
 # Event status
 A stream status must be `ACTIVE` before you can start [sending events](#sending-events) to it. To poll for the streams status manually:
 ```bash
-<<<<<<< HEAD
-<<<<<<< HEAD
 origo events describe <dataset-uri>
-=======
-origo events cat <dataset-uri>
->>>>>>> DP-934: Rename certain event-stream commands
-=======
-origo events describe <dataset-uri>
->>>>>>> DP-934: Use describe command in favour of cat
 ```
 
 Or you can check the value of status by passing the output to `jq`:
 ```bash
-<<<<<<< HEAD
-<<<<<<< HEAD
 origo events describe <dataset-uri> --format=json | jq -r '.stream.status'
-=======
-origo events cat <dataset-uri> --format=json | jq -r '.stream.status'
->>>>>>> DP-934: Rename certain event-stream commands
-=======
-origo events describe <dataset-uri> --format=json | jq -r '.stream.status'
->>>>>>> DP-934: Use describe command in favour of cat
 ```
 
 ## Delete event stream
@@ -67,11 +51,7 @@ You can send events to your stream in different ways.
 
 Single JSON events can be sent by piping a JSON string to the `events` command:
 ```bash
-<<<<<<< HEAD
 echo '{"hello": "world"}' | origo events put <dataset-uri>
-=======
-$ echo '{"hello": "world"}' | origo events put <dataset-uri>
->>>>>>> DP-934: Rename certain event-stream commands
 ```
 
 Given a file `event.json`:
@@ -89,12 +69,7 @@ cat event.json | origo events put <dataset-uri>
 or reference it:
 
 ```bash
-<<<<<<< HEAD
 origo events put ds:my-dataset/1 --file=/tmp/event.json
-=======
-$ cat event.json | origo events put <dataset-uri>
-$ origo events put my-dataset 1 --file=/tmp/event.json
->>>>>>> DP-934: Rename certain event-stream commands
 ```
 
 ### Sending multiple json events
