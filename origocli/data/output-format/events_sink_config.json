@@ -1,9 +1,5 @@
 
 {
-  "Id": {
-    "name": "Id",
-    "key": "id"
-  },
   "Type": {
     "name": "Type",
     "key": "type"
