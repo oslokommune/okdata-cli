@@ -5,7 +5,6 @@ from origo.pipelines.client import PipelineApiClient
 from origo.pipelines.resources.pipeline import Pipeline
 from origo.pipelines.resources.pipeline_instance import PipelineInstance
 from origo.sdk import SDK
-from requests import HTTPError
 
 from conftest import set_argv, BASECMD_QUAL
 from origocli.commands.pipelines.pipelines import (
@@ -23,6 +22,12 @@ pipeline_qual = f"{Pipeline.__module__}.{Pipeline.__name__}"
 pipeline_client_qual = f"{PipelineApiClient.__module__}.{PipelineApiClient.__name__}"
 
 sdk = PipelineApiClient()
+
+
+def _HTTPError400():
+    response = requests.Response()
+    response.status_code = 400
+    return requests.HTTPError("400 Client Error", response=response)
 
 
 class TestPipelines:
@@ -79,10 +84,6 @@ class TestCreate:
         set_argv("pipelines", "create", "something.json", "--format=json")
 
         sdk = PipelineApiClient()
-        try:
-            requests.get("https://httpstat.us/400").raise_for_status()
-        except HTTPError as he:
-            he_400 = he
         mocker.patch(
             "builtins.open",
             mocker.mock_open(
@@ -92,7 +93,10 @@ class TestCreate:
         mocker.patch(
             f"{pipeline_qual}.from_json", return_value=Pipeline(sdk, "", "", "")
         )
-        mocker.patch(f"{pipeline_qual}.create", return_value=[None, he_400])
+        mocker.patch(
+            f"{pipeline_qual}.create",
+            return_value=[None, _HTTPError400()],
+        )
         cmd = PipelinesCreate(sdk)
         try:
             cmd.handler()
@@ -140,17 +144,14 @@ class TestPipelinesLsInstances:
     def test_handler_with_http_error(self, mocker, caplog):
         set_argv("pipelines", "ls-instances", "--pipeline-arn", "pipeline-arn")
         caplog.set_level(logging.ERROR)
-        try:
-            requests.get("https://httpstat.us/400").raise_for_status()
-        except HTTPError as he:
-            he_400 = he
 
         pipeline = mocker.patch(
             f"{pipeline_client_qual}.get_pipeline",
             return_value=Pipeline(sdk, "", "", ""),
         )
         instances = mocker.patch(
-            f"{pipeline_qual}.list_instances", return_value=([], he_400)
+            f"{pipeline_qual}.list_instances",
+            return_value=([], _HTTPError400()),
         )
         cmd = PipelinesLsInstances(sdk)
 
