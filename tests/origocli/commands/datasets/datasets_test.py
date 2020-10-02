@@ -26,7 +26,11 @@ dataset = {
 
 version = {"version": "1"}
 
-edition = {"edition": datetime.now().isoformat()}
+edition_id = datetime.now().isoformat()
+edition = {
+    "Id": f"{dataset['Id']}/{version['version']}/{edition_id}",
+    "edition": edition_id,
+}
 
 
 @pytest.fixture()
@@ -54,8 +58,12 @@ def create_cmd(mocker, *args):
 
     edition2 = edition.copy()
     edition2["edition"] = datetime.now().isoformat()
+    new_edition = edition.copy()
+    new_edition["Id"] = f"{dataset['Id']}/{version['version']}/new-edition"
     cmd.sdk.get_editions.return_value = [edition, edition2]
     cmd.sdk.get_edition.return_value = edition
+    cmd.sdk.get_latest_edition.return_value = edition
+    cmd.sdk.create_edition.return_value = new_edition
     return cmd
 
 
@@ -99,3 +107,97 @@ class TestDatasetsLs:
         )
         cmd.handler()
         assert output_with_argument(output, [edition])
+
+
+class TestDatasetsCp:
+    def test_copy_local_files(self, mocker):
+        cmd = create_cmd(mocker, "cp", "foo", "bar")
+        mocker.patch.object(cmd, "upload_file")
+        mocker.patch.object(cmd, "download_files")
+        cmd.handler()
+        assert not cmd.upload_file.called
+        assert not cmd.download_files.called
+
+    def test_copy_upload(self, mocker):
+        cmd = create_cmd(mocker, "cp", "foo", "ds:bar")
+        mocker.patch.object(cmd, "upload_file")
+        mocker.patch.object(cmd, "download_files")
+        cmd.handler()
+        cmd.upload_file.assert_called_once_with("foo", "bar")
+        assert not cmd.download_files.called
+
+    def test_copy_download(self, mocker):
+        cmd = create_cmd(mocker, "cp", "ds:foo", "bar")
+        mocker.patch.object(cmd, "upload_file")
+        mocker.patch.object(cmd, "download_files")
+        cmd.handler()
+        assert not cmd.upload_file.called
+        cmd.download_files.assert_called_once_with("foo", "bar")
+
+    def test_copy_between_datasets(self, mocker):
+        cmd = create_cmd(mocker, "cp", "ds:foo", "ds:bar")
+        mocker.patch.object(cmd, "upload_file")
+        mocker.patch.object(cmd, "download_files")
+        cmd.handler()
+        assert not cmd.upload_file.called
+        assert not cmd.download_files.called
+
+
+class TestUtils:
+    def test_auto_create_edition(self, mocker):
+        cmd = create_cmd(mocker, "ls")
+        assert (
+            cmd._auto_create_edition(dataset["Id"], version["version"]) == "new-edition"
+        )
+
+    def test_dataset_components_from_uri_only_ds(self, mocker):
+        cmd = create_cmd(mocker, "ls")
+        dataset_id, _version, _edition = cmd._dataset_components_from_uri(dataset["Id"])
+        assert dataset_id == dataset["Id"]
+        assert _version == version["version"]
+        assert _edition == edition["edition"]
+
+    def test_dataset_components_from_uri_ds_and_version(self, mocker):
+        cmd = create_cmd(mocker, "ls")
+        dataset_id, _version, _edition = cmd._dataset_components_from_uri(
+            f"{dataset['Id']}/{version['version']}"
+        )
+        assert dataset_id == dataset["Id"]
+        assert _version == version["version"]
+        assert _edition == edition["edition"]
+
+    def test_dataset_components_from_uri_full(self, mocker):
+        cmd = create_cmd(mocker, "ls")
+        dataset_id, _version, _edition = cmd._dataset_components_from_uri(
+            f"{dataset['Id']}/{version['version']}/{edition['edition']}"
+        )
+        assert dataset_id == dataset["Id"]
+        assert _version == version["version"]
+        assert _edition == edition["edition"]
+
+    def test_dataset_components_from_uri_latest_edition(self, mocker):
+        cmd = create_cmd(mocker, "ls")
+        dataset_id, _version, _edition = cmd._dataset_components_from_uri(
+            f"{dataset['Id']}/{version['version']}/latest"
+        )
+        assert dataset_id == dataset["Id"]
+        assert _version == version["version"]
+        assert _edition == edition["edition"]
+
+    def test_dataset_components_from_uri_create_edition(self, mocker):
+        cmd = create_cmd(mocker, "ls")
+        dataset_id, _version, _edition = cmd._dataset_components_from_uri(
+            dataset["Id"], True
+        )
+        assert dataset_id == dataset["Id"]
+        assert _version == version["version"]
+        assert _edition == "new-edition"
+
+    def test_dataset_components_from_uri_create_edition_with_version(self, mocker):
+        cmd = create_cmd(mocker, "ls")
+        dataset_id, _version, _edition = cmd._dataset_components_from_uri(
+            f"{dataset['Id']}/{version['version']}", True
+        )
+        assert dataset_id == dataset["Id"]
+        assert _version == version["version"]
+        assert _edition == "new-edition"

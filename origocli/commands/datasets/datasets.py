@@ -20,7 +20,7 @@ class DatasetsCommand(BaseCommand):
 Usage:
   origo datasets ls [--format=<format>  --env=<env> --filter=<filter> options]
   origo datasets ls <datasetid> [<versionid> <editionid>][--format=<format> --env=<env> options]
-  origo datasets cp <source> <target> [<versionid> <editionid> --format=<format> --env=<env> options]
+  origo datasets cp <source> <target> [--format=<format> --env=<env> options]
   origo datasets create [--file=<file> --format=<format> --env=<env> options]
   origo datasets create-version <datasetid> [--file=<file> --format=<format> --env=<env> options]
   origo datasets create-edition <datasetid> [<versionid>] [--file=<file> --format=<format> --env=<env> options]
@@ -211,6 +211,24 @@ Options:{BASE_COMMAND_OPTIONS}
         self.print(f"Created edition for {version_id} on {dataset_id}", edition)
         return edition
 
+    def _auto_create_edition(self, dataset_id, version_id):
+        """Auto-create a new edition for the given dataset version.
+
+        Return the ID of the newly created edition.
+        """
+        data = {
+            "edition": date_now().strftime(DATE_METADATA_EDITION_FORMAT),
+            "description": f"Auto-created edition for {dataset_id}/{version_id}",
+        }
+
+        self.log.info(
+            f"Creating new edition for {dataset_id}/{version_id} with data: {data}"
+        )
+        edition = self.sdk.create_edition(dataset_id, version_id, data)
+        self.log.info(f"Created edition: {edition}")
+
+        return edition["Id"].split("/")[-1]
+
     def resolve_or_create_edition(self, dataset_id, version_id):
         self.log.info(f"Trying to resolve edition for {version_id} on {dataset_id}")
         edition_id = self.arg("editionid") or self.opt("editionid")
@@ -218,21 +236,7 @@ Options:{BASE_COMMAND_OPTIONS}
             self.log.info(f"Found edition in arguments: {edition_id}")
             return edition_id
 
-        description = f"Auto-created edition for {dataset_id}/{version_id}"
-        now = date_now()
-        data = {
-            "edition": now.strftime(DATE_METADATA_EDITION_FORMAT),
-            "description": description,
-        }
-        self.log.info(
-            f"Creating new edition for: {dataset_id}/{version_id} with data: {data}"
-        )
-
-        edition = self.sdk.create_edition(dataset_id, version_id, data)
-        self.log.info(f"Created edition: {edition}")
-        (_, _, edition_id) = edition["Id"].split("/")
-        self.log.info(f"returning: {edition_id}")
-        return edition_id
+        return self._auto_create_edition(dataset_id, version_id)
 
     def get_latest_or_create_edition(self, dataset_id, version):
         self.log.info(f"Resolving edition for dataset-uri: {dataset_id}/{version}")
@@ -240,16 +244,7 @@ Options:{BASE_COMMAND_OPTIONS}
             return self.sdk.get_latest_edition(dataset_id, version)["Id"].split("/")[-1]
         except HTTPError as he:
             if he.response.status_code == 404:
-                data = {
-                    "edition": date_now().strftime(DATE_METADATA_EDITION_FORMAT),
-                    "description": f"Auto-created edition for {dataset_id}/{version}",
-                }
-                self.log.info(
-                    f"Creating new edition for dataset-uri: {dataset_id}/{version}"
-                )
-                return self.sdk.create_edition(dataset_id, version, data)["Id"].split(
-                    "/"
-                )[-1]
+                return self._auto_create_edition(dataset_id, version)
             else:
                 raise he
 
@@ -280,27 +275,67 @@ Options:{BASE_COMMAND_OPTIONS}
         source = self.arg("source")
         target = self.arg("target")
 
-        if source.startswith("ds://"):
-            self.download_files(source, target)
+        if source.startswith("ds:") and target.startswith("ds:"):
+            self.log.error("Copying between datasets isn't supported yet.")
+        elif target.startswith("ds:"):
+            self.upload_file(source, target[3:])
+        elif source.startswith("ds:"):
+            self.download_files(source[3:], target)
         else:
-            self.upload_file(source, target)
+            self.log.error(
+                "Either source or target needs to be a dataset (prefixed with 'ds:')."
+            )
+
+    def _dataset_components_from_uri(self, dataset_uri, create_edition=False):
+        """Return an ID/version/edition tuple given a dataset URI.
+
+        Four different URI formats are supported:
+
+        - {dataset_id}
+        - {dataset_id}/{version}
+        - {dataset_id}/{version}/latest
+        - {dataset_id}/{version}/{edition}
+
+        If only a dataset ID is given, the latest version and edition is
+        chosen. A new edition is created if `create_edition` is true, or if the
+        latest version didn't already have any editions.
+
+        If only a dataset ID and version are given, the latest edition is
+        chosen. A new edition is created if `create_edition` is true, or if the
+        given version didn't already have any editions.
+
+        A specific dataset ID, verison, and edition is chosen when all three
+        components are provided. Given an edition with the special name
+        'latest', the latest edition is chosen.
+        """
+        parts = dataset_uri.split("/")
+        dataset_id, version, edition = parts + [None] * (3 - len(parts))
+
+        if not version:
+            version = self.sdk.get_latest_version(dataset_id)["version"]
+
+        if edition == "latest":
+            edition = self.sdk.get_latest_edition(dataset_id, version)["Id"].split("/")[
+                -1
+            ]
+
+        elif not edition:
+            edition = (
+                self._auto_create_edition(dataset_id, version)
+                if create_edition
+                else self.get_latest_or_create_edition(dataset_id, version)
+            )
+
+        return dataset_id, version, edition
 
     def upload_file(self, source, target):
         upload = Upload()
-        if target.startswith("ds://"):
-            dataset_uri = target[5:]
-            dataset_id, version, edition = self._dataset_components_from_uri_upload(
-                dataset_uri
-            )
-        elif target.startswith("ds:"):
-            (ns, dataset_id) = target.split(":")
-            self.log.info(f"Copying file to dataset: {dataset_id}")
-            version = self.resolve_or_load_versionid(dataset_id)
-            edition = self.resolve_or_create_edition(dataset_id, version)
+        dataset_id, version, edition = self._dataset_components_from_uri(target, True)
 
-        self.log.info(f"Will copy file to: {dataset_id}, {version}, {edition})")
+        self.log.info(f"Will upload file to: {dataset_id}/{version}/{edition})")
         res = upload.upload(source, dataset_id, version, edition)
-        self.log.info(f"Upload returned: {res}")
+        self.log.info(f"Upload returned: {res}")
+
         out = create_output(self.opt("format"), "datasets_copy_file_config.json")
         out.output_singular_object = True
         data = {
@@ -312,57 +347,21 @@ Options:{BASE_COMMAND_OPTIONS}
         out.add_row(data)
         self.print(f"Uploaded file to dataset: {dataset_id}", out)
 
-    def _dataset_components_from_uri_upload(self, dataset_uri):
-        dataset_components = dataset_uri.split("/")
-
-        if len(dataset_components) == 1:
-            [dataset_id] = dataset_components
-            version = self.sdk.get_latest_version(dataset_id)["version"]
-            edition = self.get_latest_or_create_edition(dataset_id, version)
-        elif len(dataset_components) == 2:
-            [dataset_id, version] = dataset_components
-            edition = self.get_latest_or_create_edition(dataset_id, version)
-        else:
-            [dataset_id, version, edition] = dataset_components
-
-        if edition == "latest":
-            edition = self.sdk.get_latest_edition(dataset_id, version)["Id"].split("/")[
-                -1
-            ]
-
-        return dataset_id, version, edition
-
     def download_files(self, source, target):
-        dataset_uri = source[5:]
-        dataset_components = dataset_uri.split("/")
-        if len(dataset_components) == 1:
-            [dataset_id] = dataset_components
-            version = self.sdk.get_latest_version(dataset_id)["version"]
-            edition = "latest"
-        elif len(dataset_components) == 2:
-            [dataset_id, version] = dataset_components
-            edition = "latest"
-        else:
-            [dataset_id, version, edition] = dataset_components
-
-        if edition == "latest":
-            edition = self.sdk.get_latest_edition(dataset_id, version)["Id"].split("/")[
-                -1
-            ]
-
+        dataset_id, version, edition = self._dataset_components_from_uri(source)
         downloaded_files = self.download.download(
             dataset_id, version, edition, resolve_output_filepath(target)
         )
-        self.log.info(f"Upload returned: {downloaded_files}")
+        self.log.info(f"Download returned: {downloaded_files}")
         out = create_output(self.opt("format"), "datasets_copy_file_config_2.json")
         out.output_singular_object = True
         data = {
-            "source": f"ds://{'/'.join([dataset_id, version, edition])}",
+            "source": f"ds:{'/'.join([dataset_id, version, edition])}",
             "target": "\n".join(downloaded_files["files"]),
             "statusid": "n/a",
         }
         out.add_row(data)
-        self.print(f"Downloaded file from dataset: {dataset_id}", out)
+        self.print(f"Downloaded files from dataset: {dataset_id}", out)
 
     # #################################### #
     # Access
