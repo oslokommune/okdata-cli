@@ -13,6 +13,7 @@ Contents:
 * [Create version](#create-version)
 * [Create edition](#create-edition)
 * [Upload file to edition](#upload-file-to-edition)
+  * [Inspecting the upload status](#inspecting-the-upload-status)
 * [Dataset access](#dataset-access)
 * [Boilerplate](#boilerplate)
 
@@ -157,6 +158,47 @@ origo datasets cp /tmp/test.txt ds:<datasetid> <versionid> <editionid>
 ```
 
 The `cp` command also supports a `ds://` prefix to specify a dataset URI, e.g. `ds://my-dataset/my-version/my-edition`.
+
+### Inspecting the upload status
+
+After uploading a file to a dataset using the `origo datasets cp` command, a
+status ID is displayed which can be used to track the uploading process status:
+
+```text
++-------------+---------------+---------------+------------+
+| Dataset     | Local file    | Upload status | Status ID  |
++-------------+---------------+---------------+------------+
+| <datasetid> | /tmp/test.txt | True          | <statusid> |
++-------------+---------------+---------------+------------+
+```
+
+To see the latest status of the upload, run:
+
+```bash
+origo status <statusid>
+```
+
+Or to see the complete status history of the uploading process:
+
+```bash
+origo status <statusid> --history
+```
+
+Passing `json` to the `--format` option displays the status in JSON format
+instead, making the output more suitable for use in scripts. For instance to
+continuously poll the upload status until it's finished:
+
+```bash
+######### Check status for the newly uploaded file #########
+uploaded=false
+echo "Checking status for uploaded file"
+while ! $uploaded; do
+  echo "\Checking upload status..."
+  upload_status=`origo status $status_id --format=json`
+  uploaded=`echo $upload_status | jq -r '.done'`
+done
+echo "Uploaded file is processed and ready to be consumed"
+```
 
 ## Download file from dataset
 
