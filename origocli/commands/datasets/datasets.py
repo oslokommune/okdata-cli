@@ -3,7 +3,7 @@ from requests.exceptions import HTTPError
 from origocli.command import BaseCommand, BASE_COMMAND_OPTIONS
 from origocli.commands.datasets import DatasetsBoilerplateCommand
 from origocli.output import create_output
-from origocli.io import read_stdin_or_filepath, resolve_output_filepath
+from origocli.io import read_json, resolve_output_filepath
 from origocli.date import date_now, DATE_METADATA_EDITION_FORMAT
 
 from origo.data.dataset import Dataset
@@ -125,7 +125,7 @@ Options:{BASE_COMMAND_OPTIONS}
         self.print(f"\n\nLatest version for: {dataset_id}", out)
 
     def create_dataset(self):
-        payload = read_stdin_or_filepath(self.opt("file"))
+        payload = read_json(self.opt("file"))
         self.log.info(f"Creating dataset with payload: {payload}")
 
         dataset = self.sdk.create_dataset(payload)
@@ -154,7 +154,7 @@ Options:{BASE_COMMAND_OPTIONS}
 
     def create_version(self):
         dataset_id = self.arg("datasetid")
-        payload = read_stdin_or_filepath(self.opt("file"))
+        payload = read_json(self.opt("file"))
         self.log.info(
             f"Creating version for dataset: {dataset_id} with payload: {payload}"
         )
@@ -200,7 +200,7 @@ Options:{BASE_COMMAND_OPTIONS}
         self.print("Files available: ", out)
 
     def create_edition(self):
-        payload = read_stdin_or_filepath(self.opt("file"))
+        payload = read_json(self.opt("file"))
         dataset_id = self.arg("datasetid")
         version_id = self.resolve_or_load_versionid(dataset_id)
         self.log.info(
@@ -252,7 +252,7 @@ Options:{BASE_COMMAND_OPTIONS}
     # Distribution
     # #################################### #
     def create_distribution(self):
-        payload = read_stdin_or_filepath(self.opt("file"))
+        payload = read_json(self.opt("file"))
         dataset_id = self.arg("datasetid")
         version_id = self.resolve_or_load_versionid(dataset_id)
         edition_id = self.resolve_or_create_edition(dataset_id, version_id)

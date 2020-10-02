@@ -1,3 +1,8 @@
+## ?.?.?
+
+* `~` is now expanded to the home directory in arguments to the `--file` option,
+  such as in `origo datasets create --file=~/Documents/my-dataset.json`.
+
 ## 0.4.0
 
 * New syntax for the `origo datasets cp` command. Four different URI formats are
