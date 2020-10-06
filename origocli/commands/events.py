@@ -4,7 +4,7 @@ from origo.event.post_event import PostEvent
 from origo.elasticsearch.queries import ElasticsearchQueries
 
 from origocli.command import BaseCommand, BASE_COMMAND_OPTIONS
-from origocli.io import read_stdin_or_filepath
+from origocli.io import read_json
 from origocli.output import create_output
 
 
@@ -54,7 +54,7 @@ Options:{BASE_COMMAND_OPTIONS}
     def put_event(self):
         out = create_output(self.opt("format"), "event_stream_put_config.json")
         out.output_singular_object = True
-        payload = read_stdin_or_filepath(self.opt("file"))
+        payload = read_json(self.opt("file"))
         self.log.info(f"Putting event with payload: {payload}")
 
         datasetid = self.arg("datasetid")
