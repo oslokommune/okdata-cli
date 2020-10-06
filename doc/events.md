@@ -29,12 +29,12 @@ origo events create-stream <dataset-uri>
 # Event status
 A stream status must be `ACTIVE` before you can start [sending events](#sending-events) to it. To poll for the streams status manually:
 ```bash
-origo events describe <dataset-uri>
+origo events describe-stream <dataset-uri>
 ```
 
 Or you can check the value of status by passing the output to `jq`:
 ```bash
-origo events describe <dataset-uri> --format=json | jq -r '.stream.status'
+origo events describe-stream <dataset-uri> --format=json | jq -r '.stream.status'
 ```
 
 ## Delete event stream
@@ -109,10 +109,10 @@ Event stream sinks (`s3` or `elasticsearch`) can be enabled by using the followi
 origo events enable-sink <datasetid> <versionid> --sink-type=<sink_type>
 ```
 
-The status of these resources can be polled using `describe`:
+The status of these resources can be polled using `describe-stream`:
 
 ```bash
-origo events describe <dataset-uri>
+origo events describe-stream <dataset-uri>
 ```
 
 To disable a given sink, use the following command:

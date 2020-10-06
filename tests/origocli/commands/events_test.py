@@ -45,7 +45,7 @@ def output_with_argument(output, argument):
 
 
 def test_describe_stream(mock_event_stream_sdk, mocker, mock_print):
-    set_argv("events", "describe", f"ds:{dataset_id}/{version}")
+    set_argv("events", "describe-stream", f"ds:{dataset_id}/{version}")
     add_row = mocker.spy(TableOutput, "add_row")
     add_rows = mocker.spy(TableOutput, "add_rows")
     cmd = EventsCommand()
