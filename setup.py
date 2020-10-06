@@ -28,7 +28,7 @@ setuptools.setup(
         "Sphinx",
         "docopt",
         "inquirer",
-        "origo-sdk-python>=0.2.6",
+        "origo-sdk-python>=0.2.7",
         "pygments",
         "recommonmark",
         "requests",
