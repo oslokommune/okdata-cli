@@ -1,4 +1,4 @@
-## ?.?.?
+## 0.4.0
 
 * New syntax for the `origo datasets cp` command. Four different URI formats are
   now supported when specifying the dataset to upload to or download from:
