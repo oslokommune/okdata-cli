@@ -1,5 +1,10 @@
-## ?.?.?
+## 0.5.0
 
+* Support new event stream API (including updated SDK).
+* Add new commands for managing event stream sinks and subscriptions.
+* Combine existing sub-commands from `events` and `event_streams` into `events`.
+* Add `--data` option for `events put` (alterantive to stdin/`--file`).
+* Use dataset URIs as arguments (with or without `ds:` prefix).
 * `~` is now expanded to the home directory in arguments to the `--file` option,
   such as in `origo datasets create --file=~/Documents/my-dataset.json`.
 
