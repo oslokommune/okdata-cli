@@ -166,7 +166,6 @@ Options:{BASE_COMMAND_OPTIONS}
         dataset_id, version = self._resolve_dataset_uri()
         out = create_output(self.opt("format"), "events_put_event_config.json")
         out.output_singular_object = True
-        payload = read_json(self.opt("file"))
         if self.opt("data") is not None:
             payload = json.loads(self.opt("data"))
         else:
