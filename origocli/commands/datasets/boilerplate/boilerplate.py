@@ -69,7 +69,6 @@ Options:{BASE_COMMAND_OPTIONS}
         inputfiles = [
             "bin/run.sh",
             "dataset/dataset.json",
-            "dataset/dataset-version.json",
             "dataset/dataset-version-edition.json",
             f"pipeline/{pipeline}/pipeline.json",
             "pipeline/pipeline-input.json",

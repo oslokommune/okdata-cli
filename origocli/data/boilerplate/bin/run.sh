@@ -35,7 +35,6 @@ echo "Please wait....."
 dataset_file="dataset.json"
 dataset_version_edition_file="dataset-version-edition.json"
 # No need to update the following files:
-dataset_version_file="dataset-version.json"
 dataset_upload_file="hello_world.csv"
 pipeline_instance_file="pipeline.json"
 pipeline_input_file="pipeline-input.json"
@@ -60,21 +59,13 @@ fi
 ######### Dataset #########
 dataset=`origo datasets create --file=$dataset_file --format=json`
 dataset_id=`echo "$dataset" | jq  -r '.Id'`
+version_id=1
 if [[ $dataset_id == null ]]; then
     echo "Could not create dataset"
     echo $dataset | jq
     exit
 fi
-echo "Created Dataset:: $dataset_id"
-
-######### Dataset Version #########
-version=`origo datasets create-version $dataset_id --file=$dataset_version_file --format=json`
-version_id=`echo "$version" | jq  -r '.version'`
-if [[ $version_id == null ]]; then
-    echo "Could not create version"
-    echo $version | jq
-    exit
-fi
+echo "Created dataset: $dataset_id"
 echo "Created version: $version_id"
 
 ######### Dataset Edition #########
