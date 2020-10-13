@@ -20,6 +20,8 @@ setuptools.setup(
             "data/boilerplate/data/*",
             "data/boilerplate/dataset/*",
             "data/boilerplate/pipeline/*",
+            "data/boilerplate/pipeline/csv-to-parquet/*",
+            "data/boilerplate/pipeline/data-copy/*",
             "data/output-format/*",
         ],
     },

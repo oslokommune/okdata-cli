@@ -1,3 +1,8 @@
+## ?.?.?
+
+* All datafiles required by the boilerplate command are now included in the
+  package distribution.
+
 ## 0.5.0
 
 * Support new event stream API (including updated SDK). Existing sub-commands from `events` and `event_streams` are now combined into `events`, and new commands for managing event stream sinks and subscriptions are added.
