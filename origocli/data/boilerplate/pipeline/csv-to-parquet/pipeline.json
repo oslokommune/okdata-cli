@@ -10,10 +10,10 @@
       "chunksize": 100000
     },
     "write_to_processed": {
-      "write_to_latest": "1",
       "output_stage": "processed"
     },
     "write_to_latest": {
+      "write_to_latest": "1",
       "output_stage": "processed"
     }
   },
