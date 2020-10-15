@@ -100,14 +100,17 @@ File: `dataset_with_parent.json`
 This will logically group all statistics together, and you can set permissions on the `parent_id` to grant access to all child datasets.
 
 ## Create version
+A version named "1" is created by default for new datasets. Unless you need to
+create additional versions, you may safely skip the rest of this section.
+
 File: `version.json`
 ```json
 {
-  "version": "1"
+  "version": "2"
 }
-
 ```
-Create the dataset version by piping the contents of `version.json`:
+
+Create a new dataset version by piping the contents of `version.json`:
 
 ```bash
 cat version.json | origo datasets create-version <datasetid>
