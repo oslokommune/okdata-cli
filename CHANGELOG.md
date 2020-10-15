@@ -1,10 +1,15 @@
-## ?.?.?
+## 0.5.1
+
+* A bug that made the `origo events put` command unusable has been fixed.
 
 * All datafiles required by the boilerplate command are now included in the
   package distribution.
 
 * The `write_to_latest` flag in the boilerplate templates are now set in the
   correct pipeline step.
+
+* The boilerplate script no longer creates a dataset version explicitly, as new
+  datasets now include a version "1" by default.
 
 ## 0.5.0
 
