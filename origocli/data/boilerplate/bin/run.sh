@@ -110,7 +110,7 @@ fi
 echo "Created input for $dataset_id"
 
 ######### Copy file to dataset #########
-upload=`origo datasets cp $dataset_upload_file ds:$dataset_id $version_id $edition_id --format=json`
+upload=`origo datasets cp $dataset_upload_file ds:$dataset_id/$version_id/$edition_id --format=json`
 error=`echo $upload | jq -r '.error'`
 if [[ "$error" =~ ^[1]+$ ]]; then
   echo "Could not upload file"
