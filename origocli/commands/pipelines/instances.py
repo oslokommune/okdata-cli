@@ -83,8 +83,9 @@ class PipelineInstancesCreate(BasePipelinesCommand):
         data = {
             "id": json.loads(resource),
             "datasetUri": originaldata["datasetUri"],
-            "pipelineArn": originaldata["pipelineArn"],
         }
+        if "pipelineProcessorId" in originaldata:
+            data["pipelineProcessorId"] = originaldata["pipelineProcessorId"]
         out.output_singular_object = True
         out.add_row(data)
         self.print("Created resources", out)

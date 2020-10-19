@@ -4,10 +4,10 @@ from questionary import ValidationError
 
 from origocli.commands.datasets.boilerplate.validator import (
     DateValidator,
-    SimpleEmailValidator,
-    PhoneValidator,
-    EnvironmentValidator,
     KeywordValidator,
+    PhoneValidator,
+    SimpleEmailValidator,
+    TitleValidator,
 )
 
 # Note: no testing of return values since the validator is only
@@ -71,28 +71,9 @@ class TestPhoneValidator:
             self.validate_phone({"text": ""})
 
 
-class TestEnvironmentValidator:
-    def validate_environment(self, data):
-        validator = EnvironmentValidator()
-        document = SimpleNamespace(**data)
-        validator.validate(document)
-
-    def test_too_short_environemnt(self):
-        with pytest.raises(ValidationError):
-            self.validate_environment({"text": "12345678912"})
-
-    def test_too_long_environment(self):
-        with pytest.raises(ValidationError):
-            self.validate_environment({"text": "1234567891234"})
-
-    def test_invalid_environment(self):
-        with pytest.raises(ValidationError):
-            self.validate_environment({"text": "12345678912d"})
-
-
 class TestTitleValidator:
     def validate_title(self, data):
-        validator = EnvironmentValidator()
+        validator = TitleValidator()
         document = SimpleNamespace(**data)
         validator.validate(document)
 

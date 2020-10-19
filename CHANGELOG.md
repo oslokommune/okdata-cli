@@ -1,5 +1,7 @@
 ## ?.?.?
 
+* The boilerplate command no longer prompts for an AWS account ID.
+
 * The questions on dataset access rights and confidentiality have been unified
   in the boilerplate questionnaire.
 

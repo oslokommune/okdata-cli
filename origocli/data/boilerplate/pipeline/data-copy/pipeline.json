@@ -1,5 +1,5 @@
 {
-  "pipelineArn": "arn:aws:states:eu-west-1:ACCOUNT_ID:stateMachine:dataplatform-data-copy",
+  "pipelineProcessorId": "dataplatform-data-copy",
   "taskConfig": {
     "write_to_processed": {
       "output_stage": "processed"
