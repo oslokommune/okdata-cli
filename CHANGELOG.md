@@ -1,5 +1,10 @@
 ## ?.?.?
 
+* `origo datasets create` now runs a dataset creation wizard for setting up a
+  new dataset complete with a processing pipeline, ready to receive files. The
+  `--file` parameter can still be used when you want to create a dataset from a
+  configuration file.
+
 * The boilerplate command no longer prompts for an AWS account ID.
 
 * The questions on dataset access rights and confidentiality have been unified
