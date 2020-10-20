@@ -1,3 +1,11 @@
+## ?.?.?
+
+* The questions on dataset access rights and confidentiality have been unified
+  in the boilerplate questionnaire.
+
+* The boilerplate script now uses the new `datasets cp` syntax for file
+  uploading.
+
 ## 0.5.1
 
 * A bug that made the `origo events put` command unusable has been fixed.

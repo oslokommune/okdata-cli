@@ -9,6 +9,12 @@ from origocli.date import date_now, DATE_METADATA_EDITION_FORMAT
 
 from .config import available_pipelines, boilerplate_questions
 
+confidentiality_map = {
+    "public": "green",
+    "restricted": "yellow",
+    "non-public": "red",
+}
+
 
 class DatasetsBoilerplateCommand(BaseCommand):
     __doc__ = f"""
@@ -105,8 +111,9 @@ Options:{BASE_COMMAND_OPTIONS}
             data["title"] = title
             data["description"] = config.get("description") or title
             data["objective"] = config.get("objective") or title
-            data["accessRights"] = config.get("accessRights")
-            data["confidentiality"] = config.get("confidentiality")
+            access_rights = config.get("accessRights")
+            data["accessRights"] = access_rights
+            data["confidentiality"] = confidentiality_map[access_rights]
             data["publisher"] = config.get("publisher")
             data["contactPoint"] = {
                 "name": config.get("name"),

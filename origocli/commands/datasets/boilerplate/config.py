@@ -1,3 +1,5 @@
+from questionary import Choice
+
 from .validator import (
     DateValidator,
     EnvironmentValidator,
@@ -27,14 +29,12 @@ boilerplate_questions = [
     {
         "type": "select",
         "name": "accessRights",
-        "message": "Tilgang",
-        "choices": ["non-public", "public", "restricted"],
-    },
-    {
-        "type": "select",
-        "name": "confidentiality",
-        "message": "Nivå",
-        "choices": ["green", "yellow", "red", "purple"],
+        "message": "Tilgangsnivå",
+        "choices": [
+            Choice("Offentlig", "public"),
+            Choice("Begrenset offentlighet", "restricted"),
+            Choice("Unntatt offentlighet", "non-public"),
+        ],
     },
     {"type": "text", "name": "name", "message": "Kontaktperson - navn"},
     {
