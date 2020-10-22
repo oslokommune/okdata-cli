@@ -1,5 +1,5 @@
 {
-  "pipelineProcessorId": "dataplatform-data-copy",
+  "pipelineProcessorId": "data-copy",
   "taskConfig": {
     "write_to_processed": {
       "output_stage": "processed"
