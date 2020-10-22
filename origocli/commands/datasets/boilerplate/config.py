@@ -2,7 +2,6 @@ from questionary import Choice
 
 from .validator import (
     DateValidator,
-    EnvironmentValidator,
     KeywordValidator,
     PhoneValidator,
     SimpleEmailValidator,
@@ -11,12 +10,6 @@ from .validator import (
 
 available_pipelines = ["data-copy", "csv-to-parquet"]
 boilerplate_questions = [
-    {
-        "type": "text",
-        "name": "id",
-        "message": "Kjøremiljø ID (Som gitt til deg av Origo)",
-        "validate": EnvironmentValidator,
-    },
     {"type": "text", "name": "title", "message": "Tittel", "validate": TitleValidator},
     {"type": "text", "name": "description", "message": "Beskrivelse"},
     {"type": "text", "name": "objective", "message": "Objektiv"},

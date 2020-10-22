@@ -19,14 +19,6 @@ fi
 echo "Update json files in this directory before running"
 echo "### Comment out this line to run ###\n" && exit 1
 
-# The ACCOUNT_ID is different from ORIGO_ENVIRONMENT=dev and ORIGO_ENVIRONMENT=prod
-# Make sure to use the correct ID as supplied by Origo
-ACCOUNT_ID=""
-if [ "$ACCOUNT_ID" = '' ]; then
-  echo "Update ACCOUNT_ID in this script to the one provided by Origo, then run this script again"
-  exit 1
-fi
-
 echo "Creating a dataset, edition, pipeline and uploading a file to test"
 echo "Please wait....."
 
@@ -83,10 +75,10 @@ edition_id=`echo $edition_id | cut -d "/" -f 3`
 echo "Created edition: $edition_id"
 
 ######### Pipeline instance #########
-cat $pipeline_instance_file | sed "s/DATASET_ID/$dataset_id/" | sed "s/DATASET_VERSION/$version_id/" | sed "s/ACCOUNT_ID/$ACCOUNT_ID/" > generated_pipeline.json
+cat $pipeline_instance_file | sed "s/DATASET_ID/$dataset_id/" | sed "s/DATASET_VERSION/$version_id/" > generated_pipeline.json
 pipeline=`origo pipelines instances create generated_pipeline.json --format=json`
 if [[ $pipeline == "" ]]; then
-    echo "Could not create pipeline instance - did you enter correct account id?"
+    echo "Could not create pipeline instance"
     exit
 fi
 error=`echo $pipeline | jq -r '.error'`

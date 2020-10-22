@@ -39,15 +39,6 @@ class PhoneValidator(Validator):
             )
 
 
-class EnvironmentValidator(Validator):
-    def validate(self, document):
-        if not re.match(r"^[0-9]+$", document.text) or len(document.text) != 12:
-            raise ValidationError(
-                message="Valid environment ID, as provided by Origo, 12 characters. Example: 123456789876",
-                cursor_position=len(document.text),
-            )
-
-
 class TitleValidator(Validator):
     def validate(self, document):
         if len(document.text) < 5:

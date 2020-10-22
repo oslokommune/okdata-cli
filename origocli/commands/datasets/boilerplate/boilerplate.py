@@ -95,7 +95,6 @@ Options:{BASE_COMMAND_OPTIONS}
         run_file_path = f"{outdir}/run.sh"
         with open(run_file_path) as run_file:
             data = run_file.read()
-            data = data.replace('ACCOUNT_ID=""', f"ACCOUNT_ID=\"{config['id']}\"")
             data = data.replace('echo "### Comment', '# echo "### Comment')
             if self.opt("file"):
                 data = data.replace("hello_world.csv", self.opt("file"))
