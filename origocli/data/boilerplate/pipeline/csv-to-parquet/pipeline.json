@@ -1,5 +1,5 @@
 {
-  "pipelineProcessorId": "dataplatform-csv-to-parquet",
+  "pipelineProcessorId": "csv-to-parquet",
   "taskConfig": {
     "csv_validator": {
       "schema": "",
