@@ -1,22 +1,5 @@
 {
   "pipelineProcessorId": "csv-to-parquet",
-  "taskConfig": {
-    "csv_validator": {
-      "schema": "",
-      "delimiter": ","
-    },
-    "csv_to_parquet": {
-      "format": "parquetng",
-      "chunksize": 100000
-    },
-    "write_to_processed": {
-      "output_stage": "processed"
-    },
-    "write_to_latest": {
-      "write_to_latest": "1",
-      "output_stage": "processed"
-    }
-  },
   "useLatestEdition": true,
   "id": "DATASET_ID",
   "datasetUri": "output/DATASET_ID/DATASET_VERSION",
