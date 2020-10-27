@@ -127,8 +127,8 @@ class TestPipelinesLsInstances:
             f"{pipeline_qual}.list_instances",
             return_value=(
                 [
-                    PipelineInstance(sdk, "1", "", "", "", "", False),
-                    PipelineInstance(sdk, "2", "", "", "", "", False),
+                    PipelineInstance(sdk, "1", "", "", False),
+                    PipelineInstance(sdk, "2", "", "", False),
                 ],
                 None,
             ),
@@ -172,10 +172,10 @@ class TestPipelineInstanceLs:
             f"{pipeline_client_qual}.list",
             return_value=[
                 PipelineInstance(
-                    sdk, "1", "output/dataset-id/version-1", "", "", "", False
+                    sdk, "1", "output/dataset-id/version-1", "", False
                 ).__dict__,
                 PipelineInstance(
-                    sdk, "2", "output/dataset-id/version-2", "", "", "", False
+                    sdk, "2", "output/dataset-id/version-2", "", False
                 ).__dict__,
             ],
         )
@@ -185,7 +185,7 @@ class TestPipelineInstanceLs:
         assert list.called
         assert (
             captured.out.strip()
-            == '[{"id": "1", "datasetUri": "output/dataset-id/version-1", "pipelineArn": ""}, {"id": "2", "datasetUri": "output/dataset-id/version-2", "pipelineArn": ""}]'
+            == '[{"id": "1", "datasetUri": "output/dataset-id/version-1", "pipelineArn": "N/A"}, {"id": "2", "datasetUri": "output/dataset-id/version-2", "pipelineArn": "N/A"}]'
         )
 
     def test_handler_dataset_version(self, mocker, mock_pretty_json, capsys):
@@ -197,10 +197,10 @@ class TestPipelineInstanceLs:
             f"{pipeline_client_qual}.list",
             return_value=[
                 PipelineInstance(
-                    sdk, "1", "output/dataset-id/version-1", "", "", "", False
+                    sdk, "1", "output/dataset-id/version-1", "", False
                 ).__dict__,
                 PipelineInstance(
-                    sdk, "2", "output/dataset-id/version-2", "", "", "", False
+                    sdk, "2", "output/dataset-id/version-2", "", False
                 ).__dict__,
             ],
         )
@@ -209,7 +209,7 @@ class TestPipelineInstanceLs:
         assert list.called
         assert (
             captured.out.strip()
-            == '[{"id": "2", "datasetUri": "output/dataset-id/version-2", "pipelineArn": ""}]'
+            == '[{"id": "2", "datasetUri": "output/dataset-id/version-2", "pipelineArn": "N/A"}]'
         )
 
 
