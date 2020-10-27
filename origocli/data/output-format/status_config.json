@@ -3,16 +3,16 @@
     "name": "Done",
     "key": "done"
   },
-  "statusid": {
-    "name": "Status ID",
-    "key": "id"
+  "traceid": {
+    "name": "Trace ID",
+    "key": "trace_id"
   },
   "runstatus": {
-    "name": "Run status",
-      "key": "run_status"
+    "name": "Trace status",
+      "key": "trace_status"
   },
   "status": {
-    "name": "Status",
-    "key": "status"
+    "name": "Trace event status",
+    "key": "trace_event_status"
   }
 }
