@@ -8,6 +8,8 @@
 * The boilerplate script now uses the new `datasets cp` syntax for file
   uploading.
 
+* The status (`status`) and upload (`datasets cp`) commands now supports the new status-api format.
+
 ## 0.5.1
 
 * A bug that made the `origo events put` command unusable has been fixed.
