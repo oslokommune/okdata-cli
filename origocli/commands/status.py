@@ -36,28 +36,27 @@ Options:{BASE_COMMAND_OPTIONS}
             self.print("Invalid command")
 
     @staticmethod
-    def add_status_for_id_rows(out, trace_id, trace_events):
-        finished = False
-        trace_status = trace_events[-1]["trace_status"]
-        trace_event_status = trace_events[-1]["trace_event_status"]
-
-        for i, trace_event in enumerate(trace_events, 1):
+    def find_latest_event(trace_events):
+        for trace_event in trace_events:
             if trace_event["trace_status"] == "FINISHED":
-                trace_event["done"] = False
-                if trace_event["trace_event_status"] == "OK":
-                    trace_event["done"] = True
-                    finished = True
-                    out.add_row(trace_event)
+                return trace_event
+        return trace_events[-1]
 
-        if not finished:
-            out.add_row(
-                {
-                    "done": False,
-                    "trace_id": trace_id,
-                    "trace_status": trace_status,
-                    "trace_event_status": trace_event_status,
-                }
-            )
+    def latest_event_for_status(self, trace_id, trace_events):
+        latest_event = StatusCommand.find_latest_event(trace_events)
+        trace_status = latest_event["trace_status"]
+
+        out = create_output(self.opt("format"), "status_config.json")
+        out.output_singular_object = True
+        out.add_row(
+            {
+                "done": trace_status == "FINISHED",
+                "trace_id": trace_id,
+                "trace_status": trace_status,
+                "trace_event_status": latest_event["trace_event_status"],
+            }
+        )
+        self.print(f"Status for: {trace_id}", out)
 
     def full_history_for_status(self, trace_id, trace_events):
         if trace_events:
@@ -77,7 +76,4 @@ Options:{BASE_COMMAND_OPTIONS}
         if self.opt("history"):
             self.full_history_for_status(trace_id, trace_events)
         else:
-            out = create_output(self.opt("format"), "status_config.json")
-            out.output_singular_object = True
-            StatusCommand.add_status_for_id_rows(out, trace_id, trace_events)
-            self.print(f"Status for: {trace_id}", out)
+            self.latest_event_for_status(trace_id, trace_events)

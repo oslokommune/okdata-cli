@@ -115,31 +115,48 @@ def test_get_status(mock_status_sdk, mocker, mock_print):
     set_argv("status", successful_trace_id)
     cmd = StatusCommand()
     mocker.spy(cmd.sdk, "get_status")
-    mocker.spy(StatusCommand, "add_status_for_id_rows")
+    mocker.spy(cmd, "latest_event_for_status")
+    mocker.spy(StatusCommand, "find_latest_event")
     mocker.spy(TableOutput, "add_row")
     cmd.handler()
     cmd.sdk.get_status.assert_called_once_with(successful_trace_id)
-    last_event = dict(successful_trace[-1], **{"done": True})
-    TableOutput.add_row.assert_called_once_with(ANY, last_event)
+    cmd.latest_event_for_status.assert_called_once_with(
+        successful_trace_id, successful_trace
+    )
+    StatusCommand.find_latest_event.assert_called_once_with(successful_trace)
+    expected_event = successful_trace[-1]
+    TableOutput.add_row.assert_called_once_with(
+        ANY,
+        {
+            "done": True,
+            "trace_id": expected_event["trace_id"],
+            "trace_status": expected_event["trace_status"],
+            "trace_event_status": expected_event["trace_event_status"],
+        },
+    )
 
 
 def test_get_status_in_progress(mock_status_sdk, mocker, mock_print):
     set_argv("status", in_progress_trace_id)
     cmd = StatusCommand()
     mocker.spy(cmd.sdk, "get_status")
-    mocker.spy(StatusCommand, "add_status_for_id_rows")
+    mocker.spy(cmd, "latest_event_for_status")
+    mocker.spy(StatusCommand, "find_latest_event")
     mocker.spy(TableOutput, "add_row")
     cmd.handler()
     cmd.sdk.get_status.assert_called_once_with(in_progress_trace_id)
-    StatusCommand.add_status_for_id_rows.assert_called_once()
-    last_event = in_progress_trace[-1]
+    cmd.latest_event_for_status.assert_called_once_with(
+        in_progress_trace_id, in_progress_trace
+    )
+    StatusCommand.find_latest_event.assert_called_once_with(in_progress_trace)
+    expected_event = in_progress_trace[-1]
     TableOutput.add_row.assert_called_once_with(
         ANY,
         {
             "done": False,
-            "trace_id": last_event["trace_id"],
-            "trace_status": last_event["trace_status"],
-            "trace_event_status": last_event["trace_event_status"],
+            "trace_id": expected_event["trace_id"],
+            "trace_status": expected_event["trace_status"],
+            "trace_event_status": expected_event["trace_event_status"],
         },
     )
 
@@ -148,19 +165,21 @@ def test_get_status_failed(mock_status_sdk, mocker):
     set_argv("status", failed_trace_id)
     cmd = StatusCommand()
     mocker.spy(cmd.sdk, "get_status")
-    mocker.spy(StatusCommand, "add_status_for_id_rows")
+    mocker.spy(cmd, "latest_event_for_status")
+    mocker.spy(StatusCommand, "find_latest_event")
     mocker.spy(TableOutput, "add_row")
     cmd.handler()
     cmd.sdk.get_status.assert_called_once_with(failed_trace_id)
-    StatusCommand.add_status_for_id_rows.assert_called_once()
-    last_event = failed_trace[-1]
+    cmd.latest_event_for_status.assert_called_once_with(failed_trace_id, failed_trace)
+    StatusCommand.find_latest_event.assert_called_once_with(failed_trace)
+    expected_event = failed_trace[-1]
     TableOutput.add_row.assert_called_once_with(
         ANY,
         {
-            "done": False,
-            "trace_id": last_event["trace_id"],
-            "trace_status": last_event["trace_status"],
-            "trace_event_status": last_event["trace_event_status"],
+            "done": True,
+            "trace_id": expected_event["trace_id"],
+            "trace_status": expected_event["trace_status"],
+            "trace_event_status": expected_event["trace_event_status"],
         },
     )
 
