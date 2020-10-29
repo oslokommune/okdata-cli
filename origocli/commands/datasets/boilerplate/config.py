@@ -12,7 +12,7 @@ available_pipelines = ["data-copy", "csv-to-parquet"]
 boilerplate_questions = [
     {"type": "text", "name": "title", "message": "Tittel", "validate": TitleValidator},
     {"type": "text", "name": "description", "message": "Beskrivelse"},
-    {"type": "text", "name": "objective", "message": "Objektiv"},
+    {"type": "text", "name": "objective", "message": "Formål"},
     {
         "type": "text",
         "name": "keywords",
