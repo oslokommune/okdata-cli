@@ -176,7 +176,7 @@ origo datasets cp /tmp/test.txt ds:<datasetid>/<versionid>
 ### Inspecting the upload status
 
 After uploading a file to a dataset using the `origo datasets cp` command, a
-status ID is displayed which can be used to track the uploading process status:
+trace ID is displayed which can be used to track the uploading process status:
 
 ```text
 +-------------+---------------+---------------+-------------+
