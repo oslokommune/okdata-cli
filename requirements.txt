@@ -21,7 +21,7 @@ inquirer==2.7.0           # via origo-cli (setup.py)
 jinja2==2.11.2            # via sphinx
 jsonschema==3.2.0         # via origo-sdk-python
 markupsafe==1.1.1         # via jinja2
-origo-sdk-python==0.2.7   # via origo-cli (setup.py)
+origo-sdk-python==0.3.0   # via origo-cli (setup.py)
 packaging==20.4           # via sphinx
 prettytable==0.7.2        # via origo-cli (setup.py), origo-sdk-python
 prompt-toolkit==3.0.7     # via questionary
