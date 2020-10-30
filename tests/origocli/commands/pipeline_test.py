@@ -127,8 +127,8 @@ class TestPipelinesLsInstances:
             f"{pipeline_qual}.list_instances",
             return_value=(
                 [
-                    PipelineInstance(sdk, "1", "", "", False),
-                    PipelineInstance(sdk, "2", "", "", False),
+                    PipelineInstance(sdk, "1", ""),
+                    PipelineInstance(sdk, "2", ""),
                 ],
                 None,
             ),
@@ -171,12 +171,8 @@ class TestPipelineInstanceLs:
         list = mocker.patch(
             f"{pipeline_client_qual}.list",
             return_value=[
-                PipelineInstance(
-                    sdk, "1", "output/dataset-id/version-1", "", False
-                ).__dict__,
-                PipelineInstance(
-                    sdk, "2", "output/dataset-id/version-2", "", False
-                ).__dict__,
+                PipelineInstance(sdk, "1", "output/dataset-id/version-1").__dict__,
+                PipelineInstance(sdk, "2", "output/dataset-id/version-2").__dict__,
             ],
         )
 
@@ -196,12 +192,8 @@ class TestPipelineInstanceLs:
         list = mocker.patch(
             f"{pipeline_client_qual}.list",
             return_value=[
-                PipelineInstance(
-                    sdk, "1", "output/dataset-id/version-1", "", False
-                ).__dict__,
-                PipelineInstance(
-                    sdk, "2", "output/dataset-id/version-2", "", False
-                ).__dict__,
+                PipelineInstance(sdk, "1", "output/dataset-id/version-1").__dict__,
+                PipelineInstance(sdk, "2", "output/dataset-id/version-2").__dict__,
             ],
         )
         cmd.handler()
