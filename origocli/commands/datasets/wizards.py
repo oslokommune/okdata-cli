@@ -62,7 +62,7 @@ class DatasetCreateWizard:
 
         self.command.print("Creating pipeline...")
         pipeline_client = PipelineApiClient(env=env)
-        pipeline_config = self.pipeline_config("data-copy", dataset_id, "1")
+        pipeline_config = self.pipeline_config(choices["pipeline"], dataset_id, "1")
         pipeline_id = pipeline_client.create_pipeline_instance(pipeline_config)
         pipeline_id = pipeline_id.strip('"')  # What's up with these?
         self.command.print(f"Created pipeline with ID: {pipeline_id}")
