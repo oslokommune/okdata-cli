@@ -1,7 +1,6 @@
 from questionary import Choice
 
 from .validator import (
-    DateValidator,
     KeywordValidator,
     PhoneValidator,
     SimpleEmailValidator,
