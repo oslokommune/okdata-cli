@@ -8,12 +8,12 @@ class StatusCommand(BaseCommand):
     __doc__ = f"""Oslo :: Status
 
 Usage:
-  origo status <statusid> [options --history]
+  origo status <trace_id> [options --history]
 
 Examples:
-  origo status status-id-from-system
-  origo status status-id-from-system --format=json | jq ".done"
-  origo status status-id-from-system --history
+  origo status trace-id-from-system
+  origo status trace-id-from-system --format=json | jq ".done"
+  origo status trace-id-from-system --history
 
 Options:{BASE_COMMAND_OPTIONS}
   --history
@@ -30,53 +30,50 @@ Options:{BASE_COMMAND_OPTIONS}
 
     def default(self):
         self.log.info("StatusCommand.default()")
-        if self.arg("statusid"):
+        if self.arg("trace_id"):
             self.status_for_id()
         else:
             self.print("Invalid command")
 
     @staticmethod
-    def add_status_for_id_rows(out, statusid, statuses):
-        finished = False
-        run_status = statuses[-1]["run_status"]
-        status = statuses[-1]["status"]
-        for el in statuses:
-            if el["run_status"] == "FINISHED":
-                el["done"] = False
-                if el["status"] == "OK":
-                    el["done"] = True
-                    finished = True
-                out.add_row(el)
+    def find_latest_event(trace_events):
+        for trace_event in trace_events:
+            if trace_event["trace_status"] == "FINISHED":
+                return trace_event
+        return trace_events[-1]
 
-        if not finished:
-            out.add_row(
-                {
-                    "done": False,
-                    "id": statusid,
-                    "run_status": run_status,
-                    "status": status,
-                }
-            )
+    def latest_event_for_status(self, trace_id, trace_events):
+        latest_event = StatusCommand.find_latest_event(trace_events)
+        trace_status = latest_event["trace_status"]
 
-    def full_history_for_status(self, statusid, statuses):
-        if statuses:
+        out = create_output(self.opt("format"), "status_config.json")
+        out.output_singular_object = True
+        out.add_row(
+            {
+                "done": trace_status == "FINISHED",
+                "trace_id": trace_id,
+                "trace_status": trace_status,
+                "trace_event_status": latest_event["trace_event_status"],
+            }
+        )
+        self.print(f"Status for: {trace_id}", out)
+
+    def full_history_for_status(self, trace_id, trace_events):
+        if trace_events:
             out = create_output(self.opt("format"), "status_history_config.json")
-            out.add_rows(statuses)
-            self.print(f"Status for: {statusid}", out)
+            out.add_rows(trace_events)
+            self.print(f"Status for: {trace_id}", out)
         else:
             self.print(
                 "No history found for status",
-                {"error": 1, "message": "No statuses found"},
+                {"error": 1, "message": "No trace events found"},
             )
 
     def status_for_id(self):
-        statusid = self.arg("statusid")
-        self.log.info(f"Looking up status: {statusid}")
-        statuses = self.sdk.get_status(statusid)
+        trace_id = self.arg("trace_id")
+        self.log.info(f"Looking up status: {trace_id}")
+        trace_events = self.sdk.get_status(trace_id)
         if self.opt("history"):
-            self.full_history_for_status(statusid, statuses)
+            self.full_history_for_status(trace_id, trace_events)
         else:
-            out = create_output(self.opt("format"), "status_config.json")
-            out.output_singular_object = True
-            StatusCommand.add_status_for_id_rows(out, statusid, statuses)
-            self.print(f"Status for: {statusid}", out)
+            self.latest_event_for_status(trace_id, trace_events)

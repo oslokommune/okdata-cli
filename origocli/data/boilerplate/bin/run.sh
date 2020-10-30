@@ -109,19 +109,19 @@ if [[ "$error" =~ ^[1]+$ ]]; then
   echo $upload | jq
   exit
 fi
-status_id=`echo "$upload" | jq  -r '.statusid'`
-if [[ $status_id == false ]]; then
-  echo "Error: File uploaded to origo, but could not get the status ID of the upload"
+trace_id=`echo "$upload" | jq  -r '.trace_id'`
+if [[ $trace_id == false ]]; then
+  echo "Error: File uploaded to origo, but could not get the trace ID of the upload"
   exit
 fi
-echo "Uploaded test file to dataset $dataset_id, status id for upload is $status_id"
+echo "Uploaded test file to dataset $dataset_id, trace id for upload is $trace_id"
 
 ######### Check status for the newly uploaded file #########
 uploaded=false
 echo "Checking status for uploaded file"
 while ! $uploaded; do
   echo "\Checking upload status....."
-  upload_status=`origo status $status_id --format=json`
+  upload_status=`origo status $trace_id --format=json`
   uploaded=`echo $upload_status | jq -r '.done'`
 done
 echo "Uploaded file is processed and ready to be consumed"

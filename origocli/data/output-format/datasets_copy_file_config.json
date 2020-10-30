@@ -11,8 +11,8 @@
     "name": "Upload status",
     "key": "uploaded"
   },
-  "StatusID": {
-    "name": "Status ID",
-    "key": "statusid"
+  "TraceID": {
+    "name": "Trace ID",
+    "key": "trace_id"
   }
 }

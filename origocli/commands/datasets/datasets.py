@@ -342,7 +342,7 @@ Options:{BASE_COMMAND_OPTIONS}
             "dataset": dataset_id,
             "file": source,
             "uploaded": res["result"],
-            "statusid": res["status"],
+            "trace_id": res["trace_id"],
         }
         out.add_row(data)
         self.print(f"Uploaded file to dataset: {dataset_id}", out)
@@ -358,7 +358,7 @@ Options:{BASE_COMMAND_OPTIONS}
         data = {
             "source": f"ds:{'/'.join([dataset_id, version, edition])}",
             "target": "\n".join(downloaded_files["files"]),
-            "statusid": "n/a",
+            "trace_id": "n/a",
         }
         out.add_row(data)
         self.print(f"Downloaded files from dataset: {dataset_id}", out)

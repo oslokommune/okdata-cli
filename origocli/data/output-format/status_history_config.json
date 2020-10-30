@@ -1,38 +1,42 @@
 {
-  "statusid": {
-    "name": "Status ID",
-    "key": "id"
+  "traceid": {
+    "name": "Trace ID",
+    "key": "trace_id"
   },
   "eventid": {
-    "name": "Event ID",
-    "key": "event_id"
+    "name": "Trace event ID",
+    "key": "trace_event_id"
   },
   "started": {
     "name": "Started",
-    "key": "date_started"
+    "key": "start_time"
   },
   "ended": {
     "name": "Ended",
-    "key": "date_end"
+    "key": "end_time"
   },
-  "application": {
-    "name": "Application",
-    "key": "application"
+  "domain": {
+    "name": "Domain",
+    "key": "domain"
   },
-  "applicationid": {
-    "name": "Application ID",
-    "key": "application_id"
+  "domainid": {
+    "name": "Domain ID",
+    "key": "domain_id"
   },
-  "handler": {
-    "name": "Handler",
-    "key": "handler"
+  "component": {
+    "name": "Component",
+    "key": "component"
   },
-  "runstatus": {
-    "name": "Run status",
-      "key": "run_status"
+  "operation": {
+    "name": "Operation",
+    "key": "operation"
   },
-  "status": {
-    "name": "Status",
-    "key": "status"
+  "tracestatus": {
+    "name": "Trace status",
+      "key": "trace_status"
+  },
+  "traceeventstatus": {
+    "name": "Trace event status",
+    "key": "trace_event_status"
   }
 }

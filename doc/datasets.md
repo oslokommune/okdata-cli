@@ -176,26 +176,26 @@ origo datasets cp /tmp/test.txt ds:<datasetid>/<versionid>
 ### Inspecting the upload status
 
 After uploading a file to a dataset using the `origo datasets cp` command, a
-status ID is displayed which can be used to track the uploading process status:
+trace ID is displayed which can be used to track the uploading process status:
 
 ```text
-+-------------+---------------+---------------+------------+
-| Dataset     | Local file    | Upload status | Status ID  |
-+-------------+---------------+---------------+------------+
-| <datasetid> | /tmp/test.txt | True          | <statusid> |
-+-------------+---------------+---------------+------------+
++-------------+---------------+---------------+-------------+
+| Dataset     | Local file    | Upload status | Trace ID    |
++-------------+---------------+---------------+-------------+
+| <datasetid> | /tmp/test.txt | True          | <trace_id>  |
++-------------+---------------+---------------+-------------+
 ```
 
 To see the latest status of the upload, run:
 
 ```bash
-origo status <statusid>
+origo status <trace_id>
 ```
 
 Or to see the complete status history of the uploading process:
 
 ```bash
-origo status <statusid> --history
+origo status <trace_id> --history
 ```
 
 Passing `json` to the `--format` option displays the status in JSON format
@@ -208,7 +208,7 @@ uploaded=false
 echo "Checking status for uploaded file"
 while ! $uploaded; do
   echo "\Checking upload status..."
-  upload_status=`origo status $status_id --format=json`
+  upload_status=`origo status $trace_id --format=json`
   uploaded=`echo $upload_status | jq -r '.done'`
 done
 echo "Uploaded file is processed and ready to be consumed"
