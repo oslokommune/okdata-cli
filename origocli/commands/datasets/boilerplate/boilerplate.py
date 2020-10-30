@@ -128,8 +128,6 @@ Options:{BASE_COMMAND_OPTIONS}
             data = json.load(json_file)
             data["edition"] = date_now().strftime(DATE_METADATA_EDITION_FORMAT)
             data["description"] = config.get("description") or title
-            data["startTime"] = config.get("startTime")
-            data["endTime"] = config.get("endTime")
         with open(edition_file, "w") as outfile:
             json.dump(data, outfile, indent=4)
 

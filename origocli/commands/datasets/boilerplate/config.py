@@ -49,16 +49,4 @@ boilerplate_questions = [
         "message": "Prosessering",
         "choices": available_pipelines,
     },
-    {
-        "type": "text",
-        "name": "startTime",
-        "message": "Start tidspunkt for datasett",
-        "validate": DateValidator,
-    },
-    {
-        "type": "text",
-        "name": "endTime",
-        "message": "Slutt tidspunkt for datasett",
-        "validate": DateValidator,
-    },
 ]
