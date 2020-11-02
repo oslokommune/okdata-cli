@@ -41,6 +41,16 @@ origo datasets ls --filter=<my-filter-string>
 
 ## Create dataset
 
+Enter `origo datasets create` to start the dataset creation wizard. After
+answering a number of questions, a new dataset is created along with a selected
+processing pipeline, ready to receive files.
+
+### From a configuration file
+
+Datasets can also be created from a configuration file if you need more fine
+grained control (this will not set up a pipeline). This method is also suitable
+if you need to script the dataset creation flow.
+
 File: `dataset.json`
 ```json
 {
@@ -59,13 +69,7 @@ File: `dataset.json`
 }
 ```
 
-Create the dataset by piping the contents of `dataset.json`:
-
-```bash
-cat dataset.json | origo datasets create
-```
-
-Or create it by referencing the file:
+Create the dataset by referencing the file:
 
 ```bash
 origo datasets create --file=dataset.json

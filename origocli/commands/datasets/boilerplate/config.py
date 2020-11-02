@@ -1,7 +1,6 @@
 from questionary import Choice
 
 from .validator import (
-    DateValidator,
     KeywordValidator,
     PhoneValidator,
     SimpleEmailValidator,
@@ -48,17 +47,5 @@ boilerplate_questions = [
         "name": "pipeline",
         "message": "Prosessering",
         "choices": available_pipelines,
-    },
-    {
-        "type": "text",
-        "name": "startTime",
-        "message": "Start tidspunkt for datasett",
-        "validate": DateValidator,
-    },
-    {
-        "type": "text",
-        "name": "endTime",
-        "message": "Slutt tidspunkt for datasett",
-        "validate": DateValidator,
     },
 ]

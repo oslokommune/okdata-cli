@@ -1,17 +1,17 @@
+from origo.data.dataset import Dataset
+from origo.data.download import Download
+from origo.data.upload import Upload
+from origo.dataset_authorizer.simple_dataset_authorizer_client import (
+    SimpleDatasetAuthorizerClient,
+)
 from requests.exceptions import HTTPError
 
 from origocli.command import BaseCommand, BASE_COMMAND_OPTIONS
 from origocli.commands.datasets import DatasetsBoilerplateCommand
-from origocli.output import create_output
-from origocli.io import read_json, resolve_output_filepath
+from origocli.commands.datasets.wizards import DatasetCreateWizard
 from origocli.date import date_now, DATE_METADATA_EDITION_FORMAT
-
-from origo.data.dataset import Dataset
-from origo.data.upload import Upload
-from origo.data.download import Download
-from origo.dataset_authorizer.simple_dataset_authorizer_client import (
-    SimpleDatasetAuthorizerClient,
-)
+from origocli.io import read_json, resolve_output_filepath
+from origocli.output import create_output
 
 
 class DatasetsCommand(BaseCommand):
@@ -65,7 +65,10 @@ Options:{BASE_COMMAND_OPTIONS}
         elif self.arg("datasetid") is None and self.cmd("ls") is True:
             self.datasets()
         elif self.arg("datasetid") is None and self.cmd("create") is True:
-            self.create_dataset()
+            if self.opt("file"):
+                self.create_dataset()
+            else:
+                DatasetCreateWizard(self).start()
         elif self.cmd("cp") is True:
             self.copy_file()
         elif (

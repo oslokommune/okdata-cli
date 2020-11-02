@@ -1,13 +1,14 @@
-import sys
 import json
-from requests.models import Response
+import sys
 
 import pytest
-from bin.cli import get_command_class, main
 from origo.exceptions import ApiAuthenticateError
 from origo.sdk import SDK
-from origocli.commands.datasets import DatasetsCommand
+from requests.models import Response
+
+from bin.cli import get_command_class, main
 from origocli.command import generate_error_feedback
+from origocli.commands.datasets import DatasetsCommand
 
 
 bad_request_response_body = {
@@ -17,13 +18,18 @@ bad_request_response_body = {
 
 
 def test_get_command_class():
-    argv = ["origo", "datasets"]
-    cmd = get_command_class(argv)
+    cmd = get_command_class(["origo", "datasets"])
+    assert cmd is DatasetsCommand
+
+    cmd = get_command_class(["origo", "datasets", "create"])
+    assert cmd is DatasetsCommand
+
+    cmd = get_command_class(["origo", "datasets", "create", "--file=foo"])
     assert cmd is DatasetsCommand
 
 
 def test_main_http_error(raise_http_error, capsys):
-    sys.argv = ["origo", "datasets", "create"]
+    sys.argv = ["origo", "datasets", "create", "--file=foo"]
     main()
     expected_output = generate_error_feedback(
         bad_request_response_body["message"], bad_request_response_body["errors"]
