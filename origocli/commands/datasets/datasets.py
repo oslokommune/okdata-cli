@@ -27,7 +27,6 @@ Usage:
   origo datasets create-distribution <datasetid> [<versionid> <editionid>] [--file=<file> --format=<format> --env=<env> options]
   origo datasets create-access <datasetid> <userid> [--format=<format> --env=<env> options]
   origo datasets check-access <datasetid> [--format=<format> --env=<env> options]
-  origo datasets download <datasetid> [<versionid> <editionid> <output_path>] [--format=<format> --env=<env> options]
   origo datasets boilerplate <name> [--file=<file> --prompt=<prompt> --pipeline=<pipeline> options]
 
 Examples:
