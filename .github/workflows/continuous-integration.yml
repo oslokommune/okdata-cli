@@ -6,20 +6,18 @@ on:
     branches: master
 jobs:
   build:
-
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: [3.6, 3.7, 3.8, 3.9]
 
     steps:
-    - uses: actions/checkout@v1
-    - name: Set up Python 3.7
-      uses: actions/setup-python@v1
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python }}
+      uses: actions/setup-python@v2
       with:
-        python-version: 3.7
+        python-version: ${{ matrix.python }}
     - name: Install dependencies
-      run: python3 -m pip install tox black pip-tools
+      run: pip install tox
     - name: Test with tox
-      run: make test
-      env:
-        TOX_PARALLEL_NO_SPINNER: 1
-
-
+      run: tox -e py,flake8,black
