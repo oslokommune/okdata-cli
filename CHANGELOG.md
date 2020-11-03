@@ -1,3 +1,8 @@
+## ?.?.?
+
+* `origo datasets download` is no longer presented in the `origo datasets` help
+  text, since the command is gone. Use `origo datasets cp` instead.
+
 ## 0.6.0
 
 * `origo datasets create` now runs a dataset creation wizard for setting up a
