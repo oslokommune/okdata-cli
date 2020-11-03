@@ -1,11 +1,12 @@
-## ?.?.?
+## 0.6.0
 
 * `origo datasets create` now runs a dataset creation wizard for setting up a
   new dataset complete with a processing pipeline, ready to receive files. The
   `--file` parameter can still be used when you want to create a dataset from a
   configuration file.
 
-* The boilerplate command no longer prompts for an AWS account ID.
+* The boilerplate command no longer prompts for an AWS account ID, dataset
+  edition start time, or dataset edition end time.
 
 * The questions on dataset access rights and confidentiality have been unified
   in the boilerplate questionnaire.
@@ -13,7 +14,8 @@
 * The boilerplate script now uses the new `datasets cp` syntax for file
   uploading.
 
-* The status (`status`) and upload (`datasets cp`) commands now supports the new status-api format.
+* The status (`status`) and upload (`datasets cp`) commands now support the new
+  status-api format.
 
 ## 0.5.1
 
