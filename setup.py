@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="origo-cli",
+    name="okdata-cli",
     version="0.6.0",
     author="Oslo Origo",
     author_email="dataplattform@oslo.kommune.no",
@@ -12,10 +12,10 @@ setuptools.setup(
     license="MIT",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/oslokommune/origo-cli/",
+    url="https://github.com/oslokommune/okdata-cli/",
     packages=setuptools.find_packages(".", exclude=["tests*"]),
     package_data={
-        "origocli": [
+        "okdata.cli": [
             "data/boilerplate/bin/*",
             "data/boilerplate/data/*",
             "data/boilerplate/dataset/*",
@@ -36,7 +36,7 @@ setuptools.setup(
         "requests",
         "questionary",
     ],
-    entry_points={"console_scripts": ["origo=bin.cli:main"]},
+    entry_points={"console_scripts": ["okdata=bin.cli:main"]},
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Programming Language :: Python :: 3",
