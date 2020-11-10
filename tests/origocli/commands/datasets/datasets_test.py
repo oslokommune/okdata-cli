@@ -1,7 +1,7 @@
 from datetime import datetime
 
 import pytest
-from origo.data.dataset import Dataset
+from okdata.sdk.data.dataset import Dataset
 
 from conftest import set_argv
 from origocli.commands.datasets import DatasetsCommand

@@ -4,7 +4,7 @@ import sys
 from requests.exceptions import HTTPError
 from keycloak.exceptions import KeycloakGetError
 
-from origo.exceptions import ApiAuthenticateError
+from okdata.sdk.exceptions import ApiAuthenticateError
 
 from origocli.command import BaseCommand
 from origocli.commands.datasets import DatasetsCommand

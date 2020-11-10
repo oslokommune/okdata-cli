@@ -3,7 +3,7 @@ import logging
 import sys
 
 from docopt import docopt, DocoptExit
-from origo.sdk import SDK
+from okdata.sdk import SDK
 from pygments import highlight, lexers, formatters
 
 BASE_COMMAND_OPTIONS = """

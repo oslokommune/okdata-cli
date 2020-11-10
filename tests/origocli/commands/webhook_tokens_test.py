@@ -2,7 +2,7 @@ from conftest import set_argv
 import pytest
 
 from origocli.commands.webhook_tokens import WebhookTokensCommand
-from origo.dataset_authorizer.simple_dataset_authorizer_client import (
+from okdata.sdk.dataset_authorizer.simple_dataset_authorizer_client import (
     SimpleDatasetAuthorizerClient,
 )
 

@@ -1,5 +1,5 @@
-from origo.data.dataset import Dataset
-from origo.pipelines.client import PipelineApiClient
+from okdata.sdk.data.dataset import Dataset
+from okdata.sdk.pipelines.client import PipelineApiClient
 from questionary import prompt
 
 from origocli.commands.datasets.boilerplate.boilerplate import confidentiality_map

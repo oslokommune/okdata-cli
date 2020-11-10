@@ -1,10 +1,10 @@
 import logging
 
 import requests
-from origo.pipelines.client import PipelineApiClient
-from origo.pipelines.resources.pipeline import Pipeline
-from origo.pipelines.resources.pipeline_instance import PipelineInstance
-from origo.sdk import SDK
+from okdata.sdk.pipelines.client import PipelineApiClient
+from okdata.sdk.pipelines.resources.pipeline import Pipeline
+from okdata.sdk.pipelines.resources.pipeline_instance import PipelineInstance
+from okdata.sdk import SDK
 
 from conftest import set_argv, BASECMD_QUAL
 from origocli.commands.pipelines.pipelines import (

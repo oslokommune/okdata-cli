@@ -2,8 +2,8 @@ import json
 import sys
 
 import pytest
-from origo.exceptions import ApiAuthenticateError
-from origo.sdk import SDK
+from okdata.sdk.exceptions import ApiAuthenticateError
+from okdata.sdk import SDK
 from requests.models import Response
 
 from bin.cli import get_command_class, main

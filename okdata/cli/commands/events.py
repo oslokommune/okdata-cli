@@ -1,9 +1,9 @@
 import re
 import json
 
-from origo.event.post_event import PostEvent
-from origo.elasticsearch.queries import ElasticsearchQueries
-from origo.event.event_stream_client import EventStreamClient
+from okdata.sdk.event.post_event import PostEvent
+from okdata.sdk.elasticsearch.queries import ElasticsearchQueries
+from okdata.sdk.event.event_stream_client import EventStreamClient
 
 from origocli.command import BaseCommand, BASE_COMMAND_OPTIONS
 from origocli.io import read_json

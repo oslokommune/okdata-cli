@@ -1,7 +1,7 @@
 from origocli.command import BaseCommand, BASE_COMMAND_OPTIONS
 from origocli.output import create_output
 
-from origo.dataset_authorizer.simple_dataset_authorizer_client import (
+from okdata.sdk.dataset_authorizer.simple_dataset_authorizer_client import (
     SimpleDatasetAuthorizerClient,
 )
 

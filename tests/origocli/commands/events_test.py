@@ -1,7 +1,7 @@
 import pytest
 from conftest import set_argv
-from origo.event.post_event import PostEvent
-from origo.event.event_stream_client import EventStreamClient
+from okdata.sdk.event.post_event import PostEvent
+from okdata.sdk.event.event_stream_client import EventStreamClient
 from origocli.output import TableOutput
 from origocli.commands.events import EventsCommand
 

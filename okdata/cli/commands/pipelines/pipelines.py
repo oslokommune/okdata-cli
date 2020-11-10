@@ -1,6 +1,6 @@
 import json
 
-from origo.pipelines.client import PipelineApiClient
+from okdata.sdk.pipelines.client import PipelineApiClient
 
 from origocli.command import BaseCommand
 from origocli.commands.pipelines.base import BasePipelinesCommand

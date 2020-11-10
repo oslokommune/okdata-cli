@@ -2,7 +2,7 @@ import pytest
 from unittest.mock import ANY
 from conftest import set_argv
 from origocli.commands.status import StatusCommand
-from origo.status import Status
+from okdata.sdk.status import Status
 from origocli.output import TableOutput
 
 

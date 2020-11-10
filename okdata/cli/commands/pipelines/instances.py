@@ -2,8 +2,8 @@ import json
 import inquirer
 from inquirer.errors import ValidationError
 
-from origo.data.dataset import Dataset
-from origo.pipelines.resources.pipeline_instance import PipelineInstance
+from okdata.sdk.data.dataset import Dataset
+from okdata.sdk.pipelines.resources.pipeline_instance import PipelineInstance
 
 from origocli.commands.pipelines.base import BasePipelinesCommand
 from origocli.output import create_output

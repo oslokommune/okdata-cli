@@ -1,7 +1,7 @@
 from origocli.command import BaseCommand, BASE_COMMAND_OPTIONS
 from origocli.output import create_output
 
-from origo.status import Status
+from okdata.sdk.status import Status
 
 
 class StatusCommand(BaseCommand):

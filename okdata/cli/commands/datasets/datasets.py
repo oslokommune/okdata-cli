@@ -1,7 +1,7 @@
-from origo.data.dataset import Dataset
-from origo.data.download import Download
-from origo.data.upload import Upload
-from origo.dataset_authorizer.simple_dataset_authorizer_client import (
+from okdata.sdk.data.dataset import Dataset
+from okdata.sdk.data.download import Download
+from okdata.sdk.data.upload import Upload
+from okdata.sdk.dataset_authorizer.simple_dataset_authorizer_client import (
     SimpleDatasetAuthorizerClient,
 )
 from requests.exceptions import HTTPError
