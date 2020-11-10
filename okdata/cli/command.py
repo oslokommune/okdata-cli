@@ -15,12 +15,12 @@ BASE_COMMAND_OPTIONS = """
 
 class BaseCommand:
     __doc__ = f"""usage:
-  origo datasets [options]
-  origo status [options]
-  origo pipelines [options]
-  origo events [options]
-  origo webhooks [options]
-  origo -h | --help
+  okdata datasets [options]
+  okdata status [options]
+  okdata pipelines [options]
+  okdata events [options]
+  okdata webhooks [options]
+  okdata -h | --help
 
 Commands available:
   datasets

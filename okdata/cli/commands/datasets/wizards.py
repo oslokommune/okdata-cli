@@ -76,6 +76,6 @@ class DatasetCreateWizard:
         self.command.print(
             f"""Done! You may go ahead and upload data to the dataset by running:
 
-  origo datasets cp FILE ds:{dataset_id}
+  okdata datasets cp FILE ds:{dataset_id}
 """
         )

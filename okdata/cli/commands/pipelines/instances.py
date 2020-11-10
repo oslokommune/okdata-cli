@@ -11,7 +11,7 @@ from okdata.cli.output import create_output
 
 class PipelinesLsInstances(BasePipelinesCommand):
     """
-    usage: origo pipelines ls-instances --pipeline-arn=<pipeline-arn> [options]
+    usage: okdata pipelines ls-instances --pipeline-arn=<pipeline-arn> [options]
 
     options:
       -d --debug
@@ -32,7 +32,7 @@ class PipelinesLsInstances(BasePipelinesCommand):
 
 class PipelineInstanceLs(BasePipelinesCommand):
     """usage:
-      origo pipelines instances ls [(<dataset-id> <version>)] [options]
+      okdata pipelines instances ls [(<dataset-id> <version>)] [options]
 
     options:
       -d --debug
@@ -62,8 +62,8 @@ class PipelineInstanceLs(BasePipelinesCommand):
 class PipelineInstancesCreate(BasePipelinesCommand):
     """
     usage:
-      origo pipelines instances create - [options]
-      origo pipelines instances create <file> [options]
+      okdata pipelines instances create - [options]
+      okdata pipelines instances create <file> [options]
 
     options:
       -d --debug
@@ -94,10 +94,10 @@ class PipelineInstancesCreate(BasePipelinesCommand):
 class PipelineInstances(BasePipelinesCommand):
     """
     usage:
-      origo pipelines instances ls [(<dataset-id> <version>)] [options]
-      origo pipelines instances wizard
-      origo pipelines instances create - [options]
-      origo pipelines instances create <file> [options]
+      okdata pipelines instances ls [(<dataset-id> <version>)] [options]
+      okdata pipelines instances wizard
+      okdata pipelines instances create - [options]
+      okdata pipelines instances create <file> [options]
 
     options:
       -d --debug
@@ -118,7 +118,7 @@ class PipelineInstances(BasePipelinesCommand):
 
 class PipelineInstanceWizard(BasePipelinesCommand):
     """usage:
-      origo pipelines instances wizard [options]
+      okdata pipelines instances wizard [options]
 
     options:
       -d --debug

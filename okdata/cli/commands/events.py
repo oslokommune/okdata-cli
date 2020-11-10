@@ -14,30 +14,30 @@ class EventsCommand(BaseCommand):
     __doc__ = f"""Oslo :: Events
 
 Usage:
-  origo events describe-stream <dataset-uri> [options]
-  origo events create-stream <dataset-uri> [--skip-raw] [options]
-  origo events delete-stream <dataset-uri> [options]
-  origo events enable-subscription <dataset-uri> [options]
-  origo events disable-subscription <dataset-uri> [options]
-  origo events enable-sink <dataset-uri> --sink-type=<sink_type> [options]
-  origo events disable-sink <dataset-uri> --sink-type=<sink_type> [options]
-  origo events put <dataset-uri> [(--file=<file> | --data=<data>) options]
-  origo events stat <dataset-uri> [options]
+  okdata events describe-stream <dataset-uri> [options]
+  okdata events create-stream <dataset-uri> [--skip-raw] [options]
+  okdata events delete-stream <dataset-uri> [options]
+  okdata events enable-subscription <dataset-uri> [options]
+  okdata events disable-subscription <dataset-uri> [options]
+  okdata events enable-sink <dataset-uri> --sink-type=<sink_type> [options]
+  okdata events disable-sink <dataset-uri> --sink-type=<sink_type> [options]
+  okdata events put <dataset-uri> [(--file=<file> | --data=<data>) options]
+  okdata events stat <dataset-uri> [options]
 
 Examples:
-  origo events describe-stream ds:my-dataset-id/1
-  origo events describe-stream my-dataset-id/1
-  origo events describe-stream my-dataset-id
-  origo events create-stream ds:my-dataset-id/1
-  origo events enable-sink ds:my-dataset-id/1 --sink-type=s3
-  origo events disable-sink ds:my-dataset-id/1 --sink-type=elasticsearch
-  echo '{{"hello": "world"}}' | origo events put ds:my-dataset-id/1
-  echo '[{{"hello": "world"}}, {{"world": "hello"}}]' | origo events put ds:my-dataset-id/1
-  cat /tmp/event.json | origo events put ds:my-dataset-id/1
-  origo events put ds:my-dataset-id/1 --data='{{"hello": "world"}}'
-  origo events put ds:my-dataset-id/1 --file=/tmp/event.json
-  origo events stat ds:my-dataset-id
-  origo events stat ds:my-dataset-id --format=json | jq ".last_hour.events"
+  okdata events describe-stream ds:my-dataset-id/1
+  okdata events describe-stream my-dataset-id/1
+  okdata events describe-stream my-dataset-id
+  okdata events create-stream ds:my-dataset-id/1
+  okdata events enable-sink ds:my-dataset-id/1 --sink-type=s3
+  okdata events disable-sink ds:my-dataset-id/1 --sink-type=elasticsearch
+  echo '{{"hello": "world"}}' | okdata events put ds:my-dataset-id/1
+  echo '[{{"hello": "world"}}, {{"world": "hello"}}]' | okdata events put ds:my-dataset-id/1
+  cat /tmp/event.json | okdata events put ds:my-dataset-id/1
+  okdata events put ds:my-dataset-id/1 --data='{{"hello": "world"}}'
+  okdata events put ds:my-dataset-id/1 --file=/tmp/event.json
+  okdata events stat ds:my-dataset-id
+  okdata events stat ds:my-dataset-id --format=json | jq ".last_hour.events"
 
 Options:{BASE_COMMAND_OPTIONS}
     """

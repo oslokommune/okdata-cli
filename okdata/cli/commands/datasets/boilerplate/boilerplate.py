@@ -19,13 +19,13 @@ confidentiality_map = {
 class DatasetsBoilerplateCommand(BaseCommand):
     __doc__ = f"""
 usage:
-   origo datasets boilerplate <name> [--file=<file> --prompt=<prompt> --pipeline=<pipeline> options]
+   okdata datasets boilerplate <name> [--file=<file> --prompt=<prompt> --pipeline=<pipeline> options]
 
 Examples:
-  origo datasets boilerplate oslo-traffic-data
-  origo datasets boilerplate oslo-traffic-data --file=/tmp/initial-file.csv
-  origo datasets boilerplate oslo-traffic-data --pipeline=data-copy --prompt=no
-  origo datasets boilerplate geodata-from-my-iot-devices
+  okdata datasets boilerplate oslo-traffic-data
+  okdata datasets boilerplate oslo-traffic-data --file=/tmp/initial-file.csv
+  okdata datasets boilerplate oslo-traffic-data --pipeline=data-copy --prompt=no
+  okdata datasets boilerplate geodata-from-my-iot-devices
 
 Options:{BASE_COMMAND_OPTIONS}
   --file=<file>         # Initial file to upload

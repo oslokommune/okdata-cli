@@ -7,7 +7,7 @@ from okdata.cli.output import create_output
 class PipelinesInputsLs(BasePipelinesCommand):
     """
     usage:
-      origo pipelines inputs ls <pipeline-instance> [options]
+      okdata pipelines inputs ls <pipeline-instance> [options]
 
     options:
       -d --debug
@@ -27,8 +27,8 @@ class PipelinesInputsLs(BasePipelinesCommand):
 class PipelinesInputsCreate(BasePipelinesCommand):
     """
     usage:
-      origo pipelines inputs create - [options]
-      origo pipelines inputs create <file> [options]
+      okdata pipelines inputs create - [options]
+      okdata pipelines inputs create <file> [options]
 
     options:
       -d --debug
@@ -45,8 +45,8 @@ class PipelinesInputsCreate(BasePipelinesCommand):
 class PipelinesInputs(BasePipelinesCommand):
     """
     usage:
-      origo pipelines inputs ls <pipeline-instance> [options]
-      origo pipelines inputs create (<file> | -) [options]
+      okdata pipelines inputs ls <pipeline-instance> [options]
+      okdata pipelines inputs create (<file> | -) [options]
 
     options:
       -d --debug

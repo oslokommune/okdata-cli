@@ -1,7 +1,7 @@
 import sys
 
 import pytest
-from origocli.command import BaseCommand
+from okdata.cli.command import BaseCommand
 
 BASECMD_QUAL = f"{BaseCommand.__module__}.{BaseCommand.__name__}"
 

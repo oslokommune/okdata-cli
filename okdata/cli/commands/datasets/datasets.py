@@ -18,26 +18,26 @@ class DatasetsCommand(BaseCommand):
     __doc__ = f"""Oslo :: Datasets
 
 Usage:
-  origo datasets ls [--format=<format>  --env=<env> --filter=<filter> options]
-  origo datasets ls <datasetid> [<versionid> <editionid>][--format=<format> --env=<env> options]
-  origo datasets cp <source> <target> [--format=<format> --env=<env> options]
-  origo datasets create [--file=<file> --format=<format> --env=<env> options]
-  origo datasets create-version <datasetid> [--file=<file> --format=<format> --env=<env> options]
-  origo datasets create-edition <datasetid> [<versionid>] [--file=<file> --format=<format> --env=<env> options]
-  origo datasets create-distribution <datasetid> [<versionid> <editionid>] [--file=<file> --format=<format> --env=<env> options]
-  origo datasets create-access <datasetid> <userid> [--format=<format> --env=<env> options]
-  origo datasets check-access <datasetid> [--format=<format> --env=<env> options]
-  origo datasets boilerplate <name> [--file=<file> --prompt=<prompt> --pipeline=<pipeline> options]
+  okdata datasets ls [--format=<format>  --env=<env> --filter=<filter> options]
+  okdata datasets ls <datasetid> [<versionid> <editionid>][--format=<format> --env=<env> options]
+  okdata datasets cp <source> <target> [--format=<format> --env=<env> options]
+  okdata datasets create [--file=<file> --format=<format> --env=<env> options]
+  okdata datasets create-version <datasetid> [--file=<file> --format=<format> --env=<env> options]
+  okdata datasets create-edition <datasetid> [<versionid>] [--file=<file> --format=<format> --env=<env> options]
+  okdata datasets create-distribution <datasetid> [<versionid> <editionid>] [--file=<file> --format=<format> --env=<env> options]
+  okdata datasets create-access <datasetid> <userid> [--format=<format> --env=<env> options]
+  okdata datasets check-access <datasetid> [--format=<format> --env=<env> options]
+  okdata datasets boilerplate <name> [--file=<file> --prompt=<prompt> --pipeline=<pipeline> options]
 
 Examples:
-  origo datasets ls --filter=bydelsfakta
-  origo datasets ls --filter=bydelsfakta --format=json
-  origo datasets create --file=dataset.json
-  origo datasets cp /tmp/file.csv ds:my-dataset-id
-  origo datasets boilerplate oslo-traffic-data
-  origo datasets boilerplate oslo-traffic-data --file=/tmp/initial-file.csv
-  origo datasets boilerplate oslo-traffic-data --pipeline=data-copy --prompt=no
-  origo datasets boilerplate geodata-from-my-iot-devices
+  okdata datasets ls --filter=bydelsfakta
+  okdata datasets ls --filter=bydelsfakta --format=json
+  okdata datasets create --file=dataset.json
+  okdata datasets cp /tmp/file.csv ds:my-dataset-id
+  okdata datasets boilerplate oslo-traffic-data
+  okdata datasets boilerplate oslo-traffic-data --file=/tmp/initial-file.csv
+  okdata datasets boilerplate oslo-traffic-data --pipeline=data-copy --prompt=no
+  okdata datasets boilerplate geodata-from-my-iot-devices
 
 Options:{BASE_COMMAND_OPTIONS}
   --file=<file>             # Use this file for configuration or upload

@@ -49,7 +49,7 @@ then
 fi
 
 ######### Dataset #########
-dataset=`origo datasets create --file=$dataset_file --format=json`
+dataset=`okdata datasets create --file=$dataset_file --format=json`
 dataset_id=`echo "$dataset" | jq  -r '.Id'`
 version_id=1
 if [[ $dataset_id == null ]]; then
@@ -64,7 +64,7 @@ echo "Created version: $version_id"
 # Format for dataset-version-edition.json fields:
 #   DATE_SHORT=`date +%Y-%m-%d`
 #   DATE_EDITION=`date +%Y-%m-%dT%H:%M:%S+02:00`
-edition=`origo datasets create-edition $dataset_id $version_id --file=$dataset_version_edition_file --format=json`
+edition=`okdata datasets create-edition $dataset_id $version_id --file=$dataset_version_edition_file --format=json`
 edition_id=`echo "$edition" | jq  -r '.Id'`
 if [[ $edition_id == null ]]; then
     echo "Could not create edition"
@@ -76,7 +76,7 @@ echo "Created edition: $edition_id"
 
 ######### Pipeline instance #########
 cat $pipeline_instance_file | sed "s/DATASET_ID/$dataset_id/" | sed "s/DATASET_VERSION/$version_id/" > generated_pipeline.json
-pipeline=`origo pipelines instances create generated_pipeline.json --format=json`
+pipeline=`okdata pipelines instances create generated_pipeline.json --format=json`
 if [[ $pipeline == "" ]]; then
     echo "Could not create pipeline instance"
     exit
@@ -92,7 +92,7 @@ echo "Created pipeline instance $pipeline_id for dataset: $dataset_id "
 
 ######### Pipeline input #########
 cat $pipeline_input_file | sed "s/DATASET_ID/$dataset_id/" | sed "s/DATASET_VERSION/$version_id/" | sed "s/PIPELINEINSTANCE/$pipeline_id/"  > generated_pipeline_input.json
-input=`origo pipelines inputs create generated_pipeline_input.json --format=json`
+input=`okdata pipelines inputs create generated_pipeline_input.json --format=json`
 error=`echo $input | jq -r '.error'`
 if [[ "$error" =~ ^[1]+$ ]]; then
   echo "Could not create inputs"
@@ -102,7 +102,7 @@ fi
 echo "Created input for $dataset_id"
 
 ######### Copy file to dataset #########
-upload=`origo datasets cp $dataset_upload_file ds:$dataset_id/$version_id/$edition_id --format=json`
+upload=`okdata datasets cp $dataset_upload_file ds:$dataset_id/$version_id/$edition_id --format=json`
 error=`echo $upload | jq -r '.error'`
 if [[ "$error" =~ ^[1]+$ ]]; then
   echo "Could not upload file"
@@ -111,7 +111,7 @@ if [[ "$error" =~ ^[1]+$ ]]; then
 fi
 trace_id=`echo "$upload" | jq  -r '.trace_id'`
 if [[ $trace_id == false ]]; then
-  echo "Error: File uploaded to origo, but could not get the trace ID of the upload"
+  echo "Error: File uploaded to okdata, but could not get the trace ID of the upload"
   exit
 fi
 echo "Uploaded test file to dataset $dataset_id, trace id for upload is $trace_id"
@@ -121,7 +121,7 @@ uploaded=false
 echo "Checking status for uploaded file"
 while ! $uploaded; do
   echo "\Checking upload status....."
-  upload_status=`origo status $trace_id --format=json`
+  upload_status=`okdata status $trace_id --format=json`
   uploaded=`echo $upload_status | jq -r '.done'`
 done
 echo "Uploaded file is processed and ready to be consumed"

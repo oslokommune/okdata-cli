@@ -10,14 +10,14 @@ class WebhookTokensCommand(BaseCommand):
     __doc__ = f"""Oslo :: Webhook tokens
 
 Usage:
-  origo webhooks create-token <datasetid> <service> [options]
-  origo webhooks delete-token <datasetid> <token> [options]
-  origo webhooks list-tokens <datasetid> [options]
+  okdata webhooks create-token <datasetid> <service> [options]
+  okdata webhooks delete-token <datasetid> <token> [options]
+  okdata webhooks list-tokens <datasetid> [options]
 
 Examples:
-  origo webhooks create-token some-dataset-id some-service-name --format=json
-  origo webhooks delete-token some-dataset-id some-webhook-token
-  origo webhooks list-tokens some-dataset-id
+  okdata webhooks create-token some-dataset-id some-service-name --format=json
+  okdata webhooks delete-token some-dataset-id some-webhook-token
+  okdata webhooks list-tokens some-dataset-id
 
 Options:{BASE_COMMAND_OPTIONS}
     """

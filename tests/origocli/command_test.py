@@ -58,8 +58,8 @@ def test_invalid_docopt_for_subcommand():
 class FileCommand(BaseCommand):
     """
     usage:
-        origo datasets -
-        origo datasets --file=<file>
+        okdata datasets -
+        okdata datasets --file=<file>
     """
 
 
