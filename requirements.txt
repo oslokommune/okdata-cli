@@ -19,25 +19,25 @@ imagesize==1.2.0          # via sphinx
 importlib-metadata==1.7.0  # via jsonschema
 inquirer==2.7.0           # via origo-cli (setup.py)
 jinja2==2.11.2            # via sphinx
-jsonschema==3.2.0         # via origo-sdk-python
+jsonschema==3.2.0         # via okdata-sdk
 markupsafe==1.1.1         # via jinja2
-origo-sdk-python==0.3.0   # via origo-cli (setup.py)
+okdata-sdk==0.5.0         # via origo-cli (setup.py)
 packaging==20.4           # via sphinx
-prettytable==0.7.2        # via origo-cli (setup.py), origo-sdk-python
+prettytable==0.7.2        # via okdata-sdk, origo-cli (setup.py)
 prompt-toolkit==3.0.7     # via questionary
 pyasn1==0.4.8             # via python-jose, rsa
 pygments==2.6.1           # via origo-cli (setup.py), sphinx
-pyjwt==1.7.1              # via origo-sdk-python
+pyjwt==1.7.1              # via okdata-sdk
 pyparsing==2.4.7          # via packaging
 pyrsistent==0.16.0        # via jsonschema
 python-editor==1.0.4      # via inquirer
 python-jose==3.2.0        # via python-keycloak
-python-keycloak==0.22.0   # via origo-sdk-python
+python-keycloak==0.22.0   # via okdata-sdk
 pytz==2020.1              # via babel
 questionary==1.5.2        # via origo-cli (setup.py)
 readchar==2.0.1           # via inquirer
 recommonmark==0.6.0       # via origo-cli (setup.py)
-requests==2.24.0          # via origo-cli (setup.py), origo-sdk-python, python-keycloak, sphinx
+requests==2.24.0          # via okdata-sdk, origo-cli (setup.py), python-keycloak, sphinx
 rsa==4.6                  # via python-jose
 six==1.15.0               # via blessed, ecdsa, jsonschema, packaging, pyrsistent, python-jose
 snowballstemmer==2.0.0    # via sphinx
@@ -48,7 +48,7 @@ sphinxcontrib-htmlhelp==1.0.3  # via sphinx
 sphinxcontrib-jsmath==1.0.1  # via sphinx
 sphinxcontrib-qthelp==1.0.3  # via sphinx
 sphinxcontrib-serializinghtml==1.1.4  # via sphinx
-urllib3==1.25.10          # via origo-sdk-python, requests
+urllib3==1.25.10          # via okdata-sdk, requests
 wcwidth==0.2.5            # via blessed, prompt-toolkit
 zipp==3.1.0               # via importlib-metadata
 

@@ -30,7 +30,7 @@ setuptools.setup(
         "Sphinx",
         "docopt",
         "inquirer",
-        "origo-sdk-python>=0.3.0",
+        "okdata-sdk",
         "pygments",
         "recommonmark",
         "requests",
