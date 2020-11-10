@@ -1,7 +1,7 @@
 import io
 
-from origocli.command import BaseCommand
-from origocli.output import TableOutput
+from okdata.cli.command import BaseCommand
+from okdata.cli.output import TableOutput
 from conftest import set_argv
 
 

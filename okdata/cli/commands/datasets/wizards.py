@@ -2,8 +2,8 @@ from okdata.sdk.data.dataset import Dataset
 from okdata.sdk.pipelines.client import PipelineApiClient
 from questionary import prompt
 
-from origocli.commands.datasets.boilerplate.boilerplate import confidentiality_map
-from origocli.commands.datasets.boilerplate.config import boilerplate_questions
+from okdata.cli.commands.datasets.boilerplate.boilerplate import confidentiality_map
+from okdata.cli.commands.datasets.boilerplate.config import boilerplate_questions
 
 
 class DatasetCreateWizard:

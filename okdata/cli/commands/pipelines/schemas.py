@@ -1,7 +1,7 @@
 import json
 
-from origocli.commands.pipelines.base import BasePipelinesCommand
-from origocli.output import create_output
+from okdata.cli.commands.pipelines.base import BasePipelinesCommand
+from okdata.cli.output import create_output
 
 
 class SchemasLs(BasePipelinesCommand):

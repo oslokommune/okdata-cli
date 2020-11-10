@@ -1,5 +1,5 @@
-from origocli.command import BaseCommand, BASE_COMMAND_OPTIONS
-from origocli.output import create_output
+from okdata.cli.command import BaseCommand, BASE_COMMAND_OPTIONS
+from okdata.cli.output import create_output
 
 from okdata.sdk.status import Status
 

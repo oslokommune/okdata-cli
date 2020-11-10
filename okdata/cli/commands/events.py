@@ -5,9 +5,9 @@ from okdata.sdk.event.post_event import PostEvent
 from okdata.sdk.elasticsearch.queries import ElasticsearchQueries
 from okdata.sdk.event.event_stream_client import EventStreamClient
 
-from origocli.command import BaseCommand, BASE_COMMAND_OPTIONS
-from origocli.io import read_json
-from origocli.output import create_output
+from okdata.cli.command import BaseCommand, BASE_COMMAND_OPTIONS
+from okdata.cli.io import read_json
+from okdata.cli.output import create_output
 
 
 class EventsCommand(BaseCommand):

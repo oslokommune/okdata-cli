@@ -6,12 +6,12 @@ from okdata.sdk.dataset_authorizer.simple_dataset_authorizer_client import (
 )
 from requests.exceptions import HTTPError
 
-from origocli.command import BaseCommand, BASE_COMMAND_OPTIONS
-from origocli.commands.datasets import DatasetsBoilerplateCommand
-from origocli.commands.datasets.wizards import DatasetCreateWizard
-from origocli.date import date_now, DATE_METADATA_EDITION_FORMAT
-from origocli.io import read_json, resolve_output_filepath
-from origocli.output import create_output
+from okdata.cli.command import BaseCommand, BASE_COMMAND_OPTIONS
+from okdata.cli.commands.datasets import DatasetsBoilerplateCommand
+from okdata.cli.commands.datasets.wizards import DatasetCreateWizard
+from okdata.cli.date import date_now, DATE_METADATA_EDITION_FORMAT
+from okdata.cli.io import read_json, resolve_output_filepath
+from okdata.cli.output import create_output
 
 
 class DatasetsCommand(BaseCommand):

@@ -6,12 +6,12 @@ from keycloak.exceptions import KeycloakGetError
 
 from okdata.sdk.exceptions import ApiAuthenticateError
 
-from origocli.command import BaseCommand
-from origocli.commands.datasets import DatasetsCommand
-from origocli.commands.events import EventsCommand
-from origocli.commands.pipelines import Pipelines
-from origocli.commands.status import StatusCommand
-from origocli.commands.webhook_tokens import WebhookTokensCommand
+from okdata.cli.command import BaseCommand
+from okdata.cli.commands.datasets import DatasetsCommand
+from okdata.cli.commands.events import EventsCommand
+from okdata.cli.commands.pipelines import Pipelines
+from okdata.cli.commands.status import StatusCommand
+from okdata.cli.commands.webhook_tokens import WebhookTokensCommand
 
 
 def main():

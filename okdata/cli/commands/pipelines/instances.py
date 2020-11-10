@@ -5,8 +5,8 @@ from inquirer.errors import ValidationError
 from okdata.sdk.data.dataset import Dataset
 from okdata.sdk.pipelines.resources.pipeline_instance import PipelineInstance
 
-from origocli.commands.pipelines.base import BasePipelinesCommand
-from origocli.output import create_output
+from okdata.cli.commands.pipelines.base import BasePipelinesCommand
+from okdata.cli.output import create_output
 
 
 class PipelinesLsInstances(BasePipelinesCommand):

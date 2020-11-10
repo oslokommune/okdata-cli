@@ -4,8 +4,8 @@ import json
 import shutil
 from questionary import prompt
 
-from origocli.command import BaseCommand, BASE_COMMAND_OPTIONS
-from origocli.date import date_now, DATE_METADATA_EDITION_FORMAT
+from okdata.cli.command import BaseCommand, BASE_COMMAND_OPTIONS
+from okdata.cli.date import date_now, DATE_METADATA_EDITION_FORMAT
 
 from .config import available_pipelines, boilerplate_questions
 

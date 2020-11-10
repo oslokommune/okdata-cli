@@ -7,8 +7,8 @@ from okdata.sdk import SDK
 from requests.models import Response
 
 from bin.cli import get_command_class, main
-from origocli.command import generate_error_feedback
-from origocli.commands.datasets import DatasetsCommand
+from okdata.cli.command import generate_error_feedback
+from okdata.cli.commands.datasets import DatasetsCommand
 
 
 bad_request_response_body = {

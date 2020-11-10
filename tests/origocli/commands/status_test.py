@@ -1,9 +1,9 @@
 import pytest
 from unittest.mock import ANY
 from conftest import set_argv
-from origocli.commands.status import StatusCommand
+from okdata.cli.commands.status import StatusCommand
 from okdata.sdk.status import Status
-from origocli.output import TableOutput
+from okdata.cli.output import TableOutput
 
 
 successful_trace_id = "my-dataset-be0a4c02-9733-4ff8-af1b-cd14985e9e06"

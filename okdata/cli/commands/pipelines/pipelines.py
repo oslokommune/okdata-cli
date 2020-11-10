@@ -2,15 +2,15 @@ import json
 
 from okdata.sdk.pipelines.client import PipelineApiClient
 
-from origocli.command import BaseCommand
-from origocli.commands.pipelines.base import BasePipelinesCommand
-from origocli.commands.pipelines.instances import (
+from okdata.cli.command import BaseCommand
+from okdata.cli.commands.pipelines.base import BasePipelinesCommand
+from okdata.cli.commands.pipelines.instances import (
     PipelineInstances,
     PipelinesLsInstances,
 )
-from origocli.commands.pipelines.schemas import Schemas
-from origocli.commands.pipelines.inputs import PipelinesInputs
-from origocli.output import create_output
+from okdata.cli.commands.pipelines.schemas import Schemas
+from okdata.cli.commands.pipelines.inputs import PipelinesInputs
+from okdata.cli.output import create_output
 
 
 class PipelinesLs(BasePipelinesCommand):
