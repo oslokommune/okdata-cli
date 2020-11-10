@@ -13,16 +13,18 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/oslokommune/okdata-cli/",
-    packages=setuptools.find_packages(".", exclude=["tests*"]),
+    packages=setuptools.find_namespace_packages(
+        include="okdata.cli.*", exclude=["tests*"]
+    ),
     package_data={
-        "okdata.cli": [
-            "data/boilerplate/bin/*",
-            "data/boilerplate/data/*",
-            "data/boilerplate/dataset/*",
-            "data/boilerplate/pipeline/*",
-            "data/boilerplate/pipeline/csv-to-parquet/*",
-            "data/boilerplate/pipeline/data-copy/*",
-            "data/output-format/*",
+        "okdata": [
+            "cli/data/boilerplate/bin/*",
+            "cli/data/boilerplate/data/*",
+            "cli/data/boilerplate/dataset/*",
+            "cli/data/boilerplate/pipeline/*",
+            "cli/data/boilerplate/pipeline/csv-to-parquet/*",
+            "cli/data/boilerplate/pipeline/data-copy/*",
+            "cli/data/output-format/*",
         ],
     },
     install_requires=[
@@ -36,7 +38,7 @@ setuptools.setup(
         "requests",
         "questionary",
     ],
-    entry_points={"console_scripts": ["okdata=bin.cli:main"]},
+    entry_points={"console_scripts": ["okdata=okdata.cli.__main__:main"]},
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Programming Language :: Python :: 3",

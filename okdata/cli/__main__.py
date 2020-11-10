@@ -45,10 +45,10 @@ def main():
                 "A Exception occured",
                 {
                     "error": 1,
-                    "message": "Origo CLI failed with exception, see log output for more information",
+                    "message": "okdata-cli failed with exception, see log output for more information",
                 },
             )
-            instance.log.exception(f"Origo CLI failed with: {e}")
+            instance.log.exception(f"okdata-cli failed with: {e}")
 
     else:
         BaseCommand().help()
