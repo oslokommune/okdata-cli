@@ -3,10 +3,10 @@
 ### Breaking
 
 * Name change
-    - Command changed to `okdata` from `origo`
-    - PyPI package name `okdata-cli`
-    - Repository `okdata-cli`
-    - Python modules moved to `okdata.cli.*` with `okdata` as an implicit namespace
+  - Command changed to `okdata` from `origo`
+  - PyPI package name `okdata-cli`
+  - Repository `okdata-cli`
+  - Python modules moved to `okdata.cli.*` with `okdata` as an implicit namespace
 
 ### Other
 

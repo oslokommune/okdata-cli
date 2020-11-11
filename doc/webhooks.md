@@ -2,7 +2,7 @@
 
 To see all operations available for webhooks:
 ```bash
-origo webhooks -h
+okdata webhooks -h
 ```
 
 Contents:
@@ -19,7 +19,7 @@ Documentation is available on [GitHub](https://oslokommune.github.io/dataplattfo
 Create a new webhook token:
 
 ```bash
-origo webhooks create-token <datasetid> <service>
+okdata webhooks create-token <datasetid> <service>
 ```
 
 
@@ -28,12 +28,12 @@ origo webhooks create-token <datasetid> <service>
 Lists all active webhook tokens for a dataset:
 
 ```bash
-origo webhooks list-tokens <datasetid>
+okdata webhooks list-tokens <datasetid>
 ```
 
 ## Delete token
 Delete (invalidate) specified webhook token:
 
 ```bash
-origo webhooks delete-token <datasetid> <token>
+okdata webhooks delete-token <datasetid> <token>
 ```

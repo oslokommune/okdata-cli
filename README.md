@@ -1,4 +1,4 @@
-# `okdata`: Oslo Origo Dataplatform CLI
+# `okdata-cli`: Oslo Origo Dataplatform CLI
 
 Okdata CLI provides a unified interface to the services provided by Oslo Origo Dataplatform.
 

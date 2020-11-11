@@ -2,7 +2,7 @@
 
 To see all operations available on pipelines:
 ```bash
-origo pipelines -h
+okdata pipelines -h
 ```
 
 Contents:

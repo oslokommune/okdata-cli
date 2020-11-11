@@ -1,4 +1,4 @@
-# Oslo Origo CLI Developer-documentation
+# `okdata-cli` developer-documentation
 
 ## Setup
 
@@ -39,7 +39,7 @@ with the latest version on the `master` branch.
 
 ## Uploading to PyPI
 
-Origo CLI releases are hosted at [PyPI](https://pypi.org/project/okdata-cli/),
+Okdata CLI releases are hosted at [PyPI](https://pypi.org/project/okdata-cli/),
 making it easy to install using `pip install okdata-cli`.
 
 Use the following recipe when uploading a new release to PyPI:
