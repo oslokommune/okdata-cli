@@ -1,19 +1,19 @@
-from origocli.command import BaseCommand, BASE_COMMAND_OPTIONS
-from origocli.output import create_output
+from okdata.cli.command import BaseCommand, BASE_COMMAND_OPTIONS
+from okdata.cli.output import create_output
 
-from origo.status import Status
+from okdata.sdk.status import Status
 
 
 class StatusCommand(BaseCommand):
     __doc__ = f"""Oslo :: Status
 
 Usage:
-  origo status <trace_id> [options --history]
+  okdata status <trace_id> [options --history]
 
 Examples:
-  origo status trace-id-from-system
-  origo status trace-id-from-system --format=json | jq ".done"
-  origo status trace-id-from-system --history
+  okdata status trace-id-from-system
+  okdata status trace-id-from-system --format=json | jq ".done"
+  okdata status trace-id-from-system --history
 
 Options:{BASE_COMMAND_OPTIONS}
   --history

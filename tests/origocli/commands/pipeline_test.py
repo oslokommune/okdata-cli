@@ -1,22 +1,22 @@
 import logging
 
 import requests
-from origo.pipelines.client import PipelineApiClient
-from origo.pipelines.resources.pipeline import Pipeline
-from origo.pipelines.resources.pipeline_instance import PipelineInstance
-from origo.sdk import SDK
+from okdata.sdk.pipelines.client import PipelineApiClient
+from okdata.sdk.pipelines.resources.pipeline import Pipeline
+from okdata.sdk.pipelines.resources.pipeline_instance import PipelineInstance
+from okdata.sdk import SDK
 
 from conftest import set_argv, BASECMD_QUAL
-from origocli.commands.pipelines.pipelines import (
+from okdata.cli.commands.pipelines.pipelines import (
     Pipelines,
     PipelinesCreate,
     PipelinesLs,
 )
-from origocli.commands.pipelines.instances import (
+from okdata.cli.commands.pipelines.instances import (
     PipelinesLsInstances,
     PipelineInstanceLs,
 )
-from origocli.commands.pipelines.schemas import SchemasLs, SchemasCreate
+from okdata.cli.commands.pipelines.schemas import SchemasLs, SchemasCreate
 
 pipeline_qual = f"{Pipeline.__module__}.{Pipeline.__name__}"
 pipeline_client_qual = f"{PipelineApiClient.__module__}.{PipelineApiClient.__name__}"

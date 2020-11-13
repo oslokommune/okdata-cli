@@ -4,14 +4,14 @@ import sys
 from requests.exceptions import HTTPError
 from keycloak.exceptions import KeycloakGetError
 
-from origo.exceptions import ApiAuthenticateError
+from okdata.sdk.exceptions import ApiAuthenticateError
 
-from origocli.command import BaseCommand
-from origocli.commands.datasets import DatasetsCommand
-from origocli.commands.events import EventsCommand
-from origocli.commands.pipelines import Pipelines
-from origocli.commands.status import StatusCommand
-from origocli.commands.webhook_tokens import WebhookTokensCommand
+from okdata.cli.command import BaseCommand
+from okdata.cli.commands.datasets import DatasetsCommand
+from okdata.cli.commands.events import EventsCommand
+from okdata.cli.commands.pipelines import Pipelines
+from okdata.cli.commands.status import StatusCommand
+from okdata.cli.commands.webhook_tokens import WebhookTokensCommand
 
 
 def main():
@@ -45,10 +45,10 @@ def main():
                 "A Exception occured",
                 {
                     "error": 1,
-                    "message": "Origo CLI failed with exception, see log output for more information",
+                    "message": "okdata-cli failed with exception, see log output for more information",
                 },
             )
-            instance.log.exception(f"Origo CLI failed with: {e}")
+            instance.log.exception(f"okdata-cli failed with: {e}")
 
     else:
         BaseCommand().help()

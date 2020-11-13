@@ -1,6 +1,6 @@
-# Oslo Origo CLI
+# `okdata`: Oslo Origo Dataplatform CLI
 
-Origo CLI provides a unified interface to the services provided by Oslo Origo.
+okdata CLI provides a unified interface to the services provided by Oslo Origo Dataplatform.
 
 Contents:
 * [Install/setup](install.md)

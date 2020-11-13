@@ -2,7 +2,7 @@ import pytest
 from types import SimpleNamespace
 from questionary import ValidationError
 
-from origocli.commands.datasets.boilerplate.validator import (
+from okdata.cli.commands.datasets.boilerplate.validator import (
     DateValidator,
     KeywordValidator,
     PhoneValidator,

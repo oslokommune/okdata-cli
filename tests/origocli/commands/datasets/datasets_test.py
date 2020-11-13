@@ -1,11 +1,11 @@
 from datetime import datetime
 
 import pytest
-from origo.data.dataset import Dataset
+from okdata.sdk.data.dataset import Dataset
 
 from conftest import set_argv
-from origocli.commands.datasets import DatasetsCommand
-from origocli.output import TableOutput
+from okdata.cli.commands.datasets import DatasetsCommand
+from okdata.cli.output import TableOutput
 
 DATASETS_CMD_QUAL = f"{DatasetsCommand.__module__}.{DatasetsCommand.__name__}"
 DATASETS_QUAL = f"{Dataset.__module__}.{Dataset.__name__}"

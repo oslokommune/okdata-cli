@@ -2,13 +2,13 @@ import json
 import sys
 
 import pytest
-from origo.exceptions import ApiAuthenticateError
-from origo.sdk import SDK
+from okdata.sdk.exceptions import ApiAuthenticateError
+from okdata.sdk import SDK
 from requests.models import Response
 
-from bin.cli import get_command_class, main
-from origocli.command import generate_error_feedback
-from origocli.commands.datasets import DatasetsCommand
+from okdata.cli.__main__ import get_command_class, main
+from okdata.cli.command import generate_error_feedback
+from okdata.cli.commands.datasets import DatasetsCommand
 
 
 bad_request_response_body = {
@@ -18,18 +18,18 @@ bad_request_response_body = {
 
 
 def test_get_command_class():
-    cmd = get_command_class(["origo", "datasets"])
+    cmd = get_command_class(["okdata", "datasets"])
     assert cmd is DatasetsCommand
 
-    cmd = get_command_class(["origo", "datasets", "create"])
+    cmd = get_command_class(["okdata", "datasets", "create"])
     assert cmd is DatasetsCommand
 
-    cmd = get_command_class(["origo", "datasets", "create", "--file=foo"])
+    cmd = get_command_class(["okdata", "datasets", "create", "--file=foo"])
     assert cmd is DatasetsCommand
 
 
 def test_main_http_error(raise_http_error, capsys):
-    sys.argv = ["origo", "datasets", "create", "--file=foo"]
+    sys.argv = ["okdata", "datasets", "create", "--file=foo"]
     main()
     expected_output = generate_error_feedback(
         bad_request_response_body["message"], bad_request_response_body["errors"]
@@ -38,7 +38,7 @@ def test_main_http_error(raise_http_error, capsys):
 
 
 def test_main_auth_error(auth_failed, capsys):
-    sys.argv = ["origo", "datasets", "create"]
+    sys.argv = ["okdata", "datasets", "create"]
     main()
     captured = capsys.readouterr().out.strip("\n")
     assert "An error occured (ApiAuthenticateError)" in captured

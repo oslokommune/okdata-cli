@@ -1,5 +1,15 @@
 ## ?.?.?
 
+### Breaking
+
+* Name change
+  - Command changed to `okdata` from `origo`
+  - PyPI package name `okdata-cli`
+  - Repository `okdata-cli`
+  - Python modules moved to `okdata.cli.*` with `okdata` as an implicit namespace
+
+### Other
+
 * `origo datasets download` is no longer presented in the `origo datasets` help
   text, since the command is gone. Use `origo datasets cp` instead.
 

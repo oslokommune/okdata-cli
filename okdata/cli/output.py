@@ -13,11 +13,11 @@ def get_script_path():
 
 # Create a output printer
 #
-# Formatting of output is defined in origocli/data/ouput-format.
+# Formatting of output is defined in okdata/cli/data/ouput-format.
 # Each command defines what (from the API response) should be printed, and
 # what the human-readable name should be
 def create_output(format, configfile):
-    datadir = f"{get_script_path()}/../origocli/data/output-format"
+    datadir = f"{get_script_path()}/data/output-format"
     filename = f"{datadir}/{configfile}"
     log.info(f"Creating output format: {format}, from: {filename}")
     with open(filename) as config_file:

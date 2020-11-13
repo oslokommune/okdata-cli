@@ -1,9 +1,9 @@
 import pytest
 from conftest import set_argv
-from origo.event.post_event import PostEvent
-from origo.event.event_stream_client import EventStreamClient
-from origocli.output import TableOutput
-from origocli.commands.events import EventsCommand
+from okdata.sdk.event.post_event import PostEvent
+from okdata.sdk.event.event_stream_client import EventStreamClient
+from okdata.cli.output import TableOutput
+from okdata.cli.commands.events import EventsCommand
 
 
 pipeline_client_qual = f"{PostEvent.__module__}.{PostEvent.__name__}"

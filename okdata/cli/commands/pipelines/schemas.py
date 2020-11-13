@@ -1,13 +1,13 @@
 import json
 
-from origocli.commands.pipelines.base import BasePipelinesCommand
-from origocli.output import create_output
+from okdata.cli.commands.pipelines.base import BasePipelinesCommand
+from okdata.cli.output import create_output
 
 
 class SchemasLs(BasePipelinesCommand):
-    """origo::pipelines::ls
+    """okdata::pipelines::ls
     usage:
-      origo pipelines schemas ls [options]
+      okdata pipelines schemas ls [options]
 
     options:
       -d --debug
@@ -26,8 +26,8 @@ class SchemasLs(BasePipelinesCommand):
 class SchemasCreate(BasePipelinesCommand):
     """
     usage:
-      origo pipelines schemas create - [options]
-      origo pipelines schemas create <file> [options]
+      okdata pipelines schemas create - [options]
+      okdata pipelines schemas create <file> [options]
 
     options:
       -d --debug
@@ -45,9 +45,9 @@ class SchemasCreate(BasePipelinesCommand):
 class Schemas(BasePipelinesCommand):
     """
     usage:
-      origo pipelines schemas [--id=<id>] [options]
-      origo pipelines schemas ls [options]
-      origo pipelines schemas create (<file> | -) [options]
+      okdata pipelines schemas [--id=<id>] [options]
+      okdata pipelines schemas ls [options]
+      okdata pipelines schemas create (<file> | -) [options]
 
     options:
       -d --debug

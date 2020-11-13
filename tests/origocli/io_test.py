@@ -3,7 +3,7 @@ import os
 import pathlib
 import tempfile
 
-from origocli.io import read_json
+from okdata.cli.io import read_json
 
 
 def test_read_json_from_file():

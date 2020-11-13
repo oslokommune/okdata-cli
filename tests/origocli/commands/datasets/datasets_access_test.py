@@ -1,8 +1,8 @@
 from conftest import set_argv
 import pytest
 
-from origocli.commands.datasets import DatasetsCommand
-from origo.dataset_authorizer.simple_dataset_authorizer_client import (
+from okdata.cli.commands.datasets import DatasetsCommand
+from okdata.sdk.dataset_authorizer.simple_dataset_authorizer_client import (
     SimpleDatasetAuthorizerClient,
 )
 

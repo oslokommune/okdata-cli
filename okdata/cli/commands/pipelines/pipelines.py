@@ -1,22 +1,22 @@
 import json
 
-from origo.pipelines.client import PipelineApiClient
+from okdata.sdk.pipelines.client import PipelineApiClient
 
-from origocli.command import BaseCommand
-from origocli.commands.pipelines.base import BasePipelinesCommand
-from origocli.commands.pipelines.instances import (
+from okdata.cli.command import BaseCommand
+from okdata.cli.commands.pipelines.base import BasePipelinesCommand
+from okdata.cli.commands.pipelines.instances import (
     PipelineInstances,
     PipelinesLsInstances,
 )
-from origocli.commands.pipelines.schemas import Schemas
-from origocli.commands.pipelines.inputs import PipelinesInputs
-from origocli.output import create_output
+from okdata.cli.commands.pipelines.schemas import Schemas
+from okdata.cli.commands.pipelines.inputs import PipelinesInputs
+from okdata.cli.output import create_output
 
 
 class PipelinesLs(BasePipelinesCommand):
-    """origo::pipelines::ls
+    """okdata::pipelines::ls
     usage:
-      origo pipelines ls [options]
+      okdata pipelines ls [options]
 
     options:
       -d --debug
@@ -33,8 +33,8 @@ class PipelinesLs(BasePipelinesCommand):
 class PipelinesCreate(BasePipelinesCommand):
     """
     usage:
-      origo pipelines create - [options]
-      origo pipelines create <file> [options]
+      okdata pipelines create - [options]
+      okdata pipelines create <file> [options]
 
     options:
       -d --debug
@@ -51,18 +51,18 @@ class PipelinesCreate(BasePipelinesCommand):
 class Pipelines(BaseCommand):
     """
     usage:
-      origo pipelines --pipeline-arn=<pipeline-arn> [options]
-      origo pipelines instances ls [(<dataset-id> <version>)] [options]
-      origo pipelines instances create (<file> | -) [options]
-      origo pipelines instances wizard
-      origo pipelines ls [options]
-      origo pipelines ls-instances --pipeline-arn=<pipeline-arn> [options]
-      origo pipelines create (<file> | -) [options]
-      origo pipelines schemas [--id=<id>] [options]
-      origo pipelines schemas ls [options]
-      origo pipelines schemas create (<file> | -) [options]
-      origo pipelines inputs ls <pipeline-instance> [options]
-      origo pipelines inputs create (<file> | -) [options]
+      okdata pipelines --pipeline-arn=<pipeline-arn> [options]
+      okdata pipelines instances ls [(<dataset-id> <version>)] [options]
+      okdata pipelines instances create (<file> | -) [options]
+      okdata pipelines instances wizard
+      okdata pipelines ls [options]
+      okdata pipelines ls-instances --pipeline-arn=<pipeline-arn> [options]
+      okdata pipelines create (<file> | -) [options]
+      okdata pipelines schemas [--id=<id>] [options]
+      okdata pipelines schemas ls [options]
+      okdata pipelines schemas create (<file> | -) [options]
+      okdata pipelines inputs ls <pipeline-instance> [options]
+      okdata pipelines inputs create (<file> | -) [options]
 
     options:
       -d --debug

@@ -1,7 +1,7 @@
 import io
 
-from origocli.command import BaseCommand
-from origocli.output import TableOutput
+from okdata.cli.command import BaseCommand
+from okdata.cli.output import TableOutput
 from conftest import set_argv
 
 
@@ -58,8 +58,8 @@ def test_invalid_docopt_for_subcommand():
 class FileCommand(BaseCommand):
     """
     usage:
-        origo datasets -
-        origo datasets --file=<file>
+        okdata datasets -
+        okdata datasets --file=<file>
     """
 
 

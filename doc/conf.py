@@ -17,7 +17,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = "Origo CLI"
+project = "okdata CLI"
 copyright = "2020, Oslo Origo"
 author = "Oslo Origo"
 

@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="origo-cli",
+    name="okdata-cli",
     version="0.6.0",
     author="Oslo Origo",
     author_email="dataplattform@oslo.kommune.no",
@@ -12,17 +12,19 @@ setuptools.setup(
     license="MIT",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/oslokommune/origo-cli/",
-    packages=setuptools.find_packages(".", exclude=["tests*"]),
+    url="https://github.com/oslokommune/okdata-cli/",
+    packages=setuptools.find_namespace_packages(
+        include="okdata.cli.*", exclude=["tests*"]
+    ),
     package_data={
-        "origocli": [
-            "data/boilerplate/bin/*",
-            "data/boilerplate/data/*",
-            "data/boilerplate/dataset/*",
-            "data/boilerplate/pipeline/*",
-            "data/boilerplate/pipeline/csv-to-parquet/*",
-            "data/boilerplate/pipeline/data-copy/*",
-            "data/output-format/*",
+        "okdata": [
+            "cli/data/boilerplate/bin/*",
+            "cli/data/boilerplate/data/*",
+            "cli/data/boilerplate/dataset/*",
+            "cli/data/boilerplate/pipeline/*",
+            "cli/data/boilerplate/pipeline/csv-to-parquet/*",
+            "cli/data/boilerplate/pipeline/data-copy/*",
+            "cli/data/output-format/*",
         ],
     },
     install_requires=[
@@ -30,13 +32,13 @@ setuptools.setup(
         "Sphinx",
         "docopt",
         "inquirer",
-        "origo-sdk-python>=0.3.0",
+        "okdata-sdk",
         "pygments",
         "recommonmark",
         "requests",
         "questionary",
     ],
-    entry_points={"console_scripts": ["origo=bin.cli:main"]},
+    entry_points={"console_scripts": ["okdata=okdata.cli.__main__:main"]},
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Programming Language :: Python :: 3",

@@ -1,4 +1,4 @@
-from origocli.command import BaseCommand
+from okdata.cli.command import BaseCommand
 
 
 class BasePipelinesCommand(BaseCommand):
