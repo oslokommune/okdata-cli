@@ -1,5 +1,7 @@
 # `okdata-cli`: Oslo Origo Dataplatform CLI
 
+NOW WITH GLOBS
+
 Okdata CLI provides a unified interface to the services provided by Oslo Origo Dataplatform.
 
 ```bash
