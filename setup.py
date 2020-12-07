@@ -16,6 +16,7 @@ setuptools.setup(
     packages=setuptools.find_namespace_packages(
         include="okdata.cli.*", exclude=["tests*"]
     ),
+    namespace_packages=["okdata"],
     package_data={
         "okdata": [
             "cli/data/boilerplate/bin/*",
