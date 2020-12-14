@@ -1,3 +1,8 @@
+## ?.?.?
+
+* A pipeline for transforming Excel to CSV is now offered in the dataset
+  creation wizard.
+
 ## 0.8.0
 
 * The `okdata` namespace package now uses the old-style `pkg_resources`
