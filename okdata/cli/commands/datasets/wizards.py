@@ -9,8 +9,8 @@ from okdata.cli.commands.datasets.boilerplate.config import boilerplate_question
 class DatasetCreateWizard:
     """Wizard for the `datasets create` command.
 
-    Creates a new dataset, pipeline, and pipeline input based on the answers
-    from a questionnaire.
+    Creates a new dataset with an optional pipeline based on the answers from a
+    questionnaire.
     """
 
     def __init__(self, command):
@@ -60,18 +60,23 @@ class DatasetCreateWizard:
         dataset_id = dataset["Id"]
         self.command.print(f"Created dataset with ID: {dataset_id}")
 
-        self.command.print("Creating pipeline...")
-        pipeline_client = PipelineApiClient(env=env)
-        pipeline_config = self.pipeline_config(choices["pipeline"], dataset_id, "1")
-        pipeline_id = pipeline_client.create_pipeline_instance(pipeline_config)
-        pipeline_id = pipeline_id.strip('"')  # What's up with these?
-        self.command.print(f"Created pipeline with ID: {pipeline_id}")
+        if choices["pipeline"]:
+            self.command.print("Creating pipeline...")
+            pipeline_client = PipelineApiClient(env=env)
+            pipeline_config = self.pipeline_config(choices["pipeline"], dataset_id, "1")
+            pipeline_id = pipeline_client.create_pipeline_instance(pipeline_config)
+            pipeline_id = pipeline_id.strip('"')  # What's up with these?
+            self.command.print(f"Created pipeline with ID: {pipeline_id}")
 
-        self.command.print("Creating pipeline input...")
-        pipeline_input_config = self.pipeline_input_config(pipeline_id, dataset_id, "1")
-        pipeline_input_id = pipeline_client.create_pipeline_input(pipeline_input_config)
-        pipeline_input_id = pipeline_input_id.strip('"')  # What's up with these?
-        self.command.print(f"Created pipeline input with ID: {pipeline_input_id}")
+            self.command.print("Creating pipeline input...")
+            pipeline_input_config = self.pipeline_input_config(
+                pipeline_id, dataset_id, "1"
+            )
+            pipeline_input_id = pipeline_client.create_pipeline_input(
+                pipeline_input_config
+            )
+            pipeline_input_id = pipeline_input_id.strip('"')  # What's up with these?
+            self.command.print(f"Created pipeline input with ID: {pipeline_input_id}")
 
         self.command.print(
             f"""Done! You may go ahead and upload data to the dataset by running:

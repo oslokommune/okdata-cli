@@ -7,7 +7,14 @@ from .validator import (
     TitleValidator,
 )
 
-available_pipelines = ["data-copy", "csv-to-parquet"]
+pipeline_choices = [
+    Choice("Lagre dataen slik den er", "data-copy"),
+    Choice("Konverter fra CSV til Parquet", "csv-to-parquet"),
+    Choice("Ingen prosessering (krever manuell konfigurasjon av pipeline)", False),
+]
+
+available_pipelines = [c.value for c in pipeline_choices if c.value]
+
 boilerplate_questions = [
     {"type": "text", "name": "title", "message": "Tittel", "validate": TitleValidator},
     {"type": "text", "name": "description", "message": "Beskrivelse"},
@@ -46,6 +53,6 @@ boilerplate_questions = [
         "type": "select",
         "name": "pipeline",
         "message": "Prosessering",
-        "choices": available_pipelines,
+        "choices": pipeline_choices,
     },
 ]

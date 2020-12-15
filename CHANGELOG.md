@@ -3,6 +3,9 @@
 * The `okdata` namespace package now uses the old-style `pkg_resources`
   declaration instead of being an implicit namespace package.
 
+* The dataset creation wizard can now be used to create datasets without a
+  pipeline.
+
 ## 0.7.0
 
 ### Breaking
