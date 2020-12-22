@@ -1,4 +1,4 @@
-## ?.?.?
+## 0.9.0
 
 * A pipeline for transforming Excel to CSV is now offered in the dataset
   creation wizard.
