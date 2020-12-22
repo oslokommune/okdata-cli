@@ -10,6 +10,7 @@ from .validator import (
 pipeline_choices = [
     Choice("Lagre dataen slik den er", "data-copy"),
     Choice("Konverter fra CSV til Parquet", "csv-to-parquet"),
+    Choice("Konverter fra Excel til CSV", "pipeline-excel-to-csv"),
     Choice("Ingen prosessering (krever manuell konfigurasjon av pipeline)", False),
 ]
 
