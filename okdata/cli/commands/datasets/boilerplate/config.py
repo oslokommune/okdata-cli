@@ -1,4 +1,5 @@
 from questionary import Choice, prompt
+from prompt_toolkit.styles import Style
 
 from .validator import (
     KeywordValidator,
@@ -9,6 +10,8 @@ from .validator import (
     SpatialValidator,
     SpatialResolutionValidator,
 )
+
+required_style = Style([("qmark", "fg:red bold")])
 
 pipeline_choices = [
     Choice("Lagre dataen slik den er", "data-copy"),
@@ -24,6 +27,8 @@ def boilerplate_prompt(include_extra_metadata=True):
     boilerplate_questions = [
         {
             "type": "text",
+            "qmark": "*",
+            "style": required_style,
             "name": "title",
             "message": "Tittel",
             "validate": TitleValidator,
@@ -32,6 +37,8 @@ def boilerplate_prompt(include_extra_metadata=True):
         {"type": "text", "name": "objective", "message": "Formål"},
         {
             "type": "text",
+            "qmark": "*",
+            "style": required_style,
             "name": "keywords",
             "message": "Nøkkelord (komma-separert)",
             "validate": KeywordValidator,
@@ -64,6 +71,8 @@ def boilerplate_prompt(include_extra_metadata=True):
         },
         {
             "type": "select",
+            "qmark": "*",
+            "style": required_style,
             "name": "accessRights",
             "message": "Tilgangsnivå",
             "choices": [
@@ -82,12 +91,16 @@ def boilerplate_prompt(include_extra_metadata=True):
         {"type": "text", "name": "name", "message": "Kontaktperson - navn"},
         {
             "type": "text",
+            "qmark": "*",
+            "style": required_style,
             "name": "email",
             "message": "Kontaktperson - epost",
             "validate": SimpleEmailValidator,
         },
         {
             "type": "text",
+            "qmark": "*",
+            "style": required_style,
             "name": "phone",
             "message": "Kontaktperson - telefon",
             "validate": PhoneValidator,
@@ -95,6 +108,8 @@ def boilerplate_prompt(include_extra_metadata=True):
         {"type": "text", "name": "publisher", "message": "Utgiver"},
         {
             "type": "select",
+            "qmark": "*",
+            "style": required_style,
             "name": "pipeline",
             "message": "Prosessering",
             "choices": pipeline_choices,
