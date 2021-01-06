@@ -66,3 +66,56 @@ class KeywordValidator(Validator):
                 message="At least one keyword, each must be at least 3 characters",
                 cursor_position=len(document.text),
             )
+
+
+class StandardsValidator(Validator):
+    def validate(self, document):
+        standards = [x.strip() for x in document.text.split("\n")]
+        if len([x for x in standards if x]) == 0:
+            return True
+        for standard in standards:
+            standard = standard.strip()
+            if len(standard) < 3:
+                raise ValidationError(
+                    message="Each standard reference must be at least 3 characters",
+                    cursor_position=len(document.text),
+                )
+        if len(standards) != len(set(standards)):
+            raise ValidationError(
+                message="Each standard reference must be unique",
+                cursor_position=len(document.text),
+            )
+
+
+class SpatialValidator(Validator):
+    def validate(self, document):
+        locations = [x.strip() for x in document.text.split("\n")]
+        if len([x for x in locations if x]) == 0:
+            return True
+        for location in locations:
+            location = location.strip()
+            if len(location) < 1:
+                raise ValidationError(
+                    message="Each location must be at least 1 character",
+                    cursor_position=len(document.text),
+                )
+        if len(locations) != len(set(locations)):
+            raise ValidationError(
+                message="Each location must be unique",
+                cursor_position=len(document.text),
+            )
+
+
+class SpatialResolutionValidator(Validator):
+    def validate(self, document):
+        if not document.text:
+            return True
+        try:
+            number = float(document.text.replace(",", "."))
+            if number <= 0:
+                raise ValueError
+        except ValueError:
+            raise ValidationError(
+                message="Please enter a positive (decimal) number",
+                cursor_position=len(document.text),
+            )

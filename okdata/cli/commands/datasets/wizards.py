@@ -1,9 +1,8 @@
 from okdata.sdk.data.dataset import Dataset
 from okdata.sdk.pipelines.client import PipelineApiClient
-from questionary import prompt
 
 from okdata.cli.commands.datasets.boilerplate.boilerplate import confidentiality_map
-from okdata.cli.commands.datasets.boilerplate.config import boilerplate_questions
+from okdata.cli.commands.datasets.boilerplate.config import boilerplate_prompt
 
 
 class DatasetCreateWizard:
@@ -20,7 +19,7 @@ class DatasetCreateWizard:
         title = choices["title"]
         access_rights = choices["accessRights"]
 
-        return {
+        config = {
             "title": title,
             "description": choices["description"] or title,
             "keywords": choices["keywords"].split(","),
@@ -34,6 +33,17 @@ class DatasetCreateWizard:
             },
             "publisher": choices["publisher"],
         }
+
+        if choices.get("spatial"):
+            config["spatial"] = choices["spatial"]
+        if choices.get("spatialResolutionInMeters"):
+            config["spatialResolutionInMeters"] = choices["spatialResolutionInMeters"]
+        if choices.get("conformsTo"):
+            config["conformsTo"] = choices["conformsTo"]
+        if choices.get("license"):
+            config["license"] = choices["license"]
+
+        return config
 
     def pipeline_config(self, pipeline_processor_id, dataset_id, version):
         return {
@@ -51,7 +61,7 @@ class DatasetCreateWizard:
 
     def start(self):
         env = self.command.opt("env")
-        choices = prompt(boilerplate_questions)
+        choices = boilerplate_prompt()
 
         self.command.print("Creating dataset...")
         dataset_client = Dataset(env=env)
