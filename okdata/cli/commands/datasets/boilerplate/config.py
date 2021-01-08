@@ -44,13 +44,19 @@ def boilerplate_prompt(include_extra_metadata=True):
             "validate": KeywordValidator,
         },
         {
+            "type": "confirm",
+            "name": "contains_geodata",
+            "message": "Inneholder datasettet geodata?",
+            "default": False,
+        },
+        {
             "type": "text",
             "name": "spatial",
             "message": "Romlig avgrensning (linje-separert)",
             "multiline": True,
             "validate": SpatialValidator,
             "filter": lambda v: [x.strip() for x in v.split("\n") if x],
-            "when": lambda x: include_extra_metadata,
+            "when": lambda x: include_extra_metadata and x["contains_geodata"],
         },
         {
             "type": "text",
@@ -58,7 +64,7 @@ def boilerplate_prompt(include_extra_metadata=True):
             "message": "Romlig oppløsning (i meter)",
             "validate": SpatialResolutionValidator,
             "filter": lambda v: float(v.replace(",", ".")) if v else None,
-            "when": lambda x: include_extra_metadata,
+            "when": lambda x: include_extra_metadata and x["contains_geodata"],
         },
         {
             "type": "text",
