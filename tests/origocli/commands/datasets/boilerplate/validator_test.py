@@ -120,26 +120,28 @@ class TestStandardsValidator:
 
     def test_valid(self):
         self.validate_document({"text": "abc"})
+        self.validate_document({"text": "abc;defg"})
         self.validate_document({"text": "http://www.opengis.net/def/crs/EPSG/0/5972"})
-        self.validate_document({"text": "abc\ndefg"})
+        self.validate_document(
+            {"text": "http://www.opengis.net/def/crs/EPSG/0/5972;https://epsg.io/4326"}
+        )
 
     def test_empty(self):
         self.validate_document({"text": ""})
-        self.validate_document({"text": "\n\n\n"})
 
     def test_min_length(self):
         with pytest.raises(ValidationError):
             self.validate_document({"text": "a"})
         with pytest.raises(ValidationError):
-            self.validate_document({"text": "a\n\nc\nd"})
+            self.validate_document({"text": "a;;c;d"})
         with pytest.raises(ValidationError):
-            self.validate_document({"text": "\n\nc\nd"})
+            self.validate_document({"text": ";;c;d"})
 
     def test_one_invalid_and_one_valid_value(self):
         with pytest.raises(ValidationError):
-            self.validate_document({"text": "a\nstandarddokument"})
+            self.validate_document({"text": "a;standarddokument"})
         with pytest.raises(ValidationError):
-            self.validate_document({"text": "standarddokument\nab"})
+            self.validate_document({"text": "standarddokument;ab"})
 
 
 class TestSpatialValidator:
@@ -150,17 +152,16 @@ class TestSpatialValidator:
 
     def test_valid(self):
         self.validate_document({"text": "Oslo"})
-        self.validate_document({"text": "Oslo Bydel 1\nOslo Bydel 2"})
+        self.validate_document({"text": "Oslo Bydel 1;Oslo Bydel 2"})
 
     def test_empty(self):
         self.validate_document({"text": ""})
-        self.validate_document({"text": "\n\n\n"})
 
     def test_one_invalid_and_one_valid_value(self):
         with pytest.raises(ValidationError):
-            self.validate_document({"text": "Å\n"})
+            self.validate_document({"text": "Å;"})
         with pytest.raises(ValidationError):
-            self.validate_document({"text": "\nÅs"})
+            self.validate_document({"text": ";Ås"})
 
 
 class TestSpatialResolutionValidator:

@@ -70,9 +70,9 @@ class KeywordValidator(Validator):
 
 class StandardsValidator(Validator):
     def validate(self, document):
-        standards = [x.strip() for x in document.text.split("\n")]
-        if len([x for x in standards if x]) == 0:
+        if not document.text.strip():
             return True
+        standards = [x.strip() for x in document.text.split(";")]
         for standard in standards:
             standard = standard.strip()
             if len(standard) < 3:
@@ -89,9 +89,9 @@ class StandardsValidator(Validator):
 
 class SpatialValidator(Validator):
     def validate(self, document):
-        locations = [x.strip() for x in document.text.split("\n")]
-        if len([x for x in locations if x]) == 0:
+        if not document.text.strip():
             return True
+        locations = [x.strip() for x in document.text.split(";")]
         for location in locations:
             location = location.strip()
             if len(location) < 1:

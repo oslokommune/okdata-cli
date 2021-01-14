@@ -52,10 +52,9 @@ def boilerplate_prompt(include_extra_metadata=True):
         {
             "type": "text",
             "name": "spatial",
-            "message": "Romlig avgrensning (linje-separert)",
-            "multiline": True,
+            "message": "Romlig avgrensning (semikolon-separert)",
             "validate": SpatialValidator,
-            "filter": lambda v: [x.strip() for x in v.split("\n") if x],
+            "filter": lambda v: [x.strip() for x in v.split(";") if x.strip()],
             "when": lambda x: include_extra_metadata and x["contains_geodata"],
         },
         {
@@ -69,10 +68,9 @@ def boilerplate_prompt(include_extra_metadata=True):
         {
             "type": "text",
             "name": "conformsTo",
-            "message": "Standarder (linje-separert)",
-            "multiline": True,
+            "message": "I samsvar med standarder (semikolon-separert)",
             "validate": StandardsValidator,
-            "filter": lambda v: [x.strip() for x in v.split("\n") if x],
+            "filter": lambda v: [x.strip() for x in v.split(";") if x.strip()],
             "when": lambda x: include_extra_metadata,
         },
         {
