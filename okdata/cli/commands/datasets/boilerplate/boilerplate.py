@@ -118,7 +118,7 @@ Options:{BASE_COMMAND_OPTIONS}
                 "email": config.get("email"),
                 "phone": config.get("phone"),
             }
-            data["keywords"] = [x.strip() for x in config["keywords"].split(",")]
+            data["keywords"] = [x.strip() for x in config["keywords"].split(";")]
         with open(dataset_file, "w") as outfile:
             json.dump(data, outfile, indent=4)
 

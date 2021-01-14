@@ -40,7 +40,7 @@ def boilerplate_prompt(include_extra_metadata=True):
             "qmark": "*",
             "style": required_style,
             "name": "keywords",
-            "message": "Nøkkelord (komma-separert)",
+            "message": "Nøkkelord (semikolon-separert)",
             "validate": KeywordValidator,
         },
         {

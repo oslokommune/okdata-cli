@@ -97,15 +97,15 @@ class TestKeywordValidator:
 
     def test_too_short_keywords(self):
         with pytest.raises(ValidationError):
-            self.validate_keywords({"text": "ab, cd"})
+            self.validate_keywords({"text": "ab; cd"})
 
     def test_one_valid_and_one_invalid_keyword(self):
         with pytest.raises(ValidationError):
-            self.validate_keywords({"text": "abc, cd"})
+            self.validate_keywords({"text": "abc; cd"})
 
     def test_one_invalid_and_one_valid_keyword(self):
         with pytest.raises(ValidationError):
-            self.validate_keywords({"text": "cd, abc"})
+            self.validate_keywords({"text": "cd; abc"})
 
     def test_empty_keywords(self):
         with pytest.raises(ValidationError):
