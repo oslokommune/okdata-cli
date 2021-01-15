@@ -1,3 +1,4 @@
+import csv
 from questionary import Choice, prompt
 from prompt_toolkit.styles import Style
 
@@ -23,6 +24,13 @@ pipeline_choices = [
 available_pipelines = [c.value for c in pipeline_choices if c.value]
 
 
+def filter_comma_separated(value):
+    values = next(
+        csv.reader([value], delimiter=",", escapechar="\\", skipinitialspace=True)
+    )
+    return [x.strip() for x in values if x.strip()]
+
+
 def boilerplate_prompt(include_extra_metadata=True):
     boilerplate_questions = [
         {
@@ -42,6 +50,7 @@ def boilerplate_prompt(include_extra_metadata=True):
             "name": "keywords",
             "message": "Nøkkelord (semikolon-separert)",
             "validate": KeywordValidator,
+            "filter": lambda v: filter_comma_separated(v),
         },
         {
             "type": "confirm",
@@ -54,7 +63,7 @@ def boilerplate_prompt(include_extra_metadata=True):
             "name": "spatial",
             "message": "Romlig avgrensning (semikolon-separert)",
             "validate": SpatialValidator,
-            "filter": lambda v: [x.strip() for x in v.split(";") if x.strip()],
+            "filter": lambda v: filter_comma_separated(v),
             "when": lambda x: include_extra_metadata and x["contains_geodata"],
         },
         {
@@ -70,7 +79,7 @@ def boilerplate_prompt(include_extra_metadata=True):
             "name": "conformsTo",
             "message": "I samsvar med standarder (semikolon-separert)",
             "validate": StandardsValidator,
-            "filter": lambda v: [x.strip() for x in v.split(";") if x.strip()],
+            "filter": lambda v: filter_comma_separated(v),
             "when": lambda x: include_extra_metadata,
         },
         {

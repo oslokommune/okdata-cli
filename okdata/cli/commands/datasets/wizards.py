@@ -22,7 +22,7 @@ class DatasetCreateWizard:
         config = {
             "title": title,
             "description": choices["description"] or title,
-            "keywords": choices["keywords"].split(";"),
+            "keywords": choices["keywords"],
             "accessRights": access_rights,
             "confidentiality": confidentiality_map[access_rights],
             "objective": choices["objective"] or title,
