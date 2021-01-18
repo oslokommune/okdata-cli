@@ -48,7 +48,7 @@ def boilerplate_prompt(include_extra_metadata=True):
             "qmark": "*",
             "style": required_style,
             "name": "keywords",
-            "message": "Nøkkelord (semikolon-separert)",
+            "message": "Nøkkelord (komma-separert)",
             "validate": KeywordValidator,
             "filter": filter_comma_separated,
         },
@@ -61,7 +61,7 @@ def boilerplate_prompt(include_extra_metadata=True):
         {
             "type": "text",
             "name": "spatial",
-            "message": "Romlig avgrensning (semikolon-separert)",
+            "message": "Romlig avgrensning (komma-separert)",
             "validate": SpatialValidator,
             "filter": filter_comma_separated,
             "when": lambda x: include_extra_metadata and x["contains_geodata"],
@@ -77,7 +77,7 @@ def boilerplate_prompt(include_extra_metadata=True):
         {
             "type": "text",
             "name": "conformsTo",
-            "message": "I samsvar med standarder (semikolon-separert)",
+            "message": "I samsvar med standarder (komma-separert)",
             "validate": StandardsValidator,
             "filter": filter_comma_separated,
             "when": lambda x: include_extra_metadata,
