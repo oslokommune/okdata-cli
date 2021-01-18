@@ -50,7 +50,7 @@ def boilerplate_prompt(include_extra_metadata=True):
             "name": "keywords",
             "message": "Nøkkelord (semikolon-separert)",
             "validate": KeywordValidator,
-            "filter": lambda v: filter_comma_separated(v),
+            "filter": filter_comma_separated,
         },
         {
             "type": "confirm",
@@ -63,7 +63,7 @@ def boilerplate_prompt(include_extra_metadata=True):
             "name": "spatial",
             "message": "Romlig avgrensning (semikolon-separert)",
             "validate": SpatialValidator,
-            "filter": lambda v: filter_comma_separated(v),
+            "filter": filter_comma_separated,
             "when": lambda x: include_extra_metadata and x["contains_geodata"],
         },
         {
@@ -79,7 +79,7 @@ def boilerplate_prompt(include_extra_metadata=True):
             "name": "conformsTo",
             "message": "I samsvar med standarder (semikolon-separert)",
             "validate": StandardsValidator,
-            "filter": lambda v: filter_comma_separated(v),
+            "filter": filter_comma_separated,
             "when": lambda x: include_extra_metadata,
         },
         {
