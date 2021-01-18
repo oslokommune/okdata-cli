@@ -55,14 +55,8 @@ class KeywordValidator(Validator):
             [document.text], delimiter=",", escapechar="\\", skipinitialspace=True
         )
         keywords = [x.strip() for x in next(keywords)]
-        have_valid_keywords = False
-        for keyword in keywords:
-            if len(keyword) >= 3:
-                have_valid_keywords = True
-            else:
-                have_valid_keywords = False
-                break
-        if have_valid_keywords is False or len(keywords) != len(set(keywords)):
+        have_valid_keywords = keywords and all([len(k) >= 3 for k in keywords])
+        if not have_valid_keywords or len(keywords) != len(set(keywords)):
             raise ValidationError(
                 message="At least one keyword, each must be unique and at least 3 characters",
                 cursor_position=len(document.text),
