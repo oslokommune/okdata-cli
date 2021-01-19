@@ -2,6 +2,8 @@
 
 * Add additional metadata fields to dataset creation wizard.
 
+* The `confidentiality` metadata field is now fully replaced by `accessRights`.
+
 ## 0.9.0
 
 * A pipeline for transforming Excel to CSV is now offered in the dataset

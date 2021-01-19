@@ -1,7 +1,6 @@
 from okdata.sdk.data.dataset import Dataset
 from okdata.sdk.pipelines.client import PipelineApiClient
 
-from okdata.cli.commands.datasets.boilerplate.boilerplate import confidentiality_map
 from okdata.cli.commands.datasets.boilerplate.config import boilerplate_prompt
 
 
@@ -24,7 +23,6 @@ class DatasetCreateWizard:
             "description": choices["description"] or title,
             "keywords": choices["keywords"],
             "accessRights": access_rights,
-            "confidentiality": confidentiality_map[access_rights],
             "objective": choices["objective"] or title,
             "contactPoint": {
                 "name": choices["name"],

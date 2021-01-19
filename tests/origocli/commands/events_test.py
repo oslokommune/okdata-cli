@@ -18,7 +18,7 @@ event_stream_item = {
     "id": f"{dataset_id}/{version}",
     "create_raw": True,
     "deleted": False,
-    "confidentiality": "yellow",
+    "accessRights": "restricted",
 }
 subscribable_item = {
     "status": "INACTIVE",

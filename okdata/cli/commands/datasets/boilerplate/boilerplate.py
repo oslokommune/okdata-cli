@@ -8,12 +8,6 @@ from okdata.cli.date import date_now, DATE_METADATA_EDITION_FORMAT
 
 from .config import available_pipelines, boilerplate_prompt
 
-confidentiality_map = {
-    "public": "green",
-    "restricted": "yellow",
-    "non-public": "red",
-}
-
 
 class DatasetsBoilerplateCommand(BaseCommand):
     __doc__ = f"""
@@ -111,7 +105,6 @@ Options:{BASE_COMMAND_OPTIONS}
             data["objective"] = config.get("objective") or title
             access_rights = config.get("accessRights")
             data["accessRights"] = access_rights
-            data["confidentiality"] = confidentiality_map[access_rights]
             data["publisher"] = config.get("publisher")
             data["contactPoint"] = {
                 "name": config.get("name"),

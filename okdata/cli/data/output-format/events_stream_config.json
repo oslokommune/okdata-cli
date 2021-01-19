@@ -7,9 +7,9 @@
       "name": "Raw",
       "key": "create_raw"
   },
-  "Confidentiality": {
-      "name": "Confidentiality",
-      "key": "confidentiality"
+  "AccessRights": {
+      "name": "Access rights",
+      "key": "accessRights"
   },
   "Deleted": {
       "name": "Deleted",
