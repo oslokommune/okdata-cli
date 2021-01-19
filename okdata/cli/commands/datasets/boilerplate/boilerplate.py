@@ -2,12 +2,11 @@ import os
 import re
 import json
 import shutil
-from questionary import prompt
 
 from okdata.cli.command import BaseCommand, BASE_COMMAND_OPTIONS
 from okdata.cli.date import date_now, DATE_METADATA_EDITION_FORMAT
 
-from .config import available_pipelines, boilerplate_questions
+from .config import available_pipelines, boilerplate_prompt
 
 confidentiality_map = {
     "public": "green",
@@ -54,7 +53,7 @@ Options:{BASE_COMMAND_OPTIONS}
         return name
 
     def read_config_from_user(self):
-        config = prompt(boilerplate_questions)
+        config = boilerplate_prompt(include_extra_metadata=False)
         return config
 
     def get_out_dir(self, name):
@@ -119,7 +118,7 @@ Options:{BASE_COMMAND_OPTIONS}
                 "email": config.get("email"),
                 "phone": config.get("phone"),
             }
-            data["keywords"] = [x.strip() for x in config["keywords"].split(",")]
+            data["keywords"] = config["keywords"]
         with open(dataset_file, "w") as outfile:
             json.dump(data, outfile, indent=4)
 

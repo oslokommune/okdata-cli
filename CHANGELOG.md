@@ -1,3 +1,7 @@
+## ?.?.?
+
+* Add additional metadata fields to dataset creation wizard.
+
 ## 0.9.0
 
 * A pipeline for transforming Excel to CSV is now offered in the dataset
