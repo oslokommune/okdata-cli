@@ -28,7 +28,7 @@ def filter_comma_separated(value):
     values = next(
         csv.reader([value], delimiter=",", escapechar="\\", skipinitialspace=True)
     )
-    return [x.strip() for x in values if x.strip()]
+    return [x.strip() for x in values if x]
 
 
 def boilerplate_prompt(include_extra_metadata=True):
@@ -57,6 +57,7 @@ def boilerplate_prompt(include_extra_metadata=True):
             "name": "contains_geodata",
             "message": "Inneholder datasettet geodata?",
             "default": False,
+            "when": lambda x: include_extra_metadata,
         },
         {
             "type": "text",
