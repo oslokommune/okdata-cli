@@ -13,7 +13,7 @@ DATASETS_QUAL = f"{Dataset.__module__}.{Dataset.__name__}"
 dataset = {
     "theme": ["Befolkning og samfunn", "Helse"],
     "publisher": "BBJ (Bydel Bjerke)",
-    "confidentiality": "green",
+    "accessRights": "public",
     "frequency": "Uregelmessig",
     "keywords": [],
     "contactPoint": {"email": "test@test.test"},

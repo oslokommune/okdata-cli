@@ -58,7 +58,6 @@ File: `dataset.json`
     "description": "My dataset description",
     "keywords": ["keyword", "for-indexing"],
     "accessRights": "public",
-    "confidentiality": "green",
     "objective": "The objective for this dataset",
     "contactPoint": {
         "name": "Contact Name",
@@ -89,7 +88,6 @@ File: `dataset_with_parent.json`
     "description": "My dataset description",
     "keywords": ["keyword", "for-indexing"],
     "accessRights": "public",
-    "confidentiality": "green",
     "objective": "The objective for this dataset",
     "contactPoint": {
         "name": "Contact Name",
