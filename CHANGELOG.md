@@ -1,6 +1,6 @@
-## ?.?.?
+## 0.10.0
 
-* Add additional metadata fields to dataset creation wizard.
+* Added additional metadata fields to dataset creation wizard.
 
 * The `confidentiality` metadata field is now fully replaced by `accessRights`.
 
