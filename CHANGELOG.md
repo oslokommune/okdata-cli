@@ -1,3 +1,8 @@
+## ?.?.?
+
+* Authentication is no longer necessary for downloading public ("green")
+  datasets.
+
 ## 0.10.0
 
 * Added additional metadata fields to dataset creation wizard.
