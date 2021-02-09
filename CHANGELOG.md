@@ -1,4 +1,4 @@
-## ?.?.?
+## 0.10.1
 
 * Authentication is no longer necessary for downloading public ("green")
   datasets.
