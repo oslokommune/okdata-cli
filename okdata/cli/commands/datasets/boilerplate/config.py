@@ -34,6 +34,19 @@ def filter_comma_separated(value):
 def boilerplate_prompt(include_extra_metadata=True):
     boilerplate_questions = [
         {
+            "type": "select",
+            "qmark": "*",
+            "style": required_style,
+            "name": "sourceType",
+            "message": "Datakilde",
+            "choices": [
+                Choice("Fil", "file"),
+                Choice("Sanntidsdata", "event"),
+                Choice("Database (krever eget databaseoppsett)", "database"),
+                Choice("Ingen (datasettet skal ikke inneholde data direkte)", "none"),
+            ],
+        },
+        {
             "type": "text",
             "qmark": "*",
             "style": required_style,
@@ -127,6 +140,7 @@ def boilerplate_prompt(include_extra_metadata=True):
             "name": "pipeline",
             "message": "Prosessering",
             "choices": pipeline_choices,
+            "when": lambda x: x["sourceType"] == "file",
         },
     ]
 

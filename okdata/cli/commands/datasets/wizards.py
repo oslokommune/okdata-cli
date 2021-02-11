@@ -23,6 +23,7 @@ class DatasetCreateWizard:
             "description": choices["description"] or title,
             "keywords": choices["keywords"],
             "accessRights": access_rights,
+            "source": {"type": choices["sourceType"]},
             "objective": choices["objective"] or title,
             "contactPoint": {
                 "name": choices["name"],
@@ -68,7 +69,7 @@ class DatasetCreateWizard:
         dataset_id = dataset["Id"]
         self.command.print(f"Created dataset with ID: {dataset_id}")
 
-        if choices["pipeline"]:
+        if choices.get("pipeline"):
             self.command.print("Creating pipeline...")
             pipeline_client = PipelineApiClient(env=env)
             pipeline_config = self.pipeline_config(choices["pipeline"], dataset_id, "1")
@@ -86,9 +87,20 @@ class DatasetCreateWizard:
             pipeline_input_id = pipeline_input_id.strip('"')  # What's up with these?
             self.command.print(f"Created pipeline input with ID: {pipeline_input_id}")
 
-        self.command.print(
-            f"""Done! You may go ahead and upload data to the dataset by running:
+        if choices["sourceType"] == "file":
+            self.command.print(
+                f"""Done! You may go ahead and upload data to the dataset by running:
 
   okdata datasets cp FILE ds:{dataset_id}
 """
-        )
+            )
+        elif choices["sourceType"] == "event":
+            # TODO: Just create the event stream automatically too?
+            self.command.print(
+                f"""Done! You may go ahead and create an event stream:
+
+  okdata events create-stream {dataset_id}
+"""
+            )
+        else:
+            self.command.print("Done!")
