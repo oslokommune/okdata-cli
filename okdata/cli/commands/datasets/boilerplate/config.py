@@ -151,7 +151,7 @@ def boilerplate_prompt(include_extra_metadata=True):
             "name": "pipeline",
             "message": "Prosessering",
             "choices": lambda x: pipeline_choices[x["sourceType"]],
-            "when": lambda x: x["sourceType"] in ["file", "event"],
+            "when": lambda x: x["sourceType"] in pipeline_choices,
         },
     ]
 
