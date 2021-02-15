@@ -100,6 +100,10 @@ class DatasetCreateWizard:
                 f"""Done! You may go ahead and create an event stream:
 
   okdata events create-stream {dataset_id}
+
+And then start sending events:
+
+  okdata events put ds:{dataset_id} --file=FILE
 """
             )
         else:
