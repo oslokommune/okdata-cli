@@ -14,14 +14,25 @@ from .validator import (
 
 required_style = Style([("qmark", "fg:red bold")])
 
-pipeline_choices = [
-    Choice("Lagre dataen slik den er", "data-copy"),
-    Choice("Konverter fra CSV til Parquet", "csv-to-parquet"),
-    Choice("Konverter fra Excel til CSV", "pipeline-excel-to-csv"),
-    Choice("Ingen prosessering (krever manuell konfigurasjon av pipeline)", False),
-]
+pipeline_choices = {
+    "file": [
+        Choice("Lagre dataen slik den er", "data-copy"),
+        Choice("Konverter fra CSV til Parquet", "csv-to-parquet"),
+        Choice("Konverter fra Excel til CSV", "pipeline-excel-to-csv"),
+        Choice("Ingen prosessering (krever manuell konfigurasjon av pipeline)", False),
+    ],
+    "event": [
+        Choice("Bruk dataen slik den er", "event-copy"),
+        Choice("Ingen prosessering (krever manuell konfigurasjon av pipeline)", False),
+    ],
+}
 
-available_pipelines = [c.value for c in pipeline_choices if c.value]
+available_pipelines = [
+    choice.value
+    for category in pipeline_choices.values()
+    for choice in category
+    if choice.value
+]
 
 
 def filter_comma_separated(value):
@@ -33,6 +44,19 @@ def filter_comma_separated(value):
 
 def boilerplate_prompt(include_extra_metadata=True):
     boilerplate_questions = [
+        {
+            "type": "select",
+            "qmark": "*",
+            "style": required_style,
+            "name": "sourceType",
+            "message": "Datakilde",
+            "choices": [
+                Choice("Fil", "file"),
+                Choice("Sanntidsdata", "event"),
+                Choice("Database (krever eget databaseoppsett)", "database"),
+                Choice("Ingen (datasettet skal ikke inneholde data direkte)", "none"),
+            ],
+        },
         {
             "type": "text",
             "qmark": "*",
@@ -126,7 +150,8 @@ def boilerplate_prompt(include_extra_metadata=True):
             "style": required_style,
             "name": "pipeline",
             "message": "Prosessering",
-            "choices": pipeline_choices,
+            "choices": lambda x: pipeline_choices[x["sourceType"]],
+            "when": lambda x: x["sourceType"] in pipeline_choices,
         },
     ]
 

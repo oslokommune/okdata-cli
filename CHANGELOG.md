@@ -1,3 +1,7 @@
+## ?.?.?
+
+* The dataset source type is now selected in the dataset creation wizard.
+
 ## 0.10.1
 
 * Authentication is no longer necessary for downloading public ("green")
