@@ -167,10 +167,11 @@ def test_resolve_dataset_uri():
         "ds:dette-er-1-test/10",
         "ds:dataset-0-100-x-test/1",
         "ds:mange-versjoner/192",
+        "ds:mIxEd-CaSe/1",
     ]:
         cmd.args["<dataset-uri>"] = dataset_uri
         expected_dataset_id, _, expected_version = dataset_uri[3:].partition("/")
-        expected_version = expected_version if expected_version else "1"
+        expected_version = expected_version or "1"
         assert cmd._resolve_dataset_uri() == (expected_dataset_id, expected_version)
 
 
@@ -185,10 +186,11 @@ def test_resolve_dataset_uri_unprefixed():
         "dette-er-1-test/10",
         "dataset-0-100-x-test/1",
         "mange-versjoner/192",
+        "mIxEd-CaSe/1",
     ]:
         cmd.args["<dataset-uri>"] = dataset_uri
         expected_dataset_id, _, expected_version = dataset_uri.partition("/")
-        expected_version = expected_version if expected_version else "1"
+        expected_version = expected_version or "1"
         assert cmd._resolve_dataset_uri() == (expected_dataset_id, expected_version)
 
 

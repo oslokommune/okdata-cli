@@ -201,11 +201,11 @@ Options:{BASE_COMMAND_OPTIONS}
             self.print(f"Events for {dataset_id}", out)
 
     def _resolve_dataset_uri(self):
-        dataset_uri = self.arg("dataset-uri").lower()
+        dataset_uri = self.arg("dataset-uri")
         uri_pattern = r"""
             ^                           # beginning of string
             (?:ds:)?                    # match optional "ds:" prefix (non-capturing group)
-            ([a-z0-9\-]+)               # match and capture dataset id; one or more characters in range a-z/0-9, and "-"
+            ([a-zA-Z0-9\-]+)            # match and capture dataset id; one or more characters in range a-z/A-Z/0-9, and "-"
             (?:\/                       # match optional dataset version (non-capturing group, exclude leading "/")
                 ([1-9]|[1-9][0-9]+)         # match and capture digits > 1 (if present)
             )?
@@ -220,6 +220,6 @@ Options:{BASE_COMMAND_OPTIONS}
 
         [dataset_id, version] = match.groups()
 
-        version = version if version else "1"
+        version = version or "1"
 
         return dataset_id, version

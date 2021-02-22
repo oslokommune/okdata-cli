@@ -1,3 +1,7 @@
+## ?.?.?
+
+* Fixed a bug where event stream creation would result in a "Forbidden" error.
+
 ## 0.10.2
 
 * The dataset source type is now selected in the dataset creation wizard.
