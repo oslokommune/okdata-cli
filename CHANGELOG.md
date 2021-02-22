@@ -1,4 +1,4 @@
-## ?.?.?
+## 0.10.3
 
 * Fixed a bug where event stream creation would result in a "Forbidden" error.
 
