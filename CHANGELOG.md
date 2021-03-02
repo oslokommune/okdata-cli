@@ -1,3 +1,7 @@
+## ?.?.?
+
+* Dataset license is now chosen from a preset list instead of free text.
+
 ## 0.10.3
 
 * Fixed a bug where event stream creation would result in a "Forbidden" error.

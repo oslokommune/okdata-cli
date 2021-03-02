@@ -120,19 +120,43 @@ def boilerplate_prompt(include_extra_metadata=True):
             ],
         },
         {
-            "type": "text",
+            "type": "select",
+            "qmark": "*",
+            "style": required_style,
             "name": "license",
             "message": "Lisens",
-            "filter": lambda v: v.strip(),
+            "choices": [
+                Choice("Uspesifisert (ingen gjenbruk)", ""),
+                Choice(
+                    "Norsk lisens for offentlige data (NLOD) – siste gjeldende versjon",
+                    "https://data.norge.no/nlod/",
+                ),
+                Choice(
+                    "Norsk lisens for offentlige data (NLOD) 2.0",
+                    "https://data.norge.no/nlod/no/2.0/",
+                ),
+                Choice(
+                    "Norsk lisens for offentlige data (NLOD) 1.0",
+                    "https://data.norge.no/nlod/no/1.0/",
+                ),
+                Choice(
+                    "Creative Commons – Navngivelse 4.0 Internasjonal (CC BY 4.0)",
+                    "https://creativecommons.org/licenses/by/4.0/deed.no",
+                ),
+                Choice(
+                    "Creative Commons – Fristatus-erklæring (CC0 1.0 Universal)",
+                    "https://creativecommons.org/publicdomain/zero/1.0/deed.no",
+                ),
+            ],
             "when": lambda x: include_extra_metadata,
         },
-        {"type": "text", "name": "name", "message": "Kontaktperson - navn"},
+        {"type": "text", "name": "name", "message": "Kontaktperson – navn"},
         {
             "type": "text",
             "qmark": "*",
             "style": required_style,
             "name": "email",
-            "message": "Kontaktperson - epost",
+            "message": "Kontaktperson – epost",
             "validate": SimpleEmailValidator,
         },
         {
@@ -140,7 +164,7 @@ def boilerplate_prompt(include_extra_metadata=True):
             "qmark": "*",
             "style": required_style,
             "name": "phone",
-            "message": "Kontaktperson - telefon",
+            "message": "Kontaktperson – telefon",
             "validate": PhoneValidator,
         },
         {"type": "text", "name": "publisher", "message": "Utgiver"},
