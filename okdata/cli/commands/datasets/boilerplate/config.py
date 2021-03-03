@@ -129,23 +129,23 @@ def boilerplate_prompt(include_extra_metadata=True):
                 Choice("Uspesifisert (ingen gjenbruk)", ""),
                 Choice(
                     "Norsk lisens for offentlige data (NLOD) – siste gjeldende versjon",
-                    "https://data.norge.no/nlod/",
+                    "http://data.norge.no/nlod/",
                 ),
                 Choice(
                     "Norsk lisens for offentlige data (NLOD) 2.0",
-                    "https://data.norge.no/nlod/no/2.0/",
+                    "http://data.norge.no/nlod/no/2.0/",
                 ),
                 Choice(
                     "Norsk lisens for offentlige data (NLOD) 1.0",
-                    "https://data.norge.no/nlod/no/1.0/",
+                    "http://data.norge.no/nlod/no/1.0/",
                 ),
                 Choice(
                     "Creative Commons – Navngivelse 4.0 Internasjonal (CC BY 4.0)",
-                    "https://creativecommons.org/licenses/by/4.0/deed.no",
+                    "http://creativecommons.org/licenses/by/4.0/",
                 ),
                 Choice(
                     "Creative Commons – Fristatus-erklæring (CC0 1.0 Universal)",
-                    "https://creativecommons.org/publicdomain/zero/1.0/deed.no",
+                    "http://creativecommons.org/publicdomain/zero/1.0/",
                 ),
             ],
             "when": lambda x: include_extra_metadata,
