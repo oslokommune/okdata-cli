@@ -1,4 +1,4 @@
-## ?.?.?
+## 0.10.4
 
 * Dataset license is now chosen from a preset list instead of free text.
 
