@@ -34,3 +34,9 @@ is-git-clean:
 		echo Git working directory is dirty, aborting >&2; \
 		false; \
 	fi
+
+.PHONY: publish
+publish:
+	username=$$(gopass show dataplatform/websites/pypi.org/origo-dataplatform username) &&\
+	password=$$(gopass show --password dataplatform/websites/pypi.org/origo-dataplatform) &&\
+	python -m twine upload -u $$username -p $$password dist/*
