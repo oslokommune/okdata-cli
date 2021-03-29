@@ -65,3 +65,4 @@ class Schemas(BasePipelinesCommand):
         schema = self.sdk.get_schema(id)
         schema.schema = json.loads(schema.schema)
         self.print(f"Schema for: {id}", schema.__dict__)
+        return None

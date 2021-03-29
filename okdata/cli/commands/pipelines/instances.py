@@ -154,19 +154,6 @@ class PipelineInstanceWizard(BasePipelinesCommand):
 
         questions_2 = [
             inquirer.List("version", message="Select a version", choices=versions),
-            inquirer.Editor(
-                "transformation", message="Provide a transformation object"
-            ),
-            inquirer.Text(
-                "schema-id",
-                message="Use a schema? Please enter schema-id (empty for no schema)",
-                default="",
-            ),
-            inquirer.List(
-                "create-edition",
-                message="Should a new edition be created after this pipeline succeeds? (default: True)",
-                choices=[True, False],
-            ),
         ]
 
         answers.update(inquirer.prompt(questions_2))
@@ -176,9 +163,6 @@ class PipelineInstanceWizard(BasePipelinesCommand):
             id=answers["dataset-id"],
             pipelineArn=answers["pipeline"],
             datasetUri=f"output/{answers['dataset-id']}/{answers['version']}",
-            schemaId=answers["schema-id"],
-            transformation=json.loads(answers["transformation"]),
-            useLatestEdition=not answers["create-edition"],
             taskConfig={},
         ).create()
 

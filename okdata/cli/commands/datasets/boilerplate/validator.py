@@ -114,3 +114,4 @@ class SpatialResolutionValidator(Validator):
                 message="Please enter a positive (decimal) number",
                 cursor_position=len(document.text),
             )
+        return None
