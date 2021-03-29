@@ -27,8 +27,7 @@ Options:{BASE_COMMAND_OPTIONS}
     """
 
     def __init__(self, sdk):
-        super().__init__()
-        self.sdk = sdk
+        super().__init__(sdk)
         self.handler = self.default
 
     def default(self):
