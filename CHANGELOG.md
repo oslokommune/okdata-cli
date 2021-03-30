@@ -1,4 +1,4 @@
-## ?.?.?
+## 0.10.5
 
 * Fixed `okdata pipelines instances wizard`, where an outdated version of `PipelineInstance` was assumed.
 
