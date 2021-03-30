@@ -25,7 +25,7 @@ packaging==20.4           # via sphinx
 prettytable==0.7.2        # via okdata-cli (setup.py), okdata-sdk
 prompt-toolkit==3.0.7     # via questionary
 pyasn1==0.4.8             # via python-jose, rsa
-pygments==2.6.1           # via okdata-cli (setup.py), sphinx
+pygments==2.7.4           # via okdata-cli (setup.py), sphinx
 pyjwt==1.7.1              # via okdata-sdk
 pyparsing==2.4.7          # via packaging
 pyrsistent==0.16.0        # via jsonschema
