@@ -1,3 +1,7 @@
+## ?.?.?
+
+* Fixed `okdata pipelines instances wizard`, where an outdated version of `PipelineInstance` was assumed.
+
 ## 0.10.4
 
 * Dataset license is now chosen from a preset list instead of free text.

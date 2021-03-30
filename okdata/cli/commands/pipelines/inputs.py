@@ -63,3 +63,4 @@ class PipelinesInputs(BasePipelinesCommand):
         schema = self.sdk.get_schema(self.opt("id"))
         schema.schema = json.loads(schema.schema)
         self.pretty_json(schema.__dict__)
+        return None

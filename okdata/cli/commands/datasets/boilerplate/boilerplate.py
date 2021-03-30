@@ -27,8 +27,7 @@ Options:{BASE_COMMAND_OPTIONS}
     """
 
     def __init__(self, sdk):
-        super().__init__()
-        self.sdk = sdk
+        super().__init__(sdk)
         self.handler = self.default
 
     def default(self):
@@ -153,10 +152,9 @@ Options:{BASE_COMMAND_OPTIONS}
 
         if self.opt("file"):
             run_file_path = f"{outdir}/run.sh"
-            run_file = open(run_file_path, "rt")
-            data = run_file.read()
-            data = data.replace("hello_world.csv", self.opt("file"))
-            run_file.close()
+            with open(run_file_path, "rt") as run_file:
+                data = run_file.read()
+                data.replace("hello_world.csv", self.opt("file"))
 
         self.log.info("Done creating boilerplate")
         self.print(f"Boilerplate set up in folder: {outdir}\n")

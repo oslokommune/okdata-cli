@@ -104,7 +104,7 @@ class SpatialValidator(Validator):
 class SpatialResolutionValidator(Validator):
     def validate(self, document):
         if not document.text:
-            return True
+            return None
         try:
             number = float(document.text.replace(",", "."))
             if number <= 0:
@@ -114,3 +114,4 @@ class SpatialResolutionValidator(Validator):
                 message="Please enter a positive (decimal) number",
                 cursor_position=len(document.text),
             )
+        return None

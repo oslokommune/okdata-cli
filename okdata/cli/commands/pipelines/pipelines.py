@@ -70,8 +70,7 @@ class Pipelines(BaseCommand):
     """
 
     def __init__(self):
-        super().__init__()
-        self.sdk = PipelineApiClient()
+        super().__init__(PipelineApiClient())
         self.sdk.login()
         self.handler = self.default
         self.sub_commands = [
