@@ -9,6 +9,7 @@ from okdata.sdk.exceptions import ApiAuthenticateError
 from okdata.cli.command import BaseCommand
 from okdata.cli.commands.datasets import DatasetsCommand
 from okdata.cli.commands.events import EventsCommand
+from okdata.cli.commands.permissions import PermissionsCommand
 from okdata.cli.commands.pipelines import Pipelines
 from okdata.cli.commands.status import StatusCommand
 from okdata.cli.commands.webhook_tokens import WebhookTokensCommand
@@ -60,6 +61,7 @@ def get_command_class(argv):
         "pipelines": Pipelines,
         "events": EventsCommand,
         "status": StatusCommand,
+        "permissions": PermissionsCommand,
         "webhooks": WebhookTokensCommand,
     }
     if argv[1] in commands:

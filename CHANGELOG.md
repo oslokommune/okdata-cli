@@ -1,6 +1,11 @@
+## ?.?.?
+
+* [Permissions][doc/permissoins.md] can now be administered from the CLI.
+
 ## 0.10.5
 
-* Fixed `okdata pipelines instances wizard`, where an outdated version of `PipelineInstance` was assumed.
+* Fixed `okdata pipelines instances wizard`, where an outdated version of
+  `PipelineInstance` was assumed.
 
 ## 0.10.4
 

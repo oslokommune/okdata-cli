@@ -1,0 +1,10 @@
+{
+  "Resource name": {
+    "name": "Resource name",
+    "key": "resource_name"
+  },
+  "Scopes": {
+    "name": "Scopes",
+    "key": "scopes"
+  }
+}

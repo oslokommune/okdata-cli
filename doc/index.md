@@ -10,6 +10,7 @@ Contents:
 * [Events](events.md)
 * [Pipelines](pipelines.md)
 * [Webhooks](webhooks.md)
+* [Permissions](permissions.md)
 
 ## Resources
 * [GitHub pages for Origo Dataplatform](https://oslokommune.github.io/dataplattform/)
