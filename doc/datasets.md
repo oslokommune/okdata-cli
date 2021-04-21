@@ -235,15 +235,7 @@ The target directory will be created if it doesn't already eixst on the local fi
 
 ## Dataset access
 
-Give a user full access rights to a given dataset:
-```bash
-okdata datasets create-access <datasetid> <userid>
-```
-
-Check if you current user/client have access to a given dataset:
-```bash
-okdata datasets check-access <datasetid>
-```
+See [permissions](permissions.md).
 
 ## Boilerplate
 The process of setting up a full dataset, version, edition with a properly configured pipeline that will process your data involves a few steps. A boilerplate command is provided for you to create a full set of files and configurations that will set everything up, all you have to do is to update a few files with the correct information, and you will be up and running in no time.

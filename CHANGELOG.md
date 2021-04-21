@@ -1,3 +1,7 @@
+## ?.?.?
+
+* [Permissions][doc/permissions.md] can now be administered from the CLI.
+
 ## 0.10.6
 
 * Enabled retries for file uploads.

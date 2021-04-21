@@ -1,0 +1,14 @@
+{
+  "User name": {
+    "name": "User name",
+    "key": "user_name"
+  },
+  "User type": {
+    "name": "User type",
+    "key": "user_type"
+  },
+  "Scopes": {
+    "name": "Scopes",
+    "key": "scopes"
+  }
+}
