@@ -1,4 +1,4 @@
-## ?.?.?
+## 0.10.6
 
 * Enabled retries for file uploads.
 
