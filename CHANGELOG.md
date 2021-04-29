@@ -1,6 +1,13 @@
+## ?.?.?
+
+* Enabled retries for file uploads.
+
+* The minimum required version of `okdata-sdk` is now 0.6.3.
+
 ## 0.10.5
 
-* Fixed `okdata pipelines instances wizard`, where an outdated version of `PipelineInstance` was assumed.
+* Fixed `okdata pipelines instances wizard`, where an outdated version of
+  `PipelineInstance` was assumed.
 
 ## 0.10.4
 
