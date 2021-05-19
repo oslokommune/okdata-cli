@@ -1,4 +1,4 @@
-## ?.?.?
+## 0.11.0
 
 * [Permissions][doc/permissions.md] can now be administered from the CLI.
 
