@@ -19,6 +19,7 @@ class BaseCommand:
   okdata status [options]
   okdata pipelines [options]
   okdata events [options]
+  okdata permissions [options]
   okdata webhooks [options]
   okdata -h | --help
 
@@ -27,6 +28,7 @@ Commands available:
   status
   pipelines
   events
+  permissions
   webhooks
 
 Options:{BASE_COMMAND_OPTIONS}

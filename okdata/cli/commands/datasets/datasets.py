@@ -25,8 +25,6 @@ Usage:
   okdata datasets create-version <datasetid> [--file=<file> --format=<format> --env=<env> options]
   okdata datasets create-edition <datasetid> [<versionid>] [--file=<file> --format=<format> --env=<env> options]
   okdata datasets create-distribution <datasetid> [<versionid> <editionid>] [--file=<file> --format=<format> --env=<env> options]
-  okdata datasets create-access <datasetid> <userid> [--format=<format> --env=<env> options]
-  okdata datasets check-access <datasetid> [--format=<format> --env=<env> options]
   okdata datasets boilerplate <name> [--file=<file> --prompt=<prompt> --pipeline=<pipeline> options]
 
 Examples:
@@ -57,11 +55,7 @@ Options:{BASE_COMMAND_OPTIONS}
     # TODO: do a better mapping from rules to commands here...?
     def default(self):
         self.log.info("DatasetsCommand.handle()")
-        if self.cmd("create-access") is True:
-            self.create_access()
-        elif self.cmd("check-access") is True:
-            self.check_access()
-        elif self.arg("datasetid") is None and self.cmd("ls") is True:
+        if self.arg("datasetid") is None and self.cmd("ls") is True:
             self.datasets()
         elif self.arg("datasetid") is None and self.cmd("create") is True:
             if self.opt("file"):
@@ -364,35 +358,3 @@ Options:{BASE_COMMAND_OPTIONS}
         }
         out.add_row(data)
         self.print(f"Downloaded files from dataset: {dataset_id}", out)
-
-    # #################################### #
-    # Access
-    # #################################### #
-    def create_access(self):
-        out = create_output(
-            self.opt("format"), "datasets_dataset_access_create_config.json"
-        )
-        out.output_singular_object = True
-        dataset_id = self.arg("datasetid")
-        principal_id = self.arg("userid")
-        resp = self.simple_dataset_auth_sdk.create_dataset_access(
-            dataset_id, principal_id
-        )
-        data = {
-            "dataset_id": dataset_id,
-            "principal_id": principal_id,
-            "status": resp["message"],
-        }
-        out.add_row(data)
-        self.print("Creating dataset access", out)
-
-    def check_access(self):
-        out = create_output(
-            self.opt("format"), "datasets_dataset_access_check_config.json"
-        )
-        out.output_singular_object = True
-        dataset_id = self.arg("datasetid")
-        resp = self.simple_dataset_auth_sdk.check_dataset_access(dataset_id)
-        data = {"dataset_id": dataset_id, "has_access": resp["access"]}
-        out.add_row(data)
-        self.print("Checking dataset access", out)
