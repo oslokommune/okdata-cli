@@ -38,14 +38,12 @@ jsonschema==3.2.0
     # via okdata-sdk
 markupsafe==1.1.1
     # via jinja2
-okdata-sdk==0.8.1
+okdata-sdk==0.9.0
     # via okdata-cli (setup.py)
 packaging==20.4
     # via sphinx
 prettytable==0.7.2
-    # via
-    #   okdata-cli (setup.py)
-    #   okdata-sdk
+    # via okdata-cli (setup.py)
 prompt-toolkit==3.0.7
     # via questionary
 pyasn1==0.4.8

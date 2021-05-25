@@ -33,7 +33,7 @@ setuptools.setup(
         "Sphinx",
         "docopt",
         "inquirer",
-        "okdata-sdk>=0.8.0",
+        "okdata-sdk>=0.9.0,<1.0.0",
         "pygments",
         "recommonmark",
         "requests",

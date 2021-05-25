@@ -1,3 +1,11 @@
+## ?.?.?
+
+* The new permission API based `WebhookClient` from the SDK is now used instead
+  of the deprecated `SimpleDatasetAuthorizerClient`.
+
+* [Webhook tokens](doc/webhooks.md) are now tied to an operation on a dataset
+  (read, write), instead of a specific service.
+
 ## 0.11.0
 
 * [Permissions](doc/permissions.md) can now be administered from the CLI.
