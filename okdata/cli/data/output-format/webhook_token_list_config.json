@@ -7,9 +7,9 @@
     "name": "Dataset ID",
     "key": "dataset_id"
   },
-  "Service": {
-    "name": "Service",
-    "key": "service"
+  "Operation": {
+    "name": "Operation",
+    "key": "operation"
   },
   "Expiration": {
     "name": "Expires",

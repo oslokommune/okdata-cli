@@ -1,9 +1,6 @@
 from okdata.sdk.data.dataset import Dataset
 from okdata.sdk.data.download import Download
 from okdata.sdk.data.upload import Upload
-from okdata.sdk.dataset_authorizer.simple_dataset_authorizer_client import (
-    SimpleDatasetAuthorizerClient,
-)
 from requests.exceptions import HTTPError
 
 from okdata.cli.command import BaseCommand, BASE_COMMAND_OPTIONS
@@ -47,7 +44,6 @@ Options:{BASE_COMMAND_OPTIONS}
         super().__init__()
         env = self.opt("env")
         self.sdk = Dataset(env=env)
-        self.simple_dataset_auth_sdk = SimpleDatasetAuthorizerClient(env=env)
         self.download = Download(env=env)
         self.handler = self.default
         self.sub_commands = [DatasetsBoilerplateCommand]
