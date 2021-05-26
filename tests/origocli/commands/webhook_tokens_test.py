@@ -5,16 +5,16 @@ from conftest import set_argv
 from okdata.cli.commands.webhook_tokens import WebhookTokensCommand
 
 dataset_id = "some-dataset-id"
-service_name = "some-service-name"
 webhook_token = "27580f43-7674-4033-87e2-285db632903d"
 
 
 def test_create(mock_webhook_client, mocker):
-    set_argv("webhooks", "create-token", dataset_id, service_name)
+    operation = "write"
+    set_argv("webhooks", "create-token", dataset_id, operation)
     cmd = WebhookTokensCommand()
     mocker.spy(cmd.sdk, "create_webhook_token")
     cmd.handler()
-    cmd.sdk.create_webhook_token.assert_called_once_with(dataset_id, service_name)
+    cmd.sdk.create_webhook_token.assert_called_once_with(dataset_id, operation)
 
 
 def test_delete(mock_webhook_client, mocker):
@@ -35,7 +35,7 @@ def test_list_webhook_tokens(mock_webhook_client, mocker):
 
 @pytest.fixture()
 def mock_webhook_client(monkeypatch):
-    def create_webhook_token(self, dataset_id, version):
+    def create_webhook_token(self, dataset_id, operation):
         return {"token": webhook_token}
 
     def delete_webhook_token(self, dataset_id, token):
@@ -47,7 +47,7 @@ def mock_webhook_client(monkeypatch):
                 "token": "7271646a-8530-4ed3-a042-4485fbbd7460",
                 "created_by": "janedoe",
                 "dataset_id": "some-dataset",
-                "service": "service-account-some-service",
+                "operation": "read",
                 "created_at": "2020-07-09T06:57:36+00:00",
                 "expires_at": "2022-07-09T06:57:36+00:00",
                 "is_active": True,
