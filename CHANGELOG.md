@@ -1,4 +1,4 @@
-## ?.?.?
+## 0.12.0
 
 * The new permission API based `WebhookClient` from the SDK is now used instead
   of the deprecated `SimpleDatasetAuthorizerClient`.
