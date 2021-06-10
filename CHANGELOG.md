@@ -1,4 +1,4 @@
-## ?.?.?
+## 0.12.1
 
 * Updated dependencies to fix security vulnerability in urllib3.
 
