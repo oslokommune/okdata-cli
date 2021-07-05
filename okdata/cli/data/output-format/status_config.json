@@ -8,11 +8,16 @@
     "key": "trace_id"
   },
   "runstatus": {
-    "name": "Trace status",
+    "name": "Status",
       "key": "trace_status"
   },
   "status": {
-    "name": "Trace event status",
+    "name": "Event status",
     "key": "trace_event_status"
+  },
+  "errors": {
+    "name": "Error(s)",
+    "key": "errors",
+    "wrap": 50
   }
 }

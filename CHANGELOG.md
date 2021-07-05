@@ -1,6 +1,7 @@
 ## 0.12.1
 
 * Updated dependencies to fix security vulnerability in urllib3.
+* Added support for showing collected error messages in status trace output.
 
 ## 0.12.0
 
