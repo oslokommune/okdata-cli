@@ -110,6 +110,63 @@ def test_pretty_print_success(capsys):
     )
 
 
+def test_pretty_print_wrapped_success(capsys):
+    set_argv("datasets")
+    cmd = BaseCommand()
+    config = {
+        "name": {"name": "name", "key": "name"},
+        "id": {"name": "key", "key": "key", "wrap": 15},
+    }
+    cmd.print_success(
+        TableOutput(config),
+        [{"name": "wrap", "key": "some long text that needs wrapping"}],
+    )
+    captured = capsys.readouterr()
+    assert (
+        captured.out
+        == """+------+----------------+
+| name | key            |
++------+----------------+
+| wrap | some long text |
+|      | that needs     |
+|      | wrapping       |
++------+----------------+
+"""
+    )
+
+
+def test_pretty_print_multiple_wrapped_success(capsys):
+    set_argv("datasets")
+    cmd = BaseCommand()
+    config = {
+        "name": {"name": "name", "key": "name"},
+        "id": {"name": "key", "key": "key", "wrap": 15},
+    }
+    cmd.print_success(
+        TableOutput(config),
+        [
+            {
+                "name": "wrap",
+                "key": ["some longer text that needs wrapping", "even more text here"],
+            }
+        ],
+    )
+    captured = capsys.readouterr()
+    assert (
+        captured.out
+        == """+------+-------------------+
+| name | key               |
++------+-------------------+
+| wrap | - some longer     |
+|      |   text that needs |
+|      |   wrapping        |
+|      | - even more text  |
+|      |   here            |
++------+-------------------+
+"""
+    )
+
+
 def test_help(capsys):
     set_argv("datasets")
     cmd = BaseCommand()
