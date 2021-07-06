@@ -105,9 +105,10 @@ class TableOutput(PrettyTable):
     @staticmethod
     def format_cell_value(value, max_width):
         if isinstance(value, list) and len(value) == 1:
-            value = value[0]
+            value = str(value[0])
 
         if isinstance(value, list):
+            value = [str(v) for v in value]
             if max_width:
                 value = [
                     "\n  ".join(wrap(v, width=max_width)) if len(v) > max_width else v
@@ -115,9 +116,8 @@ class TableOutput(PrettyTable):
                 ]
             value = ["- " + v for v in value]
             value = "  \n".join(value)
-        else:
-            if max_width and len(value) > max_width:
-                value = fill(value, width=max_width)
+        elif max_width and len(value) > max_width:
+            value = fill(value, width=max_width)
         return value
 
 
