@@ -42,7 +42,24 @@ Options:{BASE_COMMAND_OPTIONS}
                 return trace_event
         return trace_events[-1]
 
+    @staticmethod
+    def get_error_messages(trace_events):
+        for event in trace_events:
+            error_messages = []
+            for error in event.get("errors", []):
+                try:
+                    error_messages.append(error["message"]["en"])
+                except (TypeError, KeyError):
+                    pass
+            event["errors"] = error_messages
+        return trace_events
+
     def latest_event_for_status(self, trace_id, trace_events):
+        # Collect errors from all events
+        errors = []
+        for event in trace_events:
+            errors += event.get("errors", [])
+
         latest_event = StatusCommand.find_latest_event(trace_events)
         trace_status = latest_event["trace_status"]
 
@@ -54,6 +71,7 @@ Options:{BASE_COMMAND_OPTIONS}
                 "trace_id": trace_id,
                 "trace_status": trace_status,
                 "trace_event_status": latest_event["trace_event_status"],
+                "errors": errors,
             }
         )
         self.print(f"Status for: {trace_id}", out)
@@ -73,6 +91,7 @@ Options:{BASE_COMMAND_OPTIONS}
         trace_id = self.arg("trace_id")
         self.log.info(f"Looking up status: {trace_id}")
         trace_events = self.sdk.get_status(trace_id)
+        trace_events = StatusCommand.get_error_messages(trace_events)
         if self.opt("history"):
             self.full_history_for_status(trace_id, trace_events)
         else:

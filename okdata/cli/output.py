@@ -1,8 +1,10 @@
 import inspect
-import os
 import json
-from prettytable import PrettyTable
 import logging
+import os
+from textwrap import wrap, fill
+
+from prettytable import PrettyTable
 
 log = logging.getLogger()
 
@@ -84,6 +86,8 @@ class TableOutput(PrettyTable):
         row_data = []
         for key in self.config:
             value = self.get_row_value(row, key)
+            max_width = self.config[key].get("wrap")
+            value = TableOutput.format_cell_value(value, max_width)
             row_data.append(value)
         super().add_row(row_data)
         self.align_rows()
@@ -97,6 +101,24 @@ class TableOutput(PrettyTable):
         for key in self.config:
             name = self.config[key]["name"]
             self.align[name] = "l"
+
+    @staticmethod
+    def format_cell_value(value, max_width):
+        if isinstance(value, list) and len(value) == 1:
+            value = str(value[0])
+
+        if isinstance(value, list):
+            value = [str(v) for v in value]
+            if max_width:
+                value = [
+                    "\n  ".join(wrap(v, width=max_width)) if len(v) > max_width else v
+                    for v in value
+                ]
+            value = ["- " + v for v in value]
+            value = "  \n".join(value)
+        elif max_width and len(value) > max_width:
+            value = fill(value, width=max_width)
+        return value
 
 
 # TODO: merge many outputs to one array of elements when listing a version

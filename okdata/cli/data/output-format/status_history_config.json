@@ -1,8 +1,4 @@
 {
-  "traceid": {
-    "name": "Trace ID",
-    "key": "trace_id"
-  },
   "eventid": {
     "name": "Trace event ID",
     "key": "trace_event_id"
@@ -32,11 +28,16 @@
     "key": "operation"
   },
   "tracestatus": {
-    "name": "Trace status",
+    "name": "Status",
       "key": "trace_status"
   },
   "traceeventstatus": {
-    "name": "Trace event status",
+    "name": "Event status",
     "key": "trace_event_status"
+  },
+  "errors": {
+    "name": "Error(s)",
+    "key": "errors",
+    "wrap": 50
   }
 }
