@@ -45,9 +45,13 @@ Options:{BASE_COMMAND_OPTIONS}
     @staticmethod
     def get_error_messages(trace_events):
         for event in trace_events:
-            if "errors" in event:
-                event["errors"] = [error["message"]["en"] for error in event["errors"]]
-
+            error_messages = []
+            for error in event.get("errors", []):
+                try:
+                    error_messages.append(error["message"]["en"])
+                except (TypeError, KeyError):
+                    pass
+            event["errors"] = error_messages
         return trace_events
 
     def latest_event_for_status(self, trace_id, trace_events):
