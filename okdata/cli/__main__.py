@@ -11,6 +11,7 @@ from okdata.cli.commands.datasets import DatasetsCommand
 from okdata.cli.commands.events import EventsCommand
 from okdata.cli.commands.permissions import PermissionsCommand
 from okdata.cli.commands.pipelines import Pipelines
+from okdata.cli.commands.pubreg import PubregCommand
 from okdata.cli.commands.status import StatusCommand
 from okdata.cli.commands.webhook_tokens import WebhookTokensCommand
 
@@ -58,15 +59,14 @@ def main():
 def get_command_class(argv):
     commands = {
         "datasets": DatasetsCommand,
-        "pipelines": Pipelines,
         "events": EventsCommand,
-        "status": StatusCommand,
         "permissions": PermissionsCommand,
+        "pipelines": Pipelines,
+        "pubreg": PubregCommand,
+        "status": StatusCommand,
         "webhooks": WebhookTokensCommand,
     }
-    if argv[1] in commands:
-        return commands[argv[1]]
-    return False
+    return commands.get(argv[1], False)
 
 
 if __name__ == "__main__":
