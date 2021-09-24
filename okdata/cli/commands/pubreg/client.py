@@ -13,6 +13,11 @@ class PubregClient(SDK):
             "-dev" if self.config.config["env"] == "dev" else ""
         )
 
+    def create_client(self, env, name, scopes):
+        data = {"env": env, "name": name, "description": name, "scopes": scopes}
+        log.info(f"Creating client with payload: {data}")
+        return self.post(f"{self.api_url}/clients", data=data).json()
+
     def get_keys(self, env, client_id):
         url = f"{self.api_url}/clients/{env}/{client_id}/keys"
         log.info(f"Listing keys from: {url}")
