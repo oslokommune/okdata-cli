@@ -19,7 +19,7 @@ Usage:
 
 Examples:
   okdata pubreg create-client
-  okdata pubreg create-key test my-client
+  okdata pubreg create-key test my-client 123456789101 eu-west-1
   okdata pubreg list-keys test my-client
 
 Options:{BASE_COMMAND_OPTIONS}
