@@ -14,10 +14,12 @@ class PubregCommand(BaseCommand):
 
 Usage:
   okdata pubreg create-client [--env=<env>]
+  okdata pubreg create-key <maskinporten-env> <client-id> <aws-account> <aws-region> [--env=<env>]
   okdata pubreg list-keys <maskinporten-env> <client-id> [--env=<env>]
 
 Examples:
   okdata pubreg create-client
+  okdata pubreg create-key test my-client 123456789101 eu-west-1
   okdata pubreg list-keys test my-client
 
 Options:{BASE_COMMAND_OPTIONS}
@@ -30,7 +32,14 @@ Options:{BASE_COMMAND_OPTIONS}
     def handler(self):
         if self.cmd("create-client"):
             self.create_client()
-        if self.cmd("list-keys"):
+        elif self.cmd("create-key"):
+            self.create_client_key(
+                self.arg("maskinporten-env"),
+                self.arg("client-id"),
+                self.arg("aws-account"),
+                self.arg("aws-region"),
+            )
+        elif self.cmd("list-keys"):
             self.list_client_keys(self.arg("maskinporten-env"), self.arg("client-id"))
 
     def create_client(self):
@@ -53,7 +62,17 @@ Options:{BASE_COMMAND_OPTIONS}
             self.client.create_client(env, name, scopes)
             self.print("Done!")
         except HTTPError as e:
-            self.print(f"Something went wrong: {e}")
+            message = e.response.json()["message"]
+            self.print(f"Something went wrong: {message}")
+
+    def create_client_key(self, env, client_id, aws_account, aws_region):
+        try:
+            self.print(f"Creating key for '{client_id}' ({env})...")
+            self.client.create_key(env, client_id, aws_account, aws_region)
+            self.print("Done!")
+        except HTTPError as e:
+            message = e.response.json()["message"]
+            self.print(f"Something went wrong: {message}")
 
     def list_client_keys(self, env, client_id):
         keys = self.client.get_keys(env, client_id)
