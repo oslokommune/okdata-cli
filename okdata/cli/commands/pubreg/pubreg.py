@@ -58,7 +58,7 @@ Options:{BASE_COMMAND_OPTIONS}
             return
 
         try:
-            self.print("Creating '{name}'...")
+            self.print(f"Creating '{name}'...")
             self.client.create_client(env, name, scopes)
             self.print("Done!")
         except HTTPError as e:
