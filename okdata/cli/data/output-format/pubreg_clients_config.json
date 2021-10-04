@@ -1,0 +1,18 @@
+{
+  "Name": {
+    "name": "Name",
+    "key": "client_name"
+  },
+  "ID": {
+    "name": "ID",
+    "key": "client_id"
+  },
+  "Scopes": {
+    "name": "Scopes",
+    "key": "scopes"
+  },
+  "Created": {
+    "name": "Created",
+    "key": "created"
+  }
+}
