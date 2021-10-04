@@ -59,8 +59,9 @@ Options:{BASE_COMMAND_OPTIONS}
 
         try:
             self.print(f"Creating '{name}'...")
-            self.client.create_client(env, name, scopes)
-            self.print("Done!")
+            response = self.client.create_client(env, name, scopes)
+            client_id = response["client_id"]
+            self.print(f"Done! Created a new client with ID '{client_id}'.")
         except HTTPError as e:
             message = e.response.json()["message"]
             self.print(f"Something went wrong: {message}")
