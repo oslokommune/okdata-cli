@@ -18,6 +18,11 @@ class PubregClient(SDK):
         log.info(f"Creating client with payload: {data}")
         return self.post(f"{self.api_url}/clients", data=data).json()
 
+    def get_clients(self, env):
+        url = f"{self.api_url}/clients/{env}"
+        log.info(f"Listing clients from: {url}")
+        return self.get(url).json()
+
     def create_key(self, env, client_id, aws_account, aws_region):
         url = f"{self.api_url}/clients/{env}/{client_id}/keys"
         log.info(f"Creating key for: {url}")

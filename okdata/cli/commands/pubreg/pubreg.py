@@ -14,11 +14,13 @@ class PubregCommand(BaseCommand):
 
 Usage:
   okdata pubreg create-client [--env=<env>]
+  okdata pubreg list-clients <maskinporten-env> [--env=<env>]
   okdata pubreg create-key <maskinporten-env> <client-id> <aws-account> <aws-region> [--env=<env>]
   okdata pubreg list-keys <maskinporten-env> <client-id> [--env=<env>]
 
 Examples:
   okdata pubreg create-client
+  okdata pubreg list-clients test
   okdata pubreg create-key test my-client 123456789101 eu-west-1
   okdata pubreg list-keys test my-client
 
@@ -32,6 +34,8 @@ Options:{BASE_COMMAND_OPTIONS}
     def handler(self):
         if self.cmd("create-client"):
             self.create_client()
+        elif self.cmd("list-clients"):
+            self.list_clients(self.arg("maskinporten-env"))
         elif self.cmd("create-key"):
             self.create_client_key(
                 self.arg("maskinporten-env"),
@@ -65,6 +69,12 @@ Options:{BASE_COMMAND_OPTIONS}
         except HTTPError as e:
             message = e.response.json()["message"]
             self.print(f"Something went wrong: {message}")
+
+    def list_clients(self, env):
+        clients = self.client.get_clients(env)
+        out = create_output(self.opt("format"), "pubreg_clients_config.json")
+        out.add_rows(sorted(clients, key=itemgetter("client_name")))
+        self.print(f"Clients in ({env}):", out)
 
     def create_client_key(self, env, client_id, aws_account, aws_region):
         try:
