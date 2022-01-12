@@ -1,10 +1,11 @@
-name: GitHub Commit To Trello Comment
+name: GitHub Commit To Trello
 
 on: [push, pull_request]
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: ${{ github.actor != 'dependabot[bot]' }}   # Don't run this action if actor is dependabot
 
     steps:
       - uses: actions/checkout@v2
