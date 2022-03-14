@@ -14,8 +14,7 @@ _teams = [
     ("Min Side", "min-side"),
     ("Oslonøkkelen", "oslonokkelen"),
     ("Proaktive meldinger", "proaktive-meldinger"),
-    ("Skjema Studio", "skjema-studio"),
-    ("Skjemautvikling", "skjemautvikling"),
+    ("Skjema", "skjema"),
     ("Veiviser", "veiviser"),
 ]
 
