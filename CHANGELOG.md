@@ -1,3 +1,7 @@
+## ?.?.?
+
+* Display okdata-cli version in the help text.
+
 ## 0.13.0
 
 * Added support for showing collected error messages in status trace output.
