@@ -14,7 +14,15 @@ BASE_COMMAND_OPTIONS = """
 
 
 class BaseCommand:
-    __doc__ = f"""usage:
+    version = "0.13.0"
+    # TODO: Can use `importlib` in Python 3.8 and up instead of hard coding the
+    #       version here:
+    #
+    # version = importlib.metadata.version("okdata-cli")
+
+    __doc__ = f"""okdata-cli {version}
+
+usage:
   okdata datasets [options]
   okdata status [options]
   okdata pipelines [options]
