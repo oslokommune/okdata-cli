@@ -2,6 +2,8 @@
 
 * Display okdata-cli version in the help text.
 
+* Dropped support for Python 3.6 which reached end-of-life in December 2021.
+
 ## 0.13.0
 
 * Added support for showing collected error messages in status trace output.

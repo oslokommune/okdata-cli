@@ -4,7 +4,7 @@ Contents:
 * [Installing Python 3.7 on Ubuntu 18.04](#installing-python-3-7-on-ubuntu-18-04)
 
 ## Installing Python 3.7 on Ubuntu 18.04
-Okdata CLI requires at least Python 3.6 to run, but if you have Ubuntu 18.04, where 3.6 is installed by default, you can upgrade to the latest 3.7 version if you choose to.
+Okdata CLI requires at least Python 3.7 to run, but if you have Ubuntu 18.04, where 3.6 is installed by default, you can upgrade to the latest 3.7 version if you choose to.
 
 ### Install from source
 To install Python 3.7 from source on Ubuntu 18.04 follow these steps. This will install buildtools, the required libraries and python-virtualenv to run Okdata CLI in.
