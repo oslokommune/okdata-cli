@@ -3,7 +3,7 @@
 ## Requirements
 Okdata CLI requires the following to run:
 
-* Python 3.6 or higher
+* Python 3.7 or higher
 * `make` and build tools for installing Python modules; see output from `make init` below to see any other requirements you must install in order to install Okdata CLI
 
 In addition it is recommended to use a tool like `jq` to parse and make automated decisions based on output.
