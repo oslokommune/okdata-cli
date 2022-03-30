@@ -11,6 +11,7 @@ Contents:
 * [Pipelines](pipelines.md)
 * [Webhooks](webhooks.md)
 * [Permissions](permissions.md)
+* [Public registers](pubreg.md)
 
 ## Resources
 * [GitHub pages for Origo Dataplatform](https://oslokommune.github.io/dataplattform/)

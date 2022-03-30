@@ -29,6 +29,7 @@ usage:
   okdata events [options]
   okdata permissions [options]
   okdata webhooks [options]
+  okdata pubreg [options]
   okdata -h | --help
 
 Commands available:
@@ -38,6 +39,7 @@ Commands available:
   events
   permissions
   webhooks
+  pubreg
 
 Options:{BASE_COMMAND_OPTIONS}
 """

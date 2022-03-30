@@ -12,6 +12,7 @@ usage:
   okdata events [options]
   okdata permissions [options]
   okdata webhooks [options]
+  okdata pubreg [options]
   okdata -h | --help
 ```
 
