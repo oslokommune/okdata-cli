@@ -30,9 +30,9 @@ accessing a public register:
 okdata pubreg create-client
 ```
 
-Examples values from the wizard:
+Example values from the wizard:
 
-![Examples values from the wizard](img/pubreg-wizard.png)
+![Example values from the wizard](img/pubreg-wizard.png)
 
 ## Listing clients
 
