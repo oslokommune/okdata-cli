@@ -3,17 +3,16 @@ import json
 from okdata.sdk.pipelines.client import PipelineApiClient
 
 from okdata.cli.command import BaseCommand
-from okdata.cli.commands.pipelines.base import BasePipelinesCommand
+from okdata.cli.commands.pipelines.inputs import PipelinesInputs
 from okdata.cli.commands.pipelines.instances import (
     PipelineInstances,
     PipelinesLsInstances,
 )
 from okdata.cli.commands.pipelines.schemas import Schemas
-from okdata.cli.commands.pipelines.inputs import PipelinesInputs
 from okdata.cli.output import create_output
 
 
-class PipelinesLs(BasePipelinesCommand):
+class PipelinesLs(BaseCommand):
     """okdata::pipelines::ls
     usage:
       okdata pipelines ls [options]
@@ -23,14 +22,14 @@ class PipelinesLs(BasePipelinesCommand):
       --format=<format>
     """
 
-    def default(self):
+    def handler(self):
         out = create_output(self.opt("format"), "pipelines_config.json")
         pipelines = self.sdk.get_pipelines()
         out.add_rows(pipelines)
         self.print("Available pipelines", out)
 
 
-class PipelinesCreate(BasePipelinesCommand):
+class PipelinesCreate(BaseCommand):
     """
     usage:
       okdata pipelines create - [options]
@@ -41,7 +40,7 @@ class PipelinesCreate(BasePipelinesCommand):
       --format=<format>
     """
 
-    def default(self):
+    def handler(self):
         content = self.handle_input()
         obj = json.loads(content)
         self.sdk.create_pipeline(obj)
@@ -72,7 +71,6 @@ class Pipelines(BaseCommand):
     def __init__(self):
         super().__init__(PipelineApiClient)
         self.sdk.login()
-        self.handler = self.default
         self.sub_commands = [
             PipelinesLs,
             PipelinesCreate,
@@ -82,7 +80,7 @@ class Pipelines(BaseCommand):
             Schemas,
         ]
 
-    def default(self):
+    def handler(self):
         arn = self.args.get("--pipeline-arn")
         pipeline = self.sdk.get_pipeline(arn)
         if self.opt("format") == "json":

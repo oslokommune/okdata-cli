@@ -1,10 +1,10 @@
 import json
 
-from okdata.cli.commands.pipelines.base import BasePipelinesCommand
+from okdata.cli.command import BaseCommand
 from okdata.cli.output import create_output
 
 
-class PipelinesInputsLs(BasePipelinesCommand):
+class PipelinesInputsLs(BaseCommand):
     """
     usage:
       okdata pipelines inputs ls <pipeline-instance> [options]
@@ -14,7 +14,7 @@ class PipelinesInputsLs(BasePipelinesCommand):
       --format=<format>
     """
 
-    def default(self):
+    def handler(self):
         out = create_output(
             self.opt("format"), "pipelines_instances_inputs_config.json"
         )
@@ -24,7 +24,7 @@ class PipelinesInputsLs(BasePipelinesCommand):
         self.print("Available pipepline inputs", out)
 
 
-class PipelinesInputsCreate(BasePipelinesCommand):
+class PipelinesInputsCreate(BaseCommand):
     """
     usage:
       okdata pipelines inputs create - [options]
@@ -35,14 +35,14 @@ class PipelinesInputsCreate(BasePipelinesCommand):
       --format=<format>
     """
 
-    def default(self):
+    def handler(self):
         content = self.handle_input()
         data = json.loads(content)
         self.sdk.create_pipeline_input(data)
         self.print(f"Created input with dataset URI: {data['datasetUri']}", data)
 
 
-class PipelinesInputs(BasePipelinesCommand):
+class PipelinesInputs(BaseCommand):
     """
     usage:
       okdata pipelines inputs ls <pipeline-instance> [options]
@@ -57,7 +57,7 @@ class PipelinesInputs(BasePipelinesCommand):
         super().__init__(sdk)
         self.sub_commands = [PipelinesInputsLs, PipelinesInputsCreate]
 
-    def default(self):
+    def handler(self):
         if self.opt("help"):
             return self.help()
         schema = self.sdk.get_schema(self.opt("id"))

@@ -43,11 +43,9 @@ Commands available:
 
 Options:{BASE_COMMAND_OPTIONS}
 """
-
     log = logging.getLogger(__name__)
-    sub_commands = None
+    sub_commands = []
     args: dict
-    handler: ()
 
     def __init__(self, sdk=SDK):
         self.args = docopt(str(self.__doc__))
@@ -58,20 +56,16 @@ Options:{BASE_COMMAND_OPTIONS}
 
     def handle(self):
         self.args = docopt(str(self.__doc__))
-        if self.sub_commands:
-            for cmd in self.sub_commands:
-                try:
-                    self.log.debug(f"Checking if sub_command '{cmd.__name__}' is valid")
-                    return cmd(self.sdk.__class__).handle()
-                except DocoptExit as d:
-                    self.log.debug(d.usage)
-                    continue
-
-        if not hasattr(self, "handler"):
-            self.log.info("command was implemented without a default handler")
-            print(self.__doc__)
-            return None
+        for cmd in self.sub_commands:
+            try:
+                self.log.debug(f"Checking if sub_command '{cmd.__name__}' is valid")
+                return cmd(self.sdk.__class__).handle()
+            except DocoptExit as d:
+                self.log.debug(d.usage)
         return self.handler()
+
+    def handler(self):
+        raise NotImplementedError("Missing handler")
 
     def cmd(self, key):
         return self.args.get(key)

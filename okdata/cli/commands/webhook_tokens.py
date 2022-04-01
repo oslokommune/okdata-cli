@@ -23,9 +23,8 @@ Options:{BASE_COMMAND_OPTIONS}
 
     def __init__(self):
         super().__init__(WebhookClient)
-        self.handler = self.default
 
-    def default(self):
+    def handler(self):
         dataset_id = self.arg("datasetid")
 
         if self.cmd("create-token"):
