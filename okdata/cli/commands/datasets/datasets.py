@@ -41,10 +41,8 @@ Options:{BASE_COMMAND_OPTIONS}
     """
 
     def __init__(self):
-        super().__init__()
-        env = self.opt("env")
-        self.sdk = Dataset(env=env)
-        self.download = Download(env=env)
+        super().__init__(Dataset)
+        self.download = Download(env=self.opt("env"))
         self.handler = self.default
         self.sub_commands = [DatasetsBoilerplateCommand]
 

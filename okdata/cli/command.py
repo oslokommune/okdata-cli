@@ -49,13 +49,12 @@ Options:{BASE_COMMAND_OPTIONS}
     args: dict
     handler: ()
 
-    def __init__(self, sdk=None):
+    def __init__(self, sdk=SDK):
         self.args = docopt(str(self.__doc__))
-        self.sdk = sdk
+        self.sdk = sdk(env=self.opt("env"))
+
         if self.opt("debug"):
             logging.basicConfig(level=logging.DEBUG)
-        if self.sdk is None:
-            self.sdk = SDK(env=self.opt("env"))
 
     def handle(self):
         self.args = docopt(str(self.__doc__))
@@ -63,7 +62,7 @@ Options:{BASE_COMMAND_OPTIONS}
             for cmd in self.sub_commands:
                 try:
                     self.log.debug(f"Checking if sub_command '{cmd.__name__}' is valid")
-                    return cmd(self.sdk).handle()
+                    return cmd(self.sdk.__class__).handle()
                 except DocoptExit as d:
                     self.log.debug(d.usage)
                     continue

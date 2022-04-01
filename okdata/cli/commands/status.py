@@ -20,9 +20,7 @@ Options:{BASE_COMMAND_OPTIONS}
     """
 
     def __init__(self):
-        super().__init__()
-        env = self.opt("env")
-        self.sdk = Status(env=env)
+        super().__init__(Status)
         self.handler = self.default
 
     def login(self):

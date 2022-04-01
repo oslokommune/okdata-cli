@@ -21,7 +21,7 @@ from okdata.cli.commands.pipelines.schemas import SchemasLs, SchemasCreate
 pipeline_qual = f"{Pipeline.__module__}.{Pipeline.__name__}"
 pipeline_client_qual = f"{PipelineApiClient.__module__}.{PipelineApiClient.__name__}"
 
-sdk = PipelineApiClient()
+sdk = PipelineApiClient
 
 
 def _HTTPError400():
@@ -83,7 +83,6 @@ class TestCreate:
     def test_handler_with_create_error(self, mocker):
         set_argv("pipelines", "create", "something.json", "--format=json")
 
-        sdk = PipelineApiClient()
         mocker.patch(
             "builtins.open",
             mocker.mock_open(
@@ -110,7 +109,7 @@ class TestPipelinesLs:
         set_argv("pipelines", "ls")
         list = mocker.patch(f"{pipeline_client_qual}.list")
         print = mocker.patch(f"{BASECMD_QUAL}.print")
-        PipelinesLs(PipelineApiClient()).handler()
+        PipelinesLs(sdk).handler()
         assert list.called
         assert print.called
 
