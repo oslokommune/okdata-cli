@@ -43,13 +43,10 @@ Options:{BASE_COMMAND_OPTIONS}
     """
 
     def __init__(self):
-        super().__init__()
+        super().__init__(EventStreamClient)
         env = self.opt("env")
-
-        self.sdk = EventStreamClient(env=env)
         self.post_event_sdk = PostEvent(env=env)
         self.esq_sdk = ElasticsearchQueries(env=env)
-
         self.handler = self.default
 
     def default(self):

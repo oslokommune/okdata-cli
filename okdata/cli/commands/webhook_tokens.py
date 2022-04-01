@@ -22,9 +22,7 @@ Options:{BASE_COMMAND_OPTIONS}
     """
 
     def __init__(self):
-        super().__init__()
-        env = self.opt("env")
-        self.sdk = WebhookClient(env=env)
+        super().__init__(WebhookClient)
         self.handler = self.default
 
     def default(self):
