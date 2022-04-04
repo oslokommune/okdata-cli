@@ -56,10 +56,9 @@ Options:{BASE_COMMAND_OPTIONS}
 
         name = f"{team}-{provider}-{env}-{uuid.uuid4()}"
 
-        self.print(f"Will create a new client '{name}' in {env} with scopes {scopes}.")
-        if input("Continue? [y/N]: ") != "y":
-            self.print("Aborted")
-            return
+        self.confirm_to_continue(
+            f"Will create a new client '{name}' in {env} with scopes {scopes}."
+        )
 
         try:
             self.print(f"Creating '{name}'...")
@@ -77,6 +76,12 @@ Options:{BASE_COMMAND_OPTIONS}
         self.print(f"Clients in ({env}):", out)
 
     def create_client_key(self, env, client_id, aws_account, aws_region):
+        self.confirm_to_continue(
+            "WARNING: Due to how Maskinporten works, the expiration date of "
+            "every existing key will be updated to today's date when creating "
+            "a new key.\n  (Digdir is looking into a fix for this issue.)"
+        )
+
         try:
             self.print(f"Creating key for '{client_id}' ({env})...")
             self.client.create_key(env, client_id, aws_account, aws_region)

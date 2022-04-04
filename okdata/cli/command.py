@@ -103,6 +103,16 @@ Options:{BASE_COMMAND_OPTIONS}
             else:
                 print(payload)
 
+    def confirm_to_continue(self, message):
+        """Ask the user for confirmation before continuing.
+
+        Any answer other than "y" will exit the program.
+        """
+        self.print(message)
+        if input("Continue? [y/N]: ") != "y":
+            self.print("Abort.")
+            sys.exit()
+
     def login(self):
         self.sdk.login()
 
