@@ -1,3 +1,5 @@
+import re
+
 from prompt_toolkit.styles import Style
 from questionary import Choice, prompt
 
@@ -74,6 +76,17 @@ class ClientCreateWizard:
                     "choices": [Choice(*p) for p in _providers],
                 },
                 {
+                    "type": "text",
+                    "qmark": "*",
+                    "style": required_style,
+                    "name": "integration",
+                    "message": "Component/integration name",
+                    "validate": (
+                        lambda text: bool(re.fullmatch("[0-9a-z-]+", text))
+                        or 'Only lowercase letters, numbers and "-", please'
+                    ),
+                },
+                {
                     "type": "checkbox",
                     "qmark": "*",
                     "style": required_style,
@@ -97,6 +110,7 @@ class ClientCreateWizard:
 
         return {
             "provider": choices["provider"],
+            "integration": choices["integration"],
             "scopes": choices["scopes"],
             "environment": choices["environment"],
             "team": choices.get("team"),

@@ -1,4 +1,3 @@
-import uuid
 from operator import itemgetter
 
 from requests.exceptions import HTTPError
@@ -51,10 +50,11 @@ Options:{BASE_COMMAND_OPTIONS}
 
         team = config["team"]
         provider = config["provider"]
+        integration = config["integration"]
         env = config["environment"]
         scopes = config["scopes"]
 
-        name = f"{team}-{provider}-{env}-{uuid.uuid4()}"
+        name = f"{team}-{provider}-{integration}"
 
         self.confirm_to_continue(
             f"Will create a new client '{name}' in {env} with scopes {scopes}."
