@@ -43,11 +43,10 @@ Options:{BASE_COMMAND_OPTIONS}
     def __init__(self):
         super().__init__(Dataset)
         self.download = Download(env=self.opt("env"))
-        self.handler = self.default
         self.sub_commands = [DatasetsBoilerplateCommand]
 
     # TODO: do a better mapping from rules to commands here...?
-    def default(self):
+    def handler(self):
         self.log.info("DatasetsCommand.handle()")
         if self.arg("datasetid") is None and self.cmd("ls") is True:
             self.datasets()

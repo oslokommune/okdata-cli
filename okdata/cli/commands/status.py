@@ -1,7 +1,7 @@
+from okdata.sdk.status import Status
+
 from okdata.cli.command import BaseCommand, BASE_COMMAND_OPTIONS
 from okdata.cli.output import create_output
-
-from okdata.sdk.status import Status
 
 
 class StatusCommand(BaseCommand):
@@ -21,13 +21,12 @@ Options:{BASE_COMMAND_OPTIONS}
 
     def __init__(self):
         super().__init__(Status)
-        self.handler = self.default
 
     def login(self):
         self.sdk.login()
 
-    def default(self):
-        self.log.info("StatusCommand.default()")
+    def handler(self):
+        self.log.info("StatusCommand.handler()")
         if self.arg("trace_id"):
             self.status_for_id()
         else:

@@ -1,5 +1,7 @@
 import io
 
+import pytest
+
 from okdata.cli.command import BaseCommand
 from okdata.cli.output import TableOutput
 from conftest import set_argv
@@ -20,8 +22,8 @@ def test_docopt():
 
 def test_cmd_empty_handler():
     set_argv("datasets", "--debug", "--format", "yaml")
-    cmd = BaseCommand()
-    assert cmd.handle() is None
+    with pytest.raises(NotImplementedError):
+        BaseCommand().handle()
 
 
 def test_cmd_with_handler():
@@ -37,7 +39,9 @@ def test_cmd_with_sub_command():
     sub_cmd = BaseCommand
     cmd.sub_commands = [sub_cmd]
     cmd.handler = lambda: True
-    assert cmd.handle() is None
+
+    with pytest.raises(NotImplementedError):
+        cmd.handle()
 
 
 def test_invalid_docopt_for_subcommand():

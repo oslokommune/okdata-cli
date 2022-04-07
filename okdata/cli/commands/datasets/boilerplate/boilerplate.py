@@ -26,11 +26,7 @@ Options:{BASE_COMMAND_OPTIONS}
   --pipeline=<pipeline>  # Required when --prompt=no
     """
 
-    def __init__(self, sdk):
-        super().__init__(sdk)
-        self.handler = self.default
-
-    def default(self):
+    def handler(self):
         if self.opt("prompt") == "no":
             self.boilerplate_no_prompt()
         else:

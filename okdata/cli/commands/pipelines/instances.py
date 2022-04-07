@@ -1,15 +1,15 @@
 import json
+
 import inquirer
 from inquirer.errors import ValidationError
-
 from okdata.sdk.data.dataset import Dataset
 from okdata.sdk.pipelines.resources.pipeline_instance import PipelineInstance
 
-from okdata.cli.commands.pipelines.base import BasePipelinesCommand
+from okdata.cli.command import BaseCommand
 from okdata.cli.output import create_output
 
 
-class PipelinesLsInstances(BasePipelinesCommand):
+class PipelinesLsInstances(BaseCommand):
     """
     usage: okdata pipelines ls-instances --pipeline-arn=<pipeline-arn> [options]
 
@@ -18,7 +18,7 @@ class PipelinesLsInstances(BasePipelinesCommand):
 
     """
 
-    def default(self):
+    def handler(self):
         out = create_output(self.opt("format"), "pipelines_instances_config.json")
         arn = self.opt("pipeline-arn")
         instances, error = self.sdk.get_pipeline(arn).list_instances()
@@ -30,7 +30,7 @@ class PipelinesLsInstances(BasePipelinesCommand):
         self.print(f"Instances with arn: {arn}", out)
 
 
-class PipelineInstanceLs(BasePipelinesCommand):
+class PipelineInstanceLs(BaseCommand):
     """usage:
       okdata pipelines instances ls [(<dataset-id> <version>)] [options]
 
@@ -39,7 +39,7 @@ class PipelineInstanceLs(BasePipelinesCommand):
       --format=<format>
     """
 
-    def default(self):
+    def handler(self):
         out = create_output(self.opt("format"), "pipelines_instances_config.json")
         dataset_id = self.arg("dataset-id")
         version = self.arg("version")
@@ -59,7 +59,7 @@ class PipelineInstanceLs(BasePipelinesCommand):
         self.print(title, out)
 
 
-class PipelineInstancesCreate(BasePipelinesCommand):
+class PipelineInstancesCreate(BaseCommand):
     """
     usage:
       okdata pipelines instances create - [options]
@@ -70,7 +70,7 @@ class PipelineInstancesCreate(BasePipelinesCommand):
       --format=<format>
     """
 
-    def default(self):
+    def handler(self):
         out = create_output(self.opt("format"), "pipelines_instances_config.json")
         self.log.info("PipelineInstancesCreate")
         content = self.handle_input()
@@ -91,7 +91,7 @@ class PipelineInstancesCreate(BasePipelinesCommand):
         self.print("Created resources", out)
 
 
-class PipelineInstances(BasePipelinesCommand):
+class PipelineInstances(BaseCommand):
     """
     usage:
       okdata pipelines instances ls [(<dataset-id> <version>)] [options]
@@ -112,11 +112,11 @@ class PipelineInstances(BasePipelinesCommand):
             PipelineInstanceWizard,
         ]
 
-    def default(self):
+    def handler(self):
         self.help()
 
 
-class PipelineInstanceWizard(BasePipelinesCommand):
+class PipelineInstanceWizard(BaseCommand):
     """usage:
       okdata pipelines instances wizard [options]
 
@@ -124,7 +124,7 @@ class PipelineInstanceWizard(BasePipelinesCommand):
       -d --debug
     """
 
-    def default(self):
+    def handler(self):
         self.log.warning("==EXPERIMENTAL FEATURE==")
         ds_client = Dataset(config=self.sdk.config, auth=self.sdk.auth)
         datasets = ds_client.get_datasets()

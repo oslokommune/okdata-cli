@@ -1,10 +1,10 @@
 import json
 
-from okdata.cli.commands.pipelines.base import BasePipelinesCommand
+from okdata.cli.command import BaseCommand
 from okdata.cli.output import create_output
 
 
-class SchemasLs(BasePipelinesCommand):
+class SchemasLs(BaseCommand):
     """okdata::pipelines::ls
     usage:
       okdata pipelines schemas ls [options]
@@ -14,7 +14,7 @@ class SchemasLs(BasePipelinesCommand):
       --format=<format>
     """
 
-    def default(self):
+    def handler(self):
         out = create_output(
             self.opt("format"), "pipelines_instances_schemas_config.json"
         )
@@ -23,7 +23,7 @@ class SchemasLs(BasePipelinesCommand):
         self.print("List of Schemas available", out)
 
 
-class SchemasCreate(BasePipelinesCommand):
+class SchemasCreate(BaseCommand):
     """
     usage:
       okdata pipelines schemas create - [options]
@@ -34,7 +34,7 @@ class SchemasCreate(BasePipelinesCommand):
       --format=<format>
     """
 
-    def default(self):
+    def handler(self):
         content = self.handle_input()
         obj = json.loads(content)
         data = {"id": obj["id"], "type": "schema", "schema": json.dumps(obj["schema"])}
@@ -42,7 +42,7 @@ class SchemasCreate(BasePipelinesCommand):
         self.print(f"Created schema with id: {obj['id']}", data)
 
 
-class Schemas(BasePipelinesCommand):
+class Schemas(BaseCommand):
     """
     usage:
       okdata pipelines schemas [--id=<id>] [options]
@@ -58,7 +58,7 @@ class Schemas(BasePipelinesCommand):
         super().__init__(sdk)
         self.sub_commands = [SchemasLs, SchemasCreate]
 
-    def default(self):
+    def handler(self):
         id = self.opt("id")
         if self.opt("help") or not id:
             return self.help()
