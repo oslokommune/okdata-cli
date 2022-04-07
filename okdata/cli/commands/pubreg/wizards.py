@@ -90,7 +90,7 @@ class ClientCreateWizard:
                     "style": required_style,
                     "name": "environment",
                     "message": "Environment",
-                    "choices": ["prod", "test"],
+                    "choices": ["test", "prod"],
                 },
             ]
         )
