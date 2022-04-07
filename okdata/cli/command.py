@@ -2,6 +2,7 @@ import json
 import logging
 import sys
 
+import requests
 from docopt import docopt, DocoptExit
 from okdata.sdk import SDK
 from pygments import highlight, lexers, formatters
@@ -62,7 +63,14 @@ Options:{BASE_COMMAND_OPTIONS}
                 return cmd(self.sdk.__class__).handle()
             except DocoptExit as d:
                 self.log.debug(d.usage)
-        return self.handler()
+        try:
+            return self.handler()
+        except requests.exceptions.RetryError as e:
+            self.print(
+                "Internal server error. Try again, or contact Datapatruljen "
+                "if the problem persists."
+            )
+            self.log.debug(e)
 
     def handler(self):
         raise NotImplementedError("Missing handler")
