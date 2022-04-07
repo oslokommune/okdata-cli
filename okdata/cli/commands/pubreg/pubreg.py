@@ -13,10 +13,10 @@ class PubregCommand(BaseCommand):
     __doc__ = f"""Oslo :: Public registers
 
 Usage:
-  okdata pubreg create-client [--env=<env>]
-  okdata pubreg list-clients <maskinporten-env> [--env=<env>]
-  okdata pubreg create-key <maskinporten-env> <client-id> <aws-account> <aws-region> [--env=<env>]
-  okdata pubreg list-keys <maskinporten-env> <client-id> [--env=<env>]
+  okdata pubreg create-client [options]
+  okdata pubreg list-clients <maskinporten-env> [options]
+  okdata pubreg create-key <maskinporten-env> <client-id> <aws-account> <aws-region> [options]
+  okdata pubreg list-keys <maskinporten-env> <client-id> [options]
 
 Examples:
   okdata pubreg create-client
