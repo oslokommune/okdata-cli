@@ -56,6 +56,13 @@ _scopes = {
 class ClientCreateWizard:
     """Wizard for the `pubreg create-client` command."""
 
+    def _validate_integration(self, text):
+        if len(text) > 30:
+            return "Too long!"
+        if not re.fullmatch("[0-9a-z-]+", text):
+            return 'Only lowercase letters, numbers and "-", please'
+        return True
+
     def start(self):
         choices = prompt(
             [
@@ -81,10 +88,7 @@ class ClientCreateWizard:
                     "style": required_style,
                     "name": "integration",
                     "message": "Component/integration name",
-                    "validate": (
-                        lambda text: bool(re.fullmatch("[0-9a-z-]+", text))
-                        or 'Only lowercase letters, numbers and "-", please'
-                    ),
+                    "validate": self._validate_integration,
                 },
                 {
                     "type": "checkbox",
