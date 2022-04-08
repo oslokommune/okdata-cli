@@ -2,6 +2,7 @@ import inspect
 import json
 import logging
 import os
+from datetime import datetime
 from textwrap import wrap, fill
 
 from prettytable import PrettyTable
@@ -104,6 +105,13 @@ class TableOutput(PrettyTable):
 
     @staticmethod
     def format_cell_value(value, max_width):
+        try:
+            dt = datetime.fromisoformat(value)
+            if dt.tzinfo:
+                return dt.astimezone().isoformat(timespec="seconds")
+        except (TypeError, ValueError):
+            pass
+
         if isinstance(value, list) and len(value) == 1:
             value = str(value[0])
 
