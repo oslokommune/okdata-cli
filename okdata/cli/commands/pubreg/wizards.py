@@ -1,3 +1,5 @@
+import re
+
 from prompt_toolkit.styles import Style
 from questionary import Choice, prompt
 
@@ -54,6 +56,13 @@ _scopes = {
 class ClientCreateWizard:
     """Wizard for the `pubreg create-client` command."""
 
+    def _validate_integration(self, text):
+        if len(text) > 30:
+            return "Too long!"
+        if not re.fullmatch("[0-9a-z-]+", text):
+            return 'Only lowercase letters, numbers and "-", please'
+        return True
+
     def start(self):
         choices = prompt(
             [
@@ -72,6 +81,14 @@ class ClientCreateWizard:
                     "name": "provider",
                     "message": "Provider",
                     "choices": [Choice(*p) for p in _providers],
+                },
+                {
+                    "type": "text",
+                    "qmark": "*",
+                    "style": required_style,
+                    "name": "integration",
+                    "message": "Component/integration name",
+                    "validate": self._validate_integration,
                 },
                 {
                     "type": "checkbox",
@@ -97,6 +114,7 @@ class ClientCreateWizard:
 
         return {
             "provider": choices["provider"],
+            "integration": choices["integration"],
             "scopes": choices["scopes"],
             "environment": choices["environment"],
             "team": choices.get("team"),
