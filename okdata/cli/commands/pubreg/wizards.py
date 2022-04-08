@@ -6,16 +6,15 @@ from questionary import Choice, prompt
 required_style = Style([("qmark", "fg:red bold")])
 
 _teams = [
-    ("Automatiserte prosesser", "automatiserte-prosesser"),
+    ("Barnehagepris", "barnehagepris"),
     ("Booking", "booking"),
-    ("Dataplattform", "dataplattform"),
+    ("Datapatruljen", "datapatruljen"),
     ("Dataspeilet", "dataspeilet"),
     ("Informasjonsflyt", "informasjonsflyt"),
     ("Kjøremiljø og verktøy", "kjoremiljo"),
     ("Legevaktmottak", "legevaktmottak"),
     ("Min Side", "min-side"),
     ("Oslonøkkelen", "oslonokkelen"),
-    ("Proaktive meldinger", "proaktive-meldinger"),
     ("Skjema", "skjema"),
     ("Veiviser", "veiviser"),
 ]
