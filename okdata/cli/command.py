@@ -65,7 +65,7 @@ Options:{BASE_COMMAND_OPTIONS}
                 self.log.debug(d.usage)
         try:
             return self.handler()
-        except requests.exceptions.RetryError as e:
+        except requests.RequestException as e:
             self.print(
                 "Internal server error. Try again, or contact Datapatruljen "
                 "if the problem persists."
