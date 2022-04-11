@@ -34,6 +34,11 @@ class PubregClient(SDK):
             },
         ).json()
 
+    def delete_key(self, env, client_id, key_id):
+        url = f"{self.api_url}/clients/{env}/{client_id}/keys/{key_id}"
+        log.info(f"Deleting key: {url}")
+        return self.delete(url).json()
+
     def get_keys(self, env, client_id):
         url = f"{self.api_url}/clients/{env}/{client_id}/keys"
         log.info(f"Listing keys from: {url}")

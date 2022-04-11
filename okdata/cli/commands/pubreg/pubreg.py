@@ -15,12 +15,14 @@ Usage:
   okdata pubreg create-client [options]
   okdata pubreg list-clients <maskinporten-env> [options]
   okdata pubreg create-key <maskinporten-env> <client-id> <aws-account> <aws-region> [options]
+  okdata pubreg delete-key <maskinporten-env> <client-id> <key-id> [options]
   okdata pubreg list-keys <maskinporten-env> <client-id> [options]
 
 Examples:
   okdata pubreg create-client
   okdata pubreg list-clients test
   okdata pubreg create-key test my-client 123456789101 eu-west-1
+  okdata pubreg delete-key test my-client 2020-01-01-12-00-00
   okdata pubreg list-keys test my-client
 
 Options:{BASE_COMMAND_OPTIONS}
@@ -42,8 +44,17 @@ Options:{BASE_COMMAND_OPTIONS}
                 self.arg("aws-account"),
                 self.arg("aws-region"),
             )
+        elif self.cmd("delete-key"):
+            self.delete_client_key(
+                self.arg("maskinporten-env"),
+                self.arg("client-id"),
+                self.arg("key-id"),
+            )
         elif self.cmd("list-keys"):
-            self.list_client_keys(self.arg("maskinporten-env"), self.arg("client-id"))
+            self.list_client_keys(
+                self.arg("maskinporten-env"),
+                self.arg("client-id"),
+            )
 
     def create_client(self):
         config = ClientCreateWizard().start()
@@ -86,6 +97,29 @@ Options:{BASE_COMMAND_OPTIONS}
             self.print(f"Creating key for '{client_id}' ({env})...")
             self.client.create_key(env, client_id, aws_account, aws_region)
             self.print("Done!")
+        except HTTPError as e:
+            message = e.response.json()["message"]
+            self.print(f"Something went wrong: {message}")
+
+    def delete_client_key(self, env, client_id, key_id):
+        self.confirm_to_continue(
+            "WARNING: Due to how Maskinporten works, the expiration dates of "
+            "all other keys will be updated to today's date when deleting "
+            "a key.\n  (Digdir is looking into a fix for this issue.)"
+        )
+
+        try:
+            self.print(
+                f"Deleting key '{key_id}' from '{client_id}' ({env})...",
+            )
+            res = self.client.delete_key(env, client_id, key_id)
+            self.print(
+                "Done! The key is deleted and will no longer work, {}.".format(
+                    "and has been removed from SSM"
+                    if res["deleted_from_ssm"]
+                    else "but it has not been removed from SSM"
+                )
+            )
         except HTTPError as e:
             message = e.response.json()["message"]
             self.print(f"Something went wrong: {message}")
