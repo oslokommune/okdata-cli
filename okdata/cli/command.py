@@ -12,13 +12,6 @@ BASE_COMMAND_OPTIONS = """
   --format=<value>          # Output format: table OR json
   --env=<value>             # Environment to run command in: prod OR dev"""
 
-BASE_COMMAND_OPTIONS_COMPACT = """
-  -h, --help                # Print this help
-  -d, --debug               # Output debug information while executing task
-  --format=<value>          # Output format: table OR json
-"""
-
-
 class BaseCommand:
     version = "0.13.0"
     # TODO: Can use `importlib` in Python 3.8 and up instead of hard coding the
@@ -47,7 +40,7 @@ Commands available:
   webhooks
   pubreg
 
-Options:{BASE_COMMAND_OPTIONS_COMPACT}
+Options:{BASE_COMMAND_OPTIONS}
 """
     log = logging.getLogger(__name__)
     sub_commands = []
