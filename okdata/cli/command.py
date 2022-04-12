@@ -12,6 +12,7 @@ BASE_COMMAND_OPTIONS = """
   --format=<value>          # Output format: table OR json
   --env=<value>             # Environment to run command in: prod OR dev"""
 
+
 class BaseCommand:
     version = "0.13.0"
     # TODO: Can use `importlib` in Python 3.8 and up instead of hard coding the
