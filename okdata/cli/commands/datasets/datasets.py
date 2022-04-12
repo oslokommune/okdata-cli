@@ -16,7 +16,7 @@ class DatasetsCommand(BaseCommand):
 
 Usage:
   okdata datasets ls [--filter=<filter> options]
-  okdata datasets ls <datasetid> [<versionid> <editionid>][options]
+  okdata datasets ls <datasetid> [<versionid> <editionid>] [options]
   okdata datasets cp <source> <target> [options]
   okdata datasets create [options]
   okdata datasets create-version <datasetid> [options]
