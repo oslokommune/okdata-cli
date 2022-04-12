@@ -15,14 +15,14 @@ class DatasetsCommand(BaseCommand):
     __doc__ = f"""Oslo :: Datasets
 
 Usage:
-  okdata datasets ls [--format=<format> --filter=<filter> options]
-  okdata datasets ls <datasetid> [<versionid> <editionid>][--format=<format> options]
-  okdata datasets cp <source> <target> [--format=<format> options]
-  okdata datasets create [--file=<file> --format=<format> options]
-  okdata datasets create-version <datasetid> [--file=<file> --format=<format> options]
-  okdata datasets create-edition <datasetid> [<versionid>] [--file=<file> --format=<format> options]
-  okdata datasets create-distribution <datasetid> [<versionid> <editionid>] [--file=<file> --format=<format> options]
-  okdata datasets boilerplate <name> [--file=<file> --prompt=<prompt> --pipeline=<pipeline> options]
+  okdata datasets ls [--filter=<filter> options]
+  okdata datasets ls <datasetid> [<versionid> <editionid>][options]
+  okdata datasets cp <source> <target> [options]
+  okdata datasets create [options]
+  okdata datasets create-version <datasetid> [options]
+  okdata datasets create-edition <datasetid> [<versionid>] [options]
+  okdata datasets create-distribution <datasetid> [<versionid> <editionid>] [options]
+  okdata datasets boilerplate <name> [options]
 
 Examples:
   okdata datasets ls --filter=bydelsfakta

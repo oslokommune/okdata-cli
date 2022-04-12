@@ -11,9 +11,9 @@ class PermissionsCommand(BaseCommand):
     __doc__ = f"""Oslo :: Permissions
 
 Usage:
-  okdata permissions ls [<resource_name>] [--format=<format>]
-  okdata permissions add <resource_name> <user> <scope> [--team | --client]
-  okdata permissions rm <resource_name> <user> [<scope>] [--team | --client]
+  okdata permissions ls [<resource_name>] [options]
+  okdata permissions add <resource_name> <user> <scope> [--team | --client] [options]
+  okdata permissions rm <resource_name> <user> [<scope>] [--team | --client] [options]
 
 Examples:
   okdata permissions ls
