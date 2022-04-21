@@ -73,7 +73,7 @@ Options:{BASE_COMMAND_OPTIONS}
         elif self.arg("datasetid") is not None:
             self.dataset()
         else:
-            BaseCommand.help()
+            self.help()
 
     # #################################### #
     # Datasets

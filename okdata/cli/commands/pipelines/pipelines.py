@@ -53,7 +53,6 @@ class Pipelines(BaseCommand):
       okdata pipelines --pipeline-arn=<pipeline-arn> [options]
       okdata pipelines instances ls [(<dataset-id> <version>)] [options]
       okdata pipelines instances create (<file> | -) [options]
-      okdata pipelines instances wizard
       okdata pipelines ls [options]
       okdata pipelines ls-instances --pipeline-arn=<pipeline-arn> [options]
       okdata pipelines create (<file> | -) [options]

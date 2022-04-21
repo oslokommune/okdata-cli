@@ -1,8 +1,5 @@
 import json
 
-import inquirer
-from inquirer.errors import ValidationError
-from okdata.sdk.data.dataset import Dataset
 from okdata.sdk.pipelines.resources.pipeline_instance import PipelineInstance
 
 from okdata.cli.command import BaseCommand
@@ -95,7 +92,6 @@ class PipelineInstances(BaseCommand):
     """
     usage:
       okdata pipelines instances ls [(<dataset-id> <version>)] [options]
-      okdata pipelines instances wizard
       okdata pipelines instances create - [options]
       okdata pipelines instances create <file> [options]
 
@@ -109,66 +105,7 @@ class PipelineInstances(BaseCommand):
         self.sub_commands = [
             PipelineInstancesCreate,
             PipelineInstanceLs,
-            PipelineInstanceWizard,
         ]
 
     def handler(self):
         self.help()
-
-
-class PipelineInstanceWizard(BaseCommand):
-    """usage:
-      okdata pipelines instances wizard [options]
-
-    options:
-      -d --debug
-    """
-
-    def handler(self):
-        self.log.warning("==EXPERIMENTAL FEATURE==")
-        ds_client = Dataset(config=self.sdk.config, auth=self.sdk.auth)
-        datasets = ds_client.get_datasets()
-        datasets = [dataset["Id"] for dataset in datasets]
-
-        def validate_dataset(answers, current):
-            if current not in datasets:
-                raise ValidationError(False, reason="Dataset does not exist.")
-            return True
-
-        pipelines = self.sdk.get_pipelines()
-        arns = [pipeline["arn"] for pipeline in pipelines]
-        questions_1 = [
-            inquirer.List("pipeline", message="Select a pipeline", choices=arns),
-            inquirer.Text(
-                "dataset-id",
-                message="What is the output dataset ID ?",
-                validate=validate_dataset,
-            ),
-        ]
-
-        answers = inquirer.prompt(questions_1)
-        versions = [
-            version["version"]
-            for version in ds_client.get_versions(answers["dataset-id"])
-        ]
-
-        questions_2 = [
-            inquirer.List("version", message="Select a version", choices=versions),
-        ]
-
-        answers.update(inquirer.prompt(questions_2))
-
-        pipeline_instance, error = PipelineInstance(
-            self.sdk,
-            id=answers["dataset-id"],
-            pipelineArn=answers["pipeline"],
-            datasetUri=f"output/{answers['dataset-id']}/{answers['version']}",
-            taskConfig={},
-        ).create()
-
-        if error:
-            self.log.exception(error)
-            self.log.exception(error.response.text)
-            return
-        self.print("Success!")
-        self.pretty_json(pipeline_instance)
