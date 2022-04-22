@@ -51,8 +51,23 @@ _scopes = {
     ],
 }
 
+_environments = [
+    "test",
+    "prod",
+]
 
-class ClientCreateWizard:
+_aws_regions = [
+    ("eu-central-1 (Frankfurt)", "eu-central-1"),
+    ("eu-north-1 (Stockholm)", "eu-north-1"),
+    ("eu-west-1 (Ireland)", "eu-west-1"),
+]
+
+
+class NoClientsError(Exception):
+    pass
+
+
+class CreateClientWizard:
     """Wizard for the `pubreg create-client` command."""
 
     def _validate_integration(self, text):
@@ -65,6 +80,14 @@ class ClientCreateWizard:
     def start(self):
         choices = prompt(
             [
+                {
+                    "type": "select",
+                    "qmark": "*",
+                    "style": required_style,
+                    "name": "env",
+                    "message": "Environment",
+                    "choices": _environments,
+                },
                 {
                     "type": "select",
                     "qmark": "*",
@@ -100,21 +123,93 @@ class ClientCreateWizard:
                         lambda choices: bool(choices) or "Select at least one scope"
                     ),
                 },
+            ]
+        )
+
+        return {
+            "env": choices["env"],
+            "team": choices.get("team"),
+            "provider": choices["provider"],
+            "integration": choices["integration"],
+            "scopes": choices["scopes"],
+        }
+
+
+class CreateKeyWizard:
+    """Wizard for the `pubreg create-key` command."""
+
+    def __init__(self, client):
+        self.client = client
+
+    def _client_choices(self, env):
+        clients = self.client.get_clients(env)
+
+        if not clients:
+            raise NoClientsError
+
+        return [
+            Choice(
+                c["client_name"],
+                {"id": c["client_id"], "name": c["client_name"]},
+            )
+            for c in clients
+        ]
+
+    def start(self):
+        choices = prompt(
+            [
                 {
                     "type": "select",
                     "qmark": "*",
                     "style": required_style,
-                    "name": "environment",
+                    "name": "env",
                     "message": "Environment",
-                    "choices": ["test", "prod"],
+                    "choices": _environments,
+                },
+                {
+                    "type": "select",
+                    "qmark": "*",
+                    "style": required_style,
+                    "name": "client",
+                    "message": "Client",
+                    "choices": lambda x: self._client_choices(x["env"]),
+                },
+                {
+                    "type": "confirm",
+                    "qmark": "*",
+                    "style": required_style,
+                    "name": "send_to_aws",
+                    "message": "Send key to AWS Parameter Store?",
+                    "auto_enter": False,
+                },
+                {
+                    "type": "text",
+                    "qmark": "*",
+                    "style": required_style,
+                    "name": "aws_account",
+                    "message": "AWS account number",
+                    "when": lambda x: x["send_to_aws"],
+                    "validate": (
+                        lambda t: bool(re.fullmatch("[0-9]{12}", t))
+                        or "12 digits, please"
+                    ),
+                },
+                {
+                    "type": "select",
+                    "qmark": "*",
+                    "style": required_style,
+                    "name": "aws_region",
+                    "message": "AWS region",
+                    "when": lambda x: x["send_to_aws"],
+                    "choices": [Choice(*r) for r in _aws_regions],
                 },
             ]
         )
 
         return {
-            "provider": choices["provider"],
-            "integration": choices["integration"],
-            "scopes": choices["scopes"],
-            "environment": choices["environment"],
-            "team": choices.get("team"),
+            "env": choices["env"],
+            "client_id": choices["client"]["id"],
+            "client_name": choices["client"]["name"],
+            "aws_account": choices.get("aws_account"),
+            "aws_region": choices.get("aws_region"),
         }

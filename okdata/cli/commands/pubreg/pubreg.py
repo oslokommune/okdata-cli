@@ -1,10 +1,15 @@
+import base64
 from operator import itemgetter
 
 from requests.exceptions import HTTPError
 
 from okdata.cli.command import BASE_COMMAND_OPTIONS, BaseCommand
 from okdata.cli.commands.pubreg.client import PubregClient
-from okdata.cli.commands.pubreg.wizards import ClientCreateWizard
+from okdata.cli.commands.pubreg.wizards import (
+    CreateClientWizard,
+    CreateKeyWizard,
+    NoClientsError,
+)
 from okdata.cli.output import create_output
 
 
@@ -14,14 +19,14 @@ class PubregCommand(BaseCommand):
 Usage:
   okdata pubreg create-client [options]
   okdata pubreg list-clients <maskinporten-env> [options]
-  okdata pubreg create-key <maskinporten-env> <client-id> <aws-account> <aws-region> [options]
+  okdata pubreg create-key [options]
   okdata pubreg delete-key <maskinporten-env> <client-id> <key-id> [options]
   okdata pubreg list-keys <maskinporten-env> <client-id> [options]
 
 Examples:
   okdata pubreg create-client
   okdata pubreg list-clients test
-  okdata pubreg create-key test my-client 123456789101 eu-west-1
+  okdata pubreg create-key
   okdata pubreg delete-key test my-client 2020-01-01-12-00-00
   okdata pubreg list-keys test my-client
 
@@ -38,12 +43,7 @@ Options:{BASE_COMMAND_OPTIONS}
         elif self.cmd("list-clients"):
             self.list_clients(self.arg("maskinporten-env"))
         elif self.cmd("create-key"):
-            self.create_client_key(
-                self.arg("maskinporten-env"),
-                self.arg("client-id"),
-                self.arg("aws-account"),
-                self.arg("aws-region"),
-            )
+            self.create_client_key()
         elif self.cmd("delete-key"):
             self.delete_client_key(
                 self.arg("maskinporten-env"),
@@ -57,12 +57,12 @@ Options:{BASE_COMMAND_OPTIONS}
             )
 
     def create_client(self):
-        config = ClientCreateWizard().start()
+        config = CreateClientWizard().start()
 
+        env = config["env"]
         team = config["team"]
         provider = config["provider"]
         integration = config["integration"]
-        env = config["environment"]
         scopes = config["scopes"]
 
         name = f"{team}-{provider}-{integration}"
@@ -86,7 +86,39 @@ Options:{BASE_COMMAND_OPTIONS}
         out.add_rows(sorted(clients, key=itemgetter("client_name")))
         self.print(f"Clients in ({env}):", out)
 
-    def create_client_key(self, env, client_id, aws_account, aws_region):
+    def _handle_new_key_aws(self, key):
+        params = key.get("ssm_params")
+
+        if params:
+            self.print(
+                "The following {} been written to SSM:".format(
+                    "parameter has" if len(params) == 1 else "parameters have"
+                )
+            )
+            for param in params:
+                self.print(f"- {param}")
+        else:
+            self.print(
+                "The key was created, but it appears that the relevant "
+                "parameters weren't added to SSM. This should not happen, "
+                "please contact Datapatruljen!"
+            )
+
+    def _handle_new_key_local(self, key, client_name, env):
+        outfile = f"{client_name}-{env}-{key['kid']}.p12"
+
+        with open(outfile, "wb") as f:
+            f.write(base64.b64decode(key["keystore"]))
+
+        self.print(f"Key ID:   {key['kid']}")
+        self.print(f"Key file: {outfile}")
+        self.print(f"Password: {key['key_password']}\n")
+
+        self.print(
+            "The password can't be retrieved again later, so be sure to save it."
+        )
+
+    def create_client_key(self):
         self.confirm_to_continue(
             "WARNING: Due to how Maskinporten works, the expiration date of "
             "every existing key will be updated to today's date when creating "
@@ -94,12 +126,56 @@ Options:{BASE_COMMAND_OPTIONS}
         )
 
         try:
-            self.print(f"Creating key for '{client_id}' ({env})...")
-            self.client.create_key(env, client_id, aws_account, aws_region)
-            self.print("Done!")
+            config = CreateKeyWizard(self.client).start()
+        except NoClientsError:
+            self.print(
+                "No clients in the given environment yet!\n\n"
+                "  Create one with `okdata pubreg create-client`.\n"
+            )
+            return
+
+        env = config["env"]
+        client_id = config["client_id"]
+        client_name = config["client_name"]
+        aws_account = config["aws_account"]
+        aws_region = config["aws_region"]
+
+        self.confirm_to_continue(
+            "Will create a new key for client '{}' in {}{}.".format(
+                client_name,
+                env,
+                f", and send it to AWS account {aws_account} ({aws_region})"
+                if aws_account and aws_region
+                else "",
+            )
+        )
+
+        self.print("Creating key for '{}' ({})...".format(client_name, env))
+
+        try:
+            key = self.client.create_key(
+                env,
+                client_id,
+                aws_account,
+                aws_region,
+            )
         except HTTPError as e:
             message = e.response.json()["message"]
             self.print(f"Something went wrong: {message}")
+            return
+
+        self.print("A new key was created!\n")
+
+        if key.get("ssm_params") is not None:
+            self._handle_new_key_aws(key)
+        elif key.get("keystore") and key.get("key_password"):
+            self._handle_new_key_local(key, client_name, env)
+        else:
+            self.print(
+                "The key was neither added to AWS nor returned to the "
+                "client. This should not happen, please contact "
+                "Datapatruljen!"
+            )
 
     def delete_client_key(self, env, client_id, key_id):
         self.confirm_to_continue(
