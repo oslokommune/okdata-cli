@@ -59,21 +59,21 @@ Options:{BASE_COMMAND_OPTIONS}
     def create_client(self):
         config = CreateClientWizard().start()
 
-        env = config["env"]
-        team = config["team"]
+        team_id = config["team_id"]
         provider = config["provider"]
         integration = config["integration"]
         scopes = config["scopes"]
-
-        name = f"{team}-{provider}-{integration}"
+        env = config["env"]
 
         self.confirm_to_continue(
-            f"Will create a new client '{name}' in {env} with scopes {scopes}."
+            f"Will create a new client for {provider} in {env} with scopes {scopes}."
         )
 
         try:
-            self.print(f"Creating '{name}'...")
-            response = self.client.create_client(env, name, scopes)
+            self.print("Creating client...")
+            response = self.client.create_client(
+                team_id, provider, integration, scopes, env
+            )
             client_id = response["client_id"]
             self.print(f"Done! Created a new client with ID '{client_id}'.")
         except HTTPError as e:

@@ -13,8 +13,14 @@ class PubregClient(SDK):
             "-dev" if self.config.config["env"] == "dev" else ""
         )
 
-    def create_client(self, env, name, scopes):
-        data = {"env": env, "name": name, "description": name, "scopes": scopes}
+    def create_client(self, team_id, provider, integration, scopes, env):
+        data = {
+            "team_id": team_id,
+            "provider": provider,
+            "integration": integration,
+            "scopes": scopes,
+            "env": env,
+        }
         log.info(f"Creating client with payload: {data}")
         return self.post(f"{self.api_url}/clients", data=data).json()
 

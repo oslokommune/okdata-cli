@@ -5,19 +5,6 @@ from questionary import Choice, prompt
 
 required_style = Style([("qmark", "fg:red bold")])
 
-_teams = [
-    ("Barnehagepris", "barnehagepris"),
-    ("Booking", "booking"),
-    ("Datapatruljen", "datapatruljen"),
-    ("Dataspeilet", "dataspeilet"),
-    ("Informasjonsflyt", "informasjonsflyt"),
-    ("Kjøremiljø og verktøy", "kjoremiljo"),
-    ("Legevaktmottak", "legevaktmottak"),
-    ("Min Side", "min-side"),
-    ("Oslonøkkelen", "oslonokkelen"),
-    ("Skjema", "skjema"),
-    ("Veiviser", "veiviser"),
-]
 
 _providers = [
     ("Folkeregisteret", "freg"),
@@ -70,6 +57,24 @@ class NoClientsError(Exception):
 class CreateClientWizard:
     """Wizard for the `pubreg create-client` command."""
 
+    def _team_choices(self, env):
+        # TODO: Fetch the team list from permission-api with the real Keycloak
+        #       group IDs once permission-api supports it (T#179).
+        teams = [
+            {"name": "Barnehagepris", "id": "barnehagepris"},
+            {"name": "Booking", "id": "booking"},
+            {"name": "Datapatruljen", "id": "datapatruljen"},
+            {"name": "Dataspeilet", "id": "dataspeilet"},
+            {"name": "Informasjonsflyt", "id": "informasjonsflyt"},
+            {"name": "Kjøremiljø og verktøy", "id": "kjoremiljo"},
+            {"name": "Legevaktmottak", "id": "legevaktmottak"},
+            {"name": "Min Side", "id": "min-side"},
+            {"name": "Oslonøkkelen", "id": "oslonokkelen"},
+            {"name": "Skjema", "id": "skjema"},
+            {"name": "Veiviser", "id": "veiviser"},
+        ]
+        return [Choice(t["name"], t["id"]) for t in teams]
+
     def _validate_integration(self, text):
         if len(text) > 30:
             return "Too long!"
@@ -92,9 +97,9 @@ class CreateClientWizard:
                     "type": "select",
                     "qmark": "*",
                     "style": required_style,
-                    "name": "team",
+                    "name": "team_id",
                     "message": "Team",
-                    "choices": [Choice(*t) for t in _teams],
+                    "choices": lambda x: self._team_choices(x["env"]),
                 },
                 {
                     "type": "select",
@@ -128,7 +133,7 @@ class CreateClientWizard:
 
         return {
             "env": choices["env"],
-            "team": choices.get("team"),
+            "team_id": choices.get("team_id"),
             "provider": choices["provider"],
             "integration": choices["integration"],
             "scopes": choices["scopes"],
