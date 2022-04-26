@@ -14,7 +14,7 @@ from okdata.cli.commands.datasets.boilerplate.validator import (
 )
 
 # Note: no testing of return values since the validator is only
-# interested in ValidationError occurences
+# interested in ValidationError occurrences
 
 
 class TestDateValidator:

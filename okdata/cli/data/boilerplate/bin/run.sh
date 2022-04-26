@@ -36,7 +36,7 @@ dataset_data=`cat $dataset_file`
 if [[ $dataset_data =~ "boilerplate" || $dataset_data =~ "my.address@example.org" || $dataset_data =~ "Publisher Name" ]]
 then
    echo "Error: $dataset_file has not been updated correctly - please change the data to represent the dataset you want to create and the organization creating it!"
-   echo "Note: Change all occurence of 'boilerplate', contact and publisher must be a real contact point"
+   echo "Note: Change all occurrences of 'boilerplate', contact and publisher must be a real contact point"
    exit
 fi
 

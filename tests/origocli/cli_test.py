@@ -41,7 +41,7 @@ def test_main_auth_error(auth_failed, capsys):
     sys.argv = ["okdata", "datasets", "create"]
     main()
     captured = capsys.readouterr().out.strip("\n")
-    assert "An error occured (ApiAuthenticateError)" in captured
+    assert "An error occurred (ApiAuthenticateError)" in captured
 
 
 @pytest.fixture()

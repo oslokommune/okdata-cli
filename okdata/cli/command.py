@@ -153,7 +153,7 @@ Options:{BASE_COMMAND_OPTIONS}
 
 
 def generate_error_feedback(message, errors=None):
-    feedback = f"An error occured: {message}"
+    feedback = f"An error occurred: {message}"
     if errors:
         feedback += f"\nCause:\n\t{errors}"
 
