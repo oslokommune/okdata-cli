@@ -90,7 +90,7 @@ def test_pretty_json(capsys):
     captured = capsys.readouterr()
     assert (
         captured.out
-        == '{\n  \x1b[94m"Hello"\x1b[39;49;00m: {\n    \x1b[94m"foo"\x1b[39;49;00m: \x1b[33m"bar"\x1b[39;49;00m\n  }\n}\n\n'
+        == '{\x1b[37m\x1b[39;49;00m\n\x1b[37m  \x1b[39;49;00m\x1b[94m"Hello"\x1b[39;49;00m:\x1b[37m \x1b[39;49;00m{\x1b[37m\x1b[39;49;00m\n\x1b[37m    \x1b[39;49;00m\x1b[94m"foo"\x1b[39;49;00m:\x1b[37m \x1b[39;49;00m\x1b[33m"bar"\x1b[39;49;00m\x1b[37m\x1b[39;49;00m\n\x1b[37m  \x1b[39;49;00m}\x1b[37m\x1b[39;49;00m\n}\x1b[37m\x1b[39;49;00m\n\n'
     )
 
 

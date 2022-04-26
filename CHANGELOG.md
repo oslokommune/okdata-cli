@@ -1,10 +1,9 @@
 ## ?.?.?
 
-* The current version of `okdata-cli` is now displayed in the help text.
-
 * The previously internal `pubreg` command is now made public and documented.
-
+* Added support for Python 3.10.
 * Dropped support for Python 3.6 which reached end-of-life in December 2021.
+* The current version of `okdata-cli` is now displayed in the help text.
 
 ## 0.13.0
 
