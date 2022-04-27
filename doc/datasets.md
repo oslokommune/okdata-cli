@@ -76,7 +76,7 @@ okdata datasets create --file=dataset.json
 
 This will create a dataset with ID `my-dataset`. The ID is derived from the title of the dataset. If another dataset exists with the same ID, an ID will be created with a random set of characters at the end of the ID (e.g. `my-dataset-4nf7`). There are no restrictions on dataset naming, but it is best practice to use your organization as the first part of the dataset title. For instance, `"title": "Origo developer portal statistics"` will generate a dataset with ID `origo-developer-portal-statistics`.
 
-Write down the ID of the dataset. This must be used when creating versions, editions, or event streams.
+Write down the ID of the dataset. This must be used when creating versions and editions.
 
 ### Parent dataset
 If you have several datasets that are logically grouped together under a parent concept or idea, group them together by using the `parent_id` property of a dataset:

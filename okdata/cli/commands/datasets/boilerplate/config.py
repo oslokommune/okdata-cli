@@ -21,10 +21,6 @@ pipeline_choices = {
         Choice("Konverter fra Excel til CSV", "pipeline-excel-to-csv"),
         Choice("Ingen prosessering (krever manuell konfigurasjon av pipeline)", False),
     ],
-    "event": [
-        Choice("Bruk dataen slik den er", "event-copy"),
-        Choice("Ingen prosessering (krever manuell konfigurasjon av pipeline)", False),
-    ],
 }
 
 available_pipelines = [
@@ -52,7 +48,6 @@ def boilerplate_prompt(include_extra_metadata=True):
             "message": "Datakilde",
             "choices": [
                 Choice("Fil", "file"),
-                Choice("Sanntidsdata", "event"),
                 Choice("Database (krever eget databaseoppsett)", "database"),
                 Choice("Ingen (datasettet skal ikke inneholde data direkte)", "none"),
             ],
@@ -174,7 +169,7 @@ def boilerplate_prompt(include_extra_metadata=True):
             "style": required_style,
             "name": "pipeline",
             "message": "Prosessering",
-            "choices": lambda x: pipeline_choices[x["sourceType"]],
+            "choices": lambda x: pipeline_choices.get(x["sourceType"]),
             "when": lambda x: x["sourceType"] in pipeline_choices,
         },
     ]

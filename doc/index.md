@@ -7,7 +7,6 @@ Contents:
   * [Python requirements and setup](python.md)
 * [Configuration](configuration.md)
 * [Datasets](datasets.md)
-* [Events](events.md)
 * [Pipelines](pipelines.md)
 * [Permissions](permissions.md)
 * [Public registers](pubreg.md)
