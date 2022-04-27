@@ -12,7 +12,6 @@ from okdata.cli.commands.permissions import PermissionsCommand
 from okdata.cli.commands.pipelines import Pipelines
 from okdata.cli.commands.pubreg import PubregCommand
 from okdata.cli.commands.status import StatusCommand
-from okdata.cli.commands.webhook_tokens import WebhookTokensCommand
 
 
 def main():
@@ -72,7 +71,6 @@ def get_command_class(argv):
         "pipelines": Pipelines,
         "pubreg": PubregCommand,
         "status": StatusCommand,
-        "webhooks": WebhookTokensCommand,
     }
     return commands.get(argv[1], False)
 

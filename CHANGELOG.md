@@ -1,6 +1,8 @@
 ## ?.?.?
 
 * The previously internal `pubreg` command is now made public and documented.
+* Support for webhook management has been removed (i.e. all `okdata webhooks`
+  commands).
 * Added support for Python 3.10.
 * Dropped support for Python 3.6 which reached end-of-life in December 2021.
 * The current version of `okdata-cli` is now displayed in the help text.
