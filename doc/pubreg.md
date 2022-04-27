@@ -14,6 +14,7 @@ Contents:
 * [Listing clients](#listing-clients)
 * [Creating a client key](#creating-a-client-key)
 * [Listing client keys](#listing-client-keys)
+* [Deleting a client key](#deleting-a-client-key)
 
 ## Prerequisites
 
@@ -44,17 +45,26 @@ okdata pubreg list-clients <maskinporten-env>
 
 ## Creating a client key
 
-Before creating client keys, you'll need to grant a service user from the
+Before creating client keys, you may want to grant a service user from the
 dataplatform access to your AWS account's Parameter Store by following [these
-steps](https://github.com/oslokommune/dataplattform/blob/master/origo/registerdata/offentlige-registerdata-3.md#%C3%A5pne-aws-konto).
-This is done in order to allow us to inject the generated keys directly into
-your AWS environment.
+steps](https://github.com/oslokommune/dataplattform/blob/master/origo/registerdata/offentlige-registerdata-3.md#%C3%A5pne-aws-konto). This
+must be done if you want us to add and remove keys directly in your AWS
+environment. It's also possible to generate keys locally and handle them
+yourselves, if you prefer that.
 
-When that's in place, the following command can be used to create new keys:
+The following command can be used to launch a step-by-step wizard to create a
+new client key:
 
 ```sh
-okdata pubreg create-key <maskinporten-env> <client-id> <aws-account> <aws-region>
+okdata pubreg create-key
 ```
+
+Note that due to how Maskinporten works, the expiration date of every existing
+key will be updated to today's date when creating a new key. Digdir is looking
+into a fix for this issue.
+
+Each client can hold a maximum of five keys. After reaching that limit, old keys
+have to be [deleted](#deleting-a-client-key) to make room for new ones.
 
 ## Listing client keys
 
@@ -64,3 +74,18 @@ of your clients:
 ```sh
 okdata pubreg list-keys <maskinporten-env> <client-id>
 ```
+
+## Deleting a client key
+
+When a key is no longer needed, it can be deleted by using the following
+command:
+
+```sh
+okdata pubreg delete-key <maskinporten-env> <client-id> <key-id>
+```
+
+Note that key deletion is irreversible.
+
+Also note that due to how Maskinporten works, the expiration date of every
+existing key will be updated to today's date when creating a new key. Digdir is
+looking into a fix for this issue.
