@@ -28,7 +28,6 @@ usage:
   okdata pipelines [options]
   okdata events [options]
   okdata permissions [options]
-  okdata webhooks [options]
   okdata pubreg [options]
   okdata -h | --help
 
@@ -38,7 +37,6 @@ Commands available:
   pipelines
   events
   permissions
-  webhooks
   pubreg
 
 Options:{BASE_COMMAND_OPTIONS}

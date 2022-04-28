@@ -9,7 +9,6 @@ Contents:
 * [Datasets](datasets.md)
 * [Events](events.md)
 * [Pipelines](pipelines.md)
-* [Webhooks](webhooks.md)
 * [Permissions](permissions.md)
 * [Public registers](pubreg.md)
 
