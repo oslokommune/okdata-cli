@@ -20,15 +20,15 @@ Usage:
   okdata pubreg create-client [options]
   okdata pubreg list-clients <maskinporten-env> [options]
   okdata pubreg create-key [options]
-  okdata pubreg delete-key <maskinporten-env> <client-id> <key-id> [options]
   okdata pubreg list-keys <maskinporten-env> <client-id> [options]
+  okdata pubreg delete-key <maskinporten-env> <client-id> <key-id> [options]
 
 Examples:
   okdata pubreg create-client
   okdata pubreg list-clients test
   okdata pubreg create-key
-  okdata pubreg delete-key test my-client 2020-01-01-12-00-00
   okdata pubreg list-keys test my-client
+  okdata pubreg delete-key test my-client 2020-01-01-12-00-00
 
 Options:{BASE_COMMAND_OPTIONS}
     """
@@ -44,16 +44,16 @@ Options:{BASE_COMMAND_OPTIONS}
             self.list_clients(self.arg("maskinporten-env"))
         elif self.cmd("create-key"):
             self.create_client_key()
+        elif self.cmd("list-keys"):
+            self.list_client_keys(
+                self.arg("maskinporten-env"),
+                self.arg("client-id"),
+            )
         elif self.cmd("delete-key"):
             self.delete_client_key(
                 self.arg("maskinporten-env"),
                 self.arg("client-id"),
                 self.arg("key-id"),
-            )
-        elif self.cmd("list-keys"):
-            self.list_client_keys(
-                self.arg("maskinporten-env"),
-                self.arg("client-id"),
             )
 
     def create_client(self):
@@ -177,6 +177,12 @@ Options:{BASE_COMMAND_OPTIONS}
                 "Datapatruljen!"
             )
 
+    def list_client_keys(self, env, client_id):
+        keys = self.client.get_keys(env, client_id)
+        out = create_output(self.opt("format"), "pubreg_client_keys_config.json")
+        out.add_rows(sorted(keys, key=itemgetter("kid")))
+        self.print(f"Keys for client {client_id} ({env}):", out)
+
     def delete_client_key(self, env, client_id, key_id):
         self.confirm_to_continue(
             "WARNING: Due to how Maskinporten works, the expiration dates of "
@@ -193,9 +199,3 @@ Options:{BASE_COMMAND_OPTIONS}
         except HTTPError as e:
             message = e.response.json()["message"]
             self.print(f"Something went wrong: {message}")
-
-    def list_client_keys(self, env, client_id):
-        keys = self.client.get_keys(env, client_id)
-        out = create_output(self.opt("format"), "pubreg_client_keys_config.json")
-        out.add_rows(sorted(keys, key=itemgetter("kid")))
-        self.print(f"Keys for client {client_id} ({env}):", out)
