@@ -94,17 +94,5 @@ class DatasetCreateWizard:
   okdata datasets cp FILE ds:{dataset_id}
 """
             )
-        elif choices["sourceType"] == "event":
-            # TODO: Just create the event stream automatically too?
-            self.command.print(
-                f"""Done! You may go ahead and create an event stream:
-
-  okdata events create-stream {dataset_id}
-
-And then start sending events:
-
-  okdata events put ds:{dataset_id} --file=FILE
-"""
-            )
         else:
             self.command.print("Done!")

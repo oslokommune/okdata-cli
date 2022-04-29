@@ -9,7 +9,6 @@ usage:
   okdata datasets [options]
   okdata status [options]
   okdata pipelines [options]
-  okdata events [options]
   okdata permissions [options]
   okdata pubreg [options]
   okdata -h | --help
