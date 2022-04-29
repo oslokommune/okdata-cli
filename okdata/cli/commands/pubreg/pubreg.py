@@ -188,14 +188,8 @@ Options:{BASE_COMMAND_OPTIONS}
             self.print(
                 f"Deleting key '{key_id}' from '{client_id}' ({env})...",
             )
-            res = self.client.delete_key(env, client_id, key_id)
-            self.print(
-                "Done! The key is deleted and will no longer work, {}.".format(
-                    "and has been removed from SSM"
-                    if res["deleted_from_ssm"]
-                    else "but it has not been removed from SSM"
-                )
-            )
+            self.client.delete_key(env, client_id, key_id)
+            self.print("Done! The key is deleted and will no longer work.")
         except HTTPError as e:
             message = e.response.json()["message"]
             self.print(f"Something went wrong: {message}")
