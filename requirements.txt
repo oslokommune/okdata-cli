@@ -34,7 +34,7 @@ jsonschema==4.4.0
     # via okdata-sdk
 markupsafe==2.1.1
     # via jinja2
-okdata-sdk==1.0.0
+okdata-sdk==2.0.0
     # via okdata-cli (setup.py)
 packaging==21.3
     # via sphinx

@@ -57,23 +57,11 @@ class NoClientsError(Exception):
 class CreateClientWizard:
     """Wizard for the `pubreg create-client` command."""
 
-    def _team_choices(self, env):
-        # TODO: Fetch the team list from permission-api with the real Keycloak
-        #       group IDs once permission-api supports it (T#179).
-        teams = [
-            {"name": "Barnehagepris", "id": "barnehagepris"},
-            {"name": "Booking", "id": "booking"},
-            {"name": "Datapatruljen", "id": "datapatruljen"},
-            {"name": "Dataspeilet", "id": "dataspeilet"},
-            {"name": "Informasjonsflyt", "id": "informasjonsflyt"},
-            {"name": "Kjøremiljø og verktøy", "id": "kjoremiljo"},
-            {"name": "Legevaktmottak", "id": "legevaktmottak"},
-            {"name": "Min Side", "id": "min-side"},
-            {"name": "Oslonøkkelen", "id": "oslonokkelen"},
-            {"name": "Skjema", "id": "skjema"},
-            {"name": "Veiviser", "id": "veiviser"},
-        ]
-        return [Choice(t["name"], t["id"]) for t in teams]
+    def __init__(self, teams):
+        self.teams = teams
+
+    def _team_choices(self):
+        return [Choice(t["name"], t["id"]) for t in self.teams]
 
     def _validate_integration(self, text):
         if len(text) > 30:
@@ -99,7 +87,7 @@ class CreateClientWizard:
                     "style": required_style,
                     "name": "team_id",
                     "message": "Team",
-                    "choices": lambda x: self._team_choices(x["env"]),
+                    "choices": lambda x: self._team_choices(),
                 },
                 {
                     "type": "select",
