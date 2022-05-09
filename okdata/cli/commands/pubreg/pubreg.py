@@ -1,6 +1,7 @@
 import base64
 from operator import itemgetter
 
+from okdata.sdk.team.client import TeamClient
 from requests.exceptions import HTTPError
 
 from okdata.cli.command import BASE_COMMAND_OPTIONS, BaseCommand
@@ -57,7 +58,17 @@ Options:{BASE_COMMAND_OPTIONS}
             )
 
     def create_client(self):
-        config = CreateClientWizard().start()
+        team_client = TeamClient(env=self.opt("env"))
+        teams = team_client.get_teams(has_role="origo-team")
+
+        if not teams:
+            self.print(
+                "We haven't yet registered you as member of any Origo team. "
+                "Please contact Datapatruljen to get it done."
+            )
+            return
+
+        config = CreateClientWizard(teams).start()
 
         team_id = config["team_id"]
         provider = config["provider"]
