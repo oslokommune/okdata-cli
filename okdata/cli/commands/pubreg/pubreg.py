@@ -71,19 +71,21 @@ Options:{BASE_COMMAND_OPTIONS}
         config = CreateClientWizard(teams).start()
 
         team_id = config["team_id"]
-        provider = config["provider"]
+        provider_id = config["provider_id"]
+        provider_name = config["provider_name"]
         integration = config["integration"]
         scopes = config["scopes"]
         env = config["env"]
 
         self.confirm_to_continue(
-            f"Will create a new client for {provider} in {env} with scopes {scopes}."
+            f"Will create a new client for {provider_name} in {env} with "
+            f"scopes {scopes}."
         )
 
         try:
             self.print("Creating client...")
             response = self.client.create_client(
-                team_id, provider, integration, scopes, env
+                team_id, provider_id, integration, scopes, env
             )
             client_id = response["client_id"]
             self.print(f"Done! Created a new client with ID '{client_id}'.")

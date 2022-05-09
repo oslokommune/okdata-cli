@@ -6,11 +6,11 @@ from questionary import Choice, prompt
 required_style = Style([("qmark", "fg:red bold")])
 
 
-_providers = [
-    ("Folkeregisteret", "freg"),
-    ("Kontaktregisteret", "krr"),
-    ("Skatteetaten", "skatt"),
-]
+_providers = {
+    "freg": "Folkeregisteret",
+    "krr": "Kontaktregisteret",
+    "skatt": "Skatteetaten",
+}
 
 _scopes = {
     "freg": [
@@ -93,9 +93,11 @@ class CreateClientWizard:
                     "type": "select",
                     "qmark": "*",
                     "style": required_style,
-                    "name": "provider",
+                    "name": "provider_id",
                     "message": "Provider",
-                    "choices": [Choice(*p) for p in _providers],
+                    "choices": [
+                        Choice(pname, pid) for pid, pname in _providers.items()
+                    ],
                 },
                 {
                     "type": "checkbox",
@@ -103,7 +105,7 @@ class CreateClientWizard:
                     "style": required_style,
                     "name": "scopes",
                     "message": "Scopes",
-                    "choices": lambda x: _scopes[x["provider"]],
+                    "choices": lambda x: _scopes[x["provider_id"]],
                     "validate": (
                         lambda choices: bool(choices) or "Select at least one scope"
                     ),
@@ -122,7 +124,8 @@ class CreateClientWizard:
         return {
             "env": choices["env"],
             "team_id": choices.get("team_id"),
-            "provider": choices["provider"],
+            "provider_id": choices["provider_id"],
+            "provider_name": _providers[choices["provider_id"]],
             "integration": choices["integration"],
             "scopes": choices["scopes"],
         }
