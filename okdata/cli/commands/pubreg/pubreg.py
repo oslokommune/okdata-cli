@@ -90,7 +90,13 @@ Options:{BASE_COMMAND_OPTIONS}
                 team_id, provider_id, integration, scopes, env
             )
             client_id = response["client_id"]
-            self.print(f"Done! Created a new client with ID '{client_id}'.")
+            self.print(
+                f"""
+Done! Created a new client with ID '{client_id}'.
+You may now go ahead and create a key for it by running:
+
+  okdata pubreg create-key"""
+            )
         except HTTPError as e:
             message = e.response.json()["message"]
             self.print(f"Something went wrong: {message}")
