@@ -19,10 +19,10 @@ class PubregCommand(BaseCommand):
 
 Usage:
   okdata pubreg create-client [options]
-  okdata pubreg list-clients <maskinporten-env> [options]
+  okdata pubreg list-clients (test|prod) [options]
   okdata pubreg create-key [options]
-  okdata pubreg list-keys <maskinporten-env> <client-id> [options]
-  okdata pubreg delete-key <maskinporten-env> <client-id> <key-id> [options]
+  okdata pubreg list-keys (test|prod) <client-id> [options]
+  okdata pubreg delete-key (test|prod) <client-id> <key-id> [options]
 
 Examples:
   okdata pubreg create-client
@@ -39,20 +39,22 @@ Options:{BASE_COMMAND_OPTIONS}
         self.client = PubregClient(env=self.opt("env"))
 
     def handler(self):
+        maskinporten_env = "prod" if self.cmd("prod") else "test"
+
         if self.cmd("create-client"):
             self.create_client()
         elif self.cmd("list-clients"):
-            self.list_clients(self.arg("maskinporten-env"))
+            self.list_clients(maskinporten_env)
         elif self.cmd("create-key"):
             self.create_client_key()
         elif self.cmd("list-keys"):
             self.list_client_keys(
-                self.arg("maskinporten-env"),
+                maskinporten_env,
                 self.arg("client-id"),
             )
         elif self.cmd("delete-key"):
             self.delete_client_key(
-                self.arg("maskinporten-env"),
+                maskinporten_env,
                 self.arg("client-id"),
                 self.arg("key-id"),
             )
