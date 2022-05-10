@@ -98,14 +98,6 @@ class CreateClientWizard:
                     "choices": [Choice(*p) for p in _providers],
                 },
                 {
-                    "type": "text",
-                    "qmark": "*",
-                    "style": required_style,
-                    "name": "integration",
-                    "message": "Component/integration name",
-                    "validate": self._validate_integration,
-                },
-                {
                     "type": "checkbox",
                     "qmark": "*",
                     "style": required_style,
@@ -115,6 +107,14 @@ class CreateClientWizard:
                     "validate": (
                         lambda choices: bool(choices) or "Select at least one scope"
                     ),
+                },
+                {
+                    "type": "text",
+                    "qmark": "*",
+                    "style": required_style,
+                    "name": "integration",
+                    "message": "Component/integration name",
+                    "validate": self._validate_integration,
                 },
             ]
         )
