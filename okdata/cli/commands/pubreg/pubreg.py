@@ -179,7 +179,10 @@ Options:{BASE_COMMAND_OPTIONS}
             self.print(f"Something went wrong: {message}")
             return
 
-        self.print("A new key was created!\n")
+        self.print(
+            "\nA new key has been created and stored in the current working "
+            "directory.\n"
+        )
 
         if key.get("ssm_params") is not None:
             self._handle_new_key_aws(key)
