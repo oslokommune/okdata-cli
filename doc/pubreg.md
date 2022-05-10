@@ -40,7 +40,7 @@ Example values from the wizard:
 Use the following command to display a table of all of your clients:
 
 ```sh
-okdata pubreg list-clients <maskinporten-env>
+okdata pubreg list-clients (test|prod)
 ```
 
 ## Creating a client key
@@ -72,7 +72,7 @@ Use the following command to display a table of all the keys registered on one
 of your clients:
 
 ```sh
-okdata pubreg list-keys <maskinporten-env> <client-id>
+okdata pubreg list-keys (test|prod) <client-id>
 ```
 
 ## Deleting a client key
@@ -81,7 +81,7 @@ When a key is no longer needed, it can be deleted by using the following
 command:
 
 ```sh
-okdata pubreg delete-key <maskinporten-env> <client-id> <key-id>
+okdata pubreg delete-key (test|prod) <client-id> <key-id>
 ```
 
 Note that key deletion is irreversible.
