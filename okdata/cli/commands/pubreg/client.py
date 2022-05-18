@@ -29,6 +29,11 @@ class PubregClient(SDK):
         log.info(f"Listing clients from: {url}")
         return self.get(url).json()
 
+    def delete_client(self, env, client_id):
+        url = f"{self.api_url}/clients/{env}/{client_id}"
+        log.info(f"Deleting client for: {url}")
+        return self.delete(url).json()
+
     def create_key(self, env, client_id, aws_account=None, aws_region=None):
         url = f"{self.api_url}/clients/{env}/{client_id}/keys"
         log.info(f"Creating key for: {url}")
