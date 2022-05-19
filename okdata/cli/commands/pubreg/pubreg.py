@@ -116,9 +116,7 @@ You may now go ahead and create a key for it by running:
 
     def delete_client(self, env, client_id):
         try:
-            self.print(
-                f"Deleting client '{client_id}' from ({env})...",
-            )
+            self.print(f"Deleting client '{client_id}' ({env})...")
             self.client.delete_client(env, client_id)
             self.print("Done! The client is deleted and will no longer work.")
         except HTTPError as e:
