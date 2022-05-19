@@ -20,6 +20,7 @@ class PubregCommand(BaseCommand):
 Usage:
   okdata pubreg create-client [options]
   okdata pubreg list-clients (test|prod) [options]
+  okdata pubreg delete-client test|prod) <client-id>
   okdata pubreg create-key [options]
   okdata pubreg list-keys (test|prod) <client-id> [options]
   okdata pubreg delete-key (test|prod) <client-id> <key-id> [options]
@@ -27,6 +28,7 @@ Usage:
 Examples:
   okdata pubreg create-client
   okdata pubreg list-clients test
+  okdata pubreg delete-client test my-client
   okdata pubreg create-key
   okdata pubreg list-keys test my-client
   okdata pubreg delete-key test my-client 2020-01-01-12-00-00
@@ -45,6 +47,11 @@ Options:{BASE_COMMAND_OPTIONS}
             self.create_client()
         elif self.cmd("list-clients"):
             self.list_clients(maskinporten_env)
+        elif self.cmd("delete-client"):
+            self.delete_client(
+                maskinporten_env,
+                self.arg("client-id"),
+            )
         elif self.cmd("create-key"):
             self.create_client_key()
         elif self.cmd("list-keys"):
@@ -106,6 +113,17 @@ You may now go ahead and create a key for it by running:
         out = create_output(self.opt("format"), "pubreg_clients_config.json")
         out.add_rows(sorted(clients, key=itemgetter("client_name")))
         self.print(f"Clients in ({env}):", out)
+
+    def delete_client(self, env, client_id):
+        try:
+            self.print(
+                f"Deleting client '{client_id}' from ({env})...",
+            )
+            self.client.delete_client(env, client_id)
+            self.print("Done! The client is deleted and will no longer work.")
+        except HTTPError as e:
+            message = e.response.json()["message"]
+            self.print(f"Something went wrong: {message}")
 
     def _handle_new_key_aws(self, key):
         params = key.get("ssm_params")
