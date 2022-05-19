@@ -20,7 +20,7 @@ class PubregCommand(BaseCommand):
 Usage:
   okdata pubreg create-client [options]
   okdata pubreg list-clients (test|prod) [options]
-  okdata pubreg delete-client test|prod) <client-id>
+  okdata pubreg delete-client (test|prod) <client-id>
   okdata pubreg create-key [options]
   okdata pubreg list-keys (test|prod) <client-id> [options]
   okdata pubreg delete-key (test|prod) <client-id> <key-id> [options]
