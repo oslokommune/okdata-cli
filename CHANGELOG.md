@@ -1,4 +1,4 @@
-## ?.?.?
+## 1.0.0
 
 * The previously internal `pubreg` command is now made public and documented.
 * Support for managing event streams has been removed (i.e. all `okdata events`

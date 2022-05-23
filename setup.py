@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="okdata-cli",
-    version="0.13.0",
+    version="1.0.0",
     author="Oslo Origo",
     author_email="dataplattform@oslo.kommune.no",
     description="CLI for services provided by Oslo Origo",
@@ -40,7 +40,7 @@ setuptools.setup(
     ],
     entry_points={"console_scripts": ["okdata=okdata.cli.__main__:main"]},
     classifiers=[
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 5 - Production/Stable",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
