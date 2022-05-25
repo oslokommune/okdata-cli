@@ -50,7 +50,7 @@ pygments==2.11.2
     # via
     #   okdata-cli (setup.py)
     #   sphinx
-pyjwt==2.3.0
+pyjwt==2.4.0
     # via okdata-sdk
 pyparsing==3.0.8
     # via packaging
