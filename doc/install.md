@@ -1,36 +1,33 @@
 # Install
 
-## Requirements
-Okdata CLI requires the following to run:
-
-* Python 3.7 or higher
-* `make` and build tools for installing Python modules; see output from `make init` below to see any other requirements you must install in order to install Okdata CLI
-
-In addition it is recommended to use a tool like `jq` to parse and make automated decisions based on output.
-
-## Installation with pip
-The quickest way to get started is by installing the latest release of Okdata CLI from PyPI with pip:
+The quickest way to get started is by installing the latest release of Okdata
+CLI from PyPI with pip (requires Python 3.7 or higher):
 
 ```bash
-pip install okdata-cli
+python -m pip install --user okdata-cli
 ```
 
-## Installation from source
-If you have git installed and would like to update incrementally from source, you can clone the Okdata CLI repository from GitHub:
+This will make the `okdata` command available to you. To verify that it is
+installed properly and working, try listing all datasets:
+
+```bash
+okdata datasets ls
+```
+
+If this succeeds you're ready to proceed with [configuration](configuration.md)!
+
+## Alternative installation from source
+
+Alternatively, Okdata CLI can be installed directly from source if you would
+like to track updates before they appear in a proper PyPI release.
+
+Start by cloning the Okdata CLI repository from GitHub:
 
 ```bash
 git clone https://github.com/oslokommune/okdata-cli.git
 ```
 
-If you don't have git installed you can download the source from GitHub with one of the following:
-
-* From [Okdata CLI's GitHub page](https://github.com/oslokommune/okdata-cli) choose `Code ▾` and then `Download ZIP`
-* From a terminal: `curl -LO https://github.com/oslokommune/okdata-cli/archive/master.zip`
-
-Unzip the downloaded file and rename the unzipped directory to `okdata-cli` to follow the rest of the installation process.
-
-### Setup
-Installing Okdata CLI into a virtual environment is recommended:
+Proceed by installing Okdata CLI into a virtual environment:
 
 ```bash
 cd okdata-cli
@@ -39,19 +36,15 @@ source .venv/bin/activate
 make init
 ```
 
-This will install all dependencies and enable a new command in the venv: `okdata`. To verify that it is installed properly and working, try listing all datasets:
-
-```bash
-okdata datasets ls
-```
-
-Installing and running the program will create a `~/.okdata` directory where settings and caches will be stored.
+This will install all necessary dependencies and make the `okdata` command
+available inside the virtual environment.
 
 ## Upgrade
+
 If you have installed Okdata CLI with pip:
 
 ```bash
-pip install --upgrade okdata-cli
+python -m pip install --user --upgrade okdata-cli
 ```
 
 If you have checked out the source from GitHub:
@@ -61,13 +54,12 @@ git pull
 pip install -r requirements.txt
 ```
 
-If you download the source code in zip format, redownload it and redo the steps [Setup](#setup).
-
 ## Uninstall
+
 If you have installed Okdata CLI with pip:
 
 ```bash
-pip uninstall okdata-cli
+python -m pip uninstall okdata-cli
 ```
 
 Otherwise simply remove the `okdata-cli` directory.

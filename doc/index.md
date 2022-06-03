@@ -1,10 +1,9 @@
 # `okdata`: Oslo Origo Dataplatform CLI
 
-okdata CLI provides a unified interface to the services provided by Oslo Origo Dataplatform.
+Okdata CLI provides a unified interface to the services provided by Oslo Origo Dataplatform.
 
 Contents:
-* [Install/setup](install.md)
-  * [Python requirements and setup](python.md)
+* [Install](install.md)
 * [Configuration](configuration.md)
 * [Datasets](datasets.md)
 * [Pipelines](pipelines.md)
