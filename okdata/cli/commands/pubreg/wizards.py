@@ -1,4 +1,5 @@
 import re
+from operator import itemgetter
 
 from prompt_toolkit.styles import Style
 from questionary import Choice, prompt
@@ -148,7 +149,7 @@ class CreateKeyWizard:
                 c["client_name"],
                 {"id": c["client_id"], "name": c["client_name"]},
             )
-            for c in clients
+            for c in sorted(clients, key=itemgetter("client_name"))
         ]
 
     def start(self):
