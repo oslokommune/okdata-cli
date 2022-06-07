@@ -22,7 +22,19 @@ export PYTHONPATH=$PYTHONPATH:/<path-to-sdk>/okdata-sdk-python/
 python3 bin/cli.py datasets ls
 ```
 
+## Environment
+
+`okdata` can be run in either `dev` or `prod`.
+
+When determining in which environment to run a command, the application loads
+the environment in the following order, and chooses the first it encounters:
+
+1. `--env=prod|dev` option for every command
+2. `OKDATA_ENVIRONMENT` from the current environment
+3. Default: `prod`
+
 ## Tests
+
 ```bash
 $ make test
 ```
