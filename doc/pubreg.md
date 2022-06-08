@@ -12,6 +12,7 @@ Contents:
 * [Prerequisites](#prerequisites)
 * [Creating a client](#creating-a-client)
 * [Listing clients](#listing-clients)
+* [Deleting a client](#deleting-a-client)
 * [Creating a client key](#creating-a-client-key)
 * [Listing client keys](#listing-client-keys)
 * [Deleting a client key](#deleting-a-client-key)
@@ -42,6 +43,20 @@ Use the following command to display a table of all of your clients:
 ```sh
 okdata pubreg list-clients (test|prod)
 ```
+
+## Deleting a client
+
+When a client is no longer needed, it should be deleted by using the following
+command:
+
+```sh
+okdata pubreg delete-client
+```
+
+Clients with active keys cannot be deleted. In such cases, their keys have to be
+[deleted](#deleting-a-client-key) first.
+
+Note that client deletion is irreversible.
 
 ## Creating a client key
 
@@ -77,7 +92,7 @@ okdata pubreg list-keys (test|prod) <client-id>
 
 ## Deleting a client key
 
-When a key is no longer needed, it can be deleted by using the following
+When a key is no longer needed, it should be deleted by using the following
 command:
 
 ```sh
