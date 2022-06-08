@@ -52,6 +52,10 @@ class NoClientsError(Exception):
     pass
 
 
+class NoKeysError(Exception):
+    pass
+
+
 class NoTeamError(Exception):
     pass
 
@@ -189,6 +193,10 @@ def q_aws_region():
 def q_key(pubreg_client):
     def _key_choices(env, client_id):
         keys = pubreg_client.get_keys(env, client_id)
+
+        if not keys:
+            raise NoKeysError
+
         return sorted([k["kid"] for k in keys])
 
     return {

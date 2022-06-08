@@ -6,7 +6,11 @@ from requests.exceptions import HTTPError
 
 from okdata.cli.command import BASE_COMMAND_OPTIONS, BaseCommand
 from okdata.cli.commands.pubreg.client import PubregClient
-from okdata.cli.commands.pubreg.questions import NoClientsError, NoTeamError
+from okdata.cli.commands.pubreg.questions import (
+    NoClientsError,
+    NoKeysError,
+    NoTeamError,
+)
 from okdata.cli.commands.pubreg.wizards import (
     create_client_wizard,
     create_key_wizard,
@@ -229,7 +233,12 @@ You may now go ahead and create a key for it by running:
         self.print(f"Keys for client {client_name} [{env}]:", out)
 
     def delete_client_key(self):
-        choices = delete_key_wizard(self.pubreg_client)
+        try:
+            choices = delete_key_wizard(self.pubreg_client)
+        except NoKeysError:
+            self.print("The selected client doesn't have any keys.")
+            return
+
         env = choices["env"]
         client_id = choices["client_id"]
         client_name = choices["client_name"]
