@@ -6,10 +6,18 @@ from requests.exceptions import HTTPError
 
 from okdata.cli.command import BASE_COMMAND_OPTIONS, BaseCommand
 from okdata.cli.commands.pubreg.client import PubregClient
-from okdata.cli.commands.pubreg.wizards import (
-    CreateClientWizard,
-    CreateKeyWizard,
+from okdata.cli.commands.pubreg.questions import (
     NoClientsError,
+    NoKeysError,
+    NoTeamError,
+)
+from okdata.cli.commands.pubreg.wizards import (
+    create_client_wizard,
+    create_key_wizard,
+    delete_client_wizard,
+    delete_key_wizard,
+    list_clients_wizard,
+    list_keys_wizard,
 )
 from okdata.cli.output import create_output
 
@@ -19,65 +27,51 @@ class PubregCommand(BaseCommand):
 
 Usage:
   okdata pubreg create-client [options]
-  okdata pubreg list-clients (test|prod) [options]
-  okdata pubreg delete-client (test|prod) <client-id> [options]
+  okdata pubreg list-clients [options]
+  okdata pubreg delete-client [options]
   okdata pubreg create-key [options]
-  okdata pubreg list-keys (test|prod) <client-id> [options]
-  okdata pubreg delete-key (test|prod) <client-id> <key-id> [options]
+  okdata pubreg list-keys [options]
+  okdata pubreg delete-key [options]
 
 Examples:
   okdata pubreg create-client
-  okdata pubreg list-clients test
-  okdata pubreg delete-client test my-client
+  okdata pubreg list-clients
+  okdata pubreg delete-client
   okdata pubreg create-key
-  okdata pubreg list-keys test my-client
-  okdata pubreg delete-key test my-client 2020-01-01-12-00-00
+  okdata pubreg list-keys
+  okdata pubreg delete-key
 
 Options:{BASE_COMMAND_OPTIONS}
     """
 
     def __init__(self):
         super().__init__()
-        self.client = PubregClient(env=self.opt("env"))
+        self.pubreg_client = PubregClient(env=self.opt("env"))
+        self.team_client = TeamClient(env=self.opt("env"))
 
     def handler(self):
-        maskinporten_env = "prod" if self.cmd("prod") else "test"
-
         if self.cmd("create-client"):
             self.create_client()
         elif self.cmd("list-clients"):
-            self.list_clients(maskinporten_env)
+            self.list_clients()
         elif self.cmd("delete-client"):
-            self.delete_client(
-                maskinporten_env,
-                self.arg("client-id"),
-            )
+            self.delete_client()
         elif self.cmd("create-key"):
             self.create_client_key()
         elif self.cmd("list-keys"):
-            self.list_client_keys(
-                maskinporten_env,
-                self.arg("client-id"),
-            )
+            self.list_client_keys()
         elif self.cmd("delete-key"):
-            self.delete_client_key(
-                maskinporten_env,
-                self.arg("client-id"),
-                self.arg("key-id"),
-            )
+            self.delete_client_key()
 
     def create_client(self):
-        team_client = TeamClient(env=self.opt("env"))
-        teams = team_client.get_teams(has_role="origo-team")
-
-        if not teams:
+        try:
+            config = create_client_wizard(self.team_client)
+        except NoTeamError:
             self.print(
                 "We haven't yet registered you as member of any Origo team. "
                 "Please contact Datapatruljen to get it done."
             )
             return
-
-        config = CreateClientWizard(teams).start()
 
         team_id = config["team_id"]
         provider_id = config["provider_id"]
@@ -93,13 +87,13 @@ Options:{BASE_COMMAND_OPTIONS}
 
         try:
             self.print("Creating client...")
-            response = self.client.create_client(
+            response = self.pubreg_client.create_client(
                 team_id, provider_id, integration, scopes, env
             )
-            client_id = response["client_id"]
+            client_name = response["client_name"]
             self.print(
                 f"""
-Done! Created a new client with ID '{client_id}'.
+Done! Created a new client '{client_name}'.
 You may now go ahead and create a key for it by running:
 
   okdata pubreg create-key"""
@@ -108,16 +102,27 @@ You may now go ahead and create a key for it by running:
             message = e.response.json()["message"]
             self.print(f"Something went wrong: {message}")
 
-    def list_clients(self, env):
-        clients = self.client.get_clients(env)
+    def list_clients(self):
+        config = list_clients_wizard()
+        env = config["env"]
+        clients = self.pubreg_client.get_clients(env)
         out = create_output(self.opt("format"), "pubreg_clients_config.json")
         out.add_rows(sorted(clients, key=itemgetter("client_name")))
-        self.print(f"Clients in ({env}):", out)
+        self.print(f"Clients in {env}:", out)
 
-    def delete_client(self, env, client_id):
+    def delete_client(self):
+        choices = delete_client_wizard(self.pubreg_client)
+        env = choices["env"]
+        client_id = choices["client_id"]
+        client_name = choices["client_name"]
+
+        self.confirm_to_continue(
+            f"Will delete client '{client_name}' [{env}].",
+        )
+
         try:
-            self.print(f"Deleting client '{client_id}' ({env})...")
-            self.client.delete_client(env, client_id)
+            self.print(f"Deleting client '{client_name}' [{env}]...")
+            self.pubreg_client.delete_client(env, client_id)
             self.print("Done! The client is deleted and will no longer work.")
         except HTTPError as e:
             message = e.response.json()["message"]
@@ -156,14 +161,8 @@ You may now go ahead and create a key for it by running:
         )
 
     def create_client_key(self):
-        self.confirm_to_continue(
-            "WARNING: Due to how Maskinporten works, the expiration date of "
-            "every existing key will be updated to today's date when creating "
-            "a new key.\n  (Digdir is looking into a fix for this issue.)"
-        )
-
         try:
-            config = CreateKeyWizard(self.client).start()
+            config = create_key_wizard(self.pubreg_client)
         except NoClientsError:
             self.print(
                 "No clients in the given environment yet!\n\n"
@@ -178,6 +177,9 @@ You may now go ahead and create a key for it by running:
         aws_region = config["aws_region"]
 
         self.confirm_to_continue(
+            "WARNING: Due to how Maskinporten works, the expiration date of "
+            "every existing key will be updated to today's date when creating "
+            "a new key.\n  (Digdir is looking into a fix for this issue.)\n\n"
             "Will create a new key for client '{}' in {}{}.".format(
                 client_name,
                 env,
@@ -187,10 +189,10 @@ You may now go ahead and create a key for it by running:
             )
         )
 
-        self.print("Creating key for '{}' ({})...".format(client_name, env))
+        self.print("Creating key for '{}' [{}]...".format(client_name, env))
 
         try:
-            key = self.client.create_key(
+            key = self.pubreg_client.create_key(
                 env,
                 client_id,
                 aws_account,
@@ -217,24 +219,43 @@ You may now go ahead and create a key for it by running:
                 "Datapatruljen!"
             )
 
-    def list_client_keys(self, env, client_id):
-        keys = self.client.get_keys(env, client_id)
-        out = create_output(self.opt("format"), "pubreg_client_keys_config.json")
+    def list_client_keys(self):
+        choices = list_keys_wizard(self.pubreg_client)
+        env = choices["env"]
+        client_id = choices["client_id"]
+        client_name = choices["client_name"]
+        keys = self.pubreg_client.get_keys(env, client_id)
+        out = create_output(
+            self.opt("format"),
+            "pubreg_client_keys_config.json",
+        )
         out.add_rows(sorted(keys, key=itemgetter("kid")))
-        self.print(f"Keys for client {client_id} ({env}):", out)
+        self.print(f"Keys for client {client_name} [{env}]:", out)
 
-    def delete_client_key(self, env, client_id, key_id):
+    def delete_client_key(self):
+        try:
+            choices = delete_key_wizard(self.pubreg_client)
+        except NoKeysError:
+            self.print("The selected client doesn't have any keys.")
+            return
+
+        env = choices["env"]
+        client_id = choices["client_id"]
+        client_name = choices["client_name"]
+        key_id = choices["key_id"]
+
         self.confirm_to_continue(
             "WARNING: Due to how Maskinporten works, the expiration dates of "
             "all other keys will be updated to today's date when deleting "
-            "a key.\n  (Digdir is looking into a fix for this issue.)"
+            "a key.\n  (Digdir is looking into a fix for this issue.)\n\n"
+            f"Will delete key '{key_id}' from '{client_name}' [{env}]."
         )
 
         try:
             self.print(
-                f"Deleting key '{key_id}' from '{client_id}' ({env})...",
+                f"Deleting key '{key_id}' from '{client_name}' [{env}]...",
             )
-            self.client.delete_key(env, client_id, key_id)
+            self.pubreg_client.delete_key(env, client_id, key_id)
             self.print("Done! The key is deleted and will no longer work.")
         except HTTPError as e:
             message = e.response.json()["message"]

@@ -41,7 +41,7 @@ Example values from the wizard:
 Use the following command to display a table of all of your clients:
 
 ```sh
-okdata pubreg list-clients (test|prod)
+okdata pubreg list-clients
 ```
 
 ## Deleting a client
@@ -87,7 +87,7 @@ Use the following command to display a table of all the keys registered on one
 of your clients:
 
 ```sh
-okdata pubreg list-keys (test|prod) <client-id>
+okdata pubreg list-keys
 ```
 
 ## Deleting a client key
@@ -96,7 +96,7 @@ When a key is no longer needed, it should be deleted by using the following
 command:
 
 ```sh
-okdata pubreg delete-key (test|prod) <client-id> <key-id>
+okdata pubreg delete-key
 ```
 
 Note that key deletion is irreversible.
