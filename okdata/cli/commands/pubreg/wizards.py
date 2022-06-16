@@ -10,9 +10,9 @@ from okdata.cli.commands.pubreg.questions import (
     q_env,
     q_integration,
     q_key,
+    q_key_destination,
     q_provider,
     q_scopes,
-    q_send_to_aws,
     q_team,
 )
 
@@ -63,7 +63,7 @@ def create_key_wizard(pubreg_client):
     choices = _run_questionnaire(
         q_env(),
         q_client(pubreg_client),
-        q_send_to_aws(),
+        q_key_destination(),
         q_aws_account(),
         q_aws_region(),
     )
@@ -71,6 +71,7 @@ def create_key_wizard(pubreg_client):
         "env": choices["env"],
         "client_id": choices["client"]["id"],
         "client_name": choices["client"]["name"],
+        "key_destination": choices["key_destination"],
         "aws_account": choices.get("aws_account"),
         "aws_region": choices.get("aws_region"),
     }

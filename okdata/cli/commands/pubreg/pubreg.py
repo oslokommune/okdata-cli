@@ -173,6 +173,7 @@ You may now go ahead and create a key for it by running:
         env = config["env"]
         client_id = config["client_id"]
         client_name = config["client_name"]
+        key_destination = config["key_destination"]
         aws_account = config["aws_account"]
         aws_region = config["aws_region"]
 
@@ -180,15 +181,15 @@ You may now go ahead and create a key for it by running:
             "WARNING: Due to how Maskinporten works, the expiration date of "
             "every existing key will be updated to today's date when creating "
             "a new key.\n  (Digdir is looking into a fix for this issue.)\n\n"
-            "Will create a new key for client '{}' in {}{}.".format(
+            "Will create a new key for client '{}' in {} and {}.".format(
                 client_name,
                 env,
                 (
-                    f" and send it to AWS account {aws_account} ({aws_region})"
-                    ", REPLACING any existing key for this client"
+                    f"send it to AWS account {aws_account} ({aws_region}), "
+                    "REPLACING any existing key for this client"
                 )
-                if aws_account and aws_region
-                else "",
+                if key_destination == "aws"
+                else "save it locally",
             )
         )
 

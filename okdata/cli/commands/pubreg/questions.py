@@ -159,13 +159,16 @@ def q_client(pubreg_client):
     }
 
 
-def q_send_to_aws():
+def q_key_destination():
     return {
         **_common_style,
-        "type": "confirm",
-        "name": "send_to_aws",
-        "message": "Send key to AWS Parameter Store?",
-        "auto_enter": False,
+        "type": "select",
+        "name": "key_destination",
+        "message": "Where should the key be stored?",
+        "choices": [
+            Choice("Send the key to your AWS Parameter Store", "aws"),
+            Choice("Save the key locally", "local"),
+        ],
     }
 
 
@@ -175,7 +178,7 @@ def q_aws_account():
         "type": "text",
         "name": "aws_account",
         "message": "AWS account number",
-        "when": lambda x: x["send_to_aws"],
+        "when": lambda x: x["key_destination"] == "aws",
         "validate": (
             lambda t: bool(re.fullmatch("[0-9]{12}", t)) or "12 digits, please"
         ),
@@ -188,7 +191,7 @@ def q_aws_region():
         "type": "select",
         "name": "aws_region",
         "message": "AWS region",
-        "when": lambda x: x["send_to_aws"],
+        "when": lambda x: x["key_destination"] == "aws",
         "choices": [Choice(*r) for r in _aws_regions],
     }
 
