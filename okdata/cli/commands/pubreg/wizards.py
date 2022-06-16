@@ -1,3 +1,5 @@
+import sys
+
 from questionary import prompt
 
 from okdata.cli.commands.pubreg.questions import (
@@ -15,15 +17,23 @@ from okdata.cli.commands.pubreg.questions import (
 )
 
 
+def _run_questionnaire(*questions):
+    choices = prompt(questions)
+
+    if not choices:
+        # Questionnaire was interrupted.
+        sys.exit()
+
+    return choices
+
+
 def create_client_wizard(team_client):
-    choices = prompt(
-        [
-            q_env(),
-            q_team(team_client),
-            q_provider(),
-            q_scopes(),
-            q_integration(),
-        ]
+    choices = _run_questionnaire(
+        q_env(),
+        q_team(team_client),
+        q_provider(),
+        q_scopes(),
+        q_integration(),
     )
     return {
         "env": choices["env"],
@@ -36,17 +46,12 @@ def create_client_wizard(team_client):
 
 
 def list_clients_wizard():
-    choices = prompt([q_env()])
+    choices = _run_questionnaire(q_env())
     return {"env": choices["env"]}
 
 
 def delete_client_wizard(pubreg_client):
-    choices = prompt(
-        [
-            q_env(),
-            q_client(pubreg_client),
-        ]
-    )
+    choices = _run_questionnaire(q_env(), q_client(pubreg_client))
     return {
         "env": choices["env"],
         "client_id": choices["client"]["id"],
@@ -55,14 +60,12 @@ def delete_client_wizard(pubreg_client):
 
 
 def create_key_wizard(pubreg_client):
-    choices = prompt(
-        [
-            q_env(),
-            q_client(pubreg_client),
-            q_send_to_aws(),
-            q_aws_account(),
-            q_aws_region(),
-        ]
+    choices = _run_questionnaire(
+        q_env(),
+        q_client(pubreg_client),
+        q_send_to_aws(),
+        q_aws_account(),
+        q_aws_region(),
     )
     return {
         "env": choices["env"],
@@ -74,12 +77,7 @@ def create_key_wizard(pubreg_client):
 
 
 def list_keys_wizard(pubreg_client):
-    choices = prompt(
-        [
-            q_env(),
-            q_client(pubreg_client),
-        ]
-    )
+    choices = _run_questionnaire(q_env(), q_client(pubreg_client))
     return {
         "env": choices["env"],
         "client_id": choices["client"]["id"],
@@ -88,12 +86,10 @@ def list_keys_wizard(pubreg_client):
 
 
 def delete_key_wizard(pubreg_client):
-    choices = prompt(
-        [
-            q_env(),
-            q_client(pubreg_client),
-            q_key(pubreg_client),
-        ]
+    choices = _run_questionnaire(
+        q_env(),
+        q_client(pubreg_client),
+        q_key(pubreg_client),
     )
     return {
         "env": choices["env"],

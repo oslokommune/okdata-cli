@@ -57,6 +57,8 @@ def main():
                 },
             )
             instance.log.exception(f"okdata-cli failed with: {e}")
+        except KeyboardInterrupt:
+            instance.print("\nAbort.")
 
     else:
         BaseCommand().help()
