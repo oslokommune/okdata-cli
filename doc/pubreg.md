@@ -14,6 +14,7 @@ Contents:
 * [Listing clients](#listing-clients)
 * [Deleting a client](#deleting-a-client)
 * [Creating a client key](#creating-a-client-key)
+* [Rotating a client key](#rotating-a-client-key)
 * [Listing client keys](#listing-client-keys)
 * [Deleting a client key](#deleting-a-client-key)
 
@@ -80,6 +81,18 @@ into a fix for this issue.
 
 Each client can hold a maximum of five keys. After reaching that limit, old keys
 have to be [deleted](#deleting-a-client-key) to make room for new ones.
+
+## Rotating a client key
+
+Client keys last a year, but you're encourage to rotate them more often than
+that. To rotate a key, start by [creating](#creating-a-client-key) a new key. If
+you opt to automatically send it to your AWS account's Parameter Store, the
+newly generated key will replace the old one in place (i.e. the old one will be
+overwritten). If you opt to download the key locally, you'll have to replace the
+old key yourself.
+
+After the new key has been installed, the old key can safely be
+[deleted](#deleting-a-client-key).
 
 ## Listing client keys
 
