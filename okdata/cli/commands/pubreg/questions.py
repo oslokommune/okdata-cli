@@ -127,7 +127,10 @@ def q_integration():
         **_common_style,
         "type": "text",
         "name": "integration",
-        "message": "Component/integration name",
+        "message": "Integration name",
+        "instruction": (
+            "(identifying in which system or case this client will be used)"
+        ),
         "validate": _validate_integration,
     }
 
