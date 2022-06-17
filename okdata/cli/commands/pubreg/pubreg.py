@@ -115,15 +115,48 @@ You may now go ahead and create a key for it by running:
         env = choices["env"]
         client_id = choices["client_id"]
         client_name = choices["client_name"]
+        delete_from_aws = choices["delete_from_aws"]
+        aws_account = choices["aws_account"]
+        aws_region = choices["aws_region"]
 
         self.confirm_to_continue(
-            f"Will delete client '{client_name}' [{env}].",
+            "Will delete client '{}' [{}]{}.".format(
+                client_name,
+                env,
+                (
+                    f" along with the key stored in AWS account {aws_account} "
+                    f"({aws_region})"
+                )
+                if delete_from_aws
+                else "",
+            ),
         )
 
         try:
             self.print(f"Deleting client '{client_name}' [{env}]...")
-            self.pubreg_client.delete_client(env, client_id)
-            self.print("Done! The client is deleted and will no longer work.")
+            res = self.pubreg_client.delete_client(
+                env, client_id, aws_account, aws_region
+            )
+            deleted_ssm_params = res["deleted_ssm_params"]
+            self.print("\nDone! The client is deleted and will no longer work.")
+
+            if delete_from_aws:
+                if deleted_ssm_params:
+                    self.print(
+                        "\nThe following {} deleted from SSM:".format(
+                            "parameter was"
+                            if len(deleted_ssm_params) == 1
+                            else "parameters were"
+                        )
+                    )
+                    for param in deleted_ssm_params:
+                        self.print(f"- {param}")
+                else:
+                    self.print(
+                        "However the key secrets couldn't be deleted from SSM "
+                        "as requested."
+                    )
+
         except HTTPError as e:
             message = e.response.json()["message"]
             self.print(f"Something went wrong: {message}")
