@@ -183,7 +183,10 @@ You may now go ahead and create a key for it by running:
             "Will create a new key for client '{}' in {}{}.".format(
                 client_name,
                 env,
-                f", and send it to AWS account {aws_account} ({aws_region})"
+                (
+                    f" and send it to AWS account {aws_account} ({aws_region})"
+                    ", REPLACING any existing key for this client"
+                )
                 if aws_account and aws_region
                 else "",
             )
