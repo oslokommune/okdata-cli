@@ -133,8 +133,11 @@ You may now go ahead and create a key for it by running:
 
         if params:
             self.print(
-                "The following {} been written to SSM:".format(
-                    "parameter has" if len(params) == 1 else "parameters have"
+                (
+                    "\nA new key has been created and the following {} been "
+                    "written to SSM:"
+                ).format(
+                    "parameter has" if len(params) == 1 else "parameters have",
                 )
             )
             for param in params:
@@ -151,6 +154,11 @@ You may now go ahead and create a key for it by running:
 
         with open(outfile, "wb") as f:
             f.write(base64.b64decode(key["keystore"]))
+
+        self.print(
+            "\nA new key has been created and stored in the current working "
+            "directory.\n"
+        )
 
         self.print(f"Key ID:   {key['kid']}")
         self.print(f"Key file: {outfile}")
@@ -206,11 +214,6 @@ You may now go ahead and create a key for it by running:
             message = e.response.json()["message"]
             self.print(f"Something went wrong: {message}")
             return
-
-        self.print(
-            "\nA new key has been created and stored in the current working "
-            "directory.\n"
-        )
 
         if key.get("ssm_params") is not None:
             self._handle_new_key_aws(key)
