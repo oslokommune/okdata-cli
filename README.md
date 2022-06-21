@@ -1,19 +1,10 @@
-# `okdata-cli`: Oslo Origo Dataplatform CLI
+# `okdata-cli`: Oslo Origo data services CLI
 
-Okdata CLI provides a unified interface to the services provided by Oslo Origo Dataplatform.
+Okdata CLI provides a unified interface to data services for Oslo Origo teams.
 
-```bash
-$ okdata
-
-usage:
-  okdata datasets [options]
-  okdata status [options]
-  okdata pipelines [options]
-  okdata permissions [options]
-  okdata pubreg [options]
-  okdata -h | --help
-```
-
-## Resources
-* [Documentation at Read the Docs](https://okdata-cli.readthedocs.io/)
-* [GitHub pages for Origo Dataplatform](https://oslokommune.github.io/dataplattform/)
+* [Install](doc/install.md)
+* [Configuration](doc/configuration.md)
+* [Datasets](doc/datasets.md)
+* [Pipelines](doc/pipelines.md)
+* [Permissions](doc/permissions.md)
+* [Public registers](doc/pubreg.md)
