@@ -41,13 +41,7 @@ $ make test
 
 ## Documentation
 
-Documentation is written in Markdown and is located in the `doc` directory. We
-use Sphinx to compile it; run `make` inside the `doc` directory to see an
-overview of all the available options.
-
-An HTML version of the documentation is hosted at [Read the
-Docs](https://okdata-cli.readthedocs.io/). This is kept up to date automatically
-with the latest version on the `master` branch.
+Documentation is written in Markdown and is located in the `doc` directory.
 
 ## Uploading to PyPI
 

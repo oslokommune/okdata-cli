@@ -30,12 +30,10 @@ setuptools.setup(
     },
     install_requires=[
         "PrettyTable",
-        "Sphinx",
         "docopt",
         "okdata-sdk>=2.0.0,<3.0.0",
         "pygments>=2.11.2,<3.0.0",
         "questionary>=1.10.0,<2.0.0",
-        "recommonmark",
         "requests",
     ],
     entry_points={"console_scripts": ["okdata=okdata.cli.__main__:main"]},
