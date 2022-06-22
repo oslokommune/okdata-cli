@@ -172,13 +172,23 @@ def q_key_destination():
     }
 
 
+def q_delete_from_aws():
+    return {
+        **_common_style,
+        "type": "confirm",
+        "name": "delete_from_aws",
+        "message": "Delete key from AWS Parameter Store?",
+        "auto_enter": False,
+    }
+
+
 def q_aws_account():
     return {
         **_common_style,
         "type": "text",
         "name": "aws_account",
         "message": "AWS account number",
-        "when": lambda x: x["key_destination"] == "aws",
+        "when": lambda x: x["key_destination"] == "aws" or x.get("delete_from_aws"),
         "validate": (
             lambda t: bool(re.fullmatch("[0-9]{12}", t)) or "12 digits, please"
         ),
@@ -191,7 +201,7 @@ def q_aws_region():
         "type": "select",
         "name": "aws_region",
         "message": "AWS region",
-        "when": lambda x: x["key_destination"] == "aws",
+        "when": lambda x: x["key_destination"] == "aws" or x.get("delete_from_aws"),
         "choices": [Choice(*r) for r in _aws_regions],
     }
 

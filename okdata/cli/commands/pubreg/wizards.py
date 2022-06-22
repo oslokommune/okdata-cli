@@ -7,6 +7,7 @@ from okdata.cli.commands.pubreg.questions import (
     q_aws_account,
     q_aws_region,
     q_client,
+    q_delete_from_aws,
     q_env,
     q_integration,
     q_key,
@@ -51,11 +52,20 @@ def list_clients_wizard():
 
 
 def delete_client_wizard(pubreg_client):
-    choices = _run_questionnaire(q_env(), q_client(pubreg_client))
+    choices = _run_questionnaire(
+        q_env(),
+        q_client(pubreg_client),
+        q_delete_from_aws(),
+        q_aws_account(),
+        q_aws_region(),
+    )
     return {
         "env": choices["env"],
         "client_id": choices["client"]["id"],
         "client_name": choices["client"]["name"],
+        "delete_from_aws": choices["delete_from_aws"],
+        "aws_account": choices.get("aws_account"),
+        "aws_region": choices.get("aws_region"),
     }
 
 
