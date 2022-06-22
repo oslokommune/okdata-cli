@@ -1,3 +1,9 @@
+## 1.1.0
+
+* Numerous UI improvements in the `pubreg` sub-commands.
+* Better keyboard interrupt handling.
+* Dropped dependency on Sphinx for documentation generation.
+
 ## 1.0.0
 
 * The previously internal `pubreg` command is now made public and documented.
