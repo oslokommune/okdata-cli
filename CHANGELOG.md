@@ -1,3 +1,7 @@
+## ?.?.?
+
+* Fixed a bug in the `pubreg delete-client` command.
+
 ## 1.1.0
 
 * Numerous UI improvements in the `pubreg` sub-commands.

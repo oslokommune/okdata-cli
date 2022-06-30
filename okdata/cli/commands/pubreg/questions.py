@@ -188,7 +188,7 @@ def q_aws_account():
         "type": "text",
         "name": "aws_account",
         "message": "AWS account number",
-        "when": lambda x: x["key_destination"] == "aws" or x.get("delete_from_aws"),
+        "when": lambda x: x.get("key_destination") == "aws" or x.get("delete_from_aws"),
         "validate": (
             lambda t: bool(re.fullmatch("[0-9]{12}", t)) or "12 digits, please"
         ),
@@ -201,7 +201,7 @@ def q_aws_region():
         "type": "select",
         "name": "aws_region",
         "message": "AWS region",
-        "when": lambda x: x["key_destination"] == "aws" or x.get("delete_from_aws"),
+        "when": lambda x: x.get("key_destination") == "aws" or x.get("delete_from_aws"),
         "choices": [Choice(*r) for r in _aws_regions],
     }
 
