@@ -1,6 +1,7 @@
-## ?.?.?
+## 1.2.0
 
-* Fixed a bug in the `pubreg delete-client` command.
+* The `pubreg delete-client` command now offers to delete the SSM key parameters
+  belonging to a client when it's deleted.
 
 ## 1.1.0
 
