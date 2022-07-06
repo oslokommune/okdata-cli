@@ -40,7 +40,14 @@ class PubregClient(SDK):
             },
         ).json()
 
-    def create_key(self, env, client_id, aws_account, aws_region):
+    def create_key(
+        self,
+        env,
+        client_id,
+        aws_account,
+        aws_region,
+        enable_auto_rotate,
+    ):
         url = f"{self.api_url}/clients/{env}/{client_id}/keys"
         log.info(f"Creating key for: {url}")
         return self.post(
@@ -48,6 +55,7 @@ class PubregClient(SDK):
             data={
                 "destination_aws_account": aws_account,
                 "destination_aws_region": aws_region,
+                "enable_auto_rotate": enable_auto_rotate,
             },
         ).json()
 
