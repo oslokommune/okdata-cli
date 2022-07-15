@@ -86,11 +86,25 @@ have to be [deleted](#deleting-a-client-key) to make room for new ones.
 ## Rotating a client key
 
 Client keys last a year, but you're encourage to rotate them more often than
-that. To rotate a key, start by [creating](#creating-a-client-key) a new key. If
-you opt to automatically send it to your AWS account's Parameter Store, the
-newly generated key will replace the old one in place (i.e. the old one will be
-overwritten). If you opt to download the key locally, you'll have to replace the
-old key yourself.
+that. When creating a new key and opting to send it to your AWS account, you're
+also given the choice to activate automatic key rotation for the client.
+
+Automatic key rotation happens once every night Monday through Friday, replacing
+the previous key in-place. That is, the old key is replaced in your AWS
+account's Parameter Store with the new one. The previous key is still active for
+five minutes after the switch before it is deleted, so your application can
+assume that a key is valid for at least five minutes after fetching it from the
+Parameter Store.
+
+Automatic key rotation stops when the client is [deleted](#deleting-a-client).
+
+### Rotating a client key manually
+
+Client keys can also be rotated manually. To rotate a key manually, start by
+[creating](#creating-a-client-key) a new key. If you opt to automatically send
+it to your AWS account's Parameter Store, the newly generated key will replace
+the old one in place (i.e. the old one will be overwritten). If you opt to
+download the key locally, you'll have to replace the old key yourself.
 
 After the new key has been installed, the old key can safely be
 [deleted](#deleting-a-client-key).
