@@ -1,0 +1,22 @@
+{
+  "Time": {
+    "name": "Time",
+    "key": "timestamp"
+  },
+  "Action": {
+    "name": "Action",
+    "key": "action"
+  },
+  "User": {
+    "name": "User",
+    "key": "user"
+  },
+  "Scopes": {
+    "name": "Scopes",
+    "key": "scopes"
+  },
+  "Key ID": {
+    "name": "Key ID",
+    "key": "key_id"
+  }
+}
