@@ -1,0 +1,10 @@
+{
+  "Name": {
+    "name": "Name",
+    "key": "name"
+  },
+  "Member?": {
+    "name": "Member?",
+    "key": "is_member"
+  }
+}
