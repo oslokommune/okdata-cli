@@ -124,6 +124,8 @@ class TableOutput(PrettyTable):
                 ]
             value = ["- " + v for v in value]
             value = "  \n".join(value)
+        elif isinstance(value, bool):
+            value = "Yes" if value else "No"
         elif max_width and len(value) > max_width:
             value = fill(value, width=max_width)
         return value

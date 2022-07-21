@@ -24,18 +24,20 @@ class BaseCommand:
 
 usage:
   okdata datasets [options]
-  okdata status [options]
-  okdata pipelines [options]
   okdata permissions [options]
+  okdata pipelines [options]
   okdata pubreg [options]
+  okdata status [options]
+  okdata teams [options]
   okdata -h | --help
 
 Commands available:
   datasets
-  status
-  pipelines
   permissions
+  pipelines
   pubreg
+  status
+  teams
 
 Options:{BASE_COMMAND_OPTIONS}
 """

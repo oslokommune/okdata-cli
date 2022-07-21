@@ -1,3 +1,8 @@
+## ?.?.?
+
+* A new family of `team` commands and been added for viewing and (later) editing
+  teams.
+
 ## 1.2.0
 
 * The `pubreg delete-client` command now offers to delete the SSM key parameters
