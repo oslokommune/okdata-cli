@@ -1,7 +1,6 @@
 ## ?.?.?
 
-* A new family of `team` commands and been added for viewing and (later) editing
-  teams.
+* A new family of `team` commands and been added for viewing and editing teams.
 
 ## 1.2.0
 

@@ -1,8 +1,9 @@
 import re
 from operator import itemgetter
 
-from prompt_toolkit.styles import Style
 from questionary import Choice
+
+from okdata.cli.commands.wizard import common_style
 
 _providers = {
     "freg": "Folkeregisteret",
@@ -56,19 +57,9 @@ class NoKeysError(Exception):
     pass
 
 
-class NoTeamError(Exception):
-    pass
-
-
-_common_style = {
-    "qmark": "*",
-    "style": Style([("qmark", "fg:red bold")]),
-}
-
-
 def q_env():
     return {
-        **_common_style,
+        **common_style,
         "type": "select",
         "name": "env",
         "message": "Maskinporten environment",
@@ -76,27 +67,9 @@ def q_env():
     }
 
 
-def q_team(team_client):
-    def _team_choices():
-        teams = team_client.get_teams(has_role="origo-team")
-
-        if not teams:
-            raise NoTeamError
-
-        return [Choice(t["name"], t["id"]) for t in teams]
-
-    return {
-        **_common_style,
-        "type": "select",
-        "name": "team_id",
-        "message": "Team",
-        "choices": _team_choices(),
-    }
-
-
 def q_provider():
     return {
-        **_common_style,
+        **common_style,
         "type": "select",
         "name": "provider_id",
         "message": "Provider",
@@ -106,7 +79,7 @@ def q_provider():
 
 def q_scopes():
     return {
-        **_common_style,
+        **common_style,
         "type": "checkbox",
         "name": "scopes",
         "message": "Scopes",
@@ -124,7 +97,7 @@ def q_integration():
         return True
 
     return {
-        **_common_style,
+        **common_style,
         "type": "text",
         "name": "integration",
         "message": "Integration name",
@@ -151,7 +124,7 @@ def q_client(pubreg_client):
         ]
 
     return {
-        **_common_style,
+        **common_style,
         "type": "select",
         "name": "client",
         "message": "Client",
@@ -161,7 +134,7 @@ def q_client(pubreg_client):
 
 def q_key_destination():
     return {
-        **_common_style,
+        **common_style,
         "type": "select",
         "name": "key_destination",
         "message": "Where should the key be stored?",
@@ -174,7 +147,7 @@ def q_key_destination():
 
 def q_delete_from_aws():
     return {
-        **_common_style,
+        **common_style,
         "type": "confirm",
         "name": "delete_from_aws",
         "message": "Delete key from AWS Parameter Store?",
@@ -184,7 +157,7 @@ def q_delete_from_aws():
 
 def q_aws_account():
     return {
-        **_common_style,
+        **common_style,
         "type": "text",
         "name": "aws_account",
         "message": "AWS account number",
@@ -197,7 +170,7 @@ def q_aws_account():
 
 def q_aws_region():
     return {
-        **_common_style,
+        **common_style,
         "type": "select",
         "name": "aws_region",
         "message": "AWS region",
@@ -216,7 +189,7 @@ def q_key(pubreg_client):
         return sorted([k["kid"] for k in keys])
 
     return {
-        **_common_style,
+        **common_style,
         "type": "select",
         "name": "key_id",
         "message": "Key",

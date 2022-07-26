@@ -1,7 +1,3 @@
-import sys
-
-from questionary import prompt
-
 from okdata.cli.commands.pubreg.questions import (
     _providers,
     q_aws_account,
@@ -14,22 +10,13 @@ from okdata.cli.commands.pubreg.questions import (
     q_key_destination,
     q_provider,
     q_scopes,
-    q_team,
 )
-
-
-def _run_questionnaire(*questions):
-    choices = prompt(questions)
-
-    if not choices:
-        # Questionnaire was interrupted.
-        sys.exit()
-
-    return choices
+from okdata.cli.commands.teams.questions import q_team
+from okdata.cli.commands.wizard import run_questionnaire
 
 
 def create_client_wizard(team_client):
-    choices = _run_questionnaire(
+    choices = run_questionnaire(
         q_env(),
         q_team(team_client),
         q_provider(),
@@ -47,12 +34,12 @@ def create_client_wizard(team_client):
 
 
 def list_clients_wizard():
-    choices = _run_questionnaire(q_env())
+    choices = run_questionnaire(q_env())
     return {"env": choices["env"]}
 
 
 def delete_client_wizard(pubreg_client):
-    choices = _run_questionnaire(
+    choices = run_questionnaire(
         q_env(),
         q_client(pubreg_client),
         q_delete_from_aws(),
@@ -70,7 +57,7 @@ def delete_client_wizard(pubreg_client):
 
 
 def create_key_wizard(pubreg_client):
-    choices = _run_questionnaire(
+    choices = run_questionnaire(
         q_env(),
         q_client(pubreg_client),
         q_key_destination(),
@@ -88,7 +75,7 @@ def create_key_wizard(pubreg_client):
 
 
 def list_keys_wizard(pubreg_client):
-    choices = _run_questionnaire(q_env(), q_client(pubreg_client))
+    choices = run_questionnaire(q_env(), q_client(pubreg_client))
     return {
         "env": choices["env"],
         "client_id": choices["client"]["id"],
@@ -97,7 +84,7 @@ def list_keys_wizard(pubreg_client):
 
 
 def delete_key_wizard(pubreg_client):
-    choices = _run_questionnaire(
+    choices = run_questionnaire(
         q_env(),
         q_client(pubreg_client),
         q_key(pubreg_client),
