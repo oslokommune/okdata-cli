@@ -3,8 +3,7 @@
 * A new command `pubreg audit-log` for viewing audit logs of Maskinporten
   clients has been added.
 * Automatic client key rotation is now offered when creating a new client key.
-* A new family of `team` commands and been added for viewing and (later) editing
-  teams.
+* A new family of `team` commands and been added for viewing and editing teams.
 
 ## 1.2.0
 

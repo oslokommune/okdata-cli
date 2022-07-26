@@ -10,6 +10,7 @@ okdata teams -h
 
 Contents:
 * [Listing teams](#listing-teams)
+* [Editing team details](#editing-team-details)
 
 ## Listing teams
 
@@ -25,3 +26,17 @@ Use the `--my` option to list only those teams you're a member of:
 ```sh
 okdata teams ls --my
 ```
+
+## Editing team details
+
+Use the following command to edit the details of any team you're a member of:
+
+```sh
+okdata teams edit
+```
+
+The attributes you can edit are the team's:
+
+- Name
+- Email address
+- Slack channel URL
