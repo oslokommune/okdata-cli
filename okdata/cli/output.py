@@ -74,14 +74,13 @@ class TableOutput(PrettyTable):
         return value
 
     def get_row_value(self, row, key):
-        value = "N/A"
         row_key = self.config[key]["key"]
         if row_key in row:
             if "fields" in self.config[key]:
-                value = self.field_values(row, row_key, key)
-            else:
-                value = row[row_key]
-        return value
+                return self.field_values(row, row_key, key)
+            if row[row_key] is not None:
+                return row[row_key]
+        return "N/A"
 
     def add_row(self, row):
         row_data = []

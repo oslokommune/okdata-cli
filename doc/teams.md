@@ -11,6 +11,7 @@ okdata teams -h
 Contents:
 * [Listing teams](#listing-teams)
 * [Editing team details](#editing-team-details)
+* [Listing team members](#listing-team-members)
 
 ## Listing teams
 
@@ -40,3 +41,19 @@ The attributes you can edit are the team's:
 - Name
 - Email address
 - Slack channel URL
+
+## Listing team members
+
+The following command lets you pick a team and list its members (even from the
+ones you're not a member of):
+
+```sh
+okdata teams list-members
+```
+
+Use the `--my` option to restrict the selection of teams to those you're a
+member of:
+
+```sh
+okdata teams list-members --my
+```
