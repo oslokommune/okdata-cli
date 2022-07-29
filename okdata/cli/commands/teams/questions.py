@@ -9,9 +9,11 @@ class NoTeamError(Exception):
     pass
 
 
-def q_team(team_client):
+def q_team(team_client, my=True):
     def _team_choices():
-        teams = team_client.get_teams(has_role="origo-team")
+        teams = team_client.get_teams(
+            include=None if my else "all", has_role="origo-team"
+        )
 
         if not teams:
             raise NoTeamError
