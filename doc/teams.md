@@ -57,3 +57,15 @@ member of:
 ```sh
 okdata teams list-members --my
 ```
+
+## Adding og removing team members
+
+To add or remove a member from a team, use the following commands:
+
+```sh
+okdata teams add-member
+okdata teams remove-member
+```
+
+You will be asked to either specify a user ident (username) for the user to be
+added, or select the user(s) you want to remove from the team.
