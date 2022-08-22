@@ -8,6 +8,7 @@ from okdata.cli.commands.pubreg.questions import (
     q_aws_region,
     q_client,
     q_delete_from_aws,
+    q_enable_auto_rotate,
     q_env,
     q_integration,
     q_key,
@@ -76,6 +77,7 @@ def create_key_wizard(pubreg_client):
         q_key_destination(),
         q_aws_account(),
         q_aws_region(),
+        q_enable_auto_rotate(),
     )
     return {
         "env": choices["env"],
@@ -84,6 +86,7 @@ def create_key_wizard(pubreg_client):
         "key_destination": choices["key_destination"],
         "aws_account": choices.get("aws_account"),
         "aws_region": choices.get("aws_region"),
+        "enable_auto_rotate": choices.get("enable_auto_rotate"),
     }
 
 

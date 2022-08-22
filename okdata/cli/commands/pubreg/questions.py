@@ -206,6 +206,22 @@ def q_aws_region():
     }
 
 
+def q_enable_auto_rotate():
+    return {
+        **_common_style,
+        "type": "confirm",
+        "name": "enable_auto_rotate",
+        "message": "\n".join(
+            [
+                "Automatic key rotation will replace the key in SSM nightly.",
+                "  Enable automatic key rotation for this client?",
+            ]
+        ),
+        "when": lambda x: x.get("key_destination") == "aws",
+        "auto_enter": False,
+    }
+
+
 def q_key(pubreg_client):
     def _key_choices(env, client_id):
         keys = pubreg_client.get_keys(env, client_id)

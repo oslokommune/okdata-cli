@@ -166,7 +166,7 @@ You may now go ahead and create a key for it by running:
             message = e.response.json()["message"]
             self.print(f"Something went wrong: {message}")
 
-    def _handle_new_key_aws(self, key):
+    def _handle_new_key_aws(self, key, enabled_auto_rotate):
         params = key.get("ssm_params")
 
         if params:
@@ -180,6 +180,10 @@ You may now go ahead and create a key for it by running:
             )
             for param in params:
                 self.print(f"- {param}")
+            if enabled_auto_rotate:
+                self.print(
+                    "\nThe key has been scheduled for nightly automatic rotation.",
+                )
         else:
             self.print(
                 "The key was created, but it appears that the relevant "
@@ -222,20 +226,29 @@ You may now go ahead and create a key for it by running:
         key_destination = config["key_destination"]
         aws_account = config["aws_account"]
         aws_region = config["aws_region"]
+        enable_auto_rotate = config["enable_auto_rotate"]
 
         self.confirm_to_continue(
-            "WARNING: Due to how Maskinporten works, the expiration date of "
-            "every existing key will be updated to today's date when creating "
-            "a new key.\n  (Digdir is looking into a fix for this issue.)\n\n"
-            "Will create a new key for client '{}' in {} and {}.".format(
-                client_name,
-                env,
-                (
-                    f"send it to AWS account {aws_account} ({aws_region}), "
-                    "REPLACING any existing key for this client"
-                )
-                if key_destination == "aws"
-                else "save it locally",
+            "\n\n".join(
+                [
+                    "WARNING: Due to how Maskinporten works, the expiration "
+                    "date of every existing key will be updated to today's "
+                    "date when creating a new key.\n"
+                    "  (Digdir is looking into a fix for this issue.)",
+                    "Will create a new key for client '{}' in {} and {}.".format(
+                        client_name,
+                        env,
+                        (
+                            f"send it to AWS account {aws_account} ({aws_region}), "
+                            "REPLACING any existing key for this client"
+                        )
+                        if key_destination == "aws"
+                        else "save it locally",
+                    ),
+                    "The key will{} be rotated automatically every night.\n".format(
+                        "" if enable_auto_rotate else " NOT",
+                    ),
+                ]
             )
         )
 
@@ -243,10 +256,7 @@ You may now go ahead and create a key for it by running:
 
         try:
             key = self.pubreg_client.create_key(
-                env,
-                client_id,
-                aws_account,
-                aws_region,
+                env, client_id, aws_account, aws_region, enable_auto_rotate
             )
         except HTTPError as e:
             message = e.response.json()["message"]
@@ -254,7 +264,7 @@ You may now go ahead and create a key for it by running:
             return
 
         if key.get("ssm_params") is not None:
-            self._handle_new_key_aws(key)
+            self._handle_new_key_aws(key, enable_auto_rotate)
         elif key.get("keystore") and key.get("key_password"):
             self._handle_new_key_local(key, client_name, env)
         else:
