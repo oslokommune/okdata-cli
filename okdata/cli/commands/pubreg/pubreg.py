@@ -229,12 +229,12 @@ You may now go ahead and create a key for it by running:
         enable_auto_rotate = config["enable_auto_rotate"]
 
         self.confirm_to_continue(
-            "\n".join(
+            "\n\n".join(
                 [
                     "WARNING: Due to how Maskinporten works, the expiration "
                     "date of every existing key will be updated to today's "
-                    "date when creating a new key.",
-                    "  (Digdir is looking into a fix for this issue.)\n",
+                    "date when creating a new key.\n"
+                    "  (Digdir is looking into a fix for this issue.)",
                     "Will create a new key for client '{}' in {} and {}.".format(
                         client_name,
                         env,
@@ -245,7 +245,7 @@ You may now go ahead and create a key for it by running:
                         if key_destination == "aws"
                         else "save it locally",
                     ),
-                    "The key will{} be rotated automatically every night.".format(
+                    "The key will{} be rotated automatically every night.\n".format(
                         "" if enable_auto_rotate else " NOT",
                     ),
                 ]
