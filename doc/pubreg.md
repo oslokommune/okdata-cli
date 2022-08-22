@@ -130,3 +130,6 @@ okdata pubreg audit-log
 Audit logs contain the history of events related to clients, including their
 creation time, when keys are added and deleted, and the username of the user who
 performed each action.
+
+Note that audit logs for deleted clients can't be retrieved this way. Should
+that become necessary, please contact Dataspeilet.
