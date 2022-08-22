@@ -60,3 +60,8 @@ class PubregClient(SDK):
         url = f"{self.api_url}/clients/{env}/{client_id}/keys"
         log.info(f"Listing keys from: {url}")
         return self.get(url).json()
+
+    def get_audit_log(self, env, client_id):
+        url = f"{self.api_url}/audit/{env}/{client_id}/log"
+        log.info(f"Fetching audit log from: {url}")
+        return self.get(url).json()

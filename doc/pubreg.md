@@ -17,6 +17,7 @@ Contents:
 * [Rotating a client key](#rotating-a-client-key)
 * [Listing client keys](#listing-client-keys)
 * [Deleting a client key](#deleting-a-client-key)
+* [Viewing a client's audit log](#viewing-a-clients-audit-log)
 
 ## Prerequisites
 
@@ -117,3 +118,18 @@ Note that key deletion is irreversible.
 Also note that due to how Maskinporten works, the expiration date of every
 existing key will be updated to today's date when creating a new key. Digdir is
 looking into a fix for this issue.
+
+## Viewing a client's audit log
+
+To view the audit log for a client, use the following command:
+
+```sh
+okdata pubreg audit-log
+```
+
+Audit logs contain the history of events related to clients, including their
+creation time, when keys are added and deleted, and the username of the user who
+performed each action.
+
+Note that audit logs for deleted clients can't be retrieved this way. Should
+that become necessary, please contact Dataspeilet.

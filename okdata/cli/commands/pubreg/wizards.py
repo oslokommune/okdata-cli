@@ -108,3 +108,12 @@ def delete_key_wizard(pubreg_client):
         "client_name": choices["client"]["name"],
         "key_id": choices["key_id"],
     }
+
+
+def audit_log_wizard(pubreg_client):
+    choices = _run_questionnaire(q_env(), q_client(pubreg_client))
+    return {
+        "env": choices["env"],
+        "client_id": choices["client"]["id"],
+        "client_name": choices["client"]["name"],
+    }

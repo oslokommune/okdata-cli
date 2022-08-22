@@ -1,3 +1,8 @@
+## ?.?.?
+
+* A new command `pubreg audit-log` for viewing audit logs of Maskinporten
+  clients has been added.
+
 ## 1.2.0
 
 * The `pubreg delete-client` command now offers to delete the SSM key parameters

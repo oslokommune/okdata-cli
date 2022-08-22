@@ -12,6 +12,7 @@ from okdata.cli.commands.pubreg.questions import (
     NoTeamError,
 )
 from okdata.cli.commands.pubreg.wizards import (
+    audit_log_wizard,
     create_client_wizard,
     create_key_wizard,
     delete_client_wizard,
@@ -32,6 +33,7 @@ Usage:
   okdata pubreg create-key [options]
   okdata pubreg list-keys [options]
   okdata pubreg delete-key [options]
+  okdata pubreg audit-log [options]
 
 Examples:
   okdata pubreg create-client
@@ -40,6 +42,7 @@ Examples:
   okdata pubreg create-key
   okdata pubreg list-keys
   okdata pubreg delete-key
+  okdata pubreg audit-log
 
 Options:{BASE_COMMAND_OPTIONS}
     """
@@ -62,6 +65,8 @@ Options:{BASE_COMMAND_OPTIONS}
             self.list_client_keys()
         elif self.cmd("delete-key"):
             self.delete_client_key()
+        elif self.cmd("audit-log"):
+            self.audit_log()
 
     def create_client(self):
         try:
@@ -300,3 +305,15 @@ You may now go ahead and create a key for it by running:
         except HTTPError as e:
             message = e.response.json()["message"]
             self.print(f"Something went wrong: {message}")
+
+    def audit_log(self):
+        choices = audit_log_wizard(self.pubreg_client)
+        env = choices["env"]
+        client_id = choices["client_id"]
+        client_name = choices["client_name"]
+
+        audit_log = self.pubreg_client.get_audit_log(env, client_id)
+
+        out = create_output(self.opt("format"), "pubreg_audit_log_config.json")
+        out.add_rows(sorted(audit_log, key=itemgetter("timestamp")))
+        self.print(f"Audit log for client {client_name} [{env}]:", out)
