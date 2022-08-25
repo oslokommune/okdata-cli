@@ -76,10 +76,6 @@ new client key:
 okdata pubreg create-key
 ```
 
-Note that due to how Maskinporten works, the expiration date of every existing
-key will be updated to today's date when creating a new key. Digdir is looking
-into a fix for this issue.
-
 Each client can hold a maximum of five keys. After reaching that limit, old keys
 have to be [deleted](#deleting-a-client-key) to make room for new ones.
 
@@ -128,10 +124,6 @@ okdata pubreg delete-key
 ```
 
 Note that key deletion is irreversible.
-
-Also note that due to how Maskinporten works, the expiration date of every
-existing key will be updated to today's date when creating a new key. Digdir is
-looking into a fix for this issue.
 
 ## Viewing a client's audit log
 
