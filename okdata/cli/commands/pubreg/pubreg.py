@@ -231,10 +231,6 @@ You may now go ahead and create a key for it by running:
         self.confirm_to_continue(
             "\n\n".join(
                 [
-                    "WARNING: Due to how Maskinporten works, the expiration "
-                    "date of every existing key will be updated to today's "
-                    "date when creating a new key.\n"
-                    "  (Digdir is looking into a fix for this issue.)",
                     "Will create a new key for client '{}' in {} and {}.".format(
                         client_name,
                         env,
@@ -300,9 +296,6 @@ You may now go ahead and create a key for it by running:
         key_id = choices["key_id"]
 
         self.confirm_to_continue(
-            "WARNING: Due to how Maskinporten works, the expiration dates of "
-            "all other keys will be updated to today's date when deleting "
-            "a key.\n  (Digdir is looking into a fix for this issue.)\n\n"
             f"Will delete key '{key_id}' from '{client_name}' [{env}]."
         )
 
