@@ -20,3 +20,8 @@ def edit_team_wizard(team_client):
         "team_name": choices.get("team_name"),
         "attribute_value": choices.get("attribute_value"),
     }
+
+
+def list_members_wizard(team_client, my):
+    choices = run_questionnaire(q_team(team_client, my))
+    return {"team_id": choices["team_id"]}

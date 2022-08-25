@@ -1,0 +1,14 @@
+{
+  "Name": {
+    "name": "Name",
+    "key": "name"
+  },
+  "Username": {
+    "name": "Username",
+    "key": "username"
+  },
+  "Email": {
+    "name": "Email",
+    "key": "email"
+  }
+}
