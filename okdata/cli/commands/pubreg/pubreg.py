@@ -179,7 +179,7 @@ You may now go ahead and create a key for it by running:
                 self.print(f"- {param}")
             if enabled_auto_rotate:
                 self.print(
-                    "\nThe key has been scheduled for nightly automatic rotation.",
+                    "\nThe key has been scheduled for automatic rotation.",
                 )
         else:
             self.print(
@@ -238,9 +238,9 @@ You may now go ahead and create a key for it by running:
                         if key_destination == "aws"
                         else "save it locally",
                     ),
-                    "The key will{} be rotated automatically every night.\n".format(
-                        "" if enable_auto_rotate else " NOT",
-                    ),
+                    "The key will be rotated automatically every night on weekdays.\n"
+                    if enable_auto_rotate
+                    else "The key will NOT be rotated automatically.\n",
                 ]
             )
         )

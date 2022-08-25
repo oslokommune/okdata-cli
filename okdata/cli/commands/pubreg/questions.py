@@ -186,7 +186,7 @@ def q_enable_auto_rotate():
         "name": "enable_auto_rotate",
         "message": "\n".join(
             [
-                "Automatic key rotation will replace the key in SSM nightly.",
+                "Automatic key rotation will replace the key in SSM nightly on weekdays.",
                 "  Enable automatic key rotation for this client?",
             ]
         ),
