@@ -104,5 +104,12 @@ Options:{BASE_COMMAND_OPTIONS}
             return
 
         out = create_output(self.opt("format"), "team_members_config.json")
-        out.add_rows(sorted(members, key=itemgetter("name")))
+
+        # Sort by name and username. Users without name are sorted last.
+        out.add_rows(
+            sorted(
+                members,
+                key=lambda u: (not u["name"], u["name"] or "", u["username"]),
+            ),
+        )
         self.print("Team members", out)
