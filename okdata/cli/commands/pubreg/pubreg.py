@@ -6,11 +6,7 @@ from requests.exceptions import HTTPError
 
 from okdata.cli.command import BASE_COMMAND_OPTIONS, BaseCommand
 from okdata.cli.commands.pubreg.client import PubregClient
-from okdata.cli.commands.pubreg.questions import (
-    NoClientsError,
-    NoKeysError,
-    NoTeamError,
-)
+from okdata.cli.commands.pubreg.questions import NoClientsError, NoKeysError
 from okdata.cli.commands.pubreg.wizards import (
     audit_log_wizard,
     create_client_wizard,
@@ -20,6 +16,7 @@ from okdata.cli.commands.pubreg.wizards import (
     list_clients_wizard,
     list_keys_wizard,
 )
+from okdata.cli.commands.teams.questions import NoTeamError
 from okdata.cli.output import create_output
 
 

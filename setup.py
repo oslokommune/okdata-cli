@@ -31,7 +31,7 @@ setuptools.setup(
     install_requires=[
         "PrettyTable",
         "docopt",
-        "okdata-sdk>=2.2.0,<3.0.0",
+        "okdata-sdk>=2.2.1,<3.0.0",
         "pygments>=2.11.2,<3.0.0",
         "questionary>=1.10.0,<2.0.0",
         "requests",
