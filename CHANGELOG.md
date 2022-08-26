@@ -1,4 +1,4 @@
-## ?.?.?
+## 1.3.0
 
 * A new command `pubreg audit-log` for viewing audit logs of Maskinporten
   clients has been added.
