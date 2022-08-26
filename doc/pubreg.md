@@ -81,9 +81,10 @@ have to be [deleted](#deleting-a-client-key) to make room for new ones.
 
 ## Rotating a client key
 
-Client keys last a year, but you're encourage to rotate them more often than
-that. When creating a new key and opting to send it to your AWS account, you're
-also given the choice to activate automatic key rotation for the client.
+Client keys expire 90 days after creation by default, but it's encouraged to
+rotate them more often than that. When creating a new key and opting to send it
+to your AWS account, you're also given the choice to activate automatic key
+rotation for the client.
 
 Automatic key rotation happens once every night Monday through Friday, replacing
 the previous key in-place. That is, the old key is replaced in your AWS
@@ -91,6 +92,10 @@ account's Parameter Store with the new one. The previous key is still active for
 five minutes after the switch before it is deleted, so your application can
 assume that a key is valid for at least five minutes after fetching it from the
 Parameter Store.
+
+Keys that are subject to automatic rotation get a shorter expiration time of 7
+days instead of 90 (though they should normally be rotated automatically before
+that).
 
 Automatic key rotation stops when the client is [deleted](#deleting-a-client).
 
