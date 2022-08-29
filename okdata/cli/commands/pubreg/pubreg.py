@@ -1,4 +1,5 @@
 import base64
+from datetime import datetime
 from operator import itemgetter
 
 from okdata.sdk.team.client import TeamClient
@@ -199,9 +200,12 @@ You may now go ahead and create a key for it by running:
             "directory.\n"
         )
 
+        expires = datetime.fromisoformat(key["expires"]).astimezone().isoformat()
+
         self.print(f"Key ID:   {key['kid']}")
         self.print(f"Key file: {outfile}")
-        self.print(f"Password: {key['key_password']}\n")
+        self.print(f"Password: {key['key_password']}")
+        self.print(f"Expires:  {expires}\n")
 
         self.print(
             "The password can't be retrieved again later, so be sure to save it."
