@@ -1,3 +1,7 @@
+## ?.?.?
+
+* Add new commands `teams add-member` and `teams remove-member` for managing team members.
+
 ## 1.3.0
 
 * A new command `pubreg audit-log` for viewing audit logs of Maskinporten
