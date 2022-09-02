@@ -1,6 +1,10 @@
 from questionary import Choice
 
 from okdata.cli.commands.wizard import common_style
+from okdata.cli.commands.teams.util import (
+    member_representation,
+    sorted_member_list,
+)
 
 
 class NoTeamError(Exception):
@@ -101,14 +105,8 @@ def q_members(team_client):
             raise NoTeamMembersError
 
         return [
-            Choice(
-                f"{m['name']} ({m['username']})" if m["name"] else m["username"],
-                m["username"],
-            )
-            for m in sorted(
-                members,
-                key=lambda u: (not u["name"], u["name"] or "", u["username"]),
-            )
+            Choice(member_representation(m), m["username"])
+            for m in sorted_member_list(members)
         ]
 
     return {

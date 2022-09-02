@@ -5,6 +5,10 @@ from requests.exceptions import HTTPError
 
 from okdata.cli.command import BASE_COMMAND_OPTIONS, BaseCommand
 from okdata.cli.commands.teams.questions import NoTeamError
+from okdata.cli.commands.teams.util import (
+    member_representation,
+    sorted_member_list,
+)
 from okdata.cli.commands.teams.wizards import (
     add_member_wizard,
     edit_team_wizard,
@@ -118,13 +122,7 @@ Options:{BASE_COMMAND_OPTIONS}
 
         out = create_output(self.opt("format"), "team_members_config.json")
 
-        # Sort by name and username. Users without name are sorted last.
-        out.add_rows(
-            sorted(
-                members,
-                key=lambda u: (not u["name"], u["name"] or "", u["username"]),
-            ),
-        )
+        out.add_rows(sorted_member_list(members))
         self.print("Team members", out)
 
     def add_member(self):
@@ -146,13 +144,13 @@ Options:{BASE_COMMAND_OPTIONS}
             if user["username"] in team_members:
                 self.print(
                     "User {} is already a member of this team.".format(
-                        self._team_member_representation(user)
+                        member_representation(user)
                     )
                 )
                 return
 
             self.confirm_to_continue(
-                "Add {} to the team?".format(self._team_member_representation(user))
+                "Add {} to the team?".format(member_representation(user))
             )
 
             self.client.update_team_members(
@@ -195,8 +193,8 @@ Options:{BASE_COMMAND_OPTIONS}
                         "s" if len(members_to_remove) > 1 else "",
                         "\n - ".join(
                             [
-                                self._team_member_representation(m)
-                                for m in members_to_remove
+                                member_representation(m)
+                                for m in sorted_member_list(members_to_remove)
                             ]
                         ),
                     )
@@ -210,9 +208,3 @@ Options:{BASE_COMMAND_OPTIONS}
             message = e.response.json()["message"]
             self.print(f"Something went wrong: {message}")
             return
-
-    @staticmethod
-    def _team_member_representation(user):
-        if user["name"]:
-            return f"{user['name']} ({user['username']})"
-        return user["username"]
