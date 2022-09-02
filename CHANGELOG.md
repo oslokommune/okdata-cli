@@ -1,6 +1,7 @@
 ## ?.?.?
 
-* Add new commands `teams add-member` and `teams remove-member` for managing team members.
+* New commands `teams add-member` and `teams remove-member` added, allowing for
+  management of team members.
 
 ## 1.3.0
 
