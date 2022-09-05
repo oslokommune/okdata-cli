@@ -1,10 +1,20 @@
 from questionary import Choice
 
 from okdata.cli.commands.wizard import common_style
+from okdata.cli.commands.teams.util import (
+    member_representation,
+    sorted_member_list,
+)
 
 
 class NoTeamError(Exception):
     """Raised when the current user doesn't belong to any team."""
+
+    pass
+
+
+class NoTeamMembersError(Exception):
+    """Raised when a team does not have any members."""
 
     pass
 
@@ -74,4 +84,36 @@ def q_attribute_value():
         "name": "attribute_value",
         "message": "New value",
         "when": lambda x: x["attribute"][0] != "name",
+    }
+
+
+def q_username():
+    return {
+        **common_style,
+        "type": "text",
+        "name": "username",
+        "message": "Username (ident)",
+        "validate": lambda t: bool(t) or "Can't be empty",
+    }
+
+
+def q_members(team_client):
+    def _team_member_choices(team_id):
+        members = team_client.get_team_members(team_id)
+
+        if not members:
+            raise NoTeamMembersError
+
+        return [
+            Choice(member_representation(m), m["username"])
+            for m in sorted_member_list(members)
+        ]
+
+    return {
+        **common_style,
+        "type": "checkbox",
+        "name": "usernames",
+        "message": "Member(s)",
+        "choices": lambda x: _team_member_choices(x["team_id"]),
+        "validate": lambda x: bool(x) or "Select at least one team member",
     }
