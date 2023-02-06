@@ -1,3 +1,7 @@
+## ?.?.?
+
+* Added support for Python 3.11.
+
 ## 1.4.0
 
 * New commands `teams add-member` and `teams remove-member` added, allowing for
