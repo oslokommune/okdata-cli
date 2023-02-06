@@ -39,7 +39,7 @@ def output(mocker):
 
 
 def output_with_argument(output, argument):
-    for (args, kwargs) in output.call_args_list:
+    for args, kwargs in output.call_args_list:
         if argument in args:
             return True
     return False
