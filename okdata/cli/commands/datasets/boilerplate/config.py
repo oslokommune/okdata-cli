@@ -1,18 +1,17 @@
 import csv
-from questionary import Choice, prompt
-from prompt_toolkit.styles import Style
+
+from questionary import Choice
 
 from .validator import (
     KeywordValidator,
     PhoneValidator,
     SimpleEmailValidator,
-    TitleValidator,
-    StandardsValidator,
-    SpatialValidator,
     SpatialResolutionValidator,
+    SpatialValidator,
+    StandardsValidator,
+    TitleValidator,
 )
-
-required_style = Style([("qmark", "fg:red bold")])
+from okdata.cli.commands.wizard import required_style, run_questionnaire
 
 pipeline_choices = {
     "file": [
@@ -39,11 +38,10 @@ def filter_comma_separated(value):
 
 
 def boilerplate_prompt(include_extra_metadata=True):
-    boilerplate_questions = [
+    questions = [
         {
+            **required_style,
             "type": "select",
-            "qmark": "*",
-            "style": required_style,
             "name": "sourceType",
             "message": "Datakilde",
             "choices": [
@@ -53,9 +51,8 @@ def boilerplate_prompt(include_extra_metadata=True):
             ],
         },
         {
+            **required_style,
             "type": "text",
-            "qmark": "*",
-            "style": required_style,
             "name": "title",
             "message": "Tittel",
             "validate": TitleValidator,
@@ -63,15 +60,15 @@ def boilerplate_prompt(include_extra_metadata=True):
         {"type": "text", "name": "description", "message": "Beskrivelse"},
         {"type": "text", "name": "objective", "message": "Formål"},
         {
+            **required_style,
             "type": "text",
-            "qmark": "*",
-            "style": required_style,
             "name": "keywords",
             "message": "Nøkkelord (komma-separert)",
             "validate": KeywordValidator,
             "filter": filter_comma_separated,
         },
         {
+            **required_style,
             "type": "confirm",
             "name": "contains_geodata",
             "message": "Inneholder datasettet geodata?",
@@ -103,9 +100,8 @@ def boilerplate_prompt(include_extra_metadata=True):
             "when": lambda x: include_extra_metadata,
         },
         {
+            **required_style,
             "type": "select",
-            "qmark": "*",
-            "style": required_style,
             "name": "accessRights",
             "message": "Tilgangsnivå",
             "choices": [
@@ -115,9 +111,8 @@ def boilerplate_prompt(include_extra_metadata=True):
             ],
         },
         {
+            **required_style,
             "type": "select",
-            "qmark": "*",
-            "style": required_style,
             "name": "license",
             "message": "Lisens",
             "choices": [
@@ -147,26 +142,23 @@ def boilerplate_prompt(include_extra_metadata=True):
         },
         {"type": "text", "name": "name", "message": "Kontaktperson – navn"},
         {
+            **required_style,
             "type": "text",
-            "qmark": "*",
-            "style": required_style,
             "name": "email",
             "message": "Kontaktperson – epost",
             "validate": SimpleEmailValidator,
         },
         {
+            **required_style,
             "type": "text",
-            "qmark": "*",
-            "style": required_style,
             "name": "phone",
             "message": "Kontaktperson – telefon",
             "validate": PhoneValidator,
         },
         {"type": "text", "name": "publisher", "message": "Utgiver"},
         {
+            **required_style,
             "type": "select",
-            "qmark": "*",
-            "style": required_style,
             "name": "pipeline",
             "message": "Prosessering",
             "choices": lambda x: pipeline_choices.get(x["sourceType"]),
@@ -174,4 +166,4 @@ def boilerplate_prompt(include_extra_metadata=True):
         },
     ]
 
-    return prompt(boilerplate_questions)
+    return run_questionnaire(*questions)

@@ -1,3 +1,7 @@
+## ?.?.?
+
+* The dataset creation wizard no longer crashes when canceled.
+
 ## 1.5.0
 
 * Added support for Python 3.11.
