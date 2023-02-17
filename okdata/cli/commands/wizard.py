@@ -3,7 +3,7 @@ import sys
 from prompt_toolkit.styles import Style
 from questionary import prompt
 
-common_style = {
+required_style = {
     "qmark": "*",
     "style": Style([("qmark", "fg:red bold")]),
 }

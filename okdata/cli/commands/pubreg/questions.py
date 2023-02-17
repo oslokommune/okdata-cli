@@ -3,7 +3,7 @@ from operator import itemgetter
 
 from questionary import Choice
 
-from okdata.cli.commands.wizard import common_style
+from okdata.cli.commands.wizard import required_style
 
 _providers = {
     "freg": "Folkeregisteret",
@@ -59,7 +59,7 @@ class NoKeysError(Exception):
 
 def q_env():
     return {
-        **common_style,
+        **required_style,
         "type": "select",
         "name": "env",
         "message": "Maskinporten environment",
@@ -69,7 +69,7 @@ def q_env():
 
 def q_provider():
     return {
-        **common_style,
+        **required_style,
         "type": "select",
         "name": "provider_id",
         "message": "Provider",
@@ -79,7 +79,7 @@ def q_provider():
 
 def q_scopes():
     return {
-        **common_style,
+        **required_style,
         "type": "checkbox",
         "name": "scopes",
         "message": "Scopes",
@@ -97,7 +97,7 @@ def q_integration():
         return True
 
     return {
-        **common_style,
+        **required_style,
         "type": "text",
         "name": "integration",
         "message": "Integration name",
@@ -124,7 +124,7 @@ def q_client(pubreg_client):
         ]
 
     return {
-        **common_style,
+        **required_style,
         "type": "select",
         "name": "client",
         "message": "Client",
@@ -134,7 +134,7 @@ def q_client(pubreg_client):
 
 def q_key_destination():
     return {
-        **common_style,
+        **required_style,
         "type": "select",
         "name": "key_destination",
         "message": "Where should the key be stored?",
@@ -147,7 +147,7 @@ def q_key_destination():
 
 def q_delete_from_aws():
     return {
-        **common_style,
+        **required_style,
         "type": "confirm",
         "name": "delete_from_aws",
         "message": "Delete key from AWS Parameter Store?",
@@ -157,7 +157,7 @@ def q_delete_from_aws():
 
 def q_aws_account():
     return {
-        **common_style,
+        **required_style,
         "type": "text",
         "name": "aws_account",
         "message": "AWS account number",
@@ -170,7 +170,7 @@ def q_aws_account():
 
 def q_aws_region():
     return {
-        **common_style,
+        **required_style,
         "type": "select",
         "name": "aws_region",
         "message": "AWS region",
@@ -181,7 +181,7 @@ def q_aws_region():
 
 def q_enable_auto_rotate():
     return {
-        **common_style,
+        **required_style,
         "type": "confirm",
         "name": "enable_auto_rotate",
         "message": "\n".join(
@@ -205,7 +205,7 @@ def q_key(pubreg_client):
         return sorted([k["kid"] for k in keys])
 
     return {
-        **common_style,
+        **required_style,
         "type": "select",
         "name": "key_id",
         "message": "Key",

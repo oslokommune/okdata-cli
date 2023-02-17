@@ -1,6 +1,6 @@
 from questionary import Choice
 
-from okdata.cli.commands.wizard import common_style
+from okdata.cli.commands.wizard import required_style
 from okdata.cli.commands.teams.util import (
     member_representation,
     sorted_member_list,
@@ -31,7 +31,7 @@ def q_team(team_client, my=True):
         return [Choice(t["name"], t["id"]) for t in teams]
 
     return {
-        **common_style,
+        **required_style,
         "type": "select",
         "name": "team_id",
         "message": "Team",
@@ -56,7 +56,7 @@ def q_attribute(team_client):
         ]
 
     return {
-        **common_style,
+        **required_style,
         "type": "select",
         "name": "attribute",
         "message": "Edit what?",
@@ -66,7 +66,7 @@ def q_attribute(team_client):
 
 def q_team_name():
     return {
-        **common_style,
+        **required_style,
         "default": lambda x: x["attribute"][1],
         "type": "text",
         "name": "team_name",
@@ -78,7 +78,7 @@ def q_team_name():
 
 def q_attribute_value():
     return {
-        **common_style,
+        **required_style,
         "default": lambda x: x["attribute"][1] or "",
         "type": "text",
         "name": "attribute_value",
@@ -89,7 +89,7 @@ def q_attribute_value():
 
 def q_username():
     return {
-        **common_style,
+        **required_style,
         "type": "text",
         "name": "username",
         "message": "Username (ident)",
@@ -110,7 +110,7 @@ def q_members(team_client):
         ]
 
     return {
-        **common_style,
+        **required_style,
         "type": "checkbox",
         "name": "usernames",
         "message": "Member(s)",
