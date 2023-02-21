@@ -1,3 +1,5 @@
+import sys
+
 from okdata.sdk.data.dataset import Dataset
 from okdata.sdk.data.download import Download
 from okdata.sdk.data.upload import Upload
@@ -322,7 +324,12 @@ Options:{BASE_COMMAND_OPTIONS}
         dataset_id, version, edition = self._dataset_components_from_uri(target, True)
 
         self.log.info(f"Will upload file to: {dataset_id}/{version}/{edition})")
-        res = upload.upload(source, dataset_id, version, edition, 3)
+
+        try:
+            res = upload.upload(source, dataset_id, version, edition, 3)
+        except FileNotFoundError as e:
+            sys.exit(e)
+
         self.log.info(f"Upload returned: {res}")
 
         out = create_output(self.opt("format"), "datasets_copy_file_config.json")
