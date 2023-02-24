@@ -271,18 +271,39 @@ You may now go ahead and create a key for it by running:
                 "Datapatruljen!"
             )
 
-    def list_client_keys(self):
-        choices = list_keys_wizard(self.pubreg_client)
-        env = choices["env"]
-        client_id = choices["client_id"]
-        client_name = choices["client_name"]
+    def _list_client_keys_single(self, client_id, client_name, env):
         keys = self.pubreg_client.get_keys(env, client_id)
         out = create_output(
             self.opt("format"),
-            "pubreg_client_keys_config.json",
+            "pubreg_single_client_keys_config.json",
         )
-        out.add_rows(sorted(keys, key=itemgetter("kid")))
+        out.add_rows(sorted(keys, key=itemgetter("expires")))
         self.print(f"Keys for client {client_name} [{env}]:", out)
+
+    def _list_client_keys_multiple(self, clients, env):
+        self.print("Fetching keys for all clients, this may take some time...")
+        keys = [
+            {**key, "client_name": client["name"]}
+            for client in clients
+            for key in self.pubreg_client.get_keys(env, client["id"])
+        ]
+        out = create_output(
+            self.opt("format"),
+            "pubreg_multiple_client_keys_config.json",
+        )
+        out.add_rows(sorted(keys, key=itemgetter("expires")))
+        self.print(f"All client keys [{env}]:", out)
+
+    def list_client_keys(self):
+        choices = list_keys_wizard(self.pubreg_client)
+        env = choices["env"]
+
+        if "clients" in choices:
+            self._list_client_keys_multiple(choices["clients"], env)
+        else:
+            self._list_client_keys_single(
+                choices["client_id"], choices["client_name"], env
+            )
 
     def delete_client_key(self):
         try:

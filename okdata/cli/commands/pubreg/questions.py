@@ -108,20 +108,23 @@ def q_integration():
     }
 
 
-def q_client(pubreg_client):
+def q_client(pubreg_client, allow_all=False):
     def _client_choices(env):
         clients = pubreg_client.get_clients(env)
 
         if not clients:
             raise NoClientsError
 
-        return [
-            Choice(
-                c["client_name"],
-                {"id": c["client_id"], "name": c["client_name"]},
-            )
-            for c in sorted(clients, key=itemgetter("client_name"))
-        ]
+        sorted_clients = sorted(clients, key=itemgetter("client_name"))
+
+        def client(c):
+            return {"id": c["client_id"], "name": c["client_name"]}
+
+        return [Choice(c["client_name"], client(c)) for c in sorted_clients] + (
+            [Choice("All clients", [client(c) for c in sorted_clients])]
+            if allow_all
+            else []
+        )
 
     return {
         **required_style,

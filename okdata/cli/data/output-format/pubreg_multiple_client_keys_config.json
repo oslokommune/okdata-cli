@@ -1,0 +1,14 @@
+{
+  "Client name": {
+    "name": "Client name",
+    "key": "client_name"
+  },
+  "Key ID": {
+    "name": "Key ID",
+    "key": "kid"
+  },
+  "Expires": {
+    "name": "Expires",
+    "key": "expires"
+  }
+}
