@@ -1,4 +1,4 @@
-## ?.?.?
+## 1.5.2
 
 * Attempting to upload a non-existent file to a dataset no longer produces a
   stack trace, but rather displays a nicer error message instead.

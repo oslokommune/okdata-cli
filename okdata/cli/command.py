@@ -14,7 +14,7 @@ BASE_COMMAND_OPTIONS = """
 
 
 class BaseCommand:
-    version = "1.5.1"
+    version = "1.5.2"
     # TODO: Can use `importlib` in Python 3.8 and up instead of hard coding the
     #       version here:
     #
