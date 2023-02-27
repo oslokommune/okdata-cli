@@ -2,6 +2,7 @@
 
 * Attempting to upload a non-existent file to a dataset no longer produces a
   stack trace, but rather displays a nicer error message instead.
+* Datasets without a `latest` version is handled better.
 
 ## 1.5.1
 

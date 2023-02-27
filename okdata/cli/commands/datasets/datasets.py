@@ -91,29 +91,28 @@ Options:{BASE_COMMAND_OPTIONS}
         dataset_id = self.arg("datasetid")
         self.log.info(f"DatasetsCommand.handle_dataset({dataset_id})")
 
-        set = self.sdk.get_dataset(dataset_id)
+        dataset = self.sdk.get_dataset(dataset_id)
         versions = self.sdk.get_versions(dataset_id)
-        latest = self.sdk.get_latest_version(dataset_id)
+        latest = self._get_latest_version(dataset_id, False)
+
         if self.opt("format") == "json":
-            list = {}
-            list["dataset"] = set
-            list["versions"] = versions
-            list["latest"] = latest
-            self.print("", list)
+            self.print(
+                "",
+                {"dataset": dataset, "versions": versions, "latest": latest},
+            )
             return
 
         out = create_output(self.opt("format"), "datasets_dataset_config.json")
-        out.add_rows([set])
+        out.add_rows([dataset])
         self.print(f"Dataset: {dataset_id}", out)
 
         out = create_output(self.opt("format"), "datasets_dataset_versions_config.json")
         out.add_rows(versions)
-        self.print(f"\n\nVersions available for: {dataset_id}", out)
+        self.print(f"\nVersions available for: {dataset_id}", out)
 
-        out = create_output(self.opt("format"), "datasets_dataset_versions_config.json")
-        out.add_rows([latest])
-
-        self.print(f"\n\nLatest version for: {dataset_id}", out)
+        if latest:
+            out.add_rows([latest])
+            self.print(f"\nLatest version for: {dataset_id}", out)
 
     def create_dataset(self):
         payload = read_json(self.opt("file"))
@@ -155,13 +154,31 @@ Options:{BASE_COMMAND_OPTIONS}
         self.log.info(f"Created version: {version_id} on dataset: {dataset_id}")
         self.print(f"Created version: {version_id}", version)
 
+    def _get_latest_version(self, dataset_id, exit_on_error=True):
+        """Return the latest version of `dataset_id`.
+
+        If there is no latest version, print an error message and exit if
+        `exit_on_error` is true, otherwise return None.
+        """
+        try:
+            return self.sdk.get_latest_version(dataset_id)
+        except HTTPError as e:
+            if e.response.status_code == 404:
+                if exit_on_error:
+                    sys.exit(
+                        f"Version 'latest' not found for '{dataset_id}', "
+                        "please specify the version ID."
+                    )
+                return None
+            raise
+
     def resolve_or_load_versionid(self, dataset_id):
         self.log.info(f"Trying to resolve versionid for {dataset_id}")
         version_id = self.arg("versionid") or self.opt("versionid")
         if version_id is not None:
             self.log.info(f"Found version in arguments: {version_id}")
             return version_id
-        latest_version = self.sdk.get_latest_version(dataset_id)
+        latest_version = self._get_latest_version(dataset_id)
         self.log.info(
             f"Found version in latest dataset version: {latest_version['version']}"
         )
@@ -303,7 +320,7 @@ Options:{BASE_COMMAND_OPTIONS}
         dataset_id, version, edition = parts + [None] * (3 - len(parts))
 
         if not version:
-            version = self.sdk.get_latest_version(dataset_id)["version"]
+            version = self._get_latest_version(dataset_id)["version"]
 
         if edition == "latest":
             edition = self.sdk.get_latest_edition(dataset_id, version)["Id"].split("/")[
