@@ -1,5 +1,6 @@
 ## ?.?.?
 
+* Dataset title errors are caught earlier in the registration form.
 * Pygments is no longer a dependency.
 
 ## 1.5.2

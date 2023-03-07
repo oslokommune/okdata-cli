@@ -47,6 +47,11 @@ class TitleValidator(Validator):
                 message="Title must be at least 5 characters",
                 cursor_position=len(document.text),
             )
+        if not re.match(r"^[- a-zA-Z0-9åÅæÆøØ]+$", document.text):
+            raise ValidationError(
+                message="Title may only contain letters, numbers, spaces, and dashes",
+                cursor_position=len(document.text),
+            )
 
 
 class KeywordValidator(Validator):
