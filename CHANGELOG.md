@@ -1,6 +1,7 @@
 ## ?.?.?
 
 * Dataset title errors are caught earlier in the registration form.
+* Exiting a prompt by typing `Ctrl+D` no longer results in a stack trace.
 * Pygments is no longer a dependency.
 
 ## 1.5.2

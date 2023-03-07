@@ -46,6 +46,8 @@ def main():
             instance.print(
                 f"An error occurred (KeycloakGetError): {error['error_description']}"
             )
+        except (EOFError, KeyboardInterrupt):
+            instance.print("\nAbort.")
         except Exception as e:
             instance.print(
                 "An exception occurred",
@@ -58,8 +60,6 @@ def main():
                 },
             )
             instance.log.exception(f"okdata-cli failed with: {e}")
-        except KeyboardInterrupt:
-            instance.print("\nAbort.")
 
     else:
         BaseCommand().help()
