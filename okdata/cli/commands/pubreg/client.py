@@ -30,11 +30,11 @@ class PubregClient(SDK):
         return self.get(url).json()
 
     def delete_client(self, env, client_id, aws_account, aws_region):
-        url = f"{self.api_url}/clients/{env}/{client_id}"
+        url = f"{self.api_url}/clients/{env}/{client_id}/delete"
         log.info(f"Deleting client for: {url}")
-        return self.delete(
+        return self.post(
             url,
-            json={
+            data={
                 "aws_account": aws_account,
                 "aws_region": aws_region,
             },
