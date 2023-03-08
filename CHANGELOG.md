@@ -1,3 +1,7 @@
+## ?.?.?
+
+* Pygments is no longer a dependency.
+
 ## 1.5.2
 
 * Attempting to upload a non-existent file to a dataset no longer produces a

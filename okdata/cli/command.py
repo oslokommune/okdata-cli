@@ -4,7 +4,6 @@ import sys
 
 from docopt import docopt, DocoptExit
 from okdata.sdk import SDK
-from pygments import highlight, lexers, formatters
 
 BASE_COMMAND_OPTIONS = """
   -h, --help                # Print this help
@@ -110,11 +109,7 @@ Options:{BASE_COMMAND_OPTIONS}
 
     @staticmethod
     def pretty_json(data):
-        output = json.dumps(data, indent=2)
-        colorful_json = highlight(
-            output, lexers.JsonLexer(), formatters.TerminalFormatter()
-        )
-        print(colorful_json)
+        print(json.dumps(data, indent=2))
 
     @staticmethod
     def print_success(table, data=[]):
