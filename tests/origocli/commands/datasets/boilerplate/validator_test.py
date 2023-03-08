@@ -88,6 +88,10 @@ class TestTitleValidator:
         with pytest.raises(ValidationError):
             self.validate_title({"text": ""})
 
+    def test_title_with_weird_symbols(self):
+        with pytest.raises(ValidationError):
+            self.validate_title({"text": "a_b_c (123)"})
+
 
 class TestKeywordValidator:
     def validate_keywords(self, data):
