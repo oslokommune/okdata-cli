@@ -15,7 +15,6 @@ Contents:
 * [Upload file to edition](#upload-file-to-edition)
   * [Inspecting the upload status](#inspecting-the-upload-status)
 * [Dataset access](#dataset-access)
-* [Boilerplate](#boilerplate)
 
 ## What is a dataset
 Documentation is available on [GitHub](https://oslokommune.github.io/dataplattform/).
@@ -236,41 +235,3 @@ The target directory will be created if it doesn't already eixst on the local fi
 ## Dataset access
 
 See [permissions](permissions.md).
-
-## Boilerplate
-The process of setting up a full dataset, version, edition with a properly configured pipeline that will process your data involves a few steps. A boilerplate command is provided for you to create a full set of files and configurations that will set everything up, all you have to do is to update a few files with the correct information, and you will be up and running in no time.
-
-Currently there are two pipelines available: `csv-to-parquet` and `data-copy`, but we are working on more, and if you have been given a custom pipeline from Okdata you can still use the boilerplate functionality, you just need to update the `pipeline.json` file generated with one you will get from us.
-
-* `data-copy`: a pipeline that does not alter the original input data, useful for Excel files, documents, or any other file that your dataset contains
-* `csv-to-parquet`: generate [Parquet](https://en.wikipedia.org/wiki/Apache_Parquet) files from CSV input files
-
-To create a set of files run the following command. It will create a directory in the current working directory called `my-dataset`:
-```bash
-okdata datasets boilerplate my-dataset
-```
-The boilerplate command will give a input prompt to gather all necessary information needed in order to generate a dataset with corresponding pipeline.
-
-When running the command (see output of the boilerplate command) a default file will be uploaded to test the pipeline. To override this add a `--file=<file>`:
-```bash
-okdata datasets boilerplate my-dataset --file=/tmp/file_to_upload.csv
-```
-
-If you don't need, or want to customize the files before running the supplied script, you can skip the prompt, but you then need to supply one of the pipelines available:
-```bash
-okdata datasets boilerplate my-dataset --pipeline=data-copy --prompt=no
-```
-
-The output of the command will notify you on which files you will need to update before running the supplied `run.sh` command.
-
-### Best practice
-In order to keep your datasets and processing pipelines structured it is recommended that you create a directory structure with the following layout:
-```
-- my-organization-datasets
-  - my-organization-statistics
-  - my-organization-insight
-  - my-organization-events
-```
-and commit this to your source repository (git or other). This will also help in debugging or troubleshooting any issues that might arise, and will make it easy to deploy to production after testing.
-
-Any output from the `run.sh` command or manually executed command should also be piped to a logfile in order to look up the IDs created and be a part of the troubleshooting if need be.

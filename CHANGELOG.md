@@ -7,6 +7,8 @@
 * Dataset title errors are caught earlier in the registration form.
 * Exiting a prompt by typing `Ctrl+D` no longer results in a stack trace.
 * Pygments is no longer a dependency.
+* The `datasets boilerplate` command has been removed as it has been largely
+  subsumed by the `datasets create` wizard.
 
 ## 1.5.2
 

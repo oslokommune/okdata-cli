@@ -6,7 +6,6 @@ from okdata.sdk.data.upload import Upload
 from requests.exceptions import HTTPError
 
 from okdata.cli.command import BaseCommand, BASE_COMMAND_OPTIONS
-from okdata.cli.commands.datasets import DatasetsBoilerplateCommand
 from okdata.cli.commands.datasets.wizards import DatasetCreateWizard
 from okdata.cli.date import date_now, DATE_METADATA_EDITION_FORMAT
 from okdata.cli.io import read_json, resolve_output_filepath
@@ -24,17 +23,12 @@ Usage:
   okdata datasets create-version <datasetid> [options]
   okdata datasets create-edition <datasetid> [<versionid>] [options]
   okdata datasets create-distribution <datasetid> [<versionid> <editionid>] [options]
-  okdata datasets boilerplate <name> [options]
 
 Examples:
   okdata datasets ls --filter=bydelsfakta
   okdata datasets ls --filter=bydelsfakta --format=json
   okdata datasets create --file=dataset.json
   okdata datasets cp /tmp/file.csv ds:my-dataset-id
-  okdata datasets boilerplate oslo-traffic-data
-  okdata datasets boilerplate oslo-traffic-data --file=/tmp/initial-file.csv
-  okdata datasets boilerplate oslo-traffic-data --pipeline=data-copy --prompt=no
-  okdata datasets boilerplate geodata-from-my-iot-devices
 
 Options:{BASE_COMMAND_OPTIONS}
   --file=<file>             # Use this file for configuration or upload
@@ -45,7 +39,6 @@ Options:{BASE_COMMAND_OPTIONS}
     def __init__(self):
         super().__init__(Dataset)
         self.download = Download(env=self.opt("env"))
-        self.sub_commands = [DatasetsBoilerplateCommand]
 
     # TODO: do a better mapping from rules to commands here...?
     def handler(self):

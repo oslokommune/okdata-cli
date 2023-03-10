@@ -2,7 +2,7 @@ import csv
 
 from questionary import Choice
 
-from .validator import (
+from okdata.cli.commands.datasets.validators import (
     KeywordValidator,
     PhoneValidator,
     SimpleEmailValidator,
@@ -11,7 +11,7 @@ from .validator import (
     StandardsValidator,
     TitleValidator,
 )
-from okdata.cli.commands.wizard import required_style, run_questionnaire
+from okdata.cli.commands.wizard import required_style
 
 pipeline_choices = {
     "file": [
@@ -37,8 +37,8 @@ def filter_comma_separated(value):
     return [x.strip() for x in values if x]
 
 
-def boilerplate_prompt(include_extra_metadata=True):
-    questions = [
+def qs_create(include_extra_metadata=True):
+    return [
         {
             **required_style,
             "type": "select",
@@ -165,5 +165,3 @@ def boilerplate_prompt(include_extra_metadata=True):
             "when": lambda x: x["sourceType"] in pipeline_choices,
         },
     ]
-
-    return run_questionnaire(*questions)

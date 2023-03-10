@@ -1,16 +1,17 @@
-import pytest
 from types import SimpleNamespace
+
+import pytest
 from questionary import ValidationError
 
-from okdata.cli.commands.datasets.boilerplate.validator import (
+from okdata.cli.commands.datasets.validators import (
     DateValidator,
     KeywordValidator,
     PhoneValidator,
     SimpleEmailValidator,
-    TitleValidator,
-    StandardsValidator,
-    SpatialValidator,
     SpatialResolutionValidator,
+    SpatialValidator,
+    StandardsValidator,
+    TitleValidator,
 )
 
 # Note: no testing of return values since the validator is only

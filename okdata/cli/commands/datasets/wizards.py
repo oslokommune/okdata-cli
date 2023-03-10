@@ -1,7 +1,8 @@
 from okdata.sdk.data.dataset import Dataset
 from okdata.sdk.pipelines.client import PipelineApiClient
 
-from okdata.cli.commands.datasets.boilerplate.config import boilerplate_prompt
+from okdata.cli.commands.datasets.questions import qs_create
+from okdata.cli.commands.wizard import run_questionnaire
 
 
 class DatasetCreateWizard:
@@ -60,7 +61,7 @@ class DatasetCreateWizard:
 
     def start(self):
         env = self.command.opt("env")
-        choices = boilerplate_prompt()
+        choices = run_questionnaire(*qs_create())
 
         self.command.print("Creating dataset...")
         dataset_client = Dataset(env=env)
