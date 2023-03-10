@@ -12,11 +12,13 @@ following two environment variables:
 
 ```bash
 # Your Oslo kommune username (e.g. ooo123456)
-export OKDATA_USERNAME=<your-username>
+export OKDATA_USERNAME=$(op read op://Private/ooo/username)
 
 # Password for OKDATA_USERNAME
-export OKDATA_PASSWORD=<your-password>
+export OKDATA_PASSWORD=$(op read op://Private/ooo/password)
 ```
+
+The username and password are retrieved from 1Password in these examples.
 
 ## Client user
 
@@ -26,10 +28,10 @@ you. Please contact us at
 
 ```bash
 # Okdata client
-export OKDATA_CLIENT_ID=<your-client-id>
+export OKDATA_CLIENT_ID=$(op read op://Shared/my-client/id)
 
 # Secret for OKDATA_CLIENT_ID
-export OKDATA_CLIENT_SECRET=<your-client-secret>
+export OKDATA_CLIENT_SECRET=$(op read op://Shared/my-client/secret)
 ```
 
 Note: a client user should not be used as a shared user for convenience's sake!
