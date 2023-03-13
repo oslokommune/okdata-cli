@@ -113,7 +113,7 @@ After the new key has been installed, the old key can safely be
 ## Listing client keys
 
 Use the following command to display a table of all the keys registered on one
-of your clients:
+or all of your clients:
 
 ```sh
 okdata pubreg list-keys
