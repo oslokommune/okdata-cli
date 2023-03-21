@@ -19,12 +19,6 @@ setuptools.setup(
     namespace_packages=["okdata"],
     package_data={
         "okdata": [
-            "cli/data/boilerplate/bin/*",
-            "cli/data/boilerplate/data/*",
-            "cli/data/boilerplate/dataset/*",
-            "cli/data/boilerplate/pipeline/*",
-            "cli/data/boilerplate/pipeline/csv-to-parquet/*",
-            "cli/data/boilerplate/pipeline/data-copy/*",
             "cli/data/output-format/*",
         ],
     },

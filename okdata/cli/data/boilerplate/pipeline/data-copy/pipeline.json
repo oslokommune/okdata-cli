@@ -1,5 +1,0 @@
-{
-  "pipelineProcessorId": "data-copy",
-  "id": "DATASET_ID",
-  "datasetUri": "output/DATASET_ID/DATASET_VERSION"
-}
