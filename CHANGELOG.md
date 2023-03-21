@@ -2,6 +2,8 @@
 
 * The `pubreg list-keys` command now supports listing all client keys
   simultaneously across different clients.
+* Updated the action URL for the `pubreg delete-client` command. Updating to
+  this version is required for the command to continue working in the future.
 * Dataset title errors are caught earlier in the registration form.
 * Exiting a prompt by typing `Ctrl+D` no longer results in a stack trace.
 * Pygments is no longer a dependency.
