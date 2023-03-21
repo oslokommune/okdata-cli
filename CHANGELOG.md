@@ -1,4 +1,4 @@
-## ?.?.?
+## 1.6.0
 
 * The `pubreg list-keys` command now supports listing all client keys
   simultaneously across different clients.
