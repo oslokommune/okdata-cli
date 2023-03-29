@@ -24,7 +24,6 @@ class BaseCommand:
 usage:
   okdata datasets [options]
   okdata permissions [options]
-  okdata pipelines [options]
   okdata pubreg [options]
   okdata status [options]
   okdata teams [options]
@@ -33,7 +32,6 @@ usage:
 Commands available:
   datasets
   permissions
-  pipelines
   pubreg
   status
   teams
