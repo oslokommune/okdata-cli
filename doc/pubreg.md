@@ -79,12 +79,16 @@ okdata pubreg create-key
 Each client can hold a maximum of five keys. After reaching that limit, old keys
 have to be [deleted](#deleting-a-client-key) to make room for new ones.
 
-If you choose to store the client keys in Parameter Store, the following parameters will be created: 
-- /okdata/maskinporten/<id>/key.json (contains key_alias, key_id, key_password, keystore)
-- /okdata/maskinporten/<id>/key_alias (deprecated)
-- /okdata/maskinporten/<id>/key_id (deprecated)
-- /okdata/maskinporten/<id>/key_password (deprecated)
-- /okdata/maskinporten/<id>/keystore (deprecated)
+If you choose to store the client keys in Parameter Store, the following
+parameters will be created:
+
+- `/okdata/maskinporten/<client-id>/key.json`
+  - A JSON object containing `key_alias`, `key_expiry`, `key_id`,
+    `key_password`, and `keystore`.
+- `/okdata/maskinporten/<client-id>/key_alias` (*deprecated*)
+- `/okdata/maskinporten/<client-id>/key_id` (*deprecated*)
+- `/okdata/maskinporten/<client-id>/key_password` (*deprecated*)
+- `/okdata/maskinporten/<client-id>/keystore` (*deprecated*)
 
 ## Rotating a client key
 
