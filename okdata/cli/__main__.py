@@ -8,7 +8,6 @@ from requests.exceptions import RequestException
 from okdata.cli.command import BaseCommand
 from okdata.cli.commands.datasets import DatasetsCommand
 from okdata.cli.commands.permissions import PermissionsCommand
-from okdata.cli.commands.pipelines import Pipelines
 from okdata.cli.commands.pubreg import PubregCommand
 from okdata.cli.commands.status import StatusCommand
 from okdata.cli.commands.teams.teams import TeamsCommand
@@ -69,7 +68,6 @@ def get_command_class(argv):
     commands = {
         "datasets": DatasetsCommand,
         "permissions": PermissionsCommand,
-        "pipelines": Pipelines,
         "pubreg": PubregCommand,
         "status": StatusCommand,
         "teams": TeamsCommand,

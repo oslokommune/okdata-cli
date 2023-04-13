@@ -1,3 +1,9 @@
+## ?.?.?
+
+* All `okdata pipelines` commands have been removed. Pipelines can still be
+  configured for datasets when using the the dataset creation wizard (`okdata
+  datasets create`).
+
 ## 1.6.0
 
 * The `pubreg list-keys` command now supports listing all client keys
