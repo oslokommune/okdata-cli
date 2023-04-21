@@ -3,6 +3,7 @@ from operator import itemgetter
 from okdata.sdk.team.client import TeamClient
 from requests.exceptions import HTTPError
 
+from okdata.cli import MAINTAINER
 from okdata.cli.command import BASE_COMMAND_OPTIONS, BaseCommand
 from okdata.cli.commands.teams.questions import NoTeamError
 from okdata.cli.commands.teams.util import (
@@ -75,7 +76,7 @@ Options:{BASE_COMMAND_OPTIONS}
         except NoTeamError:
             self.print(
                 "We haven't yet registered you as member of any Origo team. "
-                "Please contact Datapatruljen to get it done."
+                f"Please contact {MAINTAINER} to get it done."
             )
             return
 
@@ -110,7 +111,7 @@ Options:{BASE_COMMAND_OPTIONS}
         except NoTeamError:
             self.print(
                 "We haven't yet registered you as member of any Origo team. "
-                "Please contact Datapatruljen to get it done."
+                f"Please contact {MAINTAINER} to get it done."
                 if my
                 else "No teams exist yet."
             )
@@ -131,7 +132,7 @@ Options:{BASE_COMMAND_OPTIONS}
         except NoTeamError:
             self.print(
                 "We haven't yet registered you as member of any Origo team. "
-                "Please contact Datapatruljen to get it done."
+                f"Please contact {MAINTAINER} to get it done."
             )
             return
 
@@ -168,7 +169,7 @@ Options:{BASE_COMMAND_OPTIONS}
         except NoTeamError:
             self.print(
                 "We haven't yet registered you as member of any Origo team. "
-                "Please contact Datapatruljen to get it done."
+                f"Please contact {MAINTAINER} to get it done."
             )
             return
 
