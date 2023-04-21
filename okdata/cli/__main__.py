@@ -5,6 +5,7 @@ from keycloak.exceptions import KeycloakGetError
 from okdata.sdk.exceptions import ApiAuthenticateError
 from requests.exceptions import RequestException
 
+from okdata.cli import MAINTAINER
 from okdata.cli.command import BaseCommand
 from okdata.cli.commands.datasets import DatasetsCommand
 from okdata.cli.commands.permissions import PermissionsCommand
@@ -32,7 +33,7 @@ def main():
             else:
                 instance.print(
                     "A server error occurred. Please try again, or contact "
-                    "Datapatruljen if the problem persists.",
+                    f"{MAINTAINER} if the problem persists.",
                 )
         except ApiAuthenticateError:
             instance.print(

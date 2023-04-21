@@ -23,8 +23,7 @@ The username and password are retrieved from 1Password in these examples.
 ## Client user
 
 For machine to machine communication, an Okdata client can be generated for
-you. Please contact us at
-[dataplattform@oslo.kommune.no](dataplattform@oslo.kommune.no) if you need one.
+you. Please contact Dataspeilet if you need one.
 
 ```bash
 # Okdata client

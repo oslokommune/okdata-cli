@@ -5,6 +5,7 @@ from operator import itemgetter
 from okdata.sdk.team.client import TeamClient
 from requests.exceptions import HTTPError
 
+from okdata.cli import MAINTAINER
 from okdata.cli.command import BASE_COMMAND_OPTIONS, BaseCommand
 from okdata.cli.commands.pubreg.client import PubregClient
 from okdata.cli.commands.pubreg.questions import NoClientsError, NoKeysError
@@ -72,7 +73,7 @@ Options:{BASE_COMMAND_OPTIONS}
         except NoTeamError:
             self.print(
                 "We haven't yet registered you as member of any Origo team. "
-                "Please contact Datapatruljen to get it done."
+                f"Please contact {MAINTAINER} to get it done."
             )
             return
 
@@ -186,7 +187,7 @@ You may now go ahead and create a key for it by running:
             self.print(
                 "The key was created, but it appears that the relevant "
                 "parameters weren't added to SSM. This should not happen, "
-                "please contact Datapatruljen!"
+                f"please contact {MAINTAINER}!"
             )
 
     def _handle_new_key_local(self, key, client_name, env):
@@ -267,8 +268,7 @@ You may now go ahead and create a key for it by running:
         else:
             self.print(
                 "The key was neither added to AWS nor returned to the "
-                "client. This should not happen, please contact "
-                "Datapatruljen!"
+                f"client. This should not happen, please contact {MAINTAINER}!"
             )
 
     def _list_client_keys_single(self, client_id, client_name, env):
