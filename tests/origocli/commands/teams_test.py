@@ -1,5 +1,6 @@
 from unittest.mock import ANY, MagicMock
 
+import pytest
 from requests import HTTPError
 
 from conftest import set_argv
@@ -136,10 +137,10 @@ def test_add_team_member_with_http_error(mocker, mock_print):
     http_error.response.json = lambda: {"message": error_message}
     cmd.client.get_user_by_username.side_effect = http_error
 
-    cmd.handler()
+    with pytest.raises(HTTPError):
+        cmd.handler()
 
     cmd.client.update_team_members.assert_not_called()
-    assert mock_print.mock_calls[0][1][0] == f"Something went wrong: {error_message}"
 
 
 def test_remove_team_member(mocker, mock_print):

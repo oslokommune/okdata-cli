@@ -246,8 +246,7 @@ Options:{BASE_COMMAND_OPTIONS}
         except HTTPError as he:
             if he.response.status_code == 404:
                 return self._auto_create_edition(dataset_id, version)
-            else:
-                raise he
+            raise
 
     # #################################### #
     # Distribution

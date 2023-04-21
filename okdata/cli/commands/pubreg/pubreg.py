@@ -3,7 +3,6 @@ from datetime import datetime
 from operator import itemgetter
 
 from okdata.sdk.team.client import TeamClient
-from requests.exceptions import HTTPError
 
 from okdata.cli import MAINTAINER
 from okdata.cli.command import BASE_COMMAND_OPTIONS, BaseCommand
@@ -89,22 +88,18 @@ Options:{BASE_COMMAND_OPTIONS}
             f"scopes {scopes}."
         )
 
-        try:
-            self.print("Creating client...")
-            response = self.pubreg_client.create_client(
-                team_id, provider_id, integration, scopes, env
-            )
-            client_name = response["client_name"]
-            self.print(
-                f"""
+        self.print("Creating client...")
+        response = self.pubreg_client.create_client(
+            team_id, provider_id, integration, scopes, env
+        )
+        client_name = response["client_name"]
+        self.print(
+            f"""
 Done! Created a new client '{client_name}'.
 You may now go ahead and create a key for it by running:
 
   okdata pubreg create-key"""
-            )
-        except HTTPError as e:
-            message = e.response.json()["message"]
-            self.print(f"Something went wrong: {message}")
+        )
 
     def list_clients(self):
         config = list_clients_wizard()
@@ -136,34 +131,28 @@ You may now go ahead and create a key for it by running:
             ),
         )
 
-        try:
-            self.print(f"Deleting client '{client_name}' [{env}]...")
-            res = self.pubreg_client.delete_client(
-                env, client_id, aws_account, aws_region
-            )
-            deleted_ssm_params = res["deleted_ssm_params"]
-            self.print("\nDone! The client is deleted and will no longer work.")
+        self.print(f"Deleting client '{client_name}' [{env}]...")
+        res = self.pubreg_client.delete_client(env, client_id, aws_account, aws_region)
+        deleted_ssm_params = res["deleted_ssm_params"]
 
-            if delete_from_aws:
-                if deleted_ssm_params:
-                    self.print(
-                        "\nThe following {} deleted from SSM:".format(
-                            "parameter was"
-                            if len(deleted_ssm_params) == 1
-                            else "parameters were"
-                        )
-                    )
-                    for param in deleted_ssm_params:
-                        self.print(f"- {param}")
-                else:
-                    self.print(
-                        "However the key secrets couldn't be deleted from SSM "
-                        "as requested."
-                    )
+        self.print("\nDone! The client is deleted and will no longer work.")
 
-        except HTTPError as e:
-            message = e.response.json()["message"]
-            self.print(f"Something went wrong: {message}")
+        if delete_from_aws:
+            if deleted_ssm_params:
+                self.print(
+                    "\nThe following {} deleted from SSM:".format(
+                        "parameter was"
+                        if len(deleted_ssm_params) == 1
+                        else "parameters were"
+                    )
+                )
+                for param in deleted_ssm_params:
+                    self.print(f"- {param}")
+            else:
+                self.print(
+                    "However the key secrets couldn't be deleted from SSM as "
+                    "requested."
+                )
 
     def _handle_new_key_aws(self, key, enabled_auto_rotate):
         params = key.get("ssm_params")
@@ -252,14 +241,9 @@ You may now go ahead and create a key for it by running:
 
         self.print("Creating key for '{}' [{}]...".format(client_name, env))
 
-        try:
-            key = self.pubreg_client.create_key(
-                env, client_id, aws_account, aws_region, enable_auto_rotate
-            )
-        except HTTPError as e:
-            message = e.response.json()["message"]
-            self.print(f"Something went wrong: {message}")
-            return
+        key = self.pubreg_client.create_key(
+            env, client_id, aws_account, aws_region, enable_auto_rotate
+        )
 
         if key.get("ssm_params") is not None:
             self._handle_new_key_aws(key, enable_auto_rotate)
@@ -321,15 +305,9 @@ You may now go ahead and create a key for it by running:
             f"Will delete key '{key_id}' from '{client_name}' [{env}]."
         )
 
-        try:
-            self.print(
-                f"Deleting key '{key_id}' from '{client_name}' [{env}]...",
-            )
-            self.pubreg_client.delete_key(env, client_id, key_id)
-            self.print("Done! The key is deleted and will no longer work.")
-        except HTTPError as e:
-            message = e.response.json()["message"]
-            self.print(f"Something went wrong: {message}")
+        self.print(f"Deleting key '{key_id}' from '{client_name}' [{env}]...")
+        self.pubreg_client.delete_key(env, client_id, key_id)
+        self.print("Done! The key is deleted and will no longer work.")
 
     def audit_log(self):
         choices = audit_log_wizard(self.pubreg_client)

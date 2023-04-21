@@ -1,7 +1,6 @@
 from operator import itemgetter
 
 from okdata.sdk.team.client import TeamClient
-from requests.exceptions import HTTPError
 
 from okdata.cli import MAINTAINER
 from okdata.cli.command import BASE_COMMAND_OPTIONS, BaseCommand
@@ -57,15 +56,9 @@ Options:{BASE_COMMAND_OPTIONS}
             self.remove_member()
 
     def ls(self, my):
-        try:
-            teams = self.client.get_teams(
-                include=None if my else "all", has_role="origo-team"
-            )
-        except HTTPError as e:
-            message = e.response.json()["message"]
-            self.print(f"Something went wrong: {message}")
-            return
-
+        teams = self.client.get_teams(
+            include=None if my else "all", has_role="origo-team"
+        )
         out = create_output(self.opt("format"), "teams_config.json")
         out.add_rows(sorted(teams, key=itemgetter("name")))
         self.print("{} teams:".format("My" if my else "All"), out)
@@ -80,29 +73,13 @@ Options:{BASE_COMMAND_OPTIONS}
             )
             return
 
-        try:
-            if config["attribute"] == "name":
-                self.client.update_team_name(
-                    config["team_id"],
-                    config["team_name"],
-                )
-            else:
-                self.client.update_team_attribute(
-                    config["team_id"],
-                    config["attribute"],
-                    config["attribute_value"],
-                )
-            self.print("Done!")
-        except HTTPError as e:
-            data = e.response.json()
-
-            if e.response.status_code == 400:
-                errors = data.get("errors", [])
-                message = "\n".join(err.get("msg", "") for err in errors).strip()
-            else:
-                message = data["message"]
-
-            self.print(f"Something went wrong: {message}")
+        if config["attribute"] == "name":
+            self.client.update_team_name(config["team_id"], config["team_name"])
+        else:
+            self.client.update_team_attribute(
+                config["team_id"], config["attribute"], config["attribute_value"]
+            )
+        self.print("Done!")
 
     def list_members(self, my):
         try:
@@ -115,10 +92,6 @@ Options:{BASE_COMMAND_OPTIONS}
                 if my
                 else "No teams exist yet."
             )
-            return
-        except HTTPError as e:
-            message = e.response.json()["message"]
-            self.print(f"Something went wrong: {message}")
             return
 
         out = create_output(self.opt("format"), "team_members_config.json")
@@ -136,32 +109,27 @@ Options:{BASE_COMMAND_OPTIONS}
             )
             return
 
-        try:
-            user = self.client.get_user_by_username(config["username"])
-            team_members = [
-                m["username"] for m in self.client.get_team_members(config["team_id"])
-            ]
+        user = self.client.get_user_by_username(config["username"])
+        team_members = [
+            m["username"] for m in self.client.get_team_members(config["team_id"])
+        ]
 
-            if user["username"] in team_members:
-                self.print(
-                    "User {} is already a member of this team.".format(
-                        member_representation(user)
-                    )
+        if user["username"] in team_members:
+            self.print(
+                "User {} is already a member of this team.".format(
+                    member_representation(user)
                 )
-                return
-
-            self.confirm_to_continue(
-                "Add {} to the team?".format(member_representation(user))
             )
-
-            self.client.update_team_members(
-                config["team_id"], team_members + [user["username"]]
-            )
-            self.print("Done!")
-        except HTTPError as e:
-            message = e.response.json()["message"]
-            self.print(f"Something went wrong: {message}")
             return
+
+        self.confirm_to_continue(
+            "Add {} to the team?".format(member_representation(user))
+        )
+
+        self.client.update_team_members(
+            config["team_id"], team_members + [user["username"]]
+        )
+        self.print("Done!")
 
     def remove_member(self):
         try:
@@ -173,39 +141,34 @@ Options:{BASE_COMMAND_OPTIONS}
             )
             return
 
-        try:
-            team_members = self.client.get_team_members(config["team_id"])
-            members_to_remove, members_to_keep = [], []
-            for member in team_members:
-                if member["username"] in config["usernames"]:
-                    members_to_remove.append(member)
-                else:
-                    members_to_keep.append(member)
-
-            if len(members_to_keep) == 0:
-                self.confirm_to_continue(
-                    "You are about to delete all members from the team, including "
-                    "yourself. It will not be possible to edit this team any further "
-                    "without being re-added by a systems administrator."
-                )
+        team_members = self.client.get_team_members(config["team_id"])
+        members_to_remove, members_to_keep = [], []
+        for member in team_members:
+            if member["username"] in config["usernames"]:
+                members_to_remove.append(member)
             else:
-                self.confirm_to_continue(
-                    "Remove the following member{} from the team?\n - {}".format(
-                        "s" if len(members_to_remove) > 1 else "",
-                        "\n - ".join(
-                            [
-                                member_representation(m)
-                                for m in sorted_member_list(members_to_remove)
-                            ]
-                        ),
-                    )
-                )
+                members_to_keep.append(member)
 
-            self.client.update_team_members(
-                config["team_id"], [m["username"] for m in members_to_keep]
+        if len(members_to_keep) == 0:
+            self.confirm_to_continue(
+                "You are about to delete all members from the team, including "
+                "yourself. It will not be possible to edit this team any "
+                "further without being re-added by a systems administrator."
             )
-            self.print("Done!")
-        except HTTPError as e:
-            message = e.response.json()["message"]
-            self.print(f"Something went wrong: {message}")
-            return
+        else:
+            self.confirm_to_continue(
+                "Remove the following member{} from the team?\n - {}".format(
+                    "s" if len(members_to_remove) > 1 else "",
+                    "\n - ".join(
+                        [
+                            member_representation(m)
+                            for m in sorted_member_list(members_to_remove)
+                        ]
+                    ),
+                )
+            )
+
+        self.client.update_team_members(
+            config["team_id"], [m["username"] for m in members_to_keep]
+        )
+        self.print("Done!")

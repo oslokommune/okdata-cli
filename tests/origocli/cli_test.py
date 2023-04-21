@@ -2,12 +2,12 @@ import json
 import sys
 
 import pytest
-from okdata.sdk.exceptions import ApiAuthenticateError
 from okdata.sdk import SDK
+from okdata.sdk.exceptions import ApiAuthenticateError
 from requests.models import Response
 
 from okdata.cli.__main__ import get_command_class, main
-from okdata.cli.command import generate_error_feedback
+from okdata.cli.command import _format_error_message
 from okdata.cli.commands.datasets import DatasetsCommand
 
 
@@ -31,7 +31,7 @@ def test_get_command_class():
 def test_main_http_error(raise_http_error, capsys):
     sys.argv = ["okdata", "datasets", "create", "--file=foo"]
     main()
-    expected_output = generate_error_feedback(
+    expected_output = _format_error_message(
         bad_request_response_body["message"], bad_request_response_body["errors"]
     )
     assert capsys.readouterr().out.strip("\n") == expected_output.strip("\n")
