@@ -1,4 +1,4 @@
-## ?.?.?
+## 2.0.0
 
 * All `okdata pipelines` commands have been removed. Pipelines can still be
   configured for datasets when using the the dataset creation wizard (`okdata
