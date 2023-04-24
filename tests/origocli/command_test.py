@@ -2,9 +2,9 @@ import io
 
 import pytest
 
-from okdata.cli.command import BaseCommand
-from okdata.cli.output import TableOutput
 from conftest import set_argv
+from okdata.cli.command import BaseCommand, _format_error_message
+from okdata.cli.output import TableOutput
 
 
 def test_docopt():
@@ -182,3 +182,26 @@ def test_help(capsys):
     cmd.help()
     captured = capsys.readouterr()
     assert captured.out == BaseCommand.__doc__
+
+
+def test_format_error_message():
+    assert _format_error_message("foo") == "An error occurred: foo"
+    assert (
+        _format_error_message("foo", "bar") == "An error occurred: foo\nCause:\n - bar"
+    )
+    assert (
+        _format_error_message("foo", ["bar"])
+        == "An error occurred: foo\nCause:\n - bar"
+    )
+    assert (
+        _format_error_message("foo", ["bar", "baz"])
+        == "An error occurred: foo\nCauses:\n - bar\n - baz"
+    )
+    assert (
+        _format_error_message("foo", [{"msg": "bar"}])
+        == "An error occurred: foo\nCause:\n - bar"
+    )
+    assert (
+        _format_error_message("foo", [{"msg": "bar"}, {"msg": "baz"}])
+        == "An error occurred: foo\nCauses:\n - bar\n - baz"
+    )

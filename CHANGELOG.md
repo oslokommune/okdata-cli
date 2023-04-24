@@ -3,6 +3,8 @@
 * All `okdata pipelines` commands have been removed. Pipelines can still be
   configured for datasets when using the the dataset creation wizard (`okdata
   datasets create`).
+* Improved error message handling in the `pubreg` and `teams` families of
+  commands.
 * The correct maintainer team is named in error messages.
 
 ## 1.6.0

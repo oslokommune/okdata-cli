@@ -123,7 +123,7 @@ Options:{BASE_COMMAND_OPTIONS}
         print(self.__doc__, end="")
 
     def print_error_response(self, response_body):
-        if type(response_body) != dict:
+        if not isinstance(response_body, dict):
             print(response_body)
             return
 
@@ -133,19 +133,29 @@ Options:{BASE_COMMAND_OPTIONS}
             print(json.dumps(response_body))
         else:
             try:
-                feedback = generate_error_feedback(
-                    message=response_body["message"],
-                    errors=response_body.get("errors", None),
+                print(
+                    _format_error_message(
+                        response_body["message"], response_body.get("errors")
+                    )
                 )
-                print(feedback)
             except KeyError:
                 self.log.debug("Got unexpected response body from api.")
                 print(response_body)
 
 
-def generate_error_feedback(message, errors=None):
-    feedback = f"An error occurred: {message}"
-    if errors:
-        feedback += f"\nCause:\n\t{errors}"
+def _format_error_message(message, errors=None):
+    msg = f"An error occurred: {message}"
+    sep = "\n - "
 
-    return f"{feedback}"
+    if isinstance(errors, list):
+        msg += "\nCause{}:{}{}".format(
+            "s" if len(errors) > 1 else "",
+            sep,
+            sep.join(
+                err.get("msg", "") if isinstance(err, dict) else err for err in errors
+            ),
+        )
+    elif errors:
+        msg += f"\nCause:{sep}{errors}"
+
+    return msg
