@@ -8,7 +8,7 @@
     "key": "file"
   },
   "Uploaded": {
-    "name": "Upload status",
+    "name": "Uploaded?",
     "key": "uploaded"
   },
   "TraceID": {
