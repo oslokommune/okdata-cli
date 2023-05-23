@@ -180,11 +180,11 @@ After uploading a file to a dataset using the `okdata datasets cp` command, a
 trace ID is displayed which can be used to track the uploading process status:
 
 ```text
-+-------------+---------------+---------------+-------------+
-| Dataset     | Local file    | Upload status | Trace ID    |
-+-------------+---------------+---------------+-------------+
-| <datasetid> | /tmp/test.txt | True          | <trace_id>  |
-+-------------+---------------+---------------+-------------+
++-------------+---------------+-----------+-------------+
+| Dataset     | Local file    | Uploaded? | Trace ID    |
++-------------+---------------+-----------+-------------+
+| <datasetid> | /tmp/test.txt | Yes       | <trace_id>  |
++-------------+---------------+-----------+-------------+
 ```
 
 To see the latest status of the upload, run:
