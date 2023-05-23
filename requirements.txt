@@ -40,7 +40,7 @@ python-keycloak==0.27.0
     # via okdata-sdk
 questionary==1.10.0
     # via okdata-cli (setup.py)
-requests==2.27.1
+requests==2.31.0
     # via
     #   okdata-cli (setup.py)
     #   okdata-sdk
