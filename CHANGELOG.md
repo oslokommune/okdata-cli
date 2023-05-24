@@ -1,4 +1,4 @@
-## ?.?.?
+## 2.0.1
 
 * Improved output from the `datasets cp` command.
 
