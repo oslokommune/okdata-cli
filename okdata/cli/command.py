@@ -1,6 +1,7 @@
 import json
 import logging
 import sys
+from importlib import metadata
 
 from docopt import docopt, DocoptExit
 from okdata.sdk import SDK
@@ -13,11 +14,7 @@ BASE_COMMAND_OPTIONS = """
 
 
 class BaseCommand:
-    version = "2.0.1"
-    # TODO: Can use `importlib` in Python 3.8 and up instead of hard coding the
-    #       version here:
-    #
-    # version = importlib.metadata.version("okdata-cli")
+    version = metadata.version("okdata-cli")
 
     __doc__ = f"""okdata-cli {version}
 

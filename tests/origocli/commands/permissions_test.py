@@ -44,8 +44,7 @@ def test_list_my_permissions(mocker, mock_print):
     cmd = make_cmd(mocker, "ls")
     cmd.handler()
     mock_print.assert_called_once()
-    # .mock_calls[0].args[1] in Python 3.8 and greater.
-    out = str(mock_print.mock_calls[0][1][1])
+    out = str(mock_print.mock_calls[0].args[1])
     assert re.search("okdata:dataset:my-dataset-1.*okdata:dataset:read", out)
     assert re.search("okdata:dataset:my-dataset-2.*okdata:dataset:admin", out)
 
@@ -66,8 +65,7 @@ def test_add_user(mocker):
     cmd.client.update_permission.assert_called_once_with(
         "okdata:dataset:my-dataset", "okdata:dataset:read", add_users=[ANY]
     )
-    # .mock_calls[0].kwargs['add_users'] in Python 3.8 and greater.
-    user = cmd.client.update_permission.mock_calls[0][2]["add_users"][0]
+    user = cmd.client.update_permission.mock_calls[0].kwargs["add_users"][0]
     assert user.user_id == "foo"
     assert user.user_type == "user"
 
