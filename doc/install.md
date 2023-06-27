@@ -1,7 +1,7 @@
 # Install
 
 The quickest way to get started is by installing the latest release of Okdata
-CLI from PyPI with pip (requires Python 3.7 or higher):
+CLI from PyPI with pip (requires Python 3.8 or higher):
 
 ```bash
 python -m pip install --user okdata-cli

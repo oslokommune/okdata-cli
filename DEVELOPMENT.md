@@ -2,7 +2,7 @@
 
 ## Setup
 
-Requirement: Python 3.7+
+Requirement: Python 3.8+
 
 Setup:
 ```bash
