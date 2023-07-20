@@ -350,16 +350,14 @@ Options:{BASE_COMMAND_OPTIONS}
             "trace_id": res["trace_id"],
         }
         out.add_row(data)
-        self.print(
-            "\n".join(
-                [
-                    f"Uploaded file to dataset: {dataset_id}",
-                    str(out),
-                    "\nYou can check the data processing status by running:\n",
-                    f"  okdata status {res['trace_id']}",
-                ]
-            )
-        )
+
+        summary = [f"Uploaded file to dataset: {dataset_id}", str(out)]
+        if res["trace_id"]:
+            summary += [
+                "\nYou can check the data processing status by running:\n",
+                f"  okdata status {res['trace_id']}",
+            ]
+        self.print("\n".join(summary))
 
     def download_files(self, source, target):
         dataset_id, version, edition = self._dataset_components_from_uri(source)
