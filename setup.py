@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="okdata-cli",
-    version="2.0.1",
+    version="3.0.0",
     author="Oslo Origo",
     author_email="dataplattform@oslo.kommune.no",
     description="CLI for services provided by Oslo Origo",
@@ -25,7 +25,7 @@ setuptools.setup(
     install_requires=[
         "PrettyTable",
         "docopt",
-        "okdata-sdk>=2.3.0,<3.0.0",
+        "okdata-sdk>=2.4.0,<3.0.0",
         "questionary>=1.10.0,<2.0.0",
         "requests",
     ],
