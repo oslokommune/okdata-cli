@@ -72,14 +72,14 @@ class TestDatasetsLs:
         cmd = create_cmd(mocker, "ls")
         cmd.handler()
         assert output_with_argument(output, [dataset, dataset])
-        assert mock_print.called_once
+        mock_print.assert_called_once()
 
     def test_dataset(self, mock_print, mocker, output):
         cmd = create_cmd(mocker, "ls", dataset["Id"])
         cmd.handler()
 
         assert output_with_argument(output, [dataset])
-        assert mock_print.called_once
+        mock_print.assert_called()
         assert cmd.sdk.get_dataset.called
         assert cmd.sdk.get_versions.called
         assert cmd.sdk.get_latest_version.called

@@ -18,7 +18,7 @@ idna==3.3
     # via requests
 jsonschema==4.4.0
     # via okdata-sdk
-okdata-sdk==2.4.1
+okdata-sdk==3.0.0
     # via okdata-cli (setup.py)
 prettytable==3.2.0
     # via okdata-cli (setup.py)
@@ -50,7 +50,9 @@ rsa==4.8
 six==1.16.0
     # via ecdsa
 urllib3==1.26.18
-    # via requests
+    # via
+    #   okdata-sdk
+    #   requests
 wcwidth==0.2.5
     # via
     #   prettytable

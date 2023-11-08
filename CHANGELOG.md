@@ -1,3 +1,9 @@
+## ?.?.?
+
+* Added support for Python 3.12.
+* Fix a bug in the version requirement for urllib3 by requiring `okdata-sdk`
+  version 3 or higher.
+
 ## 3.0.0
 
 * Dropped support for Python 3.7 which has reached end of life. Python 3.8+ is
