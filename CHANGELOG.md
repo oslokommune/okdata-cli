@@ -1,4 +1,4 @@
-## ?.?.?
+## 3.1.0
 
 * Added support for Python 3.12.
 * Fix a bug in the version requirement for urllib3 by requiring `okdata-sdk`
