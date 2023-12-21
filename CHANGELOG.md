@@ -1,3 +1,8 @@
+## ?.?.?
+
+* The `okdata status` command can now be set to watch the status of a dataset
+  upload with the `--watch` option.
+
 ## 3.1.0
 
 * Added support for Python 3.12.
