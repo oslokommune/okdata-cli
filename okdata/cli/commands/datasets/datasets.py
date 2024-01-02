@@ -354,8 +354,8 @@ Options:{BASE_COMMAND_OPTIONS}
         summary = [f"Uploaded file to dataset: {dataset_id}", str(out)]
         if res["trace_id"]:
             summary += [
-                "\nYou can check the data processing status by running:\n",
-                f"  okdata status {res['trace_id']}",
+                "\nYou can watch the data processing status by running:\n",
+                f"  okdata status {res['trace_id']} --watch",
             ]
         self.print("\n".join(summary))
 
