@@ -63,7 +63,7 @@ def create_cmd(mocker, *args):
     cmd.sdk.get_editions.return_value = [edition, edition2]
     cmd.sdk.get_edition.return_value = edition
     cmd.sdk.get_latest_edition.return_value = edition
-    cmd.sdk.create_edition.return_value = new_edition
+    cmd.sdk.auto_create_edition.return_value = new_edition
     return cmd
 
 
@@ -144,12 +144,6 @@ class TestDatasetsCp:
 
 
 class TestUtils:
-    def test_auto_create_edition(self, mocker):
-        cmd = create_cmd(mocker, "ls")
-        assert (
-            cmd._auto_create_edition(dataset["Id"], version["version"]) == "new-edition"
-        )
-
     def test_dataset_components_from_uri_only_ds(self, mocker):
         cmd = create_cmd(mocker, "ls")
         dataset_id, _version, _edition = cmd._dataset_components_from_uri(dataset["Id"])
