@@ -17,7 +17,7 @@ class DatasetsCommand(BaseCommand):
 
 Usage:
   okdata datasets ls [--filter=<filter> options]
-  okdata datasets ls <datasetid> [<versionid> <editionid>] [options]
+  okdata datasets ls <uri> [options]
   okdata datasets cp <source> <target> [options]
   okdata datasets create [options]
   okdata datasets create-version <datasetid> [options]
@@ -25,8 +25,12 @@ Usage:
   okdata datasets create-distribution <datasetid> [<versionid> <editionid>] [options]
 
 Examples:
+  okdata datasets ls
   okdata datasets ls --filter=bydelsfakta
-  okdata datasets ls --filter=bydelsfakta --format=json
+  okdata datasets ls my-dataset
+  okdata datasets ls my-dataset/1
+  okdata datasets ls my-dataset/1/20240101T102030
+  okdata datasets ls my-dataset/1/20240101T102030 --format=json
   okdata datasets create --file=dataset.json
   okdata datasets cp /tmp/file.csv ds:my-dataset-id
 
@@ -40,35 +44,39 @@ Options:{BASE_COMMAND_OPTIONS}
         super().__init__(Dataset)
         self.download = Download(env=self.opt("env"))
 
-    # TODO: do a better mapping from rules to commands here...?
     def handler(self):
         self.log.info("DatasetsCommand.handle()")
-        if self.arg("datasetid") is None and self.cmd("ls") is True:
-            self.datasets()
-        elif self.arg("datasetid") is None and self.cmd("create") is True:
+        if self.cmd("ls"):
+            self.list_metadata()
+        elif self.cmd("create"):
             if self.opt("file"):
                 self.create_dataset()
             else:
                 DatasetCreateWizard(self).start()
-        elif self.cmd("cp") is True:
+        elif self.cmd("cp"):
             self.copy_file()
-        elif (
-            self.arg("datasetid") is not None
-            and self.cmd("create-distribution") is True
-        ):
-            self.create_distribution()
-        elif self.arg("datasetid") is not None and self.cmd("create-edition") is True:
-            self.create_edition()
-        elif self.arg("datasetid") is not None and self.cmd("create-version") is True:
+        elif self.cmd("create-version"):
             self.create_version()
-        elif self.arg("editionid") is not None or self.opt("editionid") is not None:
-            self.edition_information()
-        elif self.arg("versionid") is not None or self.opt("versionid") is not None:
-            self.version()
-        elif self.arg("datasetid") is not None:
-            self.dataset()
+        elif self.cmd("create-edition"):
+            self.create_edition()
+        elif self.cmd("create-distribution"):
+            self.create_distribution()
         else:
             self.help()
+
+    def list_metadata(self):
+        if self.arg("uri"):
+            dataset_id, version, edition = self._dataset_components_from_uri(
+                self.arg("uri"), auto_resolve=False
+            )
+            if edition:
+                self.edition_information(dataset_id, version, edition)
+            elif version:
+                self.version_information(dataset_id, version)
+            elif dataset_id:
+                self.dataset(dataset_id)
+        else:
+            self.datasets()
 
     # #################################### #
     # Datasets
@@ -80,8 +88,7 @@ Options:{BASE_COMMAND_OPTIONS}
         out.add_rows(dataset_list)
         self.print("Available datasets", out)
 
-    def dataset(self):
-        dataset_id = self.arg("datasetid")
+    def dataset(self, dataset_id):
         self.log.info(f"DatasetsCommand.handle_dataset({dataset_id})")
 
         dataset = self.sdk.get_dataset(dataset_id)
@@ -119,21 +126,13 @@ Options:{BASE_COMMAND_OPTIONS}
     # #################################### #
     # Version
     # #################################### #
-    def version(self):
-        if self.cmd("create-edition") is not False:
-            self.create_version()
-        else:
-            self.version_information()
+    def version_information(self, dataset_id, version):
+        self.log.info(f"Listing version for: {dataset_id}, {version}")
 
-    def version_information(self):
-        dataset_id = self.arg("datasetid")
-        version_id = self.arg("versionid") or self.opt("versionid")
-        self.log.info(f"Listing version for: {dataset_id}, {version_id}")
-
-        editions = self.sdk.get_editions(dataset_id, version_id)
+        editions = self.sdk.get_editions(dataset_id, version)
         out = create_output(self.opt("format"), "datasets_dataset_version_config.json")
         out.add_rows(editions)
-        self.print(f"Editions available for: {dataset_id}, version: {version_id}", out)
+        self.print(f"Editions available for: {dataset_id}, version: {version}", out)
 
     def create_version(self):
         dataset_id = self.arg("datasetid")
@@ -167,7 +166,7 @@ Options:{BASE_COMMAND_OPTIONS}
 
     def resolve_or_load_versionid(self, dataset_id):
         self.log.info(f"Trying to resolve versionid for {dataset_id}")
-        version_id = self.arg("versionid") or self.opt("versionid")
+        version_id = self.arg("versionid")
         if version_id is not None:
             self.log.info(f"Found version in arguments: {version_id}")
             return version_id
@@ -180,19 +179,16 @@ Options:{BASE_COMMAND_OPTIONS}
     # #################################### #
     # Edition
     # #################################### #
-    def edition_information(self):
-        dataset_id = self.arg("datasetid")
-        version_id = self.arg("versionid") or self.opt("versionid")
-        edition_id = self.arg("editionid") or self.opt("editionid")
-        self.log.info(f"Listing edition for: {dataset_id}, {version_id}, {edition_id}")
+    def edition_information(self, dataset_id, version, edition):
+        self.log.info(f"Listing edition for: {dataset_id}, {version}, {edition}")
 
-        edition = self.sdk.get_edition(dataset_id, version_id, edition_id)
+        edition_metadata = self.sdk.get_edition(dataset_id, version, edition)
         out = create_output(
             self.opt("format"), "datasets_dataset_version_edition_config.json"
         )
-        out.add_rows([edition])
-        print(out)
-        distributions = self.sdk.get_distributions(dataset_id, version_id, edition_id)
+        out.add_rows([edition_metadata])
+        self.print(out)
+        distributions = self.sdk.get_distributions(dataset_id, version, edition)
         out = create_output(
             self.opt("format"),
             "datasets_dataset_version_edition_distributions_config.json",
@@ -232,7 +228,7 @@ Options:{BASE_COMMAND_OPTIONS}
 
     def resolve_or_create_edition(self, dataset_id, version_id):
         self.log.info(f"Trying to resolve edition for {version_id} on {dataset_id}")
-        edition_id = self.arg("editionid") or self.opt("editionid")
+        edition_id = self.arg("editionid")
         if edition_id is not None:
             self.log.info(f"Found edition in arguments: {edition_id}")
             return edition_id
@@ -286,7 +282,9 @@ Options:{BASE_COMMAND_OPTIONS}
                 "Either source or target needs to be a dataset (prefixed with 'ds:')."
             )
 
-    def _dataset_components_from_uri(self, dataset_uri, create_edition=False):
+    def _dataset_components_from_uri(
+        self, dataset_uri, create_edition=False, auto_resolve=True
+    ):
         """Return an ID/version/edition tuple given a dataset URI.
 
         Four different URI formats are supported:
@@ -296,35 +294,41 @@ Options:{BASE_COMMAND_OPTIONS}
         - {dataset_id}/{version}/latest
         - {dataset_id}/{version}/{edition}
 
-        If only a dataset ID is given, the latest version and edition is
-        chosen. A new edition is created if `create_edition` is true, or if the
-        latest version didn't already have any editions.
+        If `auto_resolve` is true, an attempt is made to resolve the version
+        and edition even if they're not provided in the following ways:
 
-        If only a dataset ID and version are given, the latest edition is
-        chosen. A new edition is created if `create_edition` is true, or if the
-        given version didn't already have any editions.
+        * If only a dataset ID is given, the latest version and edition is
+          chosen. A new edition is created if `create_edition` is true, or if
+          the latest version didn't already have any editions.
 
-        A specific dataset ID, verison, and edition is chosen when all three
-        components are provided. Given an edition with the special name
-        'latest', the latest edition is chosen.
+        * If only a dataset ID and version are given, the latest edition is
+          chosen. A new edition is created if `create_edition` is true, or if
+          the given version didn't already have any editions.
+
+        * A specific dataset ID, version, and edition is chosen when all three
+          components are provided. Given an edition with the special name
+          'latest', the latest edition is chosen.
+
+        Otherwise `None` is returned for missing parts.
         """
         parts = dataset_uri.split("/")
         dataset_id, version, edition = parts + [None] * (3 - len(parts))
 
-        if not version:
-            version = self._get_latest_version(dataset_id)["version"]
+        if auto_resolve:
+            if not version:
+                version = self._get_latest_version(dataset_id)["version"]
 
-        if edition == "latest":
-            edition = self.sdk.get_latest_edition(dataset_id, version)["Id"].split("/")[
-                -1
-            ]
+            if edition == "latest":
+                edition = self.sdk.get_latest_edition(dataset_id, version)["Id"].split(
+                    "/"
+                )[-1]
 
-        elif not edition:
-            edition = (
-                self._auto_create_edition(dataset_id, version)
-                if create_edition
-                else self.get_latest_or_create_edition(dataset_id, version)
-            )
+            elif not edition:
+                edition = (
+                    self._auto_create_edition(dataset_id, version)
+                    if create_edition
+                    else self.get_latest_or_create_edition(dataset_id, version)
+                )
 
         return dataset_id, version, edition
 

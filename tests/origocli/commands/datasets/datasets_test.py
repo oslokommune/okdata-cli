@@ -97,13 +97,13 @@ class TestDatasetsLs:
         assert not cmd.log.exception.called
 
     def test_version(self, mocker, output):
-        cmd = create_cmd(mocker, "ls", dataset["Id"], version["version"])
+        cmd = create_cmd(mocker, "ls", f'{dataset["Id"]}/{version["version"]}')
         cmd.handler()
         assert output_with_argument(output, cmd.sdk.get_editions.return_value)
 
     def test_edition(self, mocker, output):
         cmd = create_cmd(
-            mocker, "ls", dataset["Id"], version["version"], edition["edition"]
+            mocker, "ls", f'{dataset["Id"]}/{version["version"]}/{edition["edition"]}'
         )
         cmd.handler()
         assert output_with_argument(output, [edition])
@@ -201,3 +201,30 @@ class TestUtils:
         assert dataset_id == dataset["Id"]
         assert _version == version["version"]
         assert _edition == "new-edition"
+
+    def test_dataset_components_from_uri_no_resolve_1(self, mocker):
+        cmd = create_cmd(mocker, "ls")
+        dataset_id, _version, _edition = cmd._dataset_components_from_uri(
+            f"{dataset['Id']}", False, False
+        )
+        assert dataset_id == dataset["Id"]
+        assert _version is None
+        assert _edition is None
+
+    def test_dataset_components_from_uri_no_resolve_2(self, mocker):
+        cmd = create_cmd(mocker, "ls")
+        dataset_id, _version, _edition = cmd._dataset_components_from_uri(
+            f"{dataset['Id']}/{version['version']}", False, False
+        )
+        assert dataset_id == dataset["Id"]
+        assert _version == version["version"]
+        assert _edition is None
+
+    def test_dataset_components_from_uri_no_resolve_3(self, mocker):
+        cmd = create_cmd(mocker, "ls")
+        dataset_id, _version, _edition = cmd._dataset_components_from_uri(
+            f"{dataset['Id']}/{version['version']}/{edition['edition']}", False, False
+        )
+        assert dataset_id == dataset["Id"]
+        assert _version == version["version"]
+        assert _edition == edition["edition"]

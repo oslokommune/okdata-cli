@@ -2,6 +2,12 @@
 
 * The `okdata status` command can now be set to watch the status of a dataset
   upload with the `--watch` option.
+* The `datasets ls` command now accepts a single optional URI argument that can
+  denote either a dataset, version, or edition:
+
+  - `okdata datasets ls {dataset_id}`
+  - `okdata datasets ls {dataset_id}/{version}`
+  - `okdata datasets ls {dataset_id}/{version}/{edition}`
 
 ## 3.1.0
 
