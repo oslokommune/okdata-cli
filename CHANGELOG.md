@@ -9,6 +9,9 @@
   - `okdata datasets ls {dataset_id}/{version}`
   - `okdata datasets ls {dataset_id}/{version}/{edition}`
 
+* Automatically created editions now get timestamped correctly. Previously it
+  was assumed that the user always operated in UTC+2.
+
 ## 3.1.0
 
 * Added support for Python 3.12.

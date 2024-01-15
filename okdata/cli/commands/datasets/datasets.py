@@ -7,7 +7,6 @@ from requests.exceptions import HTTPError
 
 from okdata.cli.command import BaseCommand, BASE_COMMAND_OPTIONS
 from okdata.cli.commands.datasets.wizards import DatasetCreateWizard
-from okdata.cli.date import date_now, DATE_METADATA_EDITION_FORMAT
 from okdata.cli.io import read_json, resolve_output_filepath
 from okdata.cli.output import create_output
 
@@ -208,24 +207,6 @@ Options:{BASE_COMMAND_OPTIONS}
         self.print(f"Created edition for {version_id} on {dataset_id}", edition)
         return edition
 
-    def _auto_create_edition(self, dataset_id, version_id):
-        """Auto-create a new edition for the given dataset version.
-
-        Return the ID of the newly created edition.
-        """
-        data = {
-            "edition": date_now().strftime(DATE_METADATA_EDITION_FORMAT),
-            "description": f"Auto-created edition for {dataset_id}/{version_id}",
-        }
-
-        self.log.info(
-            f"Creating new edition for {dataset_id}/{version_id} with data: {data}"
-        )
-        edition = self.sdk.create_edition(dataset_id, version_id, data)
-        self.log.info(f"Created edition: {edition}")
-
-        return edition["Id"].split("/")[-1]
-
     def resolve_or_create_edition(self, dataset_id, version_id):
         self.log.info(f"Trying to resolve edition for {version_id} on {dataset_id}")
         edition_id = self.arg("editionid")
@@ -233,15 +214,15 @@ Options:{BASE_COMMAND_OPTIONS}
             self.log.info(f"Found edition in arguments: {edition_id}")
             return edition_id
 
-        return self._auto_create_edition(dataset_id, version_id)
+        return self.sdk.auto_create_edition(dataset_id, version_id)
 
     def get_latest_or_create_edition(self, dataset_id, version):
         self.log.info(f"Resolving edition for dataset-uri: {dataset_id}/{version}")
         try:
-            return self.sdk.get_latest_edition(dataset_id, version)["Id"].split("/")[-1]
+            return self.sdk.get_latest_edition(dataset_id, version)
         except HTTPError as he:
             if he.response.status_code == 404:
-                return self._auto_create_edition(dataset_id, version)
+                return self.sdk.auto_create_edition(dataset_id, version)
             raise
 
     # #################################### #
@@ -251,17 +232,14 @@ Options:{BASE_COMMAND_OPTIONS}
         payload = read_json(self.opt("file"))
         dataset_id = self.arg("datasetid")
         version_id = self.resolve_or_load_versionid(dataset_id)
-        edition_id = self.resolve_or_create_edition(dataset_id, version_id)
-        self.log.info(
-            f"Creating distribution for {edition_id} on {dataset_id}/{version_id} with payload: {payload}"
-        )
+        edition_id = self.resolve_or_create_edition(dataset_id, version_id)["Id"]
+        edition = edition_id.split("/")[-1]
+        self.log.info(f"Creating distribution for {edition_id} with payload: {payload}")
 
         distribution = self.sdk.create_distribution(
-            dataset_id, version_id, edition_id, payload
+            dataset_id, version_id, edition, payload
         )
-        self.print(
-            f"Created distribution for {version_id} on {dataset_id}", distribution
-        )
+        self.print(f"Created distribution for {edition_id}", distribution)
         return distribution
 
     # #################################### #
@@ -325,10 +303,10 @@ Options:{BASE_COMMAND_OPTIONS}
 
             elif not edition:
                 edition = (
-                    self._auto_create_edition(dataset_id, version)
+                    self.sdk.auto_create_edition(dataset_id, version)
                     if create_edition
                     else self.get_latest_or_create_edition(dataset_id, version)
-                )
+                )["Id"].split("/")[-1]
 
         return dataset_id, version, edition
 
