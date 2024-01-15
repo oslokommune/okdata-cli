@@ -1,4 +1,4 @@
-## ?.?.?
+## 3.2.0 - 2024-01-15
 
 * The `okdata status` command can now be set to watch the status of a dataset
   upload with the `--watch` option.
@@ -12,23 +12,23 @@
 * Automatically created editions now get timestamped correctly. Previously it
   was assumed that the user always operated in UTC+2.
 
-## 3.1.0
+## 3.1.0 - 2023-11-17
 
 * Added support for Python 3.12.
 * Fix a bug in the version requirement for urllib3 by requiring `okdata-sdk`
   version 3 or higher.
 
-## 3.0.0
+## 3.0.0 - 2023-09-01
 
 * Dropped support for Python 3.7 which has reached end of life. Python 3.8+ is
   now required.
 * Improved output on data upload when trace ID is missing.
 
-## 2.0.1
+## 2.0.1 - 2023-05-24
 
 * Improved output from the `datasets cp` command.
 
-## 2.0.0
+## 2.0.0 - 2023-04-24
 
 * All `okdata pipelines` commands have been removed. Pipelines can still be
   configured for datasets when using the the dataset creation wizard (`okdata
@@ -37,7 +37,7 @@
   commands.
 * The correct maintainer team is named in error messages.
 
-## 1.6.0
+## 1.6.0 - 2023-03-21
 
 * The `pubreg list-keys` command now supports listing all client keys
   simultaneously across different clients.
@@ -49,44 +49,44 @@
 * The `datasets boilerplate` command has been removed as it has been largely
   subsumed by the `datasets create` wizard.
 
-## 1.5.2
+## 1.5.2 - 2023-02-27
 
 * Attempting to upload a non-existent file to a dataset no longer produces a
   stack trace, but rather displays a nicer error message instead.
 * Datasets without a `latest` version is handled better.
 
-## 1.5.1
+## 1.5.1 - 2023-02-17
 
 * The dataset creation wizard no longer crashes when canceled.
 
-## 1.5.0
+## 1.5.0 - 2023-02-13
 
 * Added support for Python 3.11.
 
-## 1.4.0
+## 1.4.0 - 2022-09-08
 
 * New commands `teams add-member` and `teams remove-member` added, allowing for
   management of team members.
 
-## 1.3.0
+## 1.3.0 - 2022-08-26
 
 * A new command `pubreg audit-log` for viewing audit logs of Maskinporten
   clients has been added.
 * Automatic client key rotation is now offered when creating a new client key.
 * A new family of `team` commands and been added for viewing and editing teams.
 
-## 1.2.0
+## 1.2.0 - 2022-07-04
 
 * The `pubreg delete-client` command now offers to delete the SSM key parameters
   belonging to a client when it's deleted.
 
-## 1.1.0
+## 1.1.0 - 2022-06-22
 
 * Numerous UI improvements in the `pubreg` sub-commands.
 * Better keyboard interrupt handling.
 * Dropped dependency on Sphinx for documentation generation.
 
-## 1.0.0
+## 1.0.0 - 2022-05-23
 
 * The previously internal `pubreg` command is now made public and documented.
 * Support for managing event streams has been removed (i.e. all `okdata events`
@@ -97,15 +97,15 @@
 * Dropped support for Python 3.6 which reached end-of-life in December 2021.
 * The current version of `okdata-cli` is now displayed in the help text.
 
-## 0.13.0
+## 0.13.0 - 2021-07-06
 
 * Added support for showing collected error messages in status trace output.
 
-## 0.12.1
+## 0.12.1 - 2021-06-10
 
 * Updated dependencies to fix security vulnerability in urllib3.
 
-## 0.12.0
+## 0.12.0 - 2021-05-26
 
 * The new permission API based `WebhookClient` from the SDK is now used instead
   of the deprecated `SimpleDatasetAuthorizerClient`.
@@ -113,50 +113,50 @@
 * [Webhook tokens](doc/webhooks.md) are now tied to an operation on a dataset
   (read, write), instead of a specific service.
 
-## 0.11.0
+## 0.11.0 - 2021-05-19
 
 * [Permissions](doc/permissions.md) can now be administered from the CLI.
 
-## 0.10.6
+## 0.10.6 - 2021-04-29
 
 * Enabled retries for file uploads.
 
 * The minimum required version of `okdata-sdk` is now 0.6.3.
 
-## 0.10.5
+## 0.10.5 - 2021-03-30
 
 * Fixed `okdata pipelines instances wizard`, where an outdated version of
   `PipelineInstance` was assumed.
 
-## 0.10.4
+## 0.10.4 - 2021-03-04
 
 * Dataset license is now chosen from a preset list instead of free text.
 
-## 0.10.3
+## 0.10.3 - 2021-02-22
 
 * Fixed a bug where event stream creation would result in a "Forbidden" error.
 
-## 0.10.2
+## 0.10.2 - 2021-02-15
 
 * The dataset source type is now selected in the dataset creation wizard.
 
-## 0.10.1
+## 0.10.1 - 2021-02-09
 
 * Authentication is no longer necessary for downloading public ("green")
   datasets.
 
-## 0.10.0
+## 0.10.0 - 2021-01-26
 
 * Added additional metadata fields to dataset creation wizard.
 
 * The `confidentiality` metadata field is now fully replaced by `accessRights`.
 
-## 0.9.0
+## 0.9.0 - 2020-12-22
 
 * A pipeline for transforming Excel to CSV is now offered in the dataset
   creation wizard.
 
-## 0.8.0
+## 0.8.0 - 2020-12-16
 
 * The `okdata` namespace package now uses the old-style `pkg_resources`
   declaration instead of being an implicit namespace package.
@@ -164,7 +164,7 @@
 * The dataset creation wizard can now be used to create datasets without a
   pipeline.
 
-## 0.7.0
+## 0.7.0 - 2020-11-13
 
 ### Breaking
 
@@ -179,7 +179,7 @@
 * `origo datasets download` is no longer presented in the `origo datasets` help
   text, since the command is gone. Use `origo datasets cp` instead.
 
-## 0.6.0
+## 0.6.0 - 2020-11-03
 
 * `origo datasets create` now runs a dataset creation wizard for setting up a
   new dataset complete with a processing pipeline, ready to receive files. The
@@ -198,7 +198,7 @@
 * The status (`status`) and upload (`datasets cp`) commands now support the new
   status-api format.
 
-## 0.5.1
+## 0.5.1 - 2020-10-15
 
 * A bug that made the `origo events put` command unusable has been fixed.
 
@@ -211,7 +211,7 @@
 * The boilerplate script no longer creates a dataset version explicitly, as new
   datasets now include a version "1" by default.
 
-## 0.5.0
+## 0.5.0 - 2020-10-07
 
 * Support new event stream API (including updated SDK). Existing sub-commands from `events` and `event_streams` are now combined into `events`, and new commands for managing event stream sinks and subscriptions are added.
 
@@ -221,7 +221,7 @@
 * `~` is now expanded to the home directory in arguments to the `--file` option,
   such as in `origo datasets create --file=~/Documents/my-dataset.json`.
 
-## 0.4.0
+## 0.4.0 - 2020-10-06
 
 * New syntax for the `origo datasets cp` command. Four different URI formats are
   now supported when specifying the dataset to upload to or download from:
@@ -238,15 +238,15 @@
 
 * Add command `origo webhooks list-tokens` for listing webhook tokens for a dataset.
 
-## 0.3.2
+## 0.3.2 - 2020-09-04
 
 * Use Sphinx for documentation generation.
 
-## 0.3.1
+## 0.3.1 - 2020-08-31
 
 * Include package data in distribution.
 
-## 0.3.0
+## 0.3.0 - 2020-08-28
 
 * Remove `wheel` install from Makefile `init` rule.
 * Add prompt for boilerplate to make it easier to create a dataset and pipeline.
@@ -266,7 +266,7 @@
 * Allow reading stdin from a tty.
 * Remove processing stage from example dataset JSON.
 
-## 0.2.0
+## 0.2.0 - 2020-04-27
 
 * Add dataset authorizer.
 * Describe dataset access and webhook tokens in README.
@@ -274,7 +274,7 @@
 * Update to common output format.
 * Update to latest Origo SDK release.
 
-## 0.1.0
+## 0.1.0 - 2020-04-22
 
 * Ensure `jq` is installed.
 * Add boilerplate for creating a dataset, pipeline, and input for pipeline.
@@ -309,6 +309,6 @@
 * Test with GitHub actions.
 * Use Origo SDK from PyPI.
 
-## 0.0.1
+## 0.0.1 - 2019-11-22
 
 * Initial release.
