@@ -41,12 +41,11 @@ class TableOutput(PrettyTable):
         super().__init__(column_headers)
 
     def field_values(self, row, row_key, key):
-        value = ""
+        values = []
         for field in self.config[key]["fields"]:
             if field in row[row_key]:
-                tmp = row[row_key][field]
-                value += f"{tmp}\n"
-        return value
+                values.append(str(row[row_key][field]))
+        return "\n".join(values)
 
     def get_row_value(self, row, key):
         row_key = self.config[key]["key"]

@@ -1,3 +1,7 @@
+## ?.?.? - Unreleased
+
+* Fixed extraneous newline printing in table output.
+
 ## 3.2.0 - 2024-01-15
 
 * The `okdata status` command can now be set to watch the status of a dataset

@@ -119,6 +119,49 @@ def test_pretty_print_success(capsys):
     )
 
 
+def test_pretty_print_fields_single(capsys):
+    set_argv("datasets")
+    cmd = BaseCommand()
+    config = {
+        "name": {"name": "name", "key": "name"},
+        "id": {"name": "key", "key": "key", "fields": ["a"]},
+    }
+    cmd.print_success(TableOutput(config), [{"name": "hello", "key": {"a": "world"}}])
+    captured = capsys.readouterr()
+    assert (
+        captured.out
+        == """+-------+-------+
+| name  | key   |
++-------+-------+
+| hello | world |
++-------+-------+
+"""
+    )
+
+
+def test_pretty_print_fields_multiple(capsys):
+    set_argv("datasets")
+    cmd = BaseCommand()
+    config = {
+        "name": {"name": "name", "key": "name"},
+        "id": {"name": "key", "key": "key", "fields": ["a", "b"]},
+    }
+    cmd.print_success(
+        TableOutput(config), [{"name": "hello", "key": {"a": "world", "b": "world"}}]
+    )
+    captured = capsys.readouterr()
+    assert (
+        captured.out
+        == """+-------+-------+
+| name  | key   |
++-------+-------+
+| hello | world |
+|       | world |
++-------+-------+
+"""
+    )
+
+
 def test_pretty_print_wrapped_success(capsys):
     set_argv("datasets")
     cmd = BaseCommand()
