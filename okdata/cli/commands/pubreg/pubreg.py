@@ -123,11 +123,13 @@ You may now go ahead and create a key for it by running:
                 client_name,
                 env,
                 (
-                    f" along with the key stored in AWS account {aws_account} "
-                    f"({aws_region})"
-                )
-                if delete_from_aws
-                else "",
+                    (
+                        f" along with the key stored in AWS account {aws_account} "
+                        f"({aws_region})"
+                    )
+                    if delete_from_aws
+                    else ""
+                ),
             ),
         )
 
@@ -226,15 +228,19 @@ You may now go ahead and create a key for it by running:
                         client_name,
                         env,
                         (
-                            f"send it to AWS account {aws_account} ({aws_region}), "
-                            "REPLACING any existing key for this client"
-                        )
-                        if key_destination == "aws"
-                        else "save it locally",
+                            (
+                                f"send it to AWS account {aws_account} ({aws_region}), "
+                                "REPLACING any existing key for this client"
+                            )
+                            if key_destination == "aws"
+                            else "save it locally"
+                        ),
                     ),
-                    "The key will be rotated automatically every night on weekdays.\n"
-                    if enable_auto_rotate
-                    else "The key will NOT be rotated automatically.\n",
+                    (
+                        "The key will be rotated automatically every night on weekdays.\n"
+                        if enable_auto_rotate
+                        else "The key will NOT be rotated automatically.\n"
+                    ),
                 ]
             )
         )
