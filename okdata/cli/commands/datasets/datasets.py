@@ -292,6 +292,10 @@ Options:{BASE_COMMAND_OPTIONS}
         parts = dataset_uri.split("/")
         dataset_id, version, edition = parts + [None] * (3 - len(parts))
 
+        # First verify that the dataset exists; `get_dataset` raises an error
+        # if not.
+        self.sdk.get_dataset(dataset_id)
+
         if auto_resolve:
             if not version:
                 version = self._get_latest_version(dataset_id)["version"]

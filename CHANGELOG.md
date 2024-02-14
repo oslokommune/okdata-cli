@@ -1,6 +1,8 @@
 ## ?.?.? - Unreleased
 
 * Fixed extraneous newline printing in table output.
+* Improved error messages in the `datasets ls` and `datasets cp` commands when a
+  given dataset doesn't exist.
 
 ## 3.2.0 - 2024-01-15
 
