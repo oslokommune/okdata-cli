@@ -1,5 +1,6 @@
 ## ?.?.? - Unreleased
 
+* Added support for creating CSV->Delta dataset pipelines.
 * Fixed extraneous newline printing in table output.
 * Improved error messages in the `datasets ls` and `datasets cp` commands when a
   given dataset doesn't exist.
