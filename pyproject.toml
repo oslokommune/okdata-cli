@@ -7,12 +7,15 @@ exclude = '''
     | \.tox
     | node_modules
     | __pycache__
+    | libs
+    | \*\.pyc
+    | \.cache
     | \.eggs
     | .*\.egg
     | .*\.egg-info
     | env
     | venv
-    | \.venv
+    | \..*venv
     | \.serverless
 )/
 '''

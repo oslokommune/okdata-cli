@@ -1,26 +1,25 @@
+GLOBAL_PY := python3
+BUILD_VENV ?= .build_venv
+BUILD_PY := $(BUILD_VENV)/bin/python
+
 .PHONY: init
-init:
-	pip3 install tox black pip-tools
-	pip-compile
-	pip3 install -e .
+init: $(BUILD_VENV)
+
+$(BUILD_VENV):
+	$(GLOBAL_PY) -m venv $(BUILD_VENV)
+	$(BUILD_PY) -m pip install -U pip
 
 .PHONY: format
-format:
-	python3 -m black .
-
-.PHONY: clean
-clean:
-	rm -rf build/
-	rm -rf dist/
-	rm -rf *egg-info/
-
-.PHONY: build
-build:
-	python setup.py sdist
+format: $(BUILD_VENV)/bin/black
+	$(BUILD_PY) -m black .
 
 .PHONY: test
-test:
-	python3 -m tox -p auto
+test: $(BUILD_VENV)/bin/tox
+	$(BUILD_PY) -m tox -p auto -o
+
+.PHONY: upgrade-deps
+upgrade-deps: $(BUILD_VENV)/bin/pip-compile
+	$(BUILD_VENV)/bin/pip-compile -U
 
 .PHONY: bump-version
 bump-version: is-git-clean
@@ -35,8 +34,28 @@ is-git-clean:
 		false; \
 	fi
 
+.PHONY: build
+build: $(BUILD_VENV)/bin/wheel $(BUILD_VENV)/bin/twine
+	$(BUILD_PY) setup.py sdist bdist_wheel
+
+.PHONY: clean
+clean:
+	rm -rf build/
+	rm -rf dist/
+	rm -rf *egg-info/
+
 .PHONY: publish
 publish:
 	username=$$(op read op://Dataspeilet/pypi-upload-token/username) &&\
 	password=$$(op read op://Dataspeilet/pypi-upload-token/credential) &&\
 	python -m twine upload -u $$username -p $$password dist/*
+
+###
+# Python build dependencies
+##
+
+$(BUILD_VENV)/bin/pip-compile: $(BUILD_VENV)
+	$(BUILD_PY) -m pip install -U pip-tools
+
+$(BUILD_VENV)/bin/%: $(BUILD_VENV)
+	$(BUILD_PY) -m pip install -U $*
