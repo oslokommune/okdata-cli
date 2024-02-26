@@ -85,7 +85,7 @@ This will list every permission associated with the dataset `my-dataset`.
 The commands for granting and revoking permissions to and from users, are:
 
 ```bash
-okdata permissions add <resource_name> <user> <scope>
+okdata permissions add <resource_name> <user> [<scope>]
 okdata permissions rm <resource_name> <user> [<scope>]
 ```
 
@@ -105,8 +105,8 @@ And to revoke that same permission:
 okdata permissions rm okdata:dataset:my-dataset janedoe okdata:dataset:read
 ```
 
-The `scope` parameter is optional for `rm`. When omitted, all permissions for
-the user on the given resource are revoked.
+The `scope` parameter is optional in both commands. When omitted, all
+permissions are granted or revoked for the user on the given resource.
 
 Both commands support additional `--team` and `--client` flags, which are used
 when the given user ID belongs to a team or a machine user, instead of a person

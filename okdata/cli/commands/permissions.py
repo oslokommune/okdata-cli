@@ -12,12 +12,13 @@ class PermissionsCommand(BaseCommand):
 
 Usage:
   okdata permissions ls [<resource_name>] [options]
-  okdata permissions add <resource_name> <user> <scope> [--team | --client] [options]
+  okdata permissions add <resource_name> <user> [<scope>] [--team | --client] [options]
   okdata permissions rm <resource_name> <user> [<scope>] [--team | --client] [options]
 
 Examples:
   okdata permissions ls
   okdata permissions ls okdata:dataset:my-dataset
+  okdata permissions add okdata:dataset:my-dataset janedoe
   okdata permissions add okdata:dataset:my-dataset janedoe okdata:dataset:read
   okdata permissions rm okdata:dataset:my-dataset janedoe
   okdata permissions rm okdata:dataset:my-dataset janedoe okdata:dataset:write
@@ -57,10 +58,10 @@ Options:{BASE_COMMAND_OPTIONS}
             ]
             if self.cmd("add"):
                 self.add_user(resource_name, user_class(user), scope)
-                self.print("Granted {} on '{}' for {} '{}'".format(*fmt_args))
+                self.print("Granted {} on '{}' to {} '{}'".format(*fmt_args))
             else:
                 self.remove_user(resource_name, user_class(user), scope)
-                self.print("Revoked {} on '{}' for {} '{}'".format(*fmt_args))
+                self.print("Revoked {} on '{}' from {} '{}'".format(*fmt_args))
 
     def list_my_permissions(self):
         """Print all permissions for the current user."""
@@ -99,9 +100,14 @@ Options:{BASE_COMMAND_OPTIONS}
         out.add_rows(sorted(results, key=itemgetter("user_type", "user_name")))
         self.print(f"Permissions for '{resource_name}'", out)
 
-    def add_user(self, resource_name, user, scope):
-        """Grant `scope` on `resource_name` to `user`."""
-        self.client.update_permission(resource_name, scope, add_users=[user])
+    def add_user(self, resource_name, user, scope=None):
+        """Grant `scope` on `resource_name` to `user`.
+
+        When `scope` is unspecified, grant every permission on `resource_name`.
+        """
+        return self.client.update_permission(
+            resource_name, scope or "__all__", add_users=[user]
+        )
 
     def remove_user(self, resource_name, user, scope=None):
         """Revoke `scope` on `resource_name` for `user`.
@@ -109,11 +115,6 @@ Options:{BASE_COMMAND_OPTIONS}
         When `scope` is unspecified, revoke every permission on `resource_name`
         for `user`.
         """
-        if scope:
-            self.client.update_permission(resource_name, scope, remove_users=[user])
-        else:
-            for permission in self.client.get_permissions(resource_name):
-                if user.user_id in permission[f"{user.user_type}s"]:
-                    self.client.update_permission(
-                        resource_name, permission["scope"], remove_users=[user]
-                    )
+        return self.client.update_permission(
+            resource_name, scope or "__all__", remove_users=[user]
+        )

@@ -110,17 +110,11 @@ def test_remove_user(mocker):
     cmd = make_cmd(mocker, "rm", "okdata:dataset:my-dataset", "foo")
     cmd.handler()
     cmd.client.update_permission.assert_called_once_with(
-        "okdata:dataset:my-dataset", "okdata:dataset:read", remove_users=[ANY]
+        "okdata:dataset:my-dataset", "__all__", remove_users=[ANY]
     )
     user = cmd.client.update_permission.mock_calls[0][2]["remove_users"][0]
     assert user.user_id == "foo"
     assert user.user_type == "user"
-
-
-def test_remove_user_nothing_to_remove(mocker):
-    cmd = make_cmd(mocker, "rm", "okdata:dataset:my-dataset", "foobar")
-    cmd.handler()
-    cmd.client.update_permission.assert_not_called()
 
 
 def test_remove_user_scope(mocker):
@@ -140,7 +134,7 @@ def test_remove_client(mocker):
     cmd = make_cmd(mocker, "rm", "okdata:dataset:my-dataset", "bar", "--client")
     cmd.handler()
     cmd.client.update_permission.assert_called_once_with(
-        "okdata:dataset:my-dataset", "okdata:dataset:read", remove_users=[ANY]
+        "okdata:dataset:my-dataset", "__all__", remove_users=[ANY]
     )
     user = cmd.client.update_permission.mock_calls[0][2]["remove_users"][0]
     assert user.user_id == "bar"
@@ -151,7 +145,7 @@ def test_remove_team(mocker):
     cmd = make_cmd(mocker, "rm", "okdata:dataset:my-dataset", "baz", "--team")
     cmd.handler()
     cmd.client.update_permission.assert_called_once_with(
-        "okdata:dataset:my-dataset", "okdata:dataset:read", remove_users=[ANY]
+        "okdata:dataset:my-dataset", "__all__", remove_users=[ANY]
     )
     user = cmd.client.update_permission.mock_calls[0][2]["remove_users"][0]
     assert user.user_id == "baz"
