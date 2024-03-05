@@ -1,6 +1,9 @@
 ## ?.?.? - Unreleased
 
 * Added support for creating CSV->Delta dataset pipelines.
+* Added a shorthand for granting a user all permissions on a resource by not
+  specifying the `scope` parameter to the `permissions add` command, similar to
+  the way `permissions rm` works.
 * Fixed extraneous newline printing in table output.
 * Improved error messages in the `datasets ls` and `datasets cp` commands when a
   given dataset doesn't exist.
