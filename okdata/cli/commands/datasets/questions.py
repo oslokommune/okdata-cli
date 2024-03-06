@@ -1,8 +1,6 @@
-import csv
-
 from questionary import Choice
 
-from okdata.cli.commands.datasets.validators import (
+from okdata.cli.commands.validators import (
     KeywordValidator,
     PhoneValidator,
     SimpleEmailValidator,
@@ -11,7 +9,7 @@ from okdata.cli.commands.datasets.validators import (
     StandardsValidator,
     TitleValidator,
 )
-from okdata.cli.commands.wizard import required_style
+from okdata.cli.commands.wizard import filter_comma_separated, required_style
 
 pipeline_choices = {
     "file": [
@@ -29,13 +27,6 @@ available_pipelines = [
     for choice in category
     if choice.value
 ]
-
-
-def filter_comma_separated(value):
-    values = next(
-        csv.reader([value], delimiter=",", escapechar="\\", skipinitialspace=True)
-    )
-    return [x.strip() for x in values if x]
 
 
 def qs_create(include_extra_metadata=True):

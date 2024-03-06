@@ -5,23 +5,48 @@ from okdata.sdk import SDK
 log = logging.getLogger()
 
 
-class PubregClient(SDK):
+class PubsClient(SDK):
     def __init__(self, config=None, auth=None, env=None):
-        self.__name__ = "pubreg"
+        self.__name__ = "pubs"
         super().__init__(config, auth, env)
         self.api_url = "https://api.data{}.oslo.systems/maskinporten".format(
             "-dev" if self.config.config["env"] == "dev" else ""
         )
 
-    def create_client(self, team_id, provider, integration, scopes, env):
+    def create_maskinporten_client(self, team_id, provider, integration, scopes, env):
         data = {
+            "client_type": "maskinporten",
             "team_id": team_id,
             "provider": provider,
             "integration": integration,
             "scopes": scopes,
             "env": env,
         }
-        log.info(f"Creating client with payload: {data}")
+        log.info(f"Creating Maskinporten client with payload: {data}")
+        return self.post(f"{self.api_url}/clients", data=data).json()
+
+    def create_idporten_client(
+        self,
+        team_id,
+        integration,
+        client_uri,
+        frontchannel_logout_uri,
+        redirect_uris,
+        post_logout_redirect_uris,
+        env,
+    ):
+        data = {
+            "client_type": "idporten",
+            "team_id": team_id,
+            "provider": "idporten",
+            "integration": integration,
+            "client_uri": client_uri,
+            "frontchannel_logout_uri": frontchannel_logout_uri,
+            "redirect_uris": redirect_uris,
+            "post_logout_redirect_uris": post_logout_redirect_uris,
+            "env": env,
+        }
+        log.info(f"Creating ID-porten client with payload: {data}")
         return self.post(f"{self.api_url}/clients", data=data).json()
 
     def get_clients(self, env):

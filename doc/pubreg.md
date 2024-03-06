@@ -1,11 +1,12 @@
-# Public registers
+# Public services
 
-Commands related to accessing public registers are grouped under the `pubreg`
-command prefix. Run the following command to see a list of all available
-`pubreg` commands:
+Commands related to accessing public services are grouped under the `pubs`
+command prefix. Currently available public services are *Maskinporten* and
+*ID-porten*. Run the following command to see a list of all available `pubs`
+commands:
 
 ```sh
-okdata pubreg -h
+okdata pubs -h
 ```
 
 Contents:
@@ -19,7 +20,7 @@ Contents:
 * [Deleting a client key](#deleting-a-client-key)
 * [Viewing a client's audit log](#viewing-a-clients-audit-log)
 
-## Prerequisites
+## Prerequisites for accessing public registries
 
 Make sure you've got the right legal basis before accessing public registry
 data. Read more about this in our [guidelines for accessing public
@@ -28,22 +29,22 @@ registers](https://github.com/oslokommune/dataplattform/blob/master/origo/regist
 ## Creating a client
 
 The following command launches a step-by-step wizard to create a new client for
-accessing a public register:
+accessing a public service:
 
 ```sh
-okdata pubreg create-client
+okdata pubs create-client
 ```
 
 Example values from the wizard:
 
-![Example values from the wizard](img/pubreg-wizard.png)
+![Example values from the wizard](img/pubs-wizard.png)
 
 ## Listing clients
 
 Use the following command to display a table of all of your clients:
 
 ```sh
-okdata pubreg list-clients
+okdata pubs list-clients
 ```
 
 ## Deleting a client
@@ -52,7 +53,7 @@ When a client is no longer needed, it should be deleted by using the following
 command:
 
 ```sh
-okdata pubreg delete-client
+okdata pubs delete-client
 ```
 
 Clients with active keys cannot be deleted. In such cases, their keys have to be
@@ -73,7 +74,7 @@ The following command can be used to launch a step-by-step wizard to create a
 new client key:
 
 ```sh
-okdata pubreg create-key
+okdata pubs create-key
 ```
 
 Each client can hold a maximum of five keys. After reaching that limit, old keys
@@ -127,7 +128,7 @@ Use the following command to display a table of all the keys registered on one
 or all of your clients:
 
 ```sh
-okdata pubreg list-keys
+okdata pubs list-keys
 ```
 
 ## Deleting a client key
@@ -136,7 +137,7 @@ When a key is no longer needed, it should be deleted by using the following
 command:
 
 ```sh
-okdata pubreg delete-key
+okdata pubs delete-key
 ```
 
 Note that key deletion is irreversible.
@@ -146,7 +147,7 @@ Note that key deletion is irreversible.
 To view the audit log for a client, use the following command:
 
 ```sh
-okdata pubreg audit-log
+okdata pubs audit-log
 ```
 
 Audit logs contain the history of events related to clients, including their

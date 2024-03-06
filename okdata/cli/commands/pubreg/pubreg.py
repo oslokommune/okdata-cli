@@ -6,8 +6,13 @@ from okdata.sdk.team.client import TeamClient
 
 from okdata.cli import MAINTAINER
 from okdata.cli.command import BASE_COMMAND_OPTIONS, BaseCommand
-from okdata.cli.commands.pubreg.client import PubregClient
-from okdata.cli.commands.pubreg.questions import NoClientsError, NoKeysError
+from okdata.cli.commands.pubreg.client import PubsClient
+from okdata.cli.commands.pubreg.questions import (
+    NoClientsError,
+    NoKeysError,
+    client_types,
+    providers,
+)
 from okdata.cli.commands.pubreg.wizards import (
     audit_log_wizard,
     create_client_wizard,
@@ -21,33 +26,33 @@ from okdata.cli.commands.teams.questions import NoTeamError
 from okdata.cli.output import create_output
 
 
-class PubregCommand(BaseCommand):
-    __doc__ = f"""Oslo :: Public registers
+class PubsCommand(BaseCommand):
+    __doc__ = f"""Oslo :: Public services
 
 Usage:
-  okdata pubreg create-client [options]
-  okdata pubreg list-clients [options]
-  okdata pubreg delete-client [options]
-  okdata pubreg create-key [options]
-  okdata pubreg list-keys [options]
-  okdata pubreg delete-key [options]
-  okdata pubreg audit-log [options]
+  okdata pubs create-client [options]
+  okdata pubs list-clients [options]
+  okdata pubs delete-client [options]
+  okdata pubs create-key [options]
+  okdata pubs list-keys [options]
+  okdata pubs delete-key [options]
+  okdata pubs audit-log [options]
 
 Examples:
-  okdata pubreg create-client
-  okdata pubreg list-clients
-  okdata pubreg delete-client
-  okdata pubreg create-key
-  okdata pubreg list-keys
-  okdata pubreg delete-key
-  okdata pubreg audit-log
+  okdata pubs create-client
+  okdata pubs list-clients
+  okdata pubs delete-client
+  okdata pubs create-key
+  okdata pubs list-keys
+  okdata pubs delete-key
+  okdata pubs audit-log
 
 Options:{BASE_COMMAND_OPTIONS}
     """
 
     def __init__(self):
         super().__init__()
-        self.pubreg_client = PubregClient(env=self.opt("env"))
+        self.pubs_client = PubsClient(env=self.opt("env"))
         self.team_client = TeamClient(env=self.opt("env"))
 
     def handler(self):
@@ -77,40 +82,55 @@ Options:{BASE_COMMAND_OPTIONS}
             return
 
         team_id = config["team_id"]
+        client_type_id = config["client_type_id"]
         provider_id = config["provider_id"]
-        provider_name = config["provider_name"]
         integration = config["integration"]
         scopes = config["scopes"]
         env = config["env"]
 
         self.confirm_to_continue(
-            f"Will create a new client for {provider_name} in {env} with "
-            f"scopes {scopes}."
+            "Will create a new {} client{} in {}{}.".format(
+                client_types[client_type_id],
+                f" for {providers[provider_id]}" if provider_id else "",
+                env,
+                f" with scopes {scopes}" if scopes else "",
+            )
         )
 
         self.print("Creating client...")
-        response = self.pubreg_client.create_client(
-            team_id, provider_id, integration, scopes, env
-        )
+        if client_type_id == "maskinporten":
+            response = self.pubs_client.create_maskinporten_client(
+                team_id, provider_id, integration, scopes, env
+            )
+        else:
+            response = self.pubs_client.create_idporten_client(
+                team_id,
+                integration,
+                config["client_uri"],
+                config["frontchannel_logout_uri"],
+                config["redirect_uris"],
+                config["post_logout_redirect_uris"],
+                env,
+            )
         client_name = response["client_name"]
         self.print(
             f"""
 Done! Created a new client '{client_name}'.
 You may now go ahead and create a key for it by running:
 
-  okdata pubreg create-key"""
+  okdata pubs create-key"""
         )
 
     def list_clients(self):
         config = list_clients_wizard()
         env = config["env"]
-        clients = self.pubreg_client.get_clients(env)
+        clients = self.pubs_client.get_clients(env)
         out = create_output(self.opt("format"), "pubreg_clients_config.json")
         out.add_rows(sorted(clients, key=itemgetter("client_name")))
         self.print(f"Clients in {env}:", out)
 
     def delete_client(self):
-        choices = delete_client_wizard(self.pubreg_client)
+        choices = delete_client_wizard(self.pubs_client)
         env = choices["env"]
         client_id = choices["client_id"]
         client_name = choices["client_name"]
@@ -134,7 +154,7 @@ You may now go ahead and create a key for it by running:
         )
 
         self.print(f"Deleting client '{client_name}' [{env}]...")
-        res = self.pubreg_client.delete_client(env, client_id, aws_account, aws_region)
+        res = self.pubs_client.delete_client(env, client_id, aws_account, aws_region)
         deleted_ssm_params = res["deleted_ssm_params"]
 
         self.print("\nDone! The client is deleted and will no longer work.")
@@ -205,11 +225,11 @@ You may now go ahead and create a key for it by running:
 
     def create_client_key(self):
         try:
-            config = create_key_wizard(self.pubreg_client)
+            config = create_key_wizard(self.pubs_client)
         except NoClientsError:
             self.print(
                 "No clients in the given environment yet!\n\n"
-                "  Create one with `okdata pubreg create-client`.\n"
+                "  Create one with `okdata pubs create-client`.\n"
             )
             return
 
@@ -247,7 +267,7 @@ You may now go ahead and create a key for it by running:
 
         self.print("Creating key for '{}' [{}]...".format(client_name, env))
 
-        key = self.pubreg_client.create_key(
+        key = self.pubs_client.create_key(
             env, client_id, aws_account, aws_region, enable_auto_rotate
         )
 
@@ -262,7 +282,7 @@ You may now go ahead and create a key for it by running:
             )
 
     def _list_client_keys_single(self, client_id, client_name, env):
-        keys = self.pubreg_client.get_keys(env, client_id)
+        keys = self.pubs_client.get_keys(env, client_id)
         out = create_output(
             self.opt("format"),
             "pubreg_single_client_keys_config.json",
@@ -275,7 +295,7 @@ You may now go ahead and create a key for it by running:
         keys = [
             {**key, "client_name": client["name"]}
             for client in clients
-            for key in self.pubreg_client.get_keys(env, client["id"])
+            for key in self.pubs_client.get_keys(env, client["id"])
         ]
         out = create_output(
             self.opt("format"),
@@ -285,7 +305,7 @@ You may now go ahead and create a key for it by running:
         self.print(f"All client keys [{env}]:", out)
 
     def list_client_keys(self):
-        choices = list_keys_wizard(self.pubreg_client)
+        choices = list_keys_wizard(self.pubs_client)
         env = choices["env"]
 
         if "clients" in choices:
@@ -297,7 +317,7 @@ You may now go ahead and create a key for it by running:
 
     def delete_client_key(self):
         try:
-            choices = delete_key_wizard(self.pubreg_client)
+            choices = delete_key_wizard(self.pubs_client)
         except NoKeysError:
             self.print("The selected client doesn't have any keys.")
             return
@@ -312,16 +332,16 @@ You may now go ahead and create a key for it by running:
         )
 
         self.print(f"Deleting key '{key_id}' from '{client_name}' [{env}]...")
-        self.pubreg_client.delete_key(env, client_id, key_id)
+        self.pubs_client.delete_key(env, client_id, key_id)
         self.print("Done! The key is deleted and will no longer work.")
 
     def audit_log(self):
-        choices = audit_log_wizard(self.pubreg_client)
+        choices = audit_log_wizard(self.pubs_client)
         env = choices["env"]
         client_id = choices["client_id"]
         client_name = choices["client_name"]
 
-        audit_log = self.pubreg_client.get_audit_log(env, client_id)
+        audit_log = self.pubs_client.get_audit_log(env, client_id)
 
         out = create_output(self.opt("format"), "pubreg_audit_log_config.json")
         out.add_rows(sorted(audit_log, key=itemgetter("timestamp")))

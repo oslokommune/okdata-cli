@@ -1,11 +1,21 @@
-import re
 from operator import itemgetter
 
 from questionary import Choice
 
-from okdata.cli.commands.wizard import required_style
+from okdata.cli.commands.validators import (
+    AWSAccountValidator,
+    IntegrationValidator,
+    URIListValidator,
+    URIValidator,
+)
+from okdata.cli.commands.wizard import filter_comma_separated, required_style
 
-_providers = {
+client_types = {
+    "idporten": "ID-porten",
+    "maskinporten": "Maskinporten",
+}
+
+providers = {
     "freg": "Folkeregisteret",
     "krr": "Kontaktregisteret",
     "skatt": "Skatteetaten",
@@ -62,8 +72,18 @@ def q_env():
         **required_style,
         "type": "select",
         "name": "env",
-        "message": "Maskinporten environment",
+        "message": "Environment",
         "choices": _environments,
+    }
+
+
+def q_client_type():
+    return {
+        **required_style,
+        "type": "select",
+        "name": "client_type_id",
+        "message": "Client type",
+        "choices": [Choice(pname, pid) for pid, pname in client_types.items()],
     }
 
 
@@ -73,7 +93,8 @@ def q_provider():
         "type": "select",
         "name": "provider_id",
         "message": "Provider",
-        "choices": [Choice(pname, pid) for pid, pname in _providers.items()],
+        "choices": [Choice(pname, pid) for pid, pname in providers.items()],
+        "when": lambda x: x.get("client_type_id") == "maskinporten",
     }
 
 
@@ -83,19 +104,13 @@ def q_scopes():
         "type": "checkbox",
         "name": "scopes",
         "message": "Scopes",
-        "choices": lambda x: _scopes[x["provider_id"]],
+        "choices": lambda x: _scopes[x["provider_id"]] if "provider_id" in x else [],
         "validate": (lambda choices: bool(choices) or "Select at least one scope"),
+        "when": lambda x: x.get("client_type_id") == "maskinporten",
     }
 
 
 def q_integration():
-    def _validate_integration(text):
-        if len(text) > 30:
-            return "Too long!"
-        if not re.fullmatch("[0-9a-z-]+", text):
-            return 'Only lowercase letters, numbers and "-", please'
-        return True
-
     return {
         **required_style,
         "type": "text",
@@ -104,13 +119,59 @@ def q_integration():
         "instruction": (
             "(identifying in which system or case this client will be used)"
         ),
-        "validate": _validate_integration,
+        "validate": IntegrationValidator,
     }
 
 
-def q_client(pubreg_client, allow_all=False):
+def q_redirect_uris():
+    return {
+        **required_style,
+        "type": "text",
+        "name": "redirect_uris",
+        "message": "Redirect URIs (comma-separated)",
+        "filter": filter_comma_separated,
+        "when": lambda x: x.get("client_type_id") == "idporten",
+        "validate": URIListValidator,
+    }
+
+
+def q_post_logout_redirect_uris():
+    return {
+        **required_style,
+        "type": "text",
+        "name": "post_logout_redirect_uris",
+        "message": "Post logout Redirect URIs (comma-separated)",
+        "filter": filter_comma_separated,
+        "when": lambda x: x.get("client_type_id") == "idporten",
+        "validate": URIListValidator,
+    }
+
+
+def q_frontchannel_logout_uri():
+    return {
+        **required_style,
+        "type": "text",
+        "name": "frontchannel_logout_uri",
+        "message": "Frontchannel logout URI",
+        "when": lambda x: x.get("client_type_id") == "idporten",
+        "validate": URIValidator,
+    }
+
+
+def q_client_uri():
+    return {
+        **required_style,
+        "type": "text",
+        "name": "client_uri",
+        "message": "Client URI/back URI",
+        "when": lambda x: x.get("client_type_id") == "idporten",
+        "validate": URIValidator,
+    }
+
+
+def q_client(pubs_client, allow_all=False):
     def _client_choices(env):
-        clients = pubreg_client.get_clients(env)
+        clients = pubs_client.get_clients(env)
 
         if not clients:
             raise NoClientsError
@@ -165,9 +226,7 @@ def q_aws_account():
         "name": "aws_account",
         "message": "AWS account number",
         "when": lambda x: x.get("key_destination") == "aws" or x.get("delete_from_aws"),
-        "validate": (
-            lambda t: bool(re.fullmatch("[0-9]{12}", t)) or "12 digits, please"
-        ),
+        "validate": AWSAccountValidator,
     }
 
 
@@ -198,9 +257,9 @@ def q_enable_auto_rotate():
     }
 
 
-def q_key(pubreg_client):
+def q_key(pubs_client):
     def _key_choices(env, client_id):
-        keys = pubreg_client.get_keys(env, client_id)
+        keys = pubs_client.get_keys(env, client_id)
 
         if not keys:
             raise NoKeysError

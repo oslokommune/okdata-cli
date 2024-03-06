@@ -1,3 +1,3 @@
-from okdata.cli.commands.pubreg.pubreg import PubregCommand
+from okdata.cli.commands.pubreg.pubreg import PubsCommand
 
-__all__ = ["PubregCommand"]
+__all__ = ["PubsCommand"]
