@@ -9,7 +9,7 @@ from okdata.cli import MAINTAINER
 from okdata.cli.command import BaseCommand
 from okdata.cli.commands.datasets import DatasetsCommand
 from okdata.cli.commands.permissions import PermissionsCommand
-from okdata.cli.commands.pubreg import PubsCommand
+from okdata.cli.commands.pubs import PubsCommand
 from okdata.cli.commands.status import StatusCommand
 from okdata.cli.commands.teams.teams import TeamsCommand
 

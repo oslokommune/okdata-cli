@@ -6,14 +6,14 @@ from okdata.sdk.team.client import TeamClient
 
 from okdata.cli import MAINTAINER
 from okdata.cli.command import BASE_COMMAND_OPTIONS, BaseCommand
-from okdata.cli.commands.pubreg.client import PubsClient
-from okdata.cli.commands.pubreg.questions import (
+from okdata.cli.commands.pubs.client import PubsClient
+from okdata.cli.commands.pubs.questions import (
     NoClientsError,
     NoKeysError,
     client_types,
     providers,
 )
-from okdata.cli.commands.pubreg.wizards import (
+from okdata.cli.commands.pubs.wizards import (
     audit_log_wizard,
     create_client_wizard,
     create_key_wizard,
@@ -125,7 +125,7 @@ You may now go ahead and create a key for it by running:
         config = list_clients_wizard()
         env = config["env"]
         clients = self.pubs_client.get_clients(env)
-        out = create_output(self.opt("format"), "pubreg_clients_config.json")
+        out = create_output(self.opt("format"), "pubs_clients_config.json")
         out.add_rows(sorted(clients, key=itemgetter("client_name")))
         self.print(f"Clients in {env}:", out)
 
@@ -285,7 +285,7 @@ You may now go ahead and create a key for it by running:
         keys = self.pubs_client.get_keys(env, client_id)
         out = create_output(
             self.opt("format"),
-            "pubreg_single_client_keys_config.json",
+            "pubs_single_client_keys_config.json",
         )
         out.add_rows(sorted(keys, key=itemgetter("expires")))
         self.print(f"Keys for client {client_name} [{env}]:", out)
@@ -299,7 +299,7 @@ You may now go ahead and create a key for it by running:
         ]
         out = create_output(
             self.opt("format"),
-            "pubreg_multiple_client_keys_config.json",
+            "pubs_multiple_client_keys_config.json",
         )
         out.add_rows(sorted(keys, key=itemgetter("expires")))
         self.print(f"All client keys [{env}]:", out)
@@ -343,6 +343,6 @@ You may now go ahead and create a key for it by running:
 
         audit_log = self.pubs_client.get_audit_log(env, client_id)
 
-        out = create_output(self.opt("format"), "pubreg_audit_log_config.json")
+        out = create_output(self.opt("format"), "pubs_audit_log_config.json")
         out.add_rows(sorted(audit_log, key=itemgetter("timestamp")))
         self.print(f"Audit log for client {client_name} [{env}]:", out)

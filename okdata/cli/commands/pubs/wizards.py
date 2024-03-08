@@ -1,4 +1,4 @@
-from okdata.cli.commands.pubreg.questions import (
+from okdata.cli.commands.pubs.questions import (
     q_aws_account,
     q_aws_region,
     q_client,
