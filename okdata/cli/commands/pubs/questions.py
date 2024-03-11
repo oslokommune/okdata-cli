@@ -163,7 +163,7 @@ def q_client_uri():
         **required_style,
         "type": "text",
         "name": "client_uri",
-        "message": "Client URI/back URI",
+        "message": "Client URI (back URI)",
         "when": lambda x: x.get("client_type_id") == "idporten",
         "validate": URIValidator,
     }
