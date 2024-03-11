@@ -1,4 +1,4 @@
-from okdata.cli.commands.datasets.questions import filter_comma_separated
+from okdata.cli.commands.wizard import filter_comma_separated
 
 
 class TestCommaSeparatedFilter:

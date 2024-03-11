@@ -1,5 +1,8 @@
 ## ?.?.? - Unreleased
 
+* The `okdata pubreg` family of commands has been renamed to `okdata pubs` (for
+  "public services") to reflect that they now don't only handle Maskinporten
+  clients, but also ID-porten clients.
 * Added support for creating CSV->Delta dataset pipelines.
 * Added a shorthand for granting a user all permissions on a resource by not
   specifying the `scope` parameter to the `permissions add` command, similar to

@@ -21,7 +21,7 @@ class BaseCommand:
 usage:
   okdata datasets [options]
   okdata permissions [options]
-  okdata pubreg [options]
+  okdata pubs [options]
   okdata status [options]
   okdata teams [options]
   okdata -h | --help
@@ -29,7 +29,7 @@ usage:
 Commands available:
   datasets
   permissions
-  pubreg
+  pubs
   status
   teams
 
