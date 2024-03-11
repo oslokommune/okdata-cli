@@ -1,5 +1,7 @@
 ## ?.?.? - Unreleased
 
+## 4.0.0 - 2024-03-11
+
 * The `okdata pubreg` family of commands has been renamed to `okdata pubs` (for
   "public services") to reflect that they now don't only handle Maskinporten
   clients, but also ID-porten clients.
