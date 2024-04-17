@@ -1,5 +1,9 @@
 ## ?.?.? - Unreleased
 
+* The minimum required version of `okdata-sdk` is now 3.1.1. This ensures
+  compatibility with a much newer version of `python-keycloak`, eliminating
+  reliance on certain vulnerable dependencies.
+
 ## 4.0.0 - 2024-03-11
 
 * The `okdata pubreg` family of commands has been renamed to `okdata pubs` (for

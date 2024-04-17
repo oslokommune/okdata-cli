@@ -1,7 +1,7 @@
 import json
 import sys
 
-from keycloak.exceptions import KeycloakGetError
+from keycloak.exceptions import KeycloakGetError, KeycloakPostError
 from okdata.sdk.exceptions import ApiAuthenticateError
 from requests.exceptions import RequestException
 
@@ -40,11 +40,12 @@ def main():
                 "An error occurred (ApiAuthenticateError): Invalid credentials",
                 {"error": 1, "message": "Invalid credentials"},
             )
-        except KeycloakGetError as e:
+        except (KeycloakGetError, KeycloakPostError) as e:
             error = json.loads(e.error_message)
+            error_type = e.__class__.__name__
             instance.log.info(f"Keycloak reported: {e}")
             instance.print(
-                f"An error occurred (KeycloakGetError): {error['error_description']}"
+                f"An error occurred ({error_type}): {error['error_description']}"
             )
         except (EOFError, KeyboardInterrupt):
             instance.print("\nAbort.")
