@@ -3,6 +3,7 @@
 * The minimum required version of `okdata-sdk` is now 3.1.1. This ensures
   compatibility with a much newer version of `python-keycloak`, eliminating
   reliance on certain vulnerable dependencies.
+* Added support for creating JSON->Delta dataset pipelines.
 
 ## 4.0.0 - 2024-03-11
 

@@ -15,6 +15,7 @@ pipeline_choices = {
     "file": [
         Choice("Lagre dataen slik den er", "data-copy"),
         Choice("Konverter fra CSV til Delta", "csv-to-delta"),
+        Choice("Konverter fra JSON til Delta", "json-to-delta"),
         Choice("Konverter fra CSV til Parquet", "csv-to-parquet"),
         Choice("Konverter fra Excel til CSV", "pipeline-excel-to-csv"),
         Choice("Ingen prosessering (krever manuell konfigurasjon av pipeline)", False),
