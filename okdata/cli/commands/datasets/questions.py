@@ -2,11 +2,7 @@ from questionary import Choice
 
 from okdata.cli.commands.validators import (
     KeywordValidator,
-    PhoneValidator,
     SimpleEmailValidator,
-    SpatialResolutionValidator,
-    SpatialValidator,
-    StandardsValidator,
     TitleValidator,
 )
 from okdata.cli.commands.wizard import filter_comma_separated, required_style
@@ -30,7 +26,7 @@ available_pipelines = [
 ]
 
 
-def qs_create(include_extra_metadata=True):
+def qs_create():
     return [
         {
             **required_style,
@@ -59,38 +55,6 @@ def qs_create(include_extra_metadata=True):
             "message": "Nøkkelord (komma-separert)",
             "validate": KeywordValidator,
             "filter": filter_comma_separated,
-        },
-        {
-            **required_style,
-            "type": "confirm",
-            "name": "contains_geodata",
-            "message": "Inneholder datasettet geodata?",
-            "default": False,
-            "when": lambda x: include_extra_metadata,
-        },
-        {
-            "type": "text",
-            "name": "spatial",
-            "message": "Romlig avgrensning (komma-separert)",
-            "validate": SpatialValidator,
-            "filter": filter_comma_separated,
-            "when": lambda x: include_extra_metadata and x["contains_geodata"],
-        },
-        {
-            "type": "text",
-            "name": "spatialResolutionInMeters",
-            "message": "Romlig oppløsning (i meter)",
-            "validate": SpatialResolutionValidator,
-            "filter": lambda v: float(v.replace(",", ".")) if v else None,
-            "when": lambda x: include_extra_metadata and x["contains_geodata"],
-        },
-        {
-            "type": "text",
-            "name": "conformsTo",
-            "message": "I samsvar med standarder (komma-separert)",
-            "validate": StandardsValidator,
-            "filter": filter_comma_separated,
-            "when": lambda x: include_extra_metadata,
         },
         {
             **required_style,
@@ -131,7 +95,6 @@ def qs_create(include_extra_metadata=True):
                     "http://creativecommons.org/publicdomain/zero/1.0/",
                 ),
             ],
-            "when": lambda x: include_extra_metadata,
         },
         {"type": "text", "name": "name", "message": "Kontaktperson – navn"},
         {
@@ -140,13 +103,6 @@ def qs_create(include_extra_metadata=True):
             "name": "email",
             "message": "Kontaktperson – epost",
             "validate": SimpleEmailValidator,
-        },
-        {
-            **required_style,
-            "type": "text",
-            "name": "phone",
-            "message": "Kontaktperson – telefon",
-            "validate": PhoneValidator,
         },
         {"type": "text", "name": "publisher", "message": "Utgiver"},
         {

@@ -8,11 +8,7 @@ from okdata.cli.commands.validators import (
     DateValidator,
     IntegrationValidator,
     KeywordValidator,
-    PhoneValidator,
     SimpleEmailValidator,
-    SpatialResolutionValidator,
-    SpatialValidator,
-    StandardsValidator,
     TitleValidator,
     URIListValidator,
     URIValidator,
@@ -60,25 +56,6 @@ class TestSimpleEmailValidator:
             self.validate_email({"text": ""})
 
 
-class TestPhoneValidator:
-    def validate_phone(self, data):
-        validator = PhoneValidator()
-        document = SimpleNamespace(**data)
-        validator.validate(document)
-
-    def test_phone_with_space(self):
-        with pytest.raises(ValidationError):
-            self.validate_phone({"text": " 22334455"})
-
-    def test_invalid_phone(self):
-        with pytest.raises(ValidationError):
-            self.validate_phone({"text": "2233b4455"})
-
-    def test_empty_email(self):
-        with pytest.raises(ValidationError):
-            self.validate_phone({"text": ""})
-
-
 class TestTitleValidator:
     def validate_title(self, data):
         validator = TitleValidator()
@@ -119,87 +96,6 @@ class TestKeywordValidator:
     def test_empty_keywords(self):
         with pytest.raises(ValidationError):
             self.validate_keywords({"text": ""})
-
-
-class TestStandardsValidator:
-    def validate_document(self, data):
-        validator = StandardsValidator()
-        document = SimpleNamespace(**data)
-        validator.validate(document)
-
-    def test_valid(self):
-        self.validate_document({"text": "abc"})
-        self.validate_document({"text": "abc,defg"})
-        self.validate_document({"text": r"a\,bc,defg"})
-        self.validate_document({"text": "http://www.opengis.net/def/crs/EPSG/0/5972"})
-        self.validate_document(
-            {"text": "http://www.opengis.net/def/crs/EPSG/0/5972,https://epsg.io/4326"}
-        )
-
-    def test_empty(self):
-        self.validate_document({"text": ""})
-
-    def test_min_length(self):
-        with pytest.raises(ValidationError):
-            self.validate_document({"text": "a"})
-        with pytest.raises(ValidationError):
-            self.validate_document({"text": "a,,c,d"})
-        with pytest.raises(ValidationError):
-            self.validate_document({"text": ",,c,d"})
-
-    def test_one_invalid_and_one_valid_value(self):
-        with pytest.raises(ValidationError):
-            self.validate_document({"text": "a,standarddokument"})
-        with pytest.raises(ValidationError):
-            self.validate_document({"text": "standarddokument,ab"})
-
-
-class TestSpatialValidator:
-    def validate_document(self, data):
-        validator = SpatialValidator()
-        document = SimpleNamespace(**data)
-        validator.validate(document)
-
-    def test_valid(self):
-        self.validate_document({"text": "Oslo"})
-        self.validate_document({"text": "Oslo Bydel 1,Oslo Bydel 2"})
-        self.validate_document({"text": '"Oslo Bydel 1, Vest",Oslo Bydel 2'})
-
-    def test_empty(self):
-        self.validate_document({"text": ""})
-
-    def test_one_invalid_and_one_valid_value(self):
-        with pytest.raises(ValidationError):
-            self.validate_document({"text": "Å,"})
-        with pytest.raises(ValidationError):
-            self.validate_document({"text": ",Ås"})
-
-
-class TestSpatialResolutionValidator:
-    def validate_document(self, data):
-        validator = SpatialResolutionValidator()
-        document = SimpleNamespace(**data)
-        validator.validate(document)
-
-    def test_valid_numbers(self):
-        self.validate_document({"text": "1"})
-        self.validate_document({"text": "1.234"})
-        self.validate_document({"text": "1,234"})
-        self.validate_document({"text": "0,234"})
-
-    def test_invalid_separator(self):
-        with pytest.raises(ValidationError):
-            self.validate_document({"text": "1-234"})
-
-    def test_gt_zero(self):
-        with pytest.raises(ValidationError):
-            self.validate_document({"text": "0"})
-        with pytest.raises(ValidationError):
-            self.validate_document({"text": "-1.2"})
-
-    def test_invalid_value(self):
-        with pytest.raises(ValidationError):
-            self.validate_document({"text": "ukjent"})
 
 
 class TestIntegrationValidator:
