@@ -60,8 +60,7 @@ File: `dataset.json`
     "objective": "The objective for this dataset",
     "contactPoint": {
         "name": "Contact Name",
-        "email": "contact.name@example.org",
-        "phone": "999555111"
+        "email": "contact.name@example.org"
     },
     "publisher": "my organization"
 }
@@ -90,8 +89,7 @@ File: `dataset_with_parent.json`
     "objective": "The objective for this dataset",
     "contactPoint": {
         "name": "Contact Name",
-        "email": "contact.name@example.org",
-        "phone": "999555111"
+        "email": "contact.name@example.org"
     },
     "publisher": "my organization",
     "parent_id": "origo-statistics"

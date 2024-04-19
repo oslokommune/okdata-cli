@@ -16,7 +16,6 @@
     "key": "contactPoint",
     "fields": [
       "name",
-      "phone",
       "email"
     ]
   }

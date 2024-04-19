@@ -4,6 +4,9 @@
   compatibility with a much newer version of `python-keycloak`, eliminating
   reliance on certain vulnerable dependencies.
 * Added support for creating JSON->Delta dataset pipelines.
+* The dataset creation wizard has been simplified (it no longer asks
+  about geodata details, standards conformity and contact phone
+  number).
 
 ## 4.0.0 - 2024-03-11
 

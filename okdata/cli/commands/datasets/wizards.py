@@ -29,17 +29,10 @@ class DatasetCreateWizard:
             "contactPoint": {
                 "name": choices["name"],
                 "email": choices["email"],
-                "phone": choices["phone"],
             },
             "publisher": choices["publisher"],
         }
 
-        if choices.get("spatial"):
-            config["spatial"] = choices["spatial"]
-        if choices.get("spatialResolutionInMeters"):
-            config["spatialResolutionInMeters"] = choices["spatialResolutionInMeters"]
-        if choices.get("conformsTo"):
-            config["conformsTo"] = choices["conformsTo"]
         if choices.get("license"):
             config["license"] = choices["license"]
 
