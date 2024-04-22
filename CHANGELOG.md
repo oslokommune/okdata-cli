@@ -1,4 +1,4 @@
-## ?.?.? - Unreleased
+## 4.1.0 - 2024-04-22
 
 * The minimum required version of `okdata-sdk` is now 3.1.1. This ensures
   compatibility with a much newer version of `python-keycloak`, eliminating
