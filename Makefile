@@ -48,7 +48,7 @@ clean:
 publish:
 	username=$$(op read op://Dataspeilet/pypi-upload-token/username) &&\
 	password=$$(op read op://Dataspeilet/pypi-upload-token/credential) &&\
-	python -m twine upload -u $$username -p $$password dist/*
+	$(GLOBAL_PY) -m twine upload -u $$username -p $$password dist/*
 
 ###
 # Python build dependencies
