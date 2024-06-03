@@ -7,7 +7,7 @@ setuptools.setup(
     name="okdata-cli",
     version="4.1.0",
     author="Oslo Origo",
-    author_email="dataplattform@oslo.kommune.no",
+    author_email="dataspeilet@oslo.kommune.no",
     description="CLI for services provided by Oslo Origo",
     license="MIT",
     long_description=long_description,
