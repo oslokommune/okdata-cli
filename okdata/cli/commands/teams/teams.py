@@ -3,7 +3,7 @@ from operator import itemgetter
 from okdata.sdk.team.client import TeamClient
 
 from okdata.cli import MAINTAINER
-from okdata.cli.command import BASE_COMMAND_OPTIONS, BaseCommand
+from okdata.cli.command import BASE_COMMAND_OPTIONS, BaseCommand, confirm_to_continue
 from okdata.cli.commands.teams.questions import NoTeamError
 from okdata.cli.commands.teams.util import (
     member_representation,
@@ -122,9 +122,7 @@ Options:{BASE_COMMAND_OPTIONS}
             )
             return
 
-        self.confirm_to_continue(
-            "Add {} to the team?".format(member_representation(user))
-        )
+        confirm_to_continue("Add {} to the team?".format(member_representation(user)))
 
         self.client.update_team_members(
             config["team_id"], team_members + [user["username"]]
@@ -150,13 +148,13 @@ Options:{BASE_COMMAND_OPTIONS}
                 members_to_keep.append(member)
 
         if len(members_to_keep) == 0:
-            self.confirm_to_continue(
+            confirm_to_continue(
                 "You are about to delete all members from the team, including "
                 "yourself. It will not be possible to edit this team any "
                 "further without being re-added by a systems administrator."
             )
         else:
-            self.confirm_to_continue(
+            confirm_to_continue(
                 "Remove the following member{} from the team?\n - {}".format(
                     "s" if len(members_to_remove) > 1 else "",
                     "\n - ".join(

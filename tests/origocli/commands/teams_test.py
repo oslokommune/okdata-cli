@@ -1,4 +1,4 @@
-from unittest.mock import ANY, MagicMock
+from unittest.mock import ANY, MagicMock, patch
 
 import pytest
 from requests import HTTPError
@@ -35,7 +35,6 @@ def make_cmd(mocker, *args):
     set_argv("teams", *args)
     cmd = teams.TeamsCommand()
     mocker.patch.object(cmd, "client")
-    mocker.patch.object(cmd, "confirm_to_continue")
     mocker.patch.object(teams, "list_members_wizard")
     mocker.patch.object(teams, "add_member_wizard")
     mocker.patch.object(teams, "remove_member_wizard")
@@ -88,7 +87,8 @@ def test_add_team_member(mocker, mock_print):
     config = {"team_id": "team1", "username": "misty"}
     teams.add_member_wizard.return_value = config
 
-    cmd.handler()
+    with patch("okdata.cli.commands.teams.teams.confirm_to_continue"):
+        cmd.handler()
 
     teams.add_member_wizard.assert_called_once()
     target_members = [u["username"] for u in mock_members]
@@ -149,7 +149,8 @@ def test_remove_team_member(mocker, mock_print):
     config = {"team_id": team_id, "usernames": ["homersimpson"]}
     teams.remove_member_wizard.return_value = config
 
-    cmd.handler()
+    with patch("okdata.cli.commands.teams.teams.confirm_to_continue"):
+        cmd.handler()
 
     teams.remove_member_wizard.assert_called_once()
     cmd.client.update_team_members.assert_called_once_with(
@@ -158,7 +159,8 @@ def test_remove_team_member(mocker, mock_print):
     assert mock_print.mock_calls[0][1][0] == "Done!"
 
 
-def test_remove_all_team_members(mocker, mock_print):
+@patch("okdata.cli.commands.teams.teams.confirm_to_continue")
+def test_remove_all_team_members(confirm_to_continue, mocker, mock_print):
     cmd = make_cmd(mocker, "remove-member")
     team_id = "team1"
     config = {"team_id": team_id, "usernames": ["homersimpson", "misty", "janedoe"]}
@@ -167,6 +169,6 @@ def test_remove_all_team_members(mocker, mock_print):
     cmd.handler()
 
     teams.remove_member_wizard.assert_called_once()
-    cmd.confirm_to_continue.assert_called_once()
+    confirm_to_continue.assert_called_once()
     cmd.client.update_team_members.assert_called_once_with(config["team_id"], [])
     assert mock_print.mock_calls[0][1][0] == "Done!"

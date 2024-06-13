@@ -2,6 +2,8 @@
 
 * New commands `okdata -e` and `okdata -v` for printing the current environment
   and the current version of okdata-cli, respectively.
+* The default choice for dataset visibility is now non-public (red). Also warn
+  when a dataset is about to be registered as public (green).
 
 ## 4.1.0 - 2024-04-22
 

@@ -5,7 +5,7 @@ from operator import itemgetter
 from okdata.sdk.team.client import TeamClient
 
 from okdata.cli import MAINTAINER
-from okdata.cli.command import BASE_COMMAND_OPTIONS, BaseCommand
+from okdata.cli.command import BASE_COMMAND_OPTIONS, BaseCommand, confirm_to_continue
 from okdata.cli.commands.pubs.client import PubsClient
 from okdata.cli.commands.pubs.questions import (
     NoClientsError,
@@ -88,7 +88,7 @@ Options:{BASE_COMMAND_OPTIONS}
         scopes = config["scopes"]
         env = config["env"]
 
-        self.confirm_to_continue(
+        confirm_to_continue(
             "Will create a new {} client{} in {}{}.".format(
                 client_types[client_type_id],
                 f" for {providers[provider_id]}" if provider_id else "",
@@ -138,7 +138,7 @@ You may now go ahead and create a key for it by running:
         aws_account = choices["aws_account"]
         aws_region = choices["aws_region"]
 
-        self.confirm_to_continue(
+        confirm_to_continue(
             "Will delete client '{}' [{}]{}.".format(
                 client_name,
                 env,
@@ -241,7 +241,7 @@ You may now go ahead and create a key for it by running:
         aws_region = config["aws_region"]
         enable_auto_rotate = config["enable_auto_rotate"]
 
-        self.confirm_to_continue(
+        confirm_to_continue(
             "\n\n".join(
                 [
                     "Will create a new key for client '{}' in {} and {}.".format(
@@ -327,9 +327,7 @@ You may now go ahead and create a key for it by running:
         client_name = choices["client_name"]
         key_id = choices["key_id"]
 
-        self.confirm_to_continue(
-            f"Will delete key '{key_id}' from '{client_name}' [{env}]."
-        )
+        confirm_to_continue(f"Will delete key '{key_id}' from '{client_name}' [{env}].")
 
         self.print(f"Deleting key '{key_id}' from '{client_name}' [{env}]...")
         self.pubs_client.delete_key(env, client_id, key_id)

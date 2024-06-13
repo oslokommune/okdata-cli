@@ -1,6 +1,7 @@
 from okdata.sdk.data.dataset import Dataset
 from okdata.sdk.pipelines.client import PipelineApiClient
 
+from okdata.cli.command import confirm_to_continue
 from okdata.cli.commands.datasets.questions import qs_create
 from okdata.cli.commands.wizard import run_questionnaire
 
@@ -55,6 +56,17 @@ class DatasetCreateWizard:
     def start(self):
         env = self.command.opt("env")
         choices = run_questionnaire(*qs_create())
+
+        confirm_to_continue(
+            "Will create a new dataset '{}'.{}".format(
+                choices["title"],
+                (
+                    "\n\nData uploaded to the dataset will be PUBLICLY AVAILABLE ON THE INTERNET.\n"
+                    if choices["accessRights"] == "public"
+                    else ""
+                ),
+            )
+        )
 
         self.command.print("Creating dataset...")
         dataset_client = Dataset(env=env)

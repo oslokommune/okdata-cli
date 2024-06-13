@@ -62,9 +62,9 @@ def qs_create():
             "name": "accessRights",
             "message": "Tilgangsnivå",
             "choices": [
+                Choice("Eksplisitt tilgangskontroll", "non-public"),
+                Choice("Internt til Origo", "restricted"),
                 Choice("Offentlig", "public"),
-                Choice("Begrenset offentlighet", "restricted"),
-                Choice("Unntatt offentlighet", "non-public"),
             ],
         },
         {
