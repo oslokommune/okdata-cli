@@ -1,3 +1,8 @@
+## ?.?.? - Unreleased
+
+* New commands `okdata -e` and `okdata -v` for printing the current environment
+  and the current version of okdata-cli, respectively.
+
 ## 4.1.0 - 2024-04-22
 
 * The minimum required version of `okdata-sdk` is now 3.1.1. This ensures

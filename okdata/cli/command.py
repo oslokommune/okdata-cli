@@ -24,7 +24,9 @@ usage:
   okdata pubs [options]
   okdata status [options]
   okdata teams [options]
+  okdata -e | --environment
   okdata -h | --help
+  okdata -v | --version
 
 Commands available:
   datasets
@@ -118,6 +120,12 @@ Options:{BASE_COMMAND_OPTIONS}
 
     def help(self):
         print(self.__doc__, end="")
+
+    def print_env(self):
+        print(self.sdk.config.resolve_environment(None))
+
+    def print_version(self):
+        print(self.version)
 
     def print_error_response(self, response_body):
         if not isinstance(response_body, dict):

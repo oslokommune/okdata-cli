@@ -16,8 +16,14 @@ from okdata.cli.commands.teams.teams import TeamsCommand
 
 def main():
     argv = sys.argv
-    if len(argv) < 2 or argv[1] == "help":
+    if len(argv) < 2:
         BaseCommand().help()
+        return
+    if argv[1] in ("-e", "--environment"):
+        BaseCommand().print_env()
+        return
+    if argv[1] in ("-v", "--version"):
+        BaseCommand().print_version()
         return
 
     command = get_command_class(argv)
