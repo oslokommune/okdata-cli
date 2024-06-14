@@ -91,16 +91,6 @@ Options:{BASE_COMMAND_OPTIONS}
             else:
                 print(payload)
 
-    def confirm_to_continue(self, message):
-        """Ask the user for confirmation before continuing.
-
-        Any answer other than "y" will exit the program.
-        """
-        self.print(message)
-        if input("Continue? [y/N]: ") != "y":
-            self.print("Abort.")
-            sys.exit()
-
     def login(self):
         self.sdk.login()
 
@@ -146,6 +136,17 @@ Options:{BASE_COMMAND_OPTIONS}
             except KeyError:
                 self.log.debug("Got unexpected response body from api.")
                 print(response_body)
+
+
+def confirm_to_continue(message):
+    """Ask the user for confirmation before continuing.
+
+    Any answer other than "y" will exit the program.
+    """
+    print(message)
+    if input("Continue? [y/N]: ") != "y":
+        print("Abort.")
+        sys.exit()
 
 
 def _format_error_message(message, errors=None):
