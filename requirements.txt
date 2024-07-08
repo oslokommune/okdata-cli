@@ -6,7 +6,7 @@
 #
 attrs==21.4.0
     # via jsonschema
-certifi==2023.7.22
+certifi==2024.7.4
     # via requests
 cffi==1.16.0
     # via cryptography
