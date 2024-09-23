@@ -26,7 +26,7 @@ available_pipelines = [
 ]
 
 
-def qs_create():
+def qs_create_dataset():
     return [
         {
             **required_style,
@@ -112,5 +112,17 @@ def qs_create():
             "message": "Prosessering",
             "choices": lambda x: pipeline_choices.get(x["sourceType"]),
             "when": lambda x: x["sourceType"] in pipeline_choices,
+        },
+    ]
+
+
+def qs_create_pipeline():
+    return [
+        {
+            **required_style,
+            "type": "select",
+            "name": "pipeline",
+            "message": "Prosessering",
+            "choices": pipeline_choices["file"],
         },
     ]

@@ -2,8 +2,39 @@ from okdata.sdk.data.dataset import Dataset
 from okdata.sdk.pipelines.client import PipelineApiClient
 
 from okdata.cli.command import confirm_to_continue
-from okdata.cli.commands.datasets.questions import qs_create
+from okdata.cli.commands.datasets.questions import qs_create_dataset, qs_create_pipeline
 from okdata.cli.commands.wizard import run_questionnaire
+
+
+def _pipeline_config(pipeline_processor_id, dataset_id, version):
+    return {
+        "pipelineProcessorId": pipeline_processor_id,
+        "id": dataset_id,
+        "datasetUri": f"output/{dataset_id}/{version}",
+    }
+
+
+def _pipeline_input_config(pipeline_id, dataset_id, version):
+    return {
+        "pipelineInstanceId": pipeline_id,
+        "datasetUri": f"input/{dataset_id}/{version}",
+        "stage": "raw",
+    }
+
+
+def _create_pipeline(command, env, dataset_id, pipeline):
+    command.print("Creating pipeline...")
+    pipeline_client = PipelineApiClient(env=env)
+    pipeline_config = _pipeline_config(pipeline, dataset_id, "1")
+    pipeline_id = pipeline_client.create_pipeline_instance(pipeline_config)
+    pipeline_id = pipeline_id.strip('"')  # What's up with these?
+    command.print(f"Created pipeline with ID: {pipeline_id}")
+
+    command.print("Creating pipeline input...")
+    pipeline_input_config = _pipeline_input_config(pipeline_id, dataset_id, "1")
+    pipeline_input_id = pipeline_client.create_pipeline_input(pipeline_input_config)
+    pipeline_input_id = pipeline_input_id.strip('"')  # What's up with these?
+    command.print(f"Created pipeline input with ID: {pipeline_input_id}")
 
 
 class DatasetCreateWizard:
@@ -39,23 +70,9 @@ class DatasetCreateWizard:
 
         return config
 
-    def pipeline_config(self, pipeline_processor_id, dataset_id, version):
-        return {
-            "pipelineProcessorId": pipeline_processor_id,
-            "id": dataset_id,
-            "datasetUri": f"output/{dataset_id}/{version}",
-        }
-
-    def pipeline_input_config(self, pipeline_id, dataset_id, version):
-        return {
-            "pipelineInstanceId": pipeline_id,
-            "datasetUri": f"input/{dataset_id}/{version}",
-            "stage": "raw",
-        }
-
     def start(self):
         env = self.command.opt("env")
-        choices = run_questionnaire(*qs_create())
+        choices = run_questionnaire(*qs_create_dataset())
 
         confirm_to_continue(
             "Will create a new dataset '{}'.{}".format(
@@ -76,22 +93,7 @@ class DatasetCreateWizard:
         self.command.print(f"Created dataset with ID: {dataset_id}")
 
         if choices.get("pipeline"):
-            self.command.print("Creating pipeline...")
-            pipeline_client = PipelineApiClient(env=env)
-            pipeline_config = self.pipeline_config(choices["pipeline"], dataset_id, "1")
-            pipeline_id = pipeline_client.create_pipeline_instance(pipeline_config)
-            pipeline_id = pipeline_id.strip('"')  # What's up with these?
-            self.command.print(f"Created pipeline with ID: {pipeline_id}")
-
-            self.command.print("Creating pipeline input...")
-            pipeline_input_config = self.pipeline_input_config(
-                pipeline_id, dataset_id, "1"
-            )
-            pipeline_input_id = pipeline_client.create_pipeline_input(
-                pipeline_input_config
-            )
-            pipeline_input_id = pipeline_input_id.strip('"')  # What's up with these?
-            self.command.print(f"Created pipeline input with ID: {pipeline_input_id}")
+            _create_pipeline(self.command, env, dataset_id, choices["pipeline"])
 
         if choices["sourceType"] == "file":
             self.command.print(
@@ -102,3 +104,17 @@ class DatasetCreateWizard:
             )
         else:
             self.command.print("Done!")
+
+
+class PipelineCreateWizard:
+    """Wizard for the `datasets create-pipeline` command."""
+
+    def __init__(self, command, dataset_id):
+        self.command = command
+        self.dataset_id = dataset_id
+
+    def start(self):
+        choices = run_questionnaire(*qs_create_pipeline())
+        _create_pipeline(
+            self.command, self.command.opt("env"), self.dataset_id, choices["pipeline"]
+        )
