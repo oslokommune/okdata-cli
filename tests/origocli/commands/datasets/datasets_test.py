@@ -108,6 +108,11 @@ class TestDatasetsLs:
         cmd.handler()
         assert output_with_argument(output, [edition])
 
+    def test_invalid_uri(self, mocker, output):
+        cmd = create_cmd(mocker, "ls", "a/b/c/d/e")
+        with pytest.raises(SystemExit):
+            cmd.handler()
+
 
 class TestDatasetsCp:
     def test_copy_local_files(self, mocker):

@@ -1,3 +1,7 @@
+## ?.?.? - Unreleased
+
+* More robust dataset/version/edition URI parsing.
+
 ## 4.2.0 - 2024-06-18
 
 * New commands `okdata -e` and `okdata -v` for printing the current environment

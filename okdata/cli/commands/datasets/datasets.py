@@ -261,9 +261,9 @@ Options:{BASE_COMMAND_OPTIONS}
             )
 
     def _dataset_components_from_uri(
-        self, dataset_uri, create_edition=False, auto_resolve=True
+        self, uri, create_edition=False, auto_resolve=True
     ):
-        """Return an ID/version/edition tuple given a dataset URI.
+        """Return a dataset ID/version/edition tuple given a URI.
 
         Four different URI formats are supported:
 
@@ -289,8 +289,15 @@ Options:{BASE_COMMAND_OPTIONS}
 
         Otherwise `None` is returned for missing parts.
         """
-        parts = dataset_uri.split("/")
-        dataset_id, version, edition = parts + [None] * (3 - len(parts))
+        parts = uri.split("/")
+
+        try:
+            dataset_id, version, edition = parts + [None] * (3 - len(parts))
+        except ValueError:
+            sys.exit(
+                "URI must be on the format 'dataset_id', "
+                "'dataset_id/version', or 'dataset_id/version/edition'."
+            )
 
         # First verify that the dataset exists; `get_dataset` raises an error
         # if not.
