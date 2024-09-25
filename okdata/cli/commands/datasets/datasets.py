@@ -6,7 +6,10 @@ from okdata.sdk.data.upload import Upload
 from requests.exceptions import HTTPError
 
 from okdata.cli.command import BaseCommand, BASE_COMMAND_OPTIONS
-from okdata.cli.commands.datasets.wizards import DatasetCreateWizard
+from okdata.cli.commands.datasets.wizards import (
+    DatasetCreateWizard,
+    PipelineCreateWizard,
+)
 from okdata.cli.io import read_json, resolve_output_filepath
 from okdata.cli.output import create_output
 
@@ -22,6 +25,7 @@ Usage:
   okdata datasets create-version <datasetid> [options]
   okdata datasets create-edition <datasetid> [<versionid>] [options]
   okdata datasets create-distribution <datasetid> [<versionid> <editionid>] [options]
+  okdata datasets create-pipeline <datasetid> [options]
 
 Examples:
   okdata datasets ls
@@ -32,6 +36,7 @@ Examples:
   okdata datasets ls my-dataset/1/20240101T102030 --format=json
   okdata datasets create --file=dataset.json
   okdata datasets cp /tmp/file.csv ds:my-dataset-id
+  okdata datasets create-pipeline my-dataset
 
 Options:{BASE_COMMAND_OPTIONS}
   --file=<file>             # Use this file for configuration or upload
@@ -60,6 +65,8 @@ Options:{BASE_COMMAND_OPTIONS}
             self.create_edition()
         elif self.cmd("create-distribution"):
             self.create_distribution()
+        elif self.cmd("create-pipeline"):
+            PipelineCreateWizard(self, self.arg("datasetid")).start()
         else:
             self.help()
 
