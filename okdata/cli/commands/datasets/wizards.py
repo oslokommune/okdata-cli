@@ -1,5 +1,8 @@
+import sys
+
 from okdata.sdk.data.dataset import Dataset
 from okdata.sdk.pipelines.client import PipelineApiClient
+from requests import HTTPError
 
 from okdata.cli.command import confirm_to_continue
 from okdata.cli.commands.datasets.questions import qs_create_dataset, qs_create_pipeline
@@ -115,6 +118,14 @@ class PipelineCreateWizard:
 
     def start(self):
         choices = run_questionnaire(*qs_create_pipeline())
-        _create_pipeline(
-            self.command, self.command.opt("env"), self.dataset_id, choices["pipeline"]
-        )
+        try:
+            _create_pipeline(
+                self.command,
+                self.command.opt("env"),
+                self.dataset_id,
+                choices["pipeline"],
+            )
+        except HTTPError as e:
+            if e.response.status_code == 409:
+                sys.exit("This dataset already has a pipeline set up.")
+            raise
