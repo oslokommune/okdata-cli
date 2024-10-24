@@ -35,7 +35,7 @@ def qs_create_dataset():
             "message": "Datakilde",
             "choices": [
                 Choice("Fil", "file"),
-                Choice("Database (krever eget databaseoppsett)", "database"),
+                Choice("Punktmålinger", "event"),
                 Choice("Ingen (datasettet skal ikke inneholde data direkte)", "none"),
             ],
         },
