@@ -2,6 +2,8 @@
 
 * New command `datasets create-pipeline` for creating pipelines for existing
   datasets.
+* The dataset creation wizard can now create event type datasets. The database
+  dataset type has been removed.
 * More robust dataset/version/edition URI parsing.
 
 ## 4.2.0 - 2024-06-18
