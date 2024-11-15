@@ -4,6 +4,9 @@
   datasets.
 * The dataset creation wizard can now create event type datasets. The database
   dataset type has been removed.
+* New commands `datasets delete-version`, `datasets delete-edition`, and
+  `datasets delete-distribution` for deleting dataset versions, editions, and
+  distributions respectively.
 * More robust dataset/version/edition URI parsing.
 
 ## 4.2.0 - 2024-06-18
