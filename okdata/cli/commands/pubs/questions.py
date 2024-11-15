@@ -216,6 +216,7 @@ def q_delete_from_aws():
         "name": "delete_from_aws",
         "message": "Delete key from AWS Parameter Store?",
         "auto_enter": False,
+        "default": False,
     }
 
 
