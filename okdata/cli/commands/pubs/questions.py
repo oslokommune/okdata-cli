@@ -43,6 +43,7 @@ _scopes = {
         "skatteetaten:skatteplikt",
         "skatteetaten:spesifisertsummertskattegrunnlag",
         "skatteetaten:summertskattegrunnlag",
+        "skatteetaten:testnorge/testdata.read",
         "skatteetaten:tjenestepensjonsavtale",
     ],
 }
