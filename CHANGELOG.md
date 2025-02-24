@@ -1,5 +1,10 @@
 ## ?.?.? - Unreleased
 
+## 4.3.1 - 2025-02-24
+
+* Fix previous release (the new `skatteetaten:testnorge/testdata.read` scope was
+  not included).
+
 ## 4.3.0 - 2025-02-20
 
 * New command `datasets create-pipeline` for creating pipelines for existing
