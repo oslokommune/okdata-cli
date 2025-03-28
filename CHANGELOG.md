@@ -3,7 +3,7 @@
 ## 4.4.0 - 2025-05-14
 
 * Added new scope for Brønnøysundregistrene: `brreg:data:enhetsregisteret:auto:roller`.
-* Providers and scopes are now fetched from an API instead being hard coded of
+* Providers and scopes are now fetched from an API instead of being hard coded
   in the CLI code, so updating the CLI for new providers and scopes won't be
   necessary in the future.
 * Providers and scopes are sorted alphabetically in the public registry wizard.
