@@ -98,3 +98,34 @@ class PubsClient(SDK):
         url = f"{self.api_url}/audit/{env}/{client_id}/log"
         log.info(f"Fetching audit log from: {url}")
         return self.get(url).json()
+
+
+class ProvidersClient(SDK):
+    def __init__(self, config=None, auth=None, env=None):
+        self.__name__ = "providers"
+        super().__init__(config, auth, env)
+        self.api_url = "https://api.data{}.oslo.systems/maskinporten/providers".format(
+            "-dev" if self.config.config["env"] == "dev" else ""
+        )
+
+    def get_providers(self):
+        log.info(f"Listing providers from: {self.api_url}")
+        providers = self.get(self.api_url).json()
+        return {p["provider_id"]: p["name"] for p in providers}
+
+
+class ScopesClient(SDK):
+    def __init__(self, config=None, auth=None, env=None):
+        self.__name__ = "scopes"
+        super().__init__(config, auth, env)
+        self.api_url = "https://api.data{}.oslo.systems/maskinporten/scopes".format(
+            "-dev" if self.config.config["env"] == "dev" else ""
+        )
+
+    def get_scopes(self):
+        log.info(f"Listing scopes from: {self.api_url}")
+        scopes = self.get(self.api_url).json()
+        scopes_dict = {}
+        for scope in scopes:
+            scopes_dict.setdefault(scope["provider_id"], []).append(scope["scope"])
+        return scopes_dict

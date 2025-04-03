@@ -1,4 +1,4 @@
-from operator import itemgetter
+from operator import attrgetter, itemgetter
 
 from questionary import Choice
 
@@ -13,39 +13,6 @@ from okdata.cli.commands.wizard import filter_comma_separated, required_style
 client_types = {
     "idporten": "ID-porten",
     "maskinporten": "Maskinporten",
-}
-
-providers = {
-    "freg": "Folkeregisteret",
-    "krr": "Kontaktregisteret",
-    "skatt": "Skatteetaten",
-}
-
-_scopes = {
-    "freg": [
-        "folkeregister:deling/offentligmedhjemmel",
-        "folkeregister:deling/offentligutenhjemmel",
-    ],
-    "krr": [
-        "krr:global/digitalpost.read",
-        "krr:global/kontaktinformasjon.read",
-    ],
-    "skatt": [
-        "skatteetaten:arbeidsgiveravgift",
-        "skatteetaten:avregning",
-        "skatteetaten:boligsparingforungdom",
-        "skatteetaten:inntekt",
-        "skatteetaten:inntektsmottakere",
-        "skatteetaten:mvameldingsopplysning",
-        "skatteetaten:oppdragutenlandskevirksomheter",
-        "skatteetaten:restanser",
-        "skatteetaten:skattemelding",
-        "skatteetaten:skatteplikt",
-        "skatteetaten:spesifisertsummertskattegrunnlag",
-        "skatteetaten:summertskattegrunnlag",
-        "skatteetaten:testnorge/testdata.read",
-        "skatteetaten:tjenestepensjonsavtale",
-    ],
 }
 
 _environments = [
@@ -88,24 +55,29 @@ def q_client_type():
     }
 
 
-def q_provider():
+def q_provider(providers):
     return {
         **required_style,
         "type": "select",
         "name": "provider_id",
         "message": "Provider",
-        "choices": [Choice(pname, pid) for pid, pname in providers.items()],
+        "choices": sorted(
+            [Choice(pname, pid) for pid, pname in providers.items()],
+            key=attrgetter("title"),
+        ),
         "when": lambda x: x.get("client_type_id") == "maskinporten",
     }
 
 
-def q_scopes():
+def q_scopes(scopes):
     return {
         **required_style,
         "type": "checkbox",
         "name": "scopes",
         "message": "Scopes",
-        "choices": lambda x: _scopes[x["provider_id"]] if "provider_id" in x else [],
+        "choices": lambda x: (
+            sorted(scopes[x["provider_id"]]) if "provider_id" in x else []
+        ),
         "validate": (lambda choices: bool(choices) or "Select at least one scope"),
         "when": lambda x: x.get("client_type_id") == "maskinporten",
     }
