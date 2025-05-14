@@ -20,13 +20,13 @@ from okdata.cli.commands.teams.questions import q_team
 from okdata.cli.commands.wizard import run_questionnaire
 
 
-def create_client_wizard(team_client):
+def create_client_wizard(team_client, providers, scopes):
     choices = run_questionnaire(
         q_env(),
         q_team(team_client),
         q_client_type(),
-        q_provider(),
-        q_scopes(),
+        q_provider(providers),
+        q_scopes(scopes),
         q_integration(),
         q_redirect_uris(),
         q_post_logout_redirect_uris(),

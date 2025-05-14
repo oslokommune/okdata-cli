@@ -1,18 +1,14 @@
 import base64
 from datetime import datetime
+from functools import cached_property
 from operator import itemgetter
 
 from okdata.sdk.team.client import TeamClient
 
 from okdata.cli import MAINTAINER
 from okdata.cli.command import BASE_COMMAND_OPTIONS, BaseCommand, confirm_to_continue
-from okdata.cli.commands.pubs.client import PubsClient
-from okdata.cli.commands.pubs.questions import (
-    NoClientsError,
-    NoKeysError,
-    client_types,
-    providers,
-)
+from okdata.cli.commands.pubs.clients import ProvidersClient, PubsClient, ScopesClient
+from okdata.cli.commands.pubs.questions import NoClientsError, NoKeysError, client_types
 from okdata.cli.commands.pubs.wizards import (
     audit_log_wizard,
     create_client_wizard,
@@ -54,6 +50,16 @@ Options:{BASE_COMMAND_OPTIONS}
         super().__init__()
         self.pubs_client = PubsClient(env=self.opt("env"))
         self.team_client = TeamClient(env=self.opt("env"))
+        self.providers_client = ProvidersClient(env=self.opt("env"))
+        self.scopes_client = ScopesClient(env=self.opt("env"))
+
+    @cached_property
+    def _providers(self):
+        return self.providers_client.get_providers()
+
+    @cached_property
+    def _scopes(self):
+        return self.scopes_client.get_scopes()
 
     def handler(self):
         if self.cmd("create-client"):
@@ -73,7 +79,9 @@ Options:{BASE_COMMAND_OPTIONS}
 
     def create_client(self):
         try:
-            config = create_client_wizard(self.team_client)
+            config = create_client_wizard(
+                self.team_client, self._providers, self._scopes
+            )
         except NoTeamError:
             self.print(
                 "We haven't yet registered you as member of any Origo team. "
@@ -91,7 +99,7 @@ Options:{BASE_COMMAND_OPTIONS}
         confirm_to_continue(
             "Will create a new {} client{} in {}{}.".format(
                 client_types[client_type_id],
-                f" for {providers[provider_id]}" if provider_id else "",
+                f" for {self._providers[provider_id]}" if provider_id else "",
                 env,
                 f" with scopes {scopes}" if scopes else "",
             )
