@@ -1,5 +1,8 @@
 ## ?.?.? - Unreleased
 
+* Dropped support for Python 3.8 which has reached end of life. Python 3.9+ is
+  now required.
+
 ## 4.4.0 - 2025-05-14
 
 * Added new scope for Brønnøysundregistrene: `brreg:data:enhetsregisteret:auto:roller`.

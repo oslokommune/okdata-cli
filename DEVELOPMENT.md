@@ -2,7 +2,7 @@
 
 ## Setup
 
-Requirement: Python 3.8+
+Requirement: Python 3.9+
 
 Setup:
 
