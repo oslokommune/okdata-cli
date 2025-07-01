@@ -4,42 +4,48 @@
 #
 #    pip-compile
 #
-attrs==21.4.0
-    # via jsonschema
-certifi==2024.7.4
+attrs==25.3.0
+    # via
+    #   jsonschema
+    #   referencing
+certifi==2025.6.15
     # via requests
-cffi==1.16.0
+cffi==1.17.1
     # via cryptography
-charset-normalizer==2.0.12
+charset-normalizer==3.4.2
     # via requests
-cryptography==44.0.1
+cryptography==45.0.4
     # via jwcrypto
 deprecation==2.1.0
     # via python-keycloak
 docopt==0.6.2
     # via okdata-cli (setup.py)
-idna==3.7
+idna==3.10
     # via requests
-jsonschema==4.4.0
+jsonschema==4.24.0
     # via okdata-sdk
+jsonschema-specifications==2025.4.1
+    # via jsonschema
 jwcrypto==1.5.6
     # via python-keycloak
 okdata-sdk==3.3.0
     # via okdata-cli (setup.py)
-packaging==24.0
+packaging==25.0
     # via deprecation
-prettytable==3.2.0
+prettytable==3.16.0
     # via okdata-cli (setup.py)
-prompt-toolkit==3.0.29
+prompt-toolkit==3.0.51
     # via questionary
 pycparser==2.22
     # via cffi
-pyrsistent==0.18.1
-    # via jsonschema
 python-keycloak==3.12.0
     # via okdata-sdk
 questionary==1.10.0
     # via okdata-cli (setup.py)
+referencing==0.36.2
+    # via
+    #   jsonschema
+    #   jsonschema-specifications
 requests==2.32.4
     # via
     #   okdata-cli (setup.py)
@@ -48,13 +54,17 @@ requests==2.32.4
     #   requests-toolbelt
 requests-toolbelt==1.0.0
     # via python-keycloak
-typing-extensions==4.11.0
+rpds-py==0.25.1
+    # via
+    #   jsonschema
+    #   referencing
+typing-extensions==4.14.0
     # via jwcrypto
 urllib3==2.5.0
     # via
     #   okdata-sdk
     #   requests
-wcwidth==0.2.5
+wcwidth==0.2.13
     # via
     #   prettytable
     #   prompt-toolkit
