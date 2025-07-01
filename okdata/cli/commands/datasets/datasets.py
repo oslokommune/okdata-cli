@@ -5,7 +5,7 @@ from okdata.sdk.data.download import Download
 from okdata.sdk.data.upload import Upload
 from requests.exceptions import HTTPError
 
-from okdata.cli.command import BaseCommand, BASE_COMMAND_OPTIONS
+from okdata.cli.command import BaseCommand, BASE_COMMAND_OPTIONS, confirm_to_continue
 from okdata.cli.commands.datasets.wizards import (
     DatasetCreateWizard,
     PipelineCreateWizard,
@@ -26,8 +26,8 @@ Usage:
   okdata datasets create-edition <dataset_id> [<versionid>] [options]
   okdata datasets create-distribution <dataset_id> [<versionid> <editionid>] [options]
   okdata datasets create-pipeline <dataset_id> [options]
-  okdata datasets delete-version <version_id> [--cascade] [options]
-  okdata datasets delete-edition <edition_id> [--cascade] [options]
+  okdata datasets delete-version <version_id> [options]
+  okdata datasets delete-edition <edition_id> [options]
   okdata datasets delete-distribution <distribution_id> [options]
 
 Examples:
@@ -193,19 +193,17 @@ Options:{BASE_COMMAND_OPTIONS}
 
     def delete_version(self):
         version_id = self.arg("version_id")
-        cascade = self.opt("cascade")
-        self.log.info(f"Deleting version {version_id} [cascade: {bool(cascade)}]")
+        self.log.info(f"Deleting version {version_id}")
         try:
             dataset_id, version = version_id.split("/")
         except ValueError:
             sys.exit("Version ID must be on the format 'dataset_id/version'.")
-        self.sdk.delete_version(dataset_id, version, cascade)
-        self.print(
-            "Deleted version {}{}.".format(
-                version,
-                " and every child edition and distribution" if cascade else "",
-            )
+        confirm_to_continue(
+            f"Will delete version {version} together with every child edition "
+            "and distribution."
         )
+        self.sdk.delete_version(dataset_id, version, cascade=True)
+        self.print(f"Deleted version {version}.")
 
     # #################################### #
     # Edition
@@ -259,19 +257,16 @@ Options:{BASE_COMMAND_OPTIONS}
 
     def delete_edition(self):
         edition_id = self.arg("edition_id")
-        cascade = self.opt("cascade")
-        self.log.info(f"Deleting edition {edition_id} [cascade: {bool(cascade)}]")
+        self.log.info(f"Deleting edition {edition_id}")
         try:
             dataset_id, version, edition = edition_id.split("/")
         except ValueError:
             sys.exit("Edition ID must be on the format 'dataset_id/version/edition'.")
-        self.sdk.delete_edition(dataset_id, version, edition, cascade)
-        self.print(
-            "Deleted edition {}{}.".format(
-                edition,
-                " and every child distribution" if cascade else "",
-            )
+        confirm_to_continue(
+            f"Will delete edition {edition} together with every child distribution."
         )
+        self.sdk.delete_edition(dataset_id, version, edition, cascade=True)
+        self.print(f"Deleted edition {edition}.")
 
     # #################################### #
     # Distribution
@@ -299,8 +294,9 @@ Options:{BASE_COMMAND_OPTIONS}
             sys.exit(
                 "Distribution ID must be on the format 'dataset_id/version/edition/distribution'."
             )
+        confirm_to_continue(f"Will delete distribution {dist_id}.")
         self.sdk.delete_distribution(dataset_id, version, edition, dist)
-        self.print(f"Deleted distribution {dist_id}")
+        self.print(f"Deleted distribution {dist_id}.")
 
     # #################################### #
     # File handling
