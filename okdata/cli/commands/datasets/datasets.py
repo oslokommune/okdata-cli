@@ -5,7 +5,7 @@ from okdata.sdk.data.download import Download
 from okdata.sdk.data.upload import Upload
 from requests.exceptions import HTTPError
 
-from okdata.cli.command import BaseCommand, BASE_COMMAND_OPTIONS
+from okdata.cli.command import BaseCommand, BASE_COMMAND_OPTIONS, confirm_to_continue
 from okdata.cli.commands.datasets.wizards import (
     DatasetCreateWizard,
     PipelineCreateWizard,
@@ -22,10 +22,13 @@ Usage:
   okdata datasets ls <uri> [options]
   okdata datasets cp <source> <target> [options]
   okdata datasets create [options]
-  okdata datasets create-version <datasetid> [options]
-  okdata datasets create-edition <datasetid> [<versionid>] [options]
-  okdata datasets create-distribution <datasetid> [<versionid> <editionid>] [options]
-  okdata datasets create-pipeline <datasetid> [options]
+  okdata datasets create-version <dataset_id> [options]
+  okdata datasets create-edition <dataset_id> [<version>] [options]
+  okdata datasets create-distribution <dataset_id> [<version> <edition>] [options]
+  okdata datasets create-pipeline <dataset_id> [options]
+  okdata datasets delete-version <version_id> [options]
+  okdata datasets delete-edition <edition_id> [options]
+  okdata datasets delete-distribution <distribution_id> [options]
 
 Examples:
   okdata datasets ls
@@ -65,8 +68,14 @@ Options:{BASE_COMMAND_OPTIONS}
             self.create_edition()
         elif self.cmd("create-distribution"):
             self.create_distribution()
+        elif self.cmd("delete-version"):
+            self.delete_version()
+        elif self.cmd("delete-edition"):
+            self.delete_edition()
+        elif self.cmd("delete-distribution"):
+            self.delete_distribution()
         elif self.cmd("create-pipeline"):
-            PipelineCreateWizard(self, self.arg("datasetid")).start()
+            PipelineCreateWizard(self, self.arg("dataset_id")).start()
         else:
             self.help()
 
@@ -141,7 +150,7 @@ Options:{BASE_COMMAND_OPTIONS}
         self.print(f"Editions available for: {dataset_id}, version: {version}", out)
 
     def create_version(self):
-        dataset_id = self.arg("datasetid")
+        dataset_id = self.arg("dataset_id")
         payload = read_json(self.opt("file"))
         self.log.info(
             f"Creating version for dataset: {dataset_id} with payload: {payload}"
@@ -149,7 +158,7 @@ Options:{BASE_COMMAND_OPTIONS}
 
         version = self.sdk.create_version(dataset_id, payload)
         version_id = version["Id"]
-        self.log.info(f"Created version: {version_id} on dataset: {dataset_id}")
+        self.log.info(f"Created version: {version_id} on dataset: {dataset_id}")
         self.print(f"Created version: {version_id}", version)
 
     def _get_latest_version(self, dataset_id, exit_on_error=True):
@@ -170,17 +179,31 @@ Options:{BASE_COMMAND_OPTIONS}
                 return None
             raise
 
-    def resolve_or_load_versionid(self, dataset_id):
-        self.log.info(f"Trying to resolve versionid for {dataset_id}")
-        version_id = self.arg("versionid")
-        if version_id is not None:
-            self.log.info(f"Found version in arguments: {version_id}")
-            return version_id
+    def resolve_or_load_version(self, dataset_id):
+        self.log.info(f"Trying to resolve version for {dataset_id}")
+        version = self.arg("version")
+        if version is not None:
+            self.log.info(f"Found version in arguments: {version}")
+            return version
         latest_version = self._get_latest_version(dataset_id)
         self.log.info(
             f"Found version in latest dataset version: {latest_version['version']}"
         )
         return latest_version["version"]
+
+    def delete_version(self):
+        version_id = self.arg("version_id")
+        self.log.info(f"Deleting version {version_id}")
+        try:
+            dataset_id, version = version_id.split("/")
+        except ValueError:
+            sys.exit("Version ID must be on the format 'dataset_id/version'.")
+        confirm_to_continue(
+            f"Will delete version {version} together with every child edition "
+            "and distribution."
+        )
+        self.sdk.delete_version(dataset_id, version, cascade=True)
+        self.print(f"Deleted version {version}.")
 
     # #################################### #
     # Edition
@@ -204,24 +227,24 @@ Options:{BASE_COMMAND_OPTIONS}
 
     def create_edition(self):
         payload = read_json(self.opt("file"))
-        dataset_id = self.arg("datasetid")
-        version_id = self.resolve_or_load_versionid(dataset_id)
+        dataset_id = self.arg("dataset_id")
+        version = self.resolve_or_load_version(dataset_id)
         self.log.info(
-            f"Creating edition for {version_id} on {dataset_id} with payload: {payload}"
+            f"Creating edition for {version} on {dataset_id} with payload: {payload}"
         )
 
-        edition = self.sdk.create_edition(dataset_id, version_id, payload)
-        self.print(f"Created edition for {version_id} on {dataset_id}", edition)
+        edition = self.sdk.create_edition(dataset_id, version, payload)
+        self.print(f"Created edition for {version} on {dataset_id}", edition)
         return edition
 
-    def resolve_or_create_edition(self, dataset_id, version_id):
-        self.log.info(f"Trying to resolve edition for {version_id} on {dataset_id}")
-        edition_id = self.arg("editionid")
-        if edition_id is not None:
-            self.log.info(f"Found edition in arguments: {edition_id}")
-            return edition_id
+    def resolve_or_create_edition(self, dataset_id, version):
+        self.log.info(f"Trying to resolve edition for {version} on {dataset_id}")
+        edition = self.arg("edition")
+        if edition is not None:
+            self.log.info(f"Found edition in arguments: {edition}")
+            return edition
 
-        return self.sdk.auto_create_edition(dataset_id, version_id)
+        return self.sdk.auto_create_edition(dataset_id, version)
 
     def get_latest_or_create_edition(self, dataset_id, version):
         self.log.info(f"Resolving edition for dataset-uri: {dataset_id}/{version}")
@@ -232,22 +255,48 @@ Options:{BASE_COMMAND_OPTIONS}
                 return self.sdk.auto_create_edition(dataset_id, version)
             raise
 
+    def delete_edition(self):
+        edition_id = self.arg("edition_id")
+        self.log.info(f"Deleting edition {edition_id}")
+        try:
+            dataset_id, version, edition = edition_id.split("/")
+        except ValueError:
+            sys.exit("Edition ID must be on the format 'dataset_id/version/edition'.")
+        confirm_to_continue(
+            f"Will delete edition {edition} together with every child distribution."
+        )
+        self.sdk.delete_edition(dataset_id, version, edition, cascade=True)
+        self.print(f"Deleted edition {edition}.")
+
     # #################################### #
     # Distribution
     # #################################### #
     def create_distribution(self):
         payload = read_json(self.opt("file"))
-        dataset_id = self.arg("datasetid")
-        version_id = self.resolve_or_load_versionid(dataset_id)
-        edition_id = self.resolve_or_create_edition(dataset_id, version_id)["Id"]
+        dataset_id = self.arg("dataset_id")
+        version = self.resolve_or_load_version(dataset_id)
+        edition_id = self.resolve_or_create_edition(dataset_id, version)["Id"]
         edition = edition_id.split("/")[-1]
         self.log.info(f"Creating distribution for {edition_id} with payload: {payload}")
 
         distribution = self.sdk.create_distribution(
-            dataset_id, version_id, edition, payload
+            dataset_id, version, edition, payload
         )
         self.print(f"Created distribution for {edition_id}", distribution)
         return distribution
+
+    def delete_distribution(self):
+        dist_id = self.arg("distribution_id")
+        self.log.info(f"Deleting distribution {dist_id}")
+        try:
+            dataset_id, version, edition, dist = dist_id.split("/")
+        except ValueError:
+            sys.exit(
+                "Distribution ID must be on the format 'dataset_id/version/edition/distribution'."
+            )
+        confirm_to_continue(f"Will delete distribution {dist_id}.")
+        self.sdk.delete_distribution(dataset_id, version, edition, dist)
+        self.print(f"Deleted distribution {dist_id}.")
 
     # #################################### #
     # File handling
