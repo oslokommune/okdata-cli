@@ -1,5 +1,6 @@
 ## ?.?.? - Unreleased
 
+* Added support for Python 3.13.
 * Dropped support for Python 3.8 which has reached end of life. Python 3.9+ is
   now required.
 * New commands `datasets delete-version`, `datasets delete-edition`, and
