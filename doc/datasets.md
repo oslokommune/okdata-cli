@@ -25,7 +25,8 @@ To explore datasets in Okdata you can use the following commands:
 ```bash
 okdata datasets ls
 okdata datasets ls <dataset_id>
-okdata datasets ls <dataset_id> <version> <edition>
+okdata datasets ls <dataset_id>/<version>
+okdata datasets ls <dataset_id>/<version>/<edition>
 ```
 
 To start exploring the datasets in Okdata you do not need to log in, but based on the permissions set on each dataset you might get different lists.
