@@ -18,8 +18,8 @@ class DatasetsCommand(BaseCommand):
     __doc__ = f"""Oslo :: Datasets
 
 Usage:
-  okdata datasets ls [--filter=<filter> options]
-  okdata datasets ls <uri> [options]
+  okdata datasets ls [--filter=<filter> --verbose options]
+  okdata datasets ls <uri> [--verbose options]
   okdata datasets cp <source> <target> [options]
   okdata datasets create [options]
   okdata datasets create-version <dataset_id> [options]
@@ -33,7 +33,9 @@ Usage:
 Examples:
   okdata datasets ls
   okdata datasets ls --filter=bydelsfakta
+  okdata datasets ls --verbose
   okdata datasets ls my-dataset
+  okdata datasets ls my-dataset --verbose
   okdata datasets ls my-dataset/1
   okdata datasets ls my-dataset/1/20240101T102030
   okdata datasets ls my-dataset/1/20240101T102030 --format=json
@@ -99,7 +101,10 @@ Options:{BASE_COMMAND_OPTIONS}
     def datasets(self):
         self.log.info("Listing datasets")
         dataset_list = self.sdk.get_datasets(filter=self.opt("filter"))
-        out = create_output(self.opt("format"), "datasets_config.json")
+        out = create_output(
+            self.opt("format"),
+            f"datasets_config{'_verbose' if self.opt('verbose') else ''}.json",
+        )
         out.add_rows(dataset_list)
         self.print("Available datasets", out)
 
@@ -117,7 +122,12 @@ Options:{BASE_COMMAND_OPTIONS}
             )
             return
 
-        out = create_output(self.opt("format"), "datasets_dataset_config.json")
+        config = (
+            "datasets_config_verbose"
+            if self.opt("verbose")
+            else "datasets_dataset_config.json"
+        )
+        out = create_output(self.opt("format"), config)
         out.add_rows([dataset])
         self.print(f"Dataset: {dataset_id}", out)
 

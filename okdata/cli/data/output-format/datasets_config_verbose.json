@@ -1,4 +1,8 @@
 {
+  "ID": {
+    "name": "ID",
+    "key": "Id"
+  },
   "Title": {
     "name": "Title",
     "key": "title"
@@ -11,6 +15,10 @@
     "name": "Publisher",
     "key": "publisher"
   },
+  "Objective": {
+    "name": "Objective",
+    "key": "objective"
+  },
   "Parent ID": {
     "name": "Parent ID",
     "key": "parent_id"
@@ -19,8 +27,20 @@
     "name": "Access rights",
     "key": "accessRights"
   },
+  "Theme": {
+    "name": "Theme",
+    "key": "theme"
+  },
+  "Keywords": {
+    "name": "Keywords",
+    "key": "keywords"
+  },
+  "Frequency": {
+    "name": "Frequency",
+    "key": "frequency"
+  },
   "Contact point": {
-    "name": "Contact point",
+    "name": "Contact Point",
     "key": "contactPoint",
     "fields": [
       "name",
