@@ -208,7 +208,7 @@ uploaded=false
 echo "Checking status for uploaded file"
 while ! $uploaded; do
   echo "\Checking upload status..."
-  upload_status=`okdaata status $trace_id --format=json`
+  upload_status=`okdata status $trace_id --format=json`
   uploaded=`echo $upload_status | jq -r '.done'`
 done
 echo "Uploaded file is processed and ready to be consumed"

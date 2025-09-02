@@ -79,8 +79,9 @@ Options:{BASE_COMMAND_OPTIONS}
         return content
 
     def print(self, str, payload=None):
-        is_json = self.opt("format") == "json"
-        if not is_json:
+        is_structured_data = self.opt("format") in ("csv", "json")
+
+        if not is_structured_data:
             print(str)
         # Normally a return json value from the API
         if payload:

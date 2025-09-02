@@ -38,6 +38,7 @@ Examples:
   okdata datasets ls my-dataset --verbose
   okdata datasets ls my-dataset/1
   okdata datasets ls my-dataset/1/20240101T102030
+  okdata datasets ls my-dataset/1/20240101T102030 --format=csv
   okdata datasets ls my-dataset/1/20240101T102030 --format=json
   okdata datasets create --file=dataset.json
   okdata datasets cp /tmp/file.csv ds:my-dataset-id
