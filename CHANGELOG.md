@@ -9,6 +9,7 @@
 * Streamlined output in the dataset listing commands.
 * New option `--verbose` for the `datasets ls` command which lists every
   relevant metadata field for the listed datasets.
+* New output format option for printing CSV: `--format=csv`.
 
 ## 4.4.0 - 2025-05-14
 

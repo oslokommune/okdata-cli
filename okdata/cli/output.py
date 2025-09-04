@@ -1,3 +1,5 @@
+import csv
+import io
 import json
 import logging
 import os
@@ -9,25 +11,28 @@ from prettytable import PrettyTable
 log = logging.getLogger()
 
 
-def get_script_path():
+def _get_script_path():
     return os.path.dirname(__file__)
 
 
-# Create a output printer
-#
-# Formatting of output is defined in okdata/cli/data/ouput-format.
-# Each command defines what (from the API response) should be printed, and
-# what the human-readable name should be
-def create_output(format, configfile):
-    datadir = f"{get_script_path()}/data/output-format"
-    filename = f"{datadir}/{configfile}"
-    log.info(f"Creating output format: {format}, from: {filename}")
-    with open(filename) as config_file:
-        config = json.load(config_file)
+def create_output(fmt, config_file):
+    """Create and return an output printer.
 
-    if format == "json":
-        return JsonOutput(config)
-    return TableOutput(config)
+    Formatting of output is defined in the `okdata/cli/data/ouput-format`
+    directory. Each command defines which fields from the API response should
+    be printed, and what the human-readable name should be.
+    """
+    datadir = f"{_get_script_path()}/data/output-format"
+    filename = f"{datadir}/{config_file}"
+    log.info(f"Creating output format: {fmt}, from: {filename}")
+
+    with open(filename) as f:
+        config = json.load(f)
+
+    return {
+        "json": JsonOutput(config),
+        "csv": CSVOutput(config),
+    }.get(fmt, TableOutput(config))
 
 
 class TableOutput(PrettyTable):
@@ -104,13 +109,9 @@ class TableOutput(PrettyTable):
         return value
 
 
-# TODO: merge many outputs to one array of elements when listing a version
-class JsonOutput:
+class StructuredDataOutput:
     def __init__(self, config):
         self.config = config
-        # set to True it will return a single object from self.out when printed. This will make it
-        # easier to pass output to jq without having to access out[0] from the CLI
-        self.output_singular_object = False
         self.out = []
 
     def field_values(self, row, row_key, key):
@@ -143,6 +144,36 @@ class JsonOutput:
     def add_rows(self, rows):
         for row in rows:
             self.add_row(row)
+
+    def __str__(self):
+        raise NotImplementedError
+
+
+class CSVOutput(StructuredDataOutput):
+    def __str__(self):
+        out = io.StringIO()
+        writer = csv.DictWriter(out, self.out[0].keys())
+        writer.writeheader()
+        writer.writerows(self.out)
+        return out.getvalue()
+
+    def get_row_value(self, row, key):
+        val = super().get_row_value(row, key)
+
+        if isinstance(val, str):
+            return val.replace("\n", "")
+        elif isinstance(val, list):
+            return ";".join(val)
+        return val
+
+
+# TODO: merge many outputs to one array of elements when listing a version
+class JsonOutput(StructuredDataOutput):
+    def __init__(self, config):
+        super().__init__(config)
+        # set to True it will return a single object from self.out when printed. This will make it
+        # easier to pass output to jq without having to access out[0] from the CLI
+        self.output_singular_object = False
 
     def __repr__(self):
         return json.dumps(self.out)
