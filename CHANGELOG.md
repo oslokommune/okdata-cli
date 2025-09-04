@@ -10,6 +10,8 @@
 * New option `--verbose` for the `datasets ls` command which lists every
   relevant metadata field for the listed datasets.
 * New output format option for printing CSV: `--format=csv`.
+* Improved SIGPIPE handling so that `okdata` works better with tools
+  such as `head`.
 
 ## 4.4.0 - 2025-05-14
 
