@@ -6,6 +6,9 @@
 * New commands `datasets delete-version`, `datasets delete-edition`, and
   `datasets delete-distribution` for deleting dataset versions, editions, and
   distributions respectively.
+* Streamlined output in the dataset listing commands.
+* New option `--verbose` for the `datasets ls` command which lists every
+  relevant metadata field for the listed datasets.
 
 ## 4.4.0 - 2025-05-14
 
