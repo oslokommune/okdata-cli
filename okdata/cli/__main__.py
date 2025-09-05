@@ -1,4 +1,5 @@
 import json
+import os
 import sys
 
 from keycloak.exceptions import KeycloakGetError, KeycloakPostError
@@ -33,6 +34,9 @@ def main():
         try:
             instance.login()
             instance.handle()
+            # Flush output here to force SIGPIPE to be triggered while inside
+            # this try block.
+            sys.stdout.flush()
         except RequestException as e:
             if hasattr(e.response, "json"):
                 instance.print_error_response(e.response.json())
@@ -55,6 +59,11 @@ def main():
             )
         except (EOFError, KeyboardInterrupt):
             instance.print("\nAbort.")
+        except BrokenPipeError:
+            # https://docs.python.org/3/library/signal.html#note-on-sigpipe
+            devnull = os.open(os.devnull, os.O_WRONLY)
+            os.dup2(devnull, sys.stdout.fileno())
+            sys.exit(1)
         except Exception as e:
             instance.print(
                 "An exception occurred",
