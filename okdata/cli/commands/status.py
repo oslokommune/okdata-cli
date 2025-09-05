@@ -101,12 +101,22 @@ Options:{BASE_COMMAND_OPTIONS}
         if trace_status != "FINISHED":
             print("Waiting for processing to finish", end="", flush=True)
 
-        while trace_status != "FINISHED":
+        attempts = 0
+        max_attempts = 100
+        while trace_status != "FINISHED" and attempts < max_attempts:
             print(".", end="", flush=True)
             sleep(2)
+            attempts += 1
             trace_events = self.get_trace_events(trace_id)
             trace_status = StatusCommand.find_latest_event(trace_events)["trace_status"]
         print()
+
+        if attempts == max_attempts:
+            print(
+                "\nWe've waited for a good while now, and processing hasn't "
+                "yet finished.\nSomething else is most likely wrong, maybe a "
+                "pipeline hasn't been configured for the dataset?\n"
+            )
 
         return trace_events
 
