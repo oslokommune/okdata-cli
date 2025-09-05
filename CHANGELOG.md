@@ -6,13 +6,16 @@
 * New commands `datasets delete-version`, `datasets delete-edition`, and
   `datasets delete-distribution` for deleting dataset versions, editions, and
   distributions respectively.
+* Fixed binary file downloads.
 * Streamlined output in the dataset listing commands.
 * New option `--verbose` for the `datasets ls` command which lists every
   relevant metadata field for the listed datasets.
 * New output format option for printing CSV: `--format=csv`.
 * Better error messages for status traces that never finish in `status --watch`.
-* Improved SIGPIPE handling so that `okdata` works better with tools
-  such as `head`.
+* Improved SIGPIPE handling so that `okdata` works better with tools such
+  as `head`.
+* Fixed handling of the `--env` parameter when uploading datasets (it would
+  previously be ignored).
 
 ## 4.4.0 - 2025-05-14
 
