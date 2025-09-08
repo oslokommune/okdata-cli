@@ -52,7 +52,6 @@ Options:{BASE_COMMAND_OPTIONS}
 
     def __init__(self):
         super().__init__(Dataset)
-        self.download = Download(env=self.opt("env"))
 
     def handler(self):
         self.log.info("DatasetsCommand.handle()")
@@ -389,7 +388,7 @@ Options:{BASE_COMMAND_OPTIONS}
         return dataset_id, version, edition
 
     def upload_file(self, source, target):
-        upload = Upload()
+        upload = Upload(env=self.opt("env"))
         dataset_id, version, edition = self._dataset_components_from_uri(target, True)
 
         self.log.info(f"Will upload file to: {dataset_id}/{version}/{edition})")
@@ -420,8 +419,9 @@ Options:{BASE_COMMAND_OPTIONS}
         self.print("\n".join(summary))
 
     def download_files(self, source, target):
+        download = Download(env=self.opt("env"))
         dataset_id, version, edition = self._dataset_components_from_uri(source)
-        downloaded_files = self.download.download(
+        downloaded_files = download.download(
             dataset_id, version, edition, resolve_output_filepath(target)
         )
         self.log.info(f"Download returned: {downloaded_files}")
