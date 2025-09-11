@@ -10,7 +10,7 @@ attrs==25.3.0
     #   referencing
 certifi==2025.8.3
     # via requests
-cffi==1.17.1
+cffi==2.0.0
     # via cryptography
 charset-normalizer==3.4.3
     # via requests
@@ -34,9 +34,11 @@ packaging==25.0
     # via deprecation
 prettytable==3.16.0
     # via okdata-cli (setup.py)
-prompt-toolkit==3.0.52
-    # via questionary
-pycparser==2.22
+prompt-toolkit==3.0.51
+    # via
+    #   okdata-cli (setup.py)
+    #   questionary
+pycparser==2.23
     # via cffi
 python-keycloak==3.12.0
     # via okdata-sdk

@@ -1,3 +1,7 @@
+## ?.?.? - Unreleased
+
+* Fixed wizards.
+
 ## 5.0.0 - 2025-09-08
 
 * Added support for Python 3.13.
