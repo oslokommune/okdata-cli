@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="okdata-cli",
-    version="5.0.0",
+    version="5.0.1",
     author="Oslo Origo",
     author_email="dataspeilet@oslo.kommune.no",
     description="CLI for services provided by Oslo Origo",
