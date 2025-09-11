@@ -26,7 +26,12 @@ setuptools.setup(
         "docopt",
         "okdata-sdk>=3.4,<4",
         "PrettyTable",
+        # TODO: Upgrade to questionary 2.x.
         "questionary>=1.10.0,<2.0.0",
+        # Not a direct dependency, but a dependency for questionary. However
+        # questionary breaks with prompt-toolkit 3.0.52 (and possibly later
+        # versions as well), so let's pin it sub 3.0.52 for now.
+        "prompt-toolkit<3.0.52",
         "requests",
     ],
     entry_points={"console_scripts": ["okdata=okdata.cli.__main__:main"]},
