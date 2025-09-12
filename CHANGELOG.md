@@ -1,3 +1,7 @@
+## ?.?.? - Unreleased
+
+* Fixed verbose listing of single datasets.
+
 ## 5.0.1 - 2025-09-11
 
 * Fixed wizards.
