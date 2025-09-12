@@ -123,7 +123,7 @@ Options:{BASE_COMMAND_OPTIONS}
             return
 
         config = (
-            "datasets_config_verbose"
+            "datasets_config_verbose.json"
             if self.opt("verbose")
             else "datasets_dataset_config.json"
         )
