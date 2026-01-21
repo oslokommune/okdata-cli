@@ -11,6 +11,7 @@ from okdata.cli.commands.pubs.questions import (
     q_integration,
     q_key,
     q_key_destination,
+    q_org,
     q_post_logout_redirect_uris,
     q_provider,
     q_redirect_uris,
@@ -22,6 +23,7 @@ from okdata.cli.commands.wizard import run_questionnaire
 
 def create_client_wizard(team_client, providers, scopes):
     choices = run_questionnaire(
+        q_org(),
         q_env(),
         q_team(team_client),
         q_client_type(),
@@ -34,6 +36,7 @@ def create_client_wizard(team_client, providers, scopes):
         q_client_uri(),
     )
     return {
+        "org": choices["org"],
         "env": choices["env"],
         "team_id": choices.get("team_id"),
         "client_type_id": choices["client_type_id"],
@@ -48,12 +51,16 @@ def create_client_wizard(team_client, providers, scopes):
 
 
 def list_clients_wizard():
-    choices = run_questionnaire(q_env())
-    return {"env": choices["env"]}
+    choices = run_questionnaire(q_org(), q_env())
+    return {
+        "org": choices["org"],
+        "env": choices["env"],
+    }
 
 
 def delete_client_wizard(pubs_client):
     choices = run_questionnaire(
+        q_org(),
         q_env(),
         q_client(pubs_client),
         q_delete_from_aws(),
@@ -61,6 +68,7 @@ def delete_client_wizard(pubs_client):
         q_aws_region(),
     )
     return {
+        "org": choices["org"],
         "env": choices["env"],
         "client_id": choices["client"]["id"],
         "client_name": choices["client"]["name"],
@@ -72,6 +80,7 @@ def delete_client_wizard(pubs_client):
 
 def create_key_wizard(pubs_client):
     choices = run_questionnaire(
+        q_org(),
         q_env(),
         q_client(pubs_client),
         q_key_destination(),
@@ -80,6 +89,7 @@ def create_key_wizard(pubs_client):
         q_enable_auto_rotate(),
     )
     return {
+        "org": choices["org"],
         "env": choices["env"],
         "client_id": choices["client"]["id"],
         "client_name": choices["client"]["name"],
@@ -91,8 +101,13 @@ def create_key_wizard(pubs_client):
 
 
 def list_keys_wizard(pubs_client):
-    choices = run_questionnaire(q_env(), q_client(pubs_client, True))
+    choices = run_questionnaire(
+        q_org(),
+        q_env(),
+        q_client(pubs_client, True),
+    )
     return {
+        "org": choices["org"],
         "env": choices["env"],
         **(
             {
@@ -109,11 +124,13 @@ def list_keys_wizard(pubs_client):
 
 def delete_key_wizard(pubs_client):
     choices = run_questionnaire(
+        q_org(),
         q_env(),
         q_client(pubs_client),
         q_key(pubs_client),
     )
     return {
+        "org": choices["org"],
         "env": choices["env"],
         "client_id": choices["client"]["id"],
         "client_name": choices["client"]["name"],
@@ -122,8 +139,13 @@ def delete_key_wizard(pubs_client):
 
 
 def audit_log_wizard(pubs_client):
-    choices = run_questionnaire(q_env(), q_client(pubs_client))
+    choices = run_questionnaire(
+        q_org(),
+        q_env(),
+        q_client(pubs_client),
+    )
     return {
+        "org": choices["org"],
         "env": choices["env"],
         "client_id": choices["client"]["id"],
         "client_name": choices["client"]["name"],

@@ -13,13 +13,16 @@ class PubsClient(SDK):
             "-dev" if self.config.config["env"] == "dev" else ""
         )
 
-    def create_maskinporten_client(self, team_id, provider, integration, scopes, env):
+    def create_maskinporten_client(
+        self, team_id, provider, integration, scopes, org, env
+    ):
         data = {
             "client_type": "maskinporten",
             "team_id": team_id,
             "provider": provider,
             "integration": integration,
             "scopes": scopes,
+            "org": org,
             "env": env,
         }
         log.info(f"Creating Maskinporten client with payload: {data}")
@@ -33,6 +36,7 @@ class PubsClient(SDK):
         frontchannel_logout_uri,
         redirect_uris,
         post_logout_redirect_uris,
+        org,
         env,
     ):
         data = {
@@ -44,17 +48,22 @@ class PubsClient(SDK):
             "frontchannel_logout_uri": frontchannel_logout_uri,
             "redirect_uris": redirect_uris,
             "post_logout_redirect_uris": post_logout_redirect_uris,
+            "org": org,
             "env": env,
         }
         log.info(f"Creating ID-porten client with payload: {data}")
         return self.post(f"{self.api_url}/clients", data=data).json()
 
-    def get_clients(self, env):
-        url = f"{self.api_url}/clients/{env}"
+    def get_clients(self, env, org=None):
+        url = "{}/clients/{}{}".format(
+            self.api_url,
+            env,
+            f"?org={org}" if org else "",
+        )
         log.info(f"Listing clients from: {url}")
         return self.get(url).json()
 
-    def delete_client(self, env, client_id, aws_account, aws_region):
+    def delete_client(self, org, env, client_id, aws_account, aws_region):
         url = f"{self.api_url}/clients/{env}/{client_id}/delete"
         log.info(f"Deleting client for: {url}")
         return self.post(
@@ -62,11 +71,13 @@ class PubsClient(SDK):
             data={
                 "aws_account": aws_account,
                 "aws_region": aws_region,
+                "org": org,
             },
         ).json()
 
     def create_key(
         self,
+        org,
         env,
         client_id,
         aws_account,
@@ -81,6 +92,7 @@ class PubsClient(SDK):
                 "destination_aws_account": aws_account,
                 "destination_aws_region": aws_region,
                 "enable_auto_rotate": enable_auto_rotate,
+                "org": org,
             },
         ).json()
 

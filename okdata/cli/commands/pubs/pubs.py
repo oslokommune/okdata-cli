@@ -94,6 +94,7 @@ Options:{BASE_COMMAND_OPTIONS}
         provider_id = config["provider_id"]
         integration = config["integration"]
         scopes = config["scopes"]
+        org = config["org"]
         env = config["env"]
 
         confirm_to_continue(
@@ -108,7 +109,7 @@ Options:{BASE_COMMAND_OPTIONS}
         self.print("Creating client...")
         if client_type_id == "maskinporten":
             response = self.pubs_client.create_maskinporten_client(
-                team_id, provider_id, integration, scopes, env
+                team_id, provider_id, integration, scopes, org, env
             )
         else:
             response = self.pubs_client.create_idporten_client(
@@ -118,6 +119,7 @@ Options:{BASE_COMMAND_OPTIONS}
                 config["frontchannel_logout_uri"],
                 config["redirect_uris"],
                 config["post_logout_redirect_uris"],
+                org,
                 env,
             )
         client_name = response["client_name"]
@@ -129,14 +131,22 @@ You may now go ahead and create a key for it by running:
 
     def list_clients(self):
         config = list_clients_wizard()
+        org = config["org"]
         env = config["env"]
-        clients = self.pubs_client.get_clients(env)
+
+        clients = self.pubs_client.get_clients(env, org)
         out = create_output(self.opt("format"), "pubs_clients_config.json")
         out.add_rows(sorted(clients, key=itemgetter("client_name")))
         self.print(f"Clients in {env}:", out)
 
     def delete_client(self):
-        choices = delete_client_wizard(self.pubs_client)
+        try:
+            choices = delete_client_wizard(self.pubs_client)
+        except NoClientsError:
+            self.print("No clients in the given environment.")
+            return
+
+        org = choices["org"]
         env = choices["env"]
         client_id = choices["client_id"]
         client_name = choices["client_name"]
@@ -160,7 +170,9 @@ You may now go ahead and create a key for it by running:
         )
 
         self.print(f"Deleting client '{client_name}' [{env}]...")
-        res = self.pubs_client.delete_client(env, client_id, aws_account, aws_region)
+        res = self.pubs_client.delete_client(
+            org, env, client_id, aws_account, aws_region
+        )
         deleted_ssm_params = res["deleted_ssm_params"]
 
         self.print("\nDone! The client is deleted and will no longer work.")
@@ -207,8 +219,8 @@ You may now go ahead and create a key for it by running:
                 f"please contact {MAINTAINER}!"
             )
 
-    def _handle_new_key_local(self, key, client_name, env):
-        outfile = f"{client_name}-{env}-{key['kid']}.p12"
+    def _handle_new_key_local(self, key, client_id, env):
+        outfile = f"{client_id}-{env}-{key['kid']}.p12"
 
         with open(outfile, "wb") as f:
             f.write(base64.b64decode(key["keystore"]))
@@ -239,6 +251,7 @@ You may now go ahead and create a key for it by running:
             )
             return
 
+        org = config["org"]
         env = config["env"]
         client_id = config["client_id"]
         client_name = config["client_name"]
@@ -274,13 +287,13 @@ You may now go ahead and create a key for it by running:
         self.print("Creating key for '{}' [{}]...".format(client_name, env))
 
         key = self.pubs_client.create_key(
-            env, client_id, aws_account, aws_region, enable_auto_rotate
+            org, env, client_id, aws_account, aws_region, enable_auto_rotate
         )
 
         if key.get("ssm_params") is not None:
             self._handle_new_key_aws(key, enable_auto_rotate)
         elif key.get("keystore") and key.get("key_password"):
-            self._handle_new_key_local(key, client_name, env)
+            self._handle_new_key_local(key, client_id, env)
         else:
             self.print(
                 "The key was neither added to AWS nor returned to the "
@@ -311,7 +324,12 @@ You may now go ahead and create a key for it by running:
         self.print(f"All client keys [{env}]:", out)
 
     def list_client_keys(self):
-        choices = list_keys_wizard(self.pubs_client)
+        try:
+            choices = list_keys_wizard(self.pubs_client)
+        except NoClientsError:
+            self.print("No clients in the given environment.")
+            return
+
         env = choices["env"]
 
         if "clients" in choices:
@@ -324,6 +342,9 @@ You may now go ahead and create a key for it by running:
     def delete_client_key(self):
         try:
             choices = delete_key_wizard(self.pubs_client)
+        except NoClientsError:
+            self.print("No clients in the given environment.")
+            return
         except NoKeysError:
             self.print("The selected client doesn't have any keys.")
             return
@@ -340,7 +361,12 @@ You may now go ahead and create a key for it by running:
         self.print("Done! The key is deleted and will no longer work.")
 
     def audit_log(self):
-        choices = audit_log_wizard(self.pubs_client)
+        try:
+            choices = audit_log_wizard(self.pubs_client)
+        except NoClientsError:
+            self.print("No clients in the given environment.")
+            return
+
         env = choices["env"]
         client_id = choices["client_id"]
         client_name = choices["client_name"]

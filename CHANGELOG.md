@@ -3,6 +3,8 @@
 * Added support for Python 3.14.
 * Dropped support for Python 3.9 which has reached end of life. Python 3.10+ is
   now required.
+* Added support for multiple organizations to the public services (`okdata
+  pubs`) commands.
 * Fixed verbose listing of single datasets.
 
 ## 5.0.1 - 2025-09-11
