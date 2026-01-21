@@ -5,7 +5,6 @@ from conftest import set_argv
 from okdata.cli.commands.status import StatusCommand
 from okdata.cli.output import TableOutput
 
-
 successful_trace_id = "my-dataset-be0a4c02-9733-4ff8-af1b-cd14985e9e06"
 in_progress_trace_id = "my-dataset-be270876-bdc8-4390-a56a-4c339dcef4ce"
 failed_trace_id = "my-dataset-0e1a102f-624d-41d3-8ff3-a78c050e97a6"
