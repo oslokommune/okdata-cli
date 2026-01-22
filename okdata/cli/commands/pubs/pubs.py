@@ -121,13 +121,11 @@ Options:{BASE_COMMAND_OPTIONS}
                 env,
             )
         client_name = response["client_name"]
-        self.print(
-            f"""
+        self.print(f"""
 Done! Created a new client '{client_name}'.
 You may now go ahead and create a key for it by running:
 
-  okdata pubs create-key"""
-        )
+  okdata pubs create-key""")
 
     def list_clients(self):
         config = list_clients_wizard()
