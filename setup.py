@@ -24,7 +24,7 @@ setuptools.setup(
     },
     install_requires=[
         "docopt",
-        "okdata-sdk>=3.4,<4",
+        "okdata-sdk>=4,<5",
         "PrettyTable",
         # TODO: Upgrade to questionary 2.x.
         "questionary>=1.10.0,<2.0.0",
@@ -37,13 +37,13 @@ setuptools.setup(
     entry_points={"console_scripts": ["okdata=okdata.cli.__main__:main"]},
     classifiers=[
         "Development Status :: 5 - Production/Stable",
-        "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
         "Programming Language :: Python :: 3.13",
+        "Programming Language :: Python :: 3.14",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
-    python_requires=">=3.9",
+    python_requires=">=3.10",
 )

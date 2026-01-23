@@ -88,15 +88,12 @@ def test_pretty_json(capsys):
     cmd = BaseCommand()
     cmd.pretty_json({"Hello": {"foo": "bar"}})
     captured = capsys.readouterr()
-    assert (
-        captured.out
-        == """{
+    assert captured.out == """{
   "Hello": {
     "foo": "bar"
   }
 }
 """
-    )
 
 
 def test_pretty_print_success(capsys):
@@ -108,15 +105,12 @@ def test_pretty_print_success(capsys):
     }
     cmd.print_success(TableOutput(config), [{"name": "hello", "key": "world"}])
     captured = capsys.readouterr()
-    assert (
-        captured.out
-        == """+-------+-------+
+    assert captured.out == """+-------+-------+
 | name  | key   |
 +-------+-------+
 | hello | world |
 +-------+-------+
 """
-    )
 
 
 def test_pretty_print_fields_single(capsys):
@@ -128,15 +122,12 @@ def test_pretty_print_fields_single(capsys):
     }
     cmd.print_success(TableOutput(config), [{"name": "hello", "key": {"a": "world"}}])
     captured = capsys.readouterr()
-    assert (
-        captured.out
-        == """+-------+-------+
+    assert captured.out == """+-------+-------+
 | name  | key   |
 +-------+-------+
 | hello | world |
 +-------+-------+
 """
-    )
 
 
 def test_pretty_print_fields_multiple(capsys):
@@ -150,16 +141,13 @@ def test_pretty_print_fields_multiple(capsys):
         TableOutput(config), [{"name": "hello", "key": {"a": "world", "b": "world"}}]
     )
     captured = capsys.readouterr()
-    assert (
-        captured.out
-        == """+-------+-------+
+    assert captured.out == """+-------+-------+
 | name  | key   |
 +-------+-------+
 | hello | world |
 |       | world |
 +-------+-------+
 """
-    )
 
 
 def test_pretty_print_wrapped_success(capsys):
@@ -174,9 +162,7 @@ def test_pretty_print_wrapped_success(capsys):
         [{"name": "wrap", "key": "some long text that needs wrapping"}],
     )
     captured = capsys.readouterr()
-    assert (
-        captured.out
-        == """+------+----------------+
+    assert captured.out == """+------+----------------+
 | name | key            |
 +------+----------------+
 | wrap | some long text |
@@ -184,7 +170,6 @@ def test_pretty_print_wrapped_success(capsys):
 |      | wrapping       |
 +------+----------------+
 """
-    )
 
 
 def test_pretty_print_multiple_wrapped_success(capsys):
@@ -204,9 +189,7 @@ def test_pretty_print_multiple_wrapped_success(capsys):
         ],
     )
     captured = capsys.readouterr()
-    assert (
-        captured.out
-        == """+------+-------------------+
+    assert captured.out == """+------+-------------------+
 | name | key               |
 +------+-------------------+
 | wrap | - some longer     |
@@ -216,7 +199,6 @@ def test_pretty_print_multiple_wrapped_success(capsys):
 |      |   here            |
 +------+-------------------+
 """
-    )
 
 
 def test_help(capsys):

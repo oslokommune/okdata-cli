@@ -10,7 +10,6 @@ from okdata.cli.__main__ import get_command_class, main
 from okdata.cli.command import _format_error_message
 from okdata.cli.commands.datasets import DatasetsCommand
 
-
 bad_request_response_body = {
     "message": "Validation error",
     "errors": ["wtf you trying to do?"],
