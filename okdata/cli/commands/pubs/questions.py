@@ -15,6 +15,11 @@ client_types = {
     "maskinporten": "Maskinporten",
 }
 
+_organizations = [
+    "dig",
+    "origo",
+]
+
 _environments = [
     "test",
     "prod",
@@ -33,6 +38,16 @@ class NoClientsError(Exception):
 
 class NoKeysError(Exception):
     pass
+
+
+def q_org():
+    return {
+        **required_style,
+        "type": "select",
+        "name": "org",
+        "message": "Organization",
+        "choices": _organizations,
+    }
 
 
 def q_env():
@@ -143,8 +158,8 @@ def q_client_uri():
 
 
 def q_client(pubs_client, allow_all=False):
-    def _client_choices(env):
-        clients = pubs_client.get_clients(env)
+    def _client_choices(org, env):
+        clients = pubs_client.get_clients(env, org)
 
         if not clients:
             raise NoClientsError
@@ -165,7 +180,7 @@ def q_client(pubs_client, allow_all=False):
         "type": "select",
         "name": "client",
         "message": "Client",
-        "choices": lambda x: _client_choices(x["env"]),
+        "choices": lambda x: _client_choices(x["org"], x["env"]),
     }
 
 
