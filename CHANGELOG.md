@@ -1,4 +1,4 @@
-## ?.?.? - Unreleased
+## 6.0.0 - 2026-01-30
 
 * Added support for Python 3.14.
 * Dropped support for Python 3.9 which has reached end of life. Python 3.10+ is
