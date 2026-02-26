@@ -84,7 +84,7 @@ Options:{BASE_COMMAND_OPTIONS}
             )
         except NoTeamError:
             self.print(
-                "We haven't yet registered you as member of any Origo team. "
+                "You are not yet registered as a member of a team. "
                 f"Please contact {MAINTAINER} to get it done."
             )
             return

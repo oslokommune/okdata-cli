@@ -8,7 +8,7 @@ attrs==25.4.0
     # via
     #   jsonschema
     #   referencing
-certifi==2026.1.4
+certifi==2026.2.25
     # via requests
 cffi==2.0.0
     # via cryptography
@@ -66,7 +66,7 @@ urllib3==2.6.3
     # via
     #   okdata-sdk
     #   requests
-wcwidth==0.3.1
+wcwidth==0.6.0
     # via
     #   prettytable
     #   prompt-toolkit
