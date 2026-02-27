@@ -17,7 +17,6 @@ client_types = {
 
 _organizations = [
     "dig",
-    "origo",
 ]
 
 _environments = [

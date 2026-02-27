@@ -68,7 +68,7 @@ Options:{BASE_COMMAND_OPTIONS}
             config = edit_team_wizard(self.client)
         except NoTeamError:
             self.print(
-                "We haven't yet registered you as member of any Origo team. "
+                "You are not yet registered as a member of a team. "
                 f"Please contact {MAINTAINER} to get it done."
             )
             return
@@ -87,7 +87,7 @@ Options:{BASE_COMMAND_OPTIONS}
             members = self.client.get_team_members(config["team_id"])
         except NoTeamError:
             self.print(
-                "We haven't yet registered you as member of any Origo team. "
+                "You are not yet registered as a member of a team. "
                 f"Please contact {MAINTAINER} to get it done."
                 if my
                 else "No teams exist yet."
@@ -104,7 +104,7 @@ Options:{BASE_COMMAND_OPTIONS}
             config = add_member_wizard(self.client)
         except NoTeamError:
             self.print(
-                "We haven't yet registered you as member of any Origo team. "
+                "You are not yet registered as a member of a team. "
                 f"Please contact {MAINTAINER} to get it done."
             )
             return
@@ -134,7 +134,7 @@ Options:{BASE_COMMAND_OPTIONS}
             config = remove_member_wizard(self.client)
         except NoTeamError:
             self.print(
-                "We haven't yet registered you as member of any Origo team. "
+                "You are not yet registered as a member of a team. "
                 f"Please contact {MAINTAINER} to get it done."
             )
             return

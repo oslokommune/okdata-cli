@@ -1,3 +1,7 @@
+## ?.?.? - Unreleased
+
+* Removed Origo as an organization choice for public services.
+
 ## 6.0.0 - 2026-01-30
 
 * Added support for Python 3.14.

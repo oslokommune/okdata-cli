@@ -63,7 +63,7 @@ def qs_create_dataset():
             "message": "Tilgangsnivå",
             "choices": [
                 Choice("Eksplisitt tilgangskontroll", "non-public"),
-                Choice("Internt til Origo", "restricted"),
+                Choice("Internt til kommunen", "restricted"),
                 Choice("Offentlig", "public"),
             ],
         },

@@ -122,7 +122,7 @@ def test_add_team_member_no_team(mocker, mock_print):
     cmd.handler()
 
     mock_print.assert_called_once()
-    message = "We haven't yet registered you as member of any Origo team."
+    message = "You are not yet registered as a member of a team"
     assert message in mock_print.mock_calls[0][1][0]
     cmd.client.update_team_members.assert_not_called()
 
