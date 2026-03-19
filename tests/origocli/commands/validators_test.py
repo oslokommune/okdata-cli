@@ -108,6 +108,8 @@ class TestIntegrationValidator:
         self.validate_document({"text": "x"})
         self.validate_document({"text": "a-b-c-1-2-3"})
         self.validate_document({"text": "q3v3avjd40dmpwicg7kn3xo8drbslu"})
+        self.validate_document({"text": "foo bar"})
+        self.validate_document({"text": "Foobar"})
 
     def test_invalid_integrations(self):
         with pytest.raises(ValidationError):
@@ -115,11 +117,7 @@ class TestIntegrationValidator:
         with pytest.raises(ValidationError):
             self.validate_document({"text": "foo_bar"})
         with pytest.raises(ValidationError):
-            self.validate_document({"text": "foo bar"})
-        with pytest.raises(ValidationError):
             self.validate_document({"text": "foobar😅"})
-        with pytest.raises(ValidationError):
-            self.validate_document({"text": "Foobar"})
         with pytest.raises(ValidationError):
             self.validate_document({"text": "qrmfffqgqzpvlmhmx3vvns3yhlrp9am"})
 
