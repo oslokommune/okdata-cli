@@ -1,7 +1,7 @@
 import sys
 
 from okdata.sdk.data.dataset import Dataset
-from okdata.sdk.data.download import Download
+from okdata.sdk.data.download import Download, DownloadURLAssertionError
 from okdata.sdk.data.upload import Upload
 from requests.exceptions import HTTPError
 
@@ -421,9 +421,14 @@ Options:{BASE_COMMAND_OPTIONS}
     def download_files(self, source, target):
         download = Download(env=self.opt("env"))
         dataset_id, version, edition = self._dataset_components_from_uri(source)
-        downloaded_files = download.download(
-            dataset_id, version, edition, resolve_output_filepath(target)
-        )
+
+        try:
+            downloaded_files = download.download(
+                dataset_id, version, edition, resolve_output_filepath(target)
+            )
+        except DownloadURLAssertionError as e:
+            sys.exit(e)
+
         self.log.info(f"Download returned: {downloaded_files}")
         out = create_output(self.opt("format"), "datasets_copy_file_config_2.json")
         out.output_singular_object = True
