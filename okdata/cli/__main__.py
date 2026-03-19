@@ -4,7 +4,7 @@ import sys
 
 from keycloak.exceptions import KeycloakGetError, KeycloakPostError
 from okdata.sdk.exceptions import ApiAuthenticateError
-from requests.exceptions import RequestException
+from requests.exceptions import ConnectTimeout, RequestException
 
 from okdata.cli import MAINTAINER
 from okdata.cli.command import BaseCommand
@@ -37,6 +37,11 @@ def main():
             # Flush output here to force SIGPIPE to be triggered while inside
             # this try block.
             sys.stdout.flush()
+        except ConnectTimeout as e:
+            instance.print(
+                f"Connection to '{e.request.url}' timed out. Please try again, "
+                f"or contact {MAINTAINER} if the problem persists.",
+            )
         except RequestException as e:
             if hasattr(e.response, "json"):
                 instance.print_error_response(e.response.json())
