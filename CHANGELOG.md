@@ -1,6 +1,7 @@
 ## ?.?.? - Unreleased
 
 * Removed Origo as an organization choice for public services.
+* Improved request timeout handling.
 
 ## 6.0.0 - 2026-01-30
 
