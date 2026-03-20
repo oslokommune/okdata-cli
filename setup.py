@@ -24,7 +24,7 @@ setuptools.setup(
     },
     install_requires=[
         "docopt",
-        "okdata-sdk>=4,<5",
+        "okdata-sdk>=4.1,<5",
         "PrettyTable",
         # TODO: Upgrade to questionary 2.x.
         "questionary>=1.10.0,<2.0.0",

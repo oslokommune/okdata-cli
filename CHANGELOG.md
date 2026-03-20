@@ -4,6 +4,7 @@
 * Public service integration naming is now more permissive, since the
   integration name is visible to end users in case of ID-porten clients.
 * Improved request timeout handling.
+* Improved handling of dataset download errors.
 
 ## 6.0.0 - 2026-01-30
 
