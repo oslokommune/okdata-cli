@@ -1,4 +1,4 @@
-## ?.?.? - Unreleased
+## 6.1.0 - 2026-03-20
 
 * Removed Origo as an organization choice for public services.
 * Public service integration naming is now more permissive, since the
