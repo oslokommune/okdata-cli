@@ -168,7 +168,10 @@ def q_client(pubs_client, allow_all=False):
         def client(c):
             return {"id": c["client_id"], "name": c["client_name"]}
 
-        return [Choice(c["client_name"], client(c)) for c in sorted_clients] + (
+        return [
+            Choice(f'{c["client_name"]} (ID: {c["client_id"]})', client(c))
+            for c in sorted_clients
+        ] + (
             [Choice("All clients", [client(c) for c in sorted_clients])]
             if allow_all
             else []
