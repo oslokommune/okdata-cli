@@ -1,4 +1,4 @@
-## ?.?.? - Unreleased
+## 6.1.1 - 2026-04-29
 
 - Display public client IDs in selection list.
 
