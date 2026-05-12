@@ -1,4 +1,4 @@
-## ?.?.? - Unreleased
+## 6.1.2 - 2026-05-12
 
 * Allow æøå/ÆØÅ in public services integration names.
 
