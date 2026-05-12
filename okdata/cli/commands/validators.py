@@ -67,7 +67,7 @@ class IntegrationValidator(Validator):
             raise ValidationError(
                 message="Too long!", cursor_position=len(document.text)
             )
-        if not re.fullmatch("[0-9a-zA-Z -]+", document.text):
+        if not re.fullmatch("[0-9a-zA-ZæøåÆØÅ -]+", document.text):
             raise ValidationError(
                 message='Only letters, numbers, spaces and "-", please',
                 cursor_position=len(document.text),

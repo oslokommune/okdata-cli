@@ -1,6 +1,10 @@
+## ?.?.? - Unreleased
+
+* Allow æøå/ÆØÅ in public services integration names.
+
 ## 6.1.1 - 2026-04-29
 
-- Display public client IDs in selection list.
+* Display public client IDs in selection list.
 
 ## 6.1.0 - 2026-03-20
 

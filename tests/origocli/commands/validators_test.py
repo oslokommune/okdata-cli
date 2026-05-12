@@ -110,6 +110,8 @@ class TestIntegrationValidator:
         self.validate_document({"text": "q3v3avjd40dmpwicg7kn3xo8drbslu"})
         self.validate_document({"text": "foo bar"})
         self.validate_document({"text": "Foobar"})
+        self.validate_document({"text": "blåbærsyltetøy"})
+        self.validate_document({"text": "BLÅBÆRSYLTETØY"})
 
     def test_invalid_integrations(self):
         with pytest.raises(ValidationError):
