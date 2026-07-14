@@ -12,8 +12,6 @@ Contents:
   * [Parent dataset](#parent-dataset)
 * [Create version](#create-version)
 * [Create edition](#create-edition)
-* [Upload file to edition](#upload-file-to-edition)
-  * [Inspecting the upload status](#inspecting-the-upload-status)
 * [Dataset access](#dataset-access)
 
 ## What is a dataset
@@ -141,95 +139,6 @@ Or create it by referencing the file:
 ```bash
 okdata datasets create-edition <dataset_id> <version> --file=edition.json
 ```
-
-## Upload file to edition
-File: `/tmp/hello_world.csv`
-```csv
-hello, world
-world, hello
-```
-
-Upload the file with the `cp` command to the `<dataset_id>` dataset. Note the
-`ds:` prefix for the target dataset.
-
-To upload a file to a specific version and edition:
-```bash
-okdata datasets cp /tmp/test.txt ds:<dataset_id>/<version>/<edition>
-```
-
-By using the special edition ID `latest`, the file will be uploaded to the
-latest edition.
-
-If no version or edition is provided, a new edition will be created for the
-latest version automatically:
-
-```bash
-okdata datasets cp /tmp/test.txt ds:<dataset_id>
-```
-
-Or to upload to a new edition of a specific version:
-
-```bash
-okdata datasets cp /tmp/test.txt ds:<dataset_id>/<version>
-```
-
-### Inspecting the upload status
-
-After uploading a file to a dataset using the `okdata datasets cp` command, a
-trace ID is displayed which can be used to track the uploading process status:
-
-```text
-+--------------+---------------+-----------+-------------+
-| Dataset      | Local file    | Uploaded? | Trace ID    |
-+--------------+---------------+-----------+-------------+
-| <dataset_id> | /tmp/test.txt | Yes       | <trace_id>  |
-+--------------+---------------+-----------+-------------+
-```
-
-To see the latest status of the upload, run:
-
-```bash
-okdata status <trace_id>
-```
-
-Or to see the complete status history of the uploading process:
-
-```bash
-okdata status <trace_id> --history
-```
-
-Passing `json` to the `--format` option displays the status in JSON format
-instead, making the output more suitable for use in scripts. For instance to
-continuously poll the upload status until it's finished:
-
-```bash
-######### Check status for the newly uploaded file #########
-uploaded=false
-echo "Checking status for uploaded file"
-while ! $uploaded; do
-  echo "\Checking upload status..."
-  upload_status=`okdata status $trace_id --format=json`
-  uploaded=`echo $upload_status | jq -r '.done'`
-done
-echo "Uploaded file is processed and ready to be consumed"
-```
-
-## Download file from dataset
-
-The `okdata datasets cp` command can also be used to download data form a dataset URI:
-
-```bash
-okdata datasets cp ds:<dataset_id>/<version>/<edition> my/target/directory
-```
-
-If no version or edition is provided, the latest version and edition will be
-used by default (if they exist):
-
-```bash
-okdata datasets cp ds:<dataset_id> my/target/directory
-```
-
-The target directory will be created if it doesn't already eixst on the local filesystem. The CLI also supports the use of `.` to specify the current working directory as output target.
 
 ## Dataset access
 

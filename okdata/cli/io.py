@@ -18,13 +18,3 @@ def read_json(filename=None):
 
     log.info("Reading data from stdin")
     return json.loads(sys.stdin.read())
-
-
-def resolve_output_filepath(target):
-    path_components = target.split("/")
-    if path_components[0] == ".":
-        path_components[0] = os.getcwd()
-    if path_components[-1] == "":
-        path_components.pop()
-
-    return "/".join(path_components)
