@@ -67,163 +67,80 @@ def create_cmd(mocker, *args):
     return cmd
 
 
-class TestDatasetsLs:
-    def test_datasets(self, mock_print, mocker, output):
-        cmd = create_cmd(mocker, "ls")
+def test_datasets(mock_print, mocker, output):
+    cmd = create_cmd(mocker, "ls")
+    cmd.handler()
+    assert output_with_argument(output, [dataset, dataset])
+    mock_print.assert_called_once()
+
+
+def test_dataset(mock_print, mocker, output):
+    cmd = create_cmd(mocker, "ls", dataset["Id"])
+    cmd.handler()
+
+    assert output_with_argument(output, [dataset])
+    mock_print.assert_called()
+    assert cmd.sdk.get_dataset.called
+    assert cmd.sdk.get_versions.called
+    assert cmd.sdk.get_latest_version.called
+    assert not cmd.log.exception.called
+
+
+def test_dataset_format_json(mocker, mock_print):
+    cmd = create_cmd(mocker, "ls", dataset["Id"], "--format", "json")
+    cmd.handler()
+    mock_print.assert_called_once_with(
+        "", {"dataset": dataset, "versions": [version], "latest": version}
+    )
+    assert cmd.sdk.get_dataset.called
+    assert cmd.sdk.get_versions.called
+    assert cmd.sdk.get_latest_version.called
+    assert not cmd.log.exception.called
+
+
+def test_version(mocker, output):
+    cmd = create_cmd(mocker, "ls", f'{dataset["Id"]}/{version["version"]}')
+    cmd.handler()
+    assert output_with_argument(output, cmd.sdk.get_editions.return_value)
+
+
+def test_edition(mocker, output):
+    cmd = create_cmd(
+        mocker, "ls", f'{dataset["Id"]}/{version["version"]}/{edition["edition"]}'
+    )
+    cmd.handler()
+    assert output_with_argument(output, [edition])
+
+
+def test_invalid_uri(mocker, output):
+    cmd = create_cmd(mocker, "ls", "a/b/c/d/e")
+    with pytest.raises(SystemExit):
         cmd.handler()
-        assert output_with_argument(output, [dataset, dataset])
-        mock_print.assert_called_once()
-
-    def test_dataset(self, mock_print, mocker, output):
-        cmd = create_cmd(mocker, "ls", dataset["Id"])
-        cmd.handler()
-
-        assert output_with_argument(output, [dataset])
-        mock_print.assert_called()
-        assert cmd.sdk.get_dataset.called
-        assert cmd.sdk.get_versions.called
-        assert cmd.sdk.get_latest_version.called
-        assert not cmd.log.exception.called
-
-    def test_dataset_format_json(self, mocker, mock_print):
-        cmd = create_cmd(mocker, "ls", dataset["Id"], "--format", "json")
-        cmd.handler()
-        mock_print.assert_called_once_with(
-            "", {"dataset": dataset, "versions": [version], "latest": version}
-        )
-        assert cmd.sdk.get_dataset.called
-        assert cmd.sdk.get_versions.called
-        assert cmd.sdk.get_latest_version.called
-        assert not cmd.log.exception.called
-
-    def test_version(self, mocker, output):
-        cmd = create_cmd(mocker, "ls", f'{dataset["Id"]}/{version["version"]}')
-        cmd.handler()
-        assert output_with_argument(output, cmd.sdk.get_editions.return_value)
-
-    def test_edition(self, mocker, output):
-        cmd = create_cmd(
-            mocker, "ls", f'{dataset["Id"]}/{version["version"]}/{edition["edition"]}'
-        )
-        cmd.handler()
-        assert output_with_argument(output, [edition])
-
-    def test_invalid_uri(self, mocker, output):
-        cmd = create_cmd(mocker, "ls", "a/b/c/d/e")
-        with pytest.raises(SystemExit):
-            cmd.handler()
 
 
-class TestDatasetsCp:
-    def test_copy_local_files(self, mocker):
-        cmd = create_cmd(mocker, "cp", "foo", "bar")
-        mocker.patch.object(cmd, "upload_file")
-        mocker.patch.object(cmd, "download_files")
-        cmd.handler()
-        assert not cmd.upload_file.called
-        assert not cmd.download_files.called
-
-    def test_copy_upload(self, mocker):
-        cmd = create_cmd(mocker, "cp", "foo", "ds:bar")
-        mocker.patch.object(cmd, "upload_file")
-        mocker.patch.object(cmd, "download_files")
-        cmd.handler()
-        cmd.upload_file.assert_called_once_with("foo", "bar")
-        assert not cmd.download_files.called
-
-    def test_copy_download(self, mocker):
-        cmd = create_cmd(mocker, "cp", "ds:foo", "bar")
-        mocker.patch.object(cmd, "upload_file")
-        mocker.patch.object(cmd, "download_files")
-        cmd.handler()
-        assert not cmd.upload_file.called
-        cmd.download_files.assert_called_once_with("foo", "bar")
-
-    def test_copy_between_datasets(self, mocker):
-        cmd = create_cmd(mocker, "cp", "ds:foo", "ds:bar")
-        mocker.patch.object(cmd, "upload_file")
-        mocker.patch.object(cmd, "download_files")
-        cmd.handler()
-        assert not cmd.upload_file.called
-        assert not cmd.download_files.called
+def test_dataset_components_from_uri_only_ds(mocker):
+    cmd = create_cmd(mocker, "ls")
+    dataset_id, _version, _edition = cmd._dataset_components_from_uri(dataset["Id"])
+    assert dataset_id == dataset["Id"]
+    assert _version is None
+    assert _edition is None
 
 
-class TestUtils:
-    def test_dataset_components_from_uri_only_ds(self, mocker):
-        cmd = create_cmd(mocker, "ls")
-        dataset_id, _version, _edition = cmd._dataset_components_from_uri(dataset["Id"])
-        assert dataset_id == dataset["Id"]
-        assert _version == version["version"]
-        assert _edition == edition["edition"]
+def test_dataset_components_from_uri_ds_and_version(mocker):
+    cmd = create_cmd(mocker, "ls")
+    dataset_id, _version, _edition = cmd._dataset_components_from_uri(
+        f"{dataset['Id']}/{version['version']}"
+    )
+    assert dataset_id == dataset["Id"]
+    assert _version == version["version"]
+    assert _edition is None
 
-    def test_dataset_components_from_uri_ds_and_version(self, mocker):
-        cmd = create_cmd(mocker, "ls")
-        dataset_id, _version, _edition = cmd._dataset_components_from_uri(
-            f"{dataset['Id']}/{version['version']}"
-        )
-        assert dataset_id == dataset["Id"]
-        assert _version == version["version"]
-        assert _edition == edition["edition"]
 
-    def test_dataset_components_from_uri_full(self, mocker):
-        cmd = create_cmd(mocker, "ls")
-        dataset_id, _version, _edition = cmd._dataset_components_from_uri(
-            f"{dataset['Id']}/{version['version']}/{edition['edition']}"
-        )
-        assert dataset_id == dataset["Id"]
-        assert _version == version["version"]
-        assert _edition == edition["edition"]
-
-    def test_dataset_components_from_uri_latest_edition(self, mocker):
-        cmd = create_cmd(mocker, "ls")
-        dataset_id, _version, _edition = cmd._dataset_components_from_uri(
-            f"{dataset['Id']}/{version['version']}/latest"
-        )
-        assert dataset_id == dataset["Id"]
-        assert _version == version["version"]
-        assert _edition == edition["edition"]
-
-    def test_dataset_components_from_uri_create_edition(self, mocker):
-        cmd = create_cmd(mocker, "ls")
-        dataset_id, _version, _edition = cmd._dataset_components_from_uri(
-            dataset["Id"], True
-        )
-        assert dataset_id == dataset["Id"]
-        assert _version == version["version"]
-        assert _edition == "new-edition"
-
-    def test_dataset_components_from_uri_create_edition_with_version(self, mocker):
-        cmd = create_cmd(mocker, "ls")
-        dataset_id, _version, _edition = cmd._dataset_components_from_uri(
-            f"{dataset['Id']}/{version['version']}", True
-        )
-        assert dataset_id == dataset["Id"]
-        assert _version == version["version"]
-        assert _edition == "new-edition"
-
-    def test_dataset_components_from_uri_no_resolve_1(self, mocker):
-        cmd = create_cmd(mocker, "ls")
-        dataset_id, _version, _edition = cmd._dataset_components_from_uri(
-            f"{dataset['Id']}", False, False
-        )
-        assert dataset_id == dataset["Id"]
-        assert _version is None
-        assert _edition is None
-
-    def test_dataset_components_from_uri_no_resolve_2(self, mocker):
-        cmd = create_cmd(mocker, "ls")
-        dataset_id, _version, _edition = cmd._dataset_components_from_uri(
-            f"{dataset['Id']}/{version['version']}", False, False
-        )
-        assert dataset_id == dataset["Id"]
-        assert _version == version["version"]
-        assert _edition is None
-
-    def test_dataset_components_from_uri_no_resolve_3(self, mocker):
-        cmd = create_cmd(mocker, "ls")
-        dataset_id, _version, _edition = cmd._dataset_components_from_uri(
-            f"{dataset['Id']}/{version['version']}/{edition['edition']}", False, False
-        )
-        assert dataset_id == dataset["Id"]
-        assert _version == version["version"]
-        assert _edition == edition["edition"]
+def test_dataset_components_from_uri_full(mocker):
+    cmd = create_cmd(mocker, "ls")
+    dataset_id, _version, _edition = cmd._dataset_components_from_uri(
+        f"{dataset['Id']}/{version['version']}/{edition['edition']}"
+    )
+    assert dataset_id == dataset["Id"]
+    assert _version == version["version"]
+    assert _edition == edition["edition"]

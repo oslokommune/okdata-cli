@@ -1,8 +1,6 @@
 import sys
 
 from okdata.sdk.data.dataset import Dataset
-from okdata.sdk.data.download import Download, DownloadURLAssertionError
-from okdata.sdk.data.upload import Upload
 from requests.exceptions import HTTPError
 
 from okdata.cli.command import BaseCommand, BASE_COMMAND_OPTIONS, confirm_to_continue
@@ -10,7 +8,7 @@ from okdata.cli.commands.datasets.wizards import (
     DatasetCreateWizard,
     PipelineCreateWizard,
 )
-from okdata.cli.io import read_json, resolve_output_filepath
+from okdata.cli.io import read_json
 from okdata.cli.output import create_output
 
 
@@ -20,7 +18,6 @@ class DatasetsCommand(BaseCommand):
 Usage:
   okdata datasets ls [--filter=<filter> --verbose options]
   okdata datasets ls <uri> [--verbose options]
-  okdata datasets cp <source> <target> [options]
   okdata datasets create [options]
   okdata datasets create-version <dataset_id> [options]
   okdata datasets create-edition <dataset_id> [<version>] [options]
@@ -41,11 +38,10 @@ Examples:
   okdata datasets ls my-dataset/1/20240101T102030 --format=csv
   okdata datasets ls my-dataset/1/20240101T102030 --format=json
   okdata datasets create --file=dataset.json
-  okdata datasets cp /tmp/file.csv ds:my-dataset-id
   okdata datasets create-pipeline my-dataset
 
 Options:{BASE_COMMAND_OPTIONS}
-  --file=<file>             # Use this file for configuration or upload
+  --file=<file>             # Use this file for configuration
   --prompt=<prompt>         # Use input prompt to collect data, default "no"
   --pipeline=<pipeline>     # Required when --prompt=no
     """
@@ -62,8 +58,6 @@ Options:{BASE_COMMAND_OPTIONS}
                 self.create_dataset()
             else:
                 DatasetCreateWizard(self).start()
-        elif self.cmd("cp"):
-            self.copy_file()
         elif self.cmd("create-version"):
             self.create_version()
         elif self.cmd("create-edition"):
@@ -84,7 +78,7 @@ Options:{BASE_COMMAND_OPTIONS}
     def list_metadata(self):
         if self.arg("uri"):
             dataset_id, version, edition = self._dataset_components_from_uri(
-                self.arg("uri"), auto_resolve=False
+                self.arg("uri")
             )
             if edition:
                 self.edition_information(dataset_id, version, edition)
@@ -256,15 +250,6 @@ Options:{BASE_COMMAND_OPTIONS}
 
         return self.sdk.auto_create_edition(dataset_id, version)
 
-    def get_latest_or_create_edition(self, dataset_id, version):
-        self.log.info(f"Resolving edition for dataset-uri: {dataset_id}/{version}")
-        try:
-            return self.sdk.get_latest_edition(dataset_id, version)
-        except HTTPError as he:
-            if he.response.status_code == 404:
-                return self.sdk.auto_create_edition(dataset_id, version)
-            raise
-
     def delete_edition(self):
         edition_id = self.arg("edition_id")
         self.log.info(f"Deleting edition {edition_id}")
@@ -308,52 +293,14 @@ Options:{BASE_COMMAND_OPTIONS}
         self.sdk.delete_distribution(dataset_id, version, edition, dist)
         self.print(f"Deleted distribution {dist_id}.")
 
-    # #################################### #
-    # File handling
-    # #################################### #
-    def copy_file(self):
-        source = self.arg("source")
-        target = self.arg("target")
-
-        if source.startswith("ds:") and target.startswith("ds:"):
-            self.log.error("Copying between datasets isn't supported yet.")
-        elif target.startswith("ds:"):
-            self.upload_file(source, target[3:])
-        elif source.startswith("ds:"):
-            self.download_files(source[3:], target)
-        else:
-            self.log.error(
-                "Either source or target needs to be a dataset (prefixed with 'ds:')."
-            )
-
-    def _dataset_components_from_uri(
-        self, uri, create_edition=False, auto_resolve=True
-    ):
+    def _dataset_components_from_uri(self, uri):
         """Return a dataset ID/version/edition tuple given a URI.
 
-        Four different URI formats are supported:
+        Three different URI formats are supported:
 
         - {dataset_id}
         - {dataset_id}/{version}
-        - {dataset_id}/{version}/latest
         - {dataset_id}/{version}/{edition}
-
-        If `auto_resolve` is true, an attempt is made to resolve the version
-        and edition even if they're not provided in the following ways:
-
-        * If only a dataset ID is given, the latest version and edition is
-          chosen. A new edition is created if `create_edition` is true, or if
-          the latest version didn't already have any editions.
-
-        * If only a dataset ID and version are given, the latest edition is
-          chosen. A new edition is created if `create_edition` is true, or if
-          the given version didn't already have any editions.
-
-        * A specific dataset ID, version, and edition is chosen when all three
-          components are provided. Given an edition with the special name
-          'latest', the latest edition is chosen.
-
-        Otherwise `None` is returned for missing parts.
         """
         parts = uri.split("/")
 
@@ -369,73 +316,4 @@ Options:{BASE_COMMAND_OPTIONS}
         # if not.
         self.sdk.get_dataset(dataset_id)
 
-        if auto_resolve:
-            if not version:
-                version = self._get_latest_version(dataset_id)["version"]
-
-            if edition == "latest":
-                edition = self.sdk.get_latest_edition(dataset_id, version)["Id"].split(
-                    "/"
-                )[-1]
-
-            elif not edition:
-                edition = (
-                    self.sdk.auto_create_edition(dataset_id, version)
-                    if create_edition
-                    else self.get_latest_or_create_edition(dataset_id, version)
-                )["Id"].split("/")[-1]
-
         return dataset_id, version, edition
-
-    def upload_file(self, source, target):
-        upload = Upload(env=self.opt("env"))
-        dataset_id, version, edition = self._dataset_components_from_uri(target, True)
-
-        self.log.info(f"Will upload file to: {dataset_id}/{version}/{edition})")
-
-        try:
-            res = upload.upload(source, dataset_id, version, edition, 3)
-        except FileNotFoundError as e:
-            sys.exit(e)
-
-        self.log.info(f"Upload returned: {res}")
-
-        out = create_output(self.opt("format"), "datasets_copy_file_config.json")
-        out.output_singular_object = True
-        data = {
-            "dataset": dataset_id,
-            "file": source,
-            "uploaded": res["result"],
-            "trace_id": res["trace_id"],
-        }
-        out.add_row(data)
-
-        summary = [f"Uploaded file to dataset: {dataset_id}", str(out)]
-        if res["trace_id"]:
-            summary += [
-                "\nYou can watch the data processing status by running:\n",
-                f"  okdata status {res['trace_id']} --watch",
-            ]
-        self.print("\n".join(summary))
-
-    def download_files(self, source, target):
-        download = Download(env=self.opt("env"))
-        dataset_id, version, edition = self._dataset_components_from_uri(source)
-
-        try:
-            downloaded_files = download.download(
-                dataset_id, version, edition, resolve_output_filepath(target)
-            )
-        except DownloadURLAssertionError as e:
-            sys.exit(e)
-
-        self.log.info(f"Download returned: {downloaded_files}")
-        out = create_output(self.opt("format"), "datasets_copy_file_config_2.json")
-        out.output_singular_object = True
-        data = {
-            "source": f"ds:{'/'.join([dataset_id, version, edition])}",
-            "target": "\n".join(downloaded_files["files"]),
-            "trace_id": "n/a",
-        }
-        out.add_row(data)
-        self.print(f"Downloaded files from dataset: {dataset_id}", out)

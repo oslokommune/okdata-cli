@@ -98,15 +98,7 @@ class DatasetCreateWizard:
         if choices.get("pipeline"):
             _create_pipeline(self.command, env, dataset_id, choices["pipeline"])
 
-        if choices["sourceType"] == "file":
-            self.command.print(
-                f"""Done! You may go ahead and upload data to the dataset by running:
-
-  okdata datasets cp FILE ds:{dataset_id}
-"""
-            )
-        else:
-            self.command.print("Done!")
+        self.command.print("Done!")
 
 
 class PipelineCreateWizard:
