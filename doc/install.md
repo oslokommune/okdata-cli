@@ -2,7 +2,7 @@
 
 The quickest way to get started is by installing the latest release of Okdata
 CLI from [PyPI](https://pypi.org/project/okdata-cli) with pip (requires Python
-3.9 or higher):
+3.10 or higher):
 
 ```bash
 python -m pip install --user okdata-cli
@@ -15,10 +15,10 @@ pipx install okdata-cli
 ```
 
 This will make the `okdata` command available to you. To verify that it is
-installed properly and working, try listing all datasets:
+installed properly and working, try printing its version:
 
 ```bash
-okdata datasets ls
+okdata --version
 ```
 
 If this succeeds you're ready to proceed with [configuration](configuration.md)!

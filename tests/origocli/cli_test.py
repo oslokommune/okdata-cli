@@ -8,7 +8,7 @@ from requests.models import Response
 
 from okdata.cli.__main__ import get_command_class, main
 from okdata.cli.command import _format_error_message
-from okdata.cli.commands.datasets import DatasetsCommand
+from okdata.cli.commands.pubs import PubsCommand
 
 bad_request_response_body = {
     "message": "Validation error",
@@ -17,18 +17,18 @@ bad_request_response_body = {
 
 
 def test_get_command_class():
-    cmd = get_command_class(["okdata", "datasets"])
-    assert cmd is DatasetsCommand
+    cmd = get_command_class(["okdata", "pubs"])
+    assert cmd is PubsCommand
 
-    cmd = get_command_class(["okdata", "datasets", "create"])
-    assert cmd is DatasetsCommand
+    cmd = get_command_class(["okdata", "pubs", "list-clients"])
+    assert cmd is PubsCommand
 
-    cmd = get_command_class(["okdata", "datasets", "create", "--file=foo"])
-    assert cmd is DatasetsCommand
+    cmd = get_command_class(["okdata", "pubs", "list-clients", "--format=json"])
+    assert cmd is PubsCommand
 
 
 def test_main_http_error(raise_http_error, capsys):
-    sys.argv = ["okdata", "datasets", "create", "--file=foo"]
+    sys.argv = ["okdata", "pubs", "list-clients"]
     main()
     expected_output = _format_error_message(
         bad_request_response_body["message"], bad_request_response_body["errors"]
@@ -37,7 +37,7 @@ def test_main_http_error(raise_http_error, capsys):
 
 
 def test_main_auth_error(auth_failed, capsys):
-    sys.argv = ["okdata", "datasets", "create"]
+    sys.argv = ["okdata", "pubs", "list-clients"]
     main()
     captured = capsys.readouterr().out.strip("\n")
     assert "An error occurred (ApiAuthenticateError)" in captured
@@ -53,7 +53,7 @@ def raise_http_error(monkeypatch):
         )
         bad_request_response.raise_for_status()
 
-    monkeypatch.setattr(DatasetsCommand, "create_dataset", bad_request)
+    monkeypatch.setattr(PubsCommand, "list_clients", bad_request)
 
 
 @pytest.fixture()

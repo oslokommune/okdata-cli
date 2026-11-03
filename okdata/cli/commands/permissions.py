@@ -17,14 +17,13 @@ Usage:
 
 Examples:
   okdata permissions ls
-  okdata permissions ls okdata:dataset:my-dataset
-  okdata permissions add okdata:dataset:my-dataset janedoe
-  okdata permissions add okdata:dataset:my-dataset janedoe okdata:dataset:read
-  okdata permissions rm okdata:dataset:my-dataset janedoe
-  okdata permissions rm okdata:dataset:my-dataset janedoe okdata:dataset:write
+  okdata permissions ls maskinporten:client:test-6970b743-5075-3f1a-3d35-ac84ea3dc79b
+  okdata permissions add maskinporten:client:test-6970b743-5075-3f1a-3d35-ac84ea3dc79b janedoe
+  okdata permissions add maskinporten:client:test-6970b743-5075-3f1a-3d35-ac84ea3dc79b janedoe maskinporten:client:read
+  okdata permissions rm maskinporten:client:test-6970b743-5075-3f1a-3d35-ac84ea3dc79b janedoe
+  okdata permissions rm maskinporten:client:test-6970b743-5075-3f1a-3d35-ac84ea3dc79b janedoe maskinporten:client:write
 
 Options:{BASE_COMMAND_OPTIONS}
-  --history
     """
 
     def __init__(self):

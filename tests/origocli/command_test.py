@@ -1,5 +1,3 @@
-import io
-
 import pytest
 
 from conftest import set_argv
@@ -8,11 +6,11 @@ from okdata.cli.output import TableOutput
 
 
 def test_docopt():
-    set_argv("datasets", "--debug", "--format", "yaml")
+    set_argv("pubs", "--debug", "--format", "yaml")
 
     cmd = BaseCommand()
 
-    assert cmd.cmd("datasets") is True
+    assert cmd.cmd("pubs") is True
     assert cmd.opt("debug") is True
     assert cmd.opt("format") == "yaml"
     assert cmd.cmd("notexisting") is None
@@ -21,20 +19,20 @@ def test_docopt():
 
 
 def test_cmd_empty_handler():
-    set_argv("datasets", "--debug", "--format", "yaml")
+    set_argv("pubs", "--debug", "--format", "yaml")
     with pytest.raises(NotImplementedError):
         BaseCommand().handle()
 
 
 def test_cmd_with_handler():
-    set_argv("datasets", "--debug", "--format", "yaml")
+    set_argv("pubs", "--debug", "--format", "yaml")
     cmd = BaseCommand()
     cmd.handler = lambda: True
     assert cmd.handle() is True
 
 
 def test_cmd_with_sub_command():
-    set_argv("datasets", "--debug", "--format", "yaml")
+    set_argv("pubs", "--debug", "--format", "yaml")
     cmd = BaseCommand()
     sub_cmd = BaseCommand
     cmd.sub_commands = [sub_cmd]
@@ -51,7 +49,7 @@ def test_invalid_docopt_for_subcommand():
             illegal usage
         """
 
-    set_argv("datasets", "--debug", "--format", "yaml")
+    set_argv("pubs", "--debug", "--format", "yaml")
 
     cmd = BaseCommand()
     cmd.sub_commands = [SubCommand]
@@ -59,32 +57,8 @@ def test_invalid_docopt_for_subcommand():
     assert cmd.handle() is True
 
 
-class FileCommand(BaseCommand):
-    """
-    usage:
-        okdata datasets -
-        okdata datasets --file=<file>
-    """
-
-
-def test_handle_input_from_file(mocker):
-    mocker.patch("builtins.open", mocker.mock_open(read_data="open_file"))
-    set_argv("datasets", "--file", "input.json")
-    cmd = FileCommand()
-    content = cmd.handle_input()
-    assert content == "open_file"
-
-
-def test_handle_input_from_stdin(monkeypatch):
-    monkeypatch.setattr("sys.stdin", io.StringIO("stdin"))
-    set_argv("datasets", "-")
-    cmd = FileCommand()
-    content = cmd.handle_input()
-    assert content == "stdin"
-
-
 def test_pretty_json(capsys):
-    set_argv("datasets")
+    set_argv("pubs")
     cmd = BaseCommand()
     cmd.pretty_json({"Hello": {"foo": "bar"}})
     captured = capsys.readouterr()
@@ -97,7 +71,7 @@ def test_pretty_json(capsys):
 
 
 def test_pretty_print_success(capsys):
-    set_argv("datasets")
+    set_argv("pubs")
     cmd = BaseCommand()
     config = {
         "name": {"name": "name", "key": "name"},
@@ -114,7 +88,7 @@ def test_pretty_print_success(capsys):
 
 
 def test_pretty_print_fields_single(capsys):
-    set_argv("datasets")
+    set_argv("pubs")
     cmd = BaseCommand()
     config = {
         "name": {"name": "name", "key": "name"},
@@ -131,7 +105,7 @@ def test_pretty_print_fields_single(capsys):
 
 
 def test_pretty_print_fields_multiple(capsys):
-    set_argv("datasets")
+    set_argv("pubs")
     cmd = BaseCommand()
     config = {
         "name": {"name": "name", "key": "name"},
@@ -151,7 +125,7 @@ def test_pretty_print_fields_multiple(capsys):
 
 
 def test_pretty_print_wrapped_success(capsys):
-    set_argv("datasets")
+    set_argv("pubs")
     cmd = BaseCommand()
     config = {
         "name": {"name": "name", "key": "name"},
@@ -173,7 +147,7 @@ def test_pretty_print_wrapped_success(capsys):
 
 
 def test_pretty_print_multiple_wrapped_success(capsys):
-    set_argv("datasets")
+    set_argv("pubs")
     cmd = BaseCommand()
     config = {
         "name": {"name": "name", "key": "name"},
@@ -202,7 +176,7 @@ def test_pretty_print_multiple_wrapped_success(capsys):
 
 
 def test_help(capsys):
-    set_argv("datasets")
+    set_argv("pubs")
     cmd = BaseCommand()
     cmd.help()
     captured = capsys.readouterr()

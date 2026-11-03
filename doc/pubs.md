@@ -63,8 +63,9 @@ Note that client deletion is irreversible.
 
 ## Creating a client key
 
-Before creating client keys, you may want to grant a service user from the
-dataplatform access to your AWS account's Parameter Store by following [these
+Before creating client keys, you may want to grant the Maskinporten API's
+service role in Dataspeilet's AWS account access to your AWS account's Parameter
+Store by following [these
 steps](https://github.com/oslokommune/dataplattform/blob/master/origo/registerdata/offentlige-registerdata-3.md#%C3%A5pne-aws-konto). This
 must be done if you want us to add and remove keys directly in your AWS
 environment. It's also possible to generate keys locally and handle them
