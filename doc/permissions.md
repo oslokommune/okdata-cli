@@ -14,49 +14,51 @@ Contents:
 ## What are permissions
 
 *Permissions* allow fine grained control over *who* can do *what* with *which*
-resources in the dataplatform. We use `user`, `scope`, and `resource_name` to
-give the who/what/which parts, respectively, so a permission can be viewed as a
-triplet:
+resources. We use `user`, `scope`, and `resource_name` to give the
+who/what/which parts, respectively, so a permission can be viewed as a triplet:
 
     <user>, <scope>, <resource_name>
 
 Meaning `<user>` is allowed to do `<scope>` on `<resource_name>`. For instance:
 
-    janedoe, okdata:dataset:read, okdata:dataset:my-dataset
+    janedoe, maskinporten:client:read, maskinporten:client:test-6970b743-5075-3f1a-3d35-ac84ea3dc79b
 
 Meaning that the user `janedoe` is allowed to perform read operations on the
-dataset named `my-dataset`.
+public service client with ID `6970b743-5075-3f1a-3d35-ac84ea3dc79b` in the
+`test` environment.
 
 ### User types
 
 The `<user>` part can be either a user ID (username), a team ID, which grants
-the permission to every member of the given team, or a client ID, in case you've
-been assigned a machine client user by the dataplatform team.
+the permission to every member of the given team, or the ID of a machine user (a
+*client* in Keycloak terms, not to be confused with the public service clients
+described below), in case you've been assigned one by Dataspeilet.
 
 ### Scopes
 
 Scopes consist of three parts separated by colons: a namespace, a resource type,
-and the permission itself. Permissions currently only apply to datasets, though
-this might be extended in the future. For now, the available scopes are:
+and the permission itself. Permissions currently apply to clients for public
+services (Maskinporten and ID-porten), which are managed with the [`pubs`
+commands](pubs.md). The available scopes are:
 
-- `okdata:dataset:admin`, allowing the user to modify the permissions for the
-  given dataset.
+- `maskinporten:client:read`, allowing the user to see the given client, list
+  its keys, and view its audit log.
 
-- `okdata:dataset:read`, allowing the user to see/download data from the given
-  dataset.
+- `maskinporten:client:write`, allowing the user to create and delete keys for
+  the given client, and to delete the client itself.
 
-- `okdata:dataset:update`, allowing the user to change metadata for the given
-  dataset, like its title and description.
-
-- `okdata:dataset:write`, allowing the user to write/upload new data to the
-  given dataset.
+Both scopes are granted to the owning team when a client is created.
 
 ### Resource names
 
 Resource names also consist of three parts separated by colons: a namespace, a
-resource type, and the resource ID itself. The only resource type currently
-available is `okdata:dataset`, and the resource ID becomes the ID of the
-dataset.
+resource type, and the resource ID itself. For public service clients the
+resource type is `maskinporten:client`, and the resource ID is the client's
+environment (`test` or `prod`) followed by a dash and the client ID:
+
+    maskinporten:client:<env>-<client_id>
+
+The client ID is shown by `okdata pubs list-clients`.
 
 ## Listing permissions
 
@@ -75,10 +77,12 @@ okdata permissions ls <resource_name>
 For instance:
 
 ```bash
-okdata permissions ls okdata:dataset:my-dataset
+okdata permissions ls maskinporten:client:test-6970b743-5075-3f1a-3d35-ac84ea3dc79b
 ```
 
-This will list every permission associated with the dataset `my-dataset`.
+This will list every permission associated with the given client. Note that this
+requires admin rights on the resource, see [who can manage
+permissions](#who-can-manage-permissions) below.
 
 ## Granting and revoking permissions
 
@@ -92,17 +96,17 @@ okdata permissions rm <resource_name> <user> [<scope>]
 The format of `resource_name`, `user`, and `scope` is explained in the [previous
 section](#what-are-permissions).
 
-Here is an example where the user `janedoe` is given read access to the dataset
-`my-dataset`:
+Here is an example where the user `janedoe` is given read access to the client
+`6970b743-5075-3f1a-3d35-ac84ea3dc79b` in the `test` environment:
 
 ```bash
-okdata permissions add okdata:dataset:my-dataset janedoe okdata:dataset:read
+okdata permissions add maskinporten:client:test-6970b743-5075-3f1a-3d35-ac84ea3dc79b janedoe maskinporten:client:read
 ```
 
 And to revoke that same permission:
 
 ```bash
-okdata permissions rm okdata:dataset:my-dataset janedoe okdata:dataset:read
+okdata permissions rm maskinporten:client:test-6970b743-5075-3f1a-3d35-ac84ea3dc79b janedoe maskinporten:client:read
 ```
 
 The `scope` parameter is optional in both commands. When omitted, all
@@ -110,4 +114,16 @@ permissions are granted or revoked for the user on the given resource.
 
 Both commands support additional `--team` and `--client` flags, which are used
 when the given user ID belongs to a team or a machine user, instead of a person
-user.
+user. For instance, to give every member of a team write access to the same
+client:
+
+```bash
+okdata permissions add maskinporten:client:test-6970b743-5075-3f1a-3d35-ac84ea3dc79b <team_id> maskinporten:client:write --team
+```
+
+### Who can manage permissions
+
+Listing the permissions for a resource, as well as granting and revoking them,
+requires admin rights on that resource. Teams are not granted admin rights on
+their public service clients, so if you need to change who has access to one of
+your clients, get in touch with Dataspeilet.

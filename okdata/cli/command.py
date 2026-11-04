@@ -19,20 +19,16 @@ class BaseCommand:
     __doc__ = f"""okdata-cli {version}
 
 usage:
-  okdata datasets [options]
   okdata permissions [options]
   okdata pubs [options]
-  okdata status [options]
   okdata teams [options]
   okdata -e | --environment
   okdata -h | --help
   okdata -v | --version
 
 Commands available:
-  datasets
   permissions
   pubs
-  status
   teams
 
 Options:{BASE_COMMAND_OPTIONS}
@@ -69,14 +65,6 @@ Options:{BASE_COMMAND_OPTIONS}
 
     def opt(self, key):
         return self.args.get(f"--{key}", None)
-
-    def handle_input(self):
-        if self.cmd("-"):
-            content = sys.stdin.read()
-        else:
-            with open(self.arg("file")) as f:
-                content = f.read()
-        return content
 
     def print(self, str, payload=None):
         is_structured_data = self.opt("format") in ("csv", "json")

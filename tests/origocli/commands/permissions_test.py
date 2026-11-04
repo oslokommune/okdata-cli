@@ -4,26 +4,24 @@ from unittest.mock import ANY
 from conftest import set_argv
 from okdata.cli.commands.permissions import PermissionsCommand
 
-DATASETS_CMD_QUAL = f"{PermissionsCommand.__module__}.{PermissionsCommand.__name__}"
-
 my_permissions = {
-    "okdata:dataset:my-dataset-1": {
+    "maskinporten:client:test-client-1": {
         "scopes": [
-            "okdata:dataset:read",
+            "maskinporten:client:read",
         ]
     },
-    "okdata:dataset:my-dataset-2": {
+    "maskinporten:client:test-client-2": {
         "scopes": [
-            "okdata:dataset:admin",
+            "maskinporten:client:write",
         ]
     },
 }
 
 permissions = [
     {
-        "resource_name": "okdata:dataset:my-dataset",
+        "resource_name": "maskinporten:client:test-client",
         "description": "",
-        "scope": "okdata:dataset:read",
+        "scope": "maskinporten:client:read",
         "users": ["foo"],
         "clients": ["bar"],
         "teams": ["baz"],
@@ -45,25 +43,31 @@ def test_list_my_permissions(mocker, mock_print):
     cmd.handler()
     mock_print.assert_called_once()
     out = str(mock_print.mock_calls[0].args[1])
-    assert re.search("okdata:dataset:my-dataset-1.*okdata:dataset:read", out)
-    assert re.search("okdata:dataset:my-dataset-2.*okdata:dataset:admin", out)
+    assert re.search("maskinporten:client:test-client-1.*maskinporten:client:read", out)
+    assert re.search(
+        "maskinporten:client:test-client-2.*maskinporten:client:write", out
+    )
 
 
 def test_list_permissions(mocker, mock_print):
-    cmd = make_cmd(mocker, "ls", "okdata:dataset:my-dataset")
+    cmd = make_cmd(mocker, "ls", "maskinporten:client:test-client")
     cmd.handler()
     mock_print.assert_called_once()
     output = str(mock_print.mock_calls[0][1][1])
-    assert re.search("foo.*okdata:dataset:read", output)
+    assert re.search("foo.*maskinporten:client:read", output)
 
 
 def test_add_user(mocker):
     cmd = make_cmd(
-        mocker, "add", "okdata:dataset:my-dataset", "foo", "okdata:dataset:read"
+        mocker,
+        "add",
+        "maskinporten:client:test-client",
+        "foo",
+        "maskinporten:client:read",
     )
     cmd.handler()
     cmd.client.update_permission.assert_called_once_with(
-        "okdata:dataset:my-dataset", "okdata:dataset:read", add_users=[ANY]
+        "maskinporten:client:test-client", "maskinporten:client:read", add_users=[ANY]
     )
     user = cmd.client.update_permission.mock_calls[0].kwargs["add_users"][0]
     assert user.user_id == "foo"
@@ -74,14 +78,14 @@ def test_add_client(mocker):
     cmd = make_cmd(
         mocker,
         "add",
-        "okdata:dataset:my-dataset",
+        "maskinporten:client:test-client",
         "bar",
-        "okdata:dataset:read",
+        "maskinporten:client:read",
         "--client",
     )
     cmd.handler()
     cmd.client.update_permission.assert_called_once_with(
-        "okdata:dataset:my-dataset", "okdata:dataset:read", add_users=[ANY]
+        "maskinporten:client:test-client", "maskinporten:client:read", add_users=[ANY]
     )
     user = cmd.client.update_permission.mock_calls[0][2]["add_users"][0]
     assert user.user_id == "bar"
@@ -92,14 +96,14 @@ def test_add_team(mocker):
     cmd = make_cmd(
         mocker,
         "add",
-        "okdata:dataset:my-dataset",
+        "maskinporten:client:test-client",
         "baz",
-        "okdata:dataset:read",
+        "maskinporten:client:read",
         "--team",
     )
     cmd.handler()
     cmd.client.update_permission.assert_called_once_with(
-        "okdata:dataset:my-dataset", "okdata:dataset:read", add_users=[ANY]
+        "maskinporten:client:test-client", "maskinporten:client:read", add_users=[ANY]
     )
     user = cmd.client.update_permission.mock_calls[0][2]["add_users"][0]
     assert user.user_id == "baz"
@@ -107,10 +111,10 @@ def test_add_team(mocker):
 
 
 def test_remove_user(mocker):
-    cmd = make_cmd(mocker, "rm", "okdata:dataset:my-dataset", "foo")
+    cmd = make_cmd(mocker, "rm", "maskinporten:client:test-client", "foo")
     cmd.handler()
     cmd.client.update_permission.assert_called_once_with(
-        "okdata:dataset:my-dataset", "__all__", remove_users=[ANY]
+        "maskinporten:client:test-client", "__all__", remove_users=[ANY]
     )
     user = cmd.client.update_permission.mock_calls[0][2]["remove_users"][0]
     assert user.user_id == "foo"
@@ -119,11 +123,17 @@ def test_remove_user(mocker):
 
 def test_remove_user_scope(mocker):
     cmd = make_cmd(
-        mocker, "rm", "okdata:dataset:my-dataset", "foo", "okdata:dataset:write"
+        mocker,
+        "rm",
+        "maskinporten:client:test-client",
+        "foo",
+        "maskinporten:client:write",
     )
     cmd.handler()
     cmd.client.update_permission.assert_called_once_with(
-        "okdata:dataset:my-dataset", "okdata:dataset:write", remove_users=[ANY]
+        "maskinporten:client:test-client",
+        "maskinporten:client:write",
+        remove_users=[ANY],
     )
     user = cmd.client.update_permission.mock_calls[0][2]["remove_users"][0]
     assert user.user_id == "foo"
@@ -131,10 +141,10 @@ def test_remove_user_scope(mocker):
 
 
 def test_remove_client(mocker):
-    cmd = make_cmd(mocker, "rm", "okdata:dataset:my-dataset", "bar", "--client")
+    cmd = make_cmd(mocker, "rm", "maskinporten:client:test-client", "bar", "--client")
     cmd.handler()
     cmd.client.update_permission.assert_called_once_with(
-        "okdata:dataset:my-dataset", "__all__", remove_users=[ANY]
+        "maskinporten:client:test-client", "__all__", remove_users=[ANY]
     )
     user = cmd.client.update_permission.mock_calls[0][2]["remove_users"][0]
     assert user.user_id == "bar"
@@ -142,10 +152,10 @@ def test_remove_client(mocker):
 
 
 def test_remove_team(mocker):
-    cmd = make_cmd(mocker, "rm", "okdata:dataset:my-dataset", "baz", "--team")
+    cmd = make_cmd(mocker, "rm", "maskinporten:client:test-client", "baz", "--team")
     cmd.handler()
     cmd.client.update_permission.assert_called_once_with(
-        "okdata:dataset:my-dataset", "__all__", remove_users=[ANY]
+        "maskinporten:client:test-client", "__all__", remove_users=[ANY]
     )
     user = cmd.client.update_permission.mock_calls[0][2]["remove_users"][0]
     assert user.user_id == "baz"

@@ -1,9 +1,6 @@
 # Configuration
 
-Most `okdata` commands require you to be authenticated. Though some operations
-(like `okdata datasets ls`) doesn't require you to be authenticated, they might
-return only a subset of available resources compared to that of a logged in
-user.
+All `okdata` commands require you to be authenticated.
 
 ## Oslo kommune user
 

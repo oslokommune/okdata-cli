@@ -1,6 +1,7 @@
 ## ?.?.? - Unreleased
 
-* The `datasets cp` command has been removed.
+* The `okdata datasets` and `okdata status` families of commands have been
+  removed, as the dataplatform services provided by `okdata` are discontinued.
 
 ## 6.1.2 - 2026-05-12
 

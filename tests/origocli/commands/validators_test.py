@@ -5,97 +5,13 @@ from questionary import ValidationError
 
 from okdata.cli.commands.validators import (
     AWSAccountValidator,
-    DateValidator,
     IntegrationValidator,
-    KeywordValidator,
-    SimpleEmailValidator,
-    TitleValidator,
     URIListValidator,
     URIValidator,
 )
 
 # Note: no testing of return values since the validator is only
 # interested in ValidationError occurrences
-
-
-class TestDateValidator:
-    def validate_document(self, data):
-        validator = DateValidator()
-        document = SimpleNamespace(**data)
-        validator.validate(document)
-
-    def test_incomplete_date(self):
-        with pytest.raises(ValidationError):
-            self.validate_document({"text": "2020-01-"})
-
-    def test_invalid_input(self):
-        with pytest.raises(ValidationError):
-            self.validate_document({"text": "2020-01-ab"})
-
-    def test_empty_date(self):
-        with pytest.raises(ValidationError):
-            self.validate_document({"text": ""})
-
-
-class TestSimpleEmailValidator:
-    def validate_email(self, data):
-        validator = SimpleEmailValidator()
-        document = SimpleNamespace(**data)
-        validator.validate(document)
-
-    def test_incomplete_email(self):
-        with pytest.raises(ValidationError):
-            self.validate_email({"text": "test@example"})
-
-    def test_invalid_email(self):
-        with pytest.raises(ValidationError):
-            self.validate_email({"text": "just random text"})
-
-    def test_empty_email(self):
-        with pytest.raises(ValidationError):
-            self.validate_email({"text": ""})
-
-
-class TestTitleValidator:
-    def validate_title(self, data):
-        validator = TitleValidator()
-        document = SimpleNamespace(**data)
-        validator.validate(document)
-
-    def test_too_short_title(self):
-        with pytest.raises(ValidationError):
-            self.validate_title({"text": "abc"})
-
-    def test_empty_title(self):
-        with pytest.raises(ValidationError):
-            self.validate_title({"text": ""})
-
-    def test_title_with_weird_symbols(self):
-        with pytest.raises(ValidationError):
-            self.validate_title({"text": "a_b_c (123)"})
-
-
-class TestKeywordValidator:
-    def validate_keywords(self, data):
-        validator = KeywordValidator()
-        document = SimpleNamespace(**data)
-        validator.validate(document)
-
-    def test_too_short_keywords(self):
-        with pytest.raises(ValidationError):
-            self.validate_keywords({"text": "ab, cd"})
-
-    def test_one_valid_and_one_invalid_keyword(self):
-        with pytest.raises(ValidationError):
-            self.validate_keywords({"text": "abc, cd"})
-
-    def test_one_invalid_and_one_valid_keyword(self):
-        with pytest.raises(ValidationError):
-            self.validate_keywords({"text": "cd, abc"})
-
-    def test_empty_keywords(self):
-        with pytest.raises(ValidationError):
-            self.validate_keywords({"text": ""})
 
 
 class TestIntegrationValidator:
