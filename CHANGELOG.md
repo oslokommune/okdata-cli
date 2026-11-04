@@ -1,5 +1,8 @@
 ## ?.?.? - Unreleased
 
+* Added support for Python 3.15.
+* Dropped support for Python 3.10 which has reached end of life. Python 3.11+ is
+  now required.
 * The `okdata datasets` and `okdata status` families of commands have been
   removed, as the dataplatform services provided by `okdata` are discontinued.
 
