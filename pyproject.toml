@@ -1,5 +1,5 @@
 [tool.black]
-target-version = ['py38']
+target-version = ['py311']
 # Keep exclude in sync with flake8 config in tox.ini
 exclude = '''
 /(
