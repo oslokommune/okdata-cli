@@ -15,8 +15,8 @@ Contents:
 
 ## Listing teams
 
-The following command displays a list of every Origo team along with your
-membership status in each of them:
+The following command displays a list of every team along with your membership
+status in each of them:
 
 ```sh
 okdata teams ls

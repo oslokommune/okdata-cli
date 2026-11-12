@@ -1,6 +1,7 @@
-# `okdata-cli`: Oslo Origo data services CLI
+# `okdata-cli`: CLI access to public services for Oslo kommune
 
-Okdata CLI provides a unified interface to data services for Oslo Origo teams.
+Okdata CLI provides a unified interface for accessing public services for
+Oslo kommune.
 
 * [Install](doc/install.md)
 * [Configuration](doc/configuration.md)

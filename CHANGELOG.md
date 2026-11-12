@@ -1,10 +1,12 @@
-## ?.?.? - Unreleased
+## 7.0.0 - 2026-11-13
 
 * Added support for Python 3.15.
 * Dropped support for Python 3.10 which has reached end of life. Python 3.11+ is
   now required.
 * The `okdata datasets` and `okdata status` families of commands have been
   removed, as the dataplatform services provided by `okdata` are discontinued.
+* The minimum required version of `okdata-sdk` is now version 5.
+* The `okdata` namespace is now an implicit (PEP 420) namespace package.
 
 ## 6.1.2 - 2026-05-12
 

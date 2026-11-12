@@ -5,26 +5,19 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="okdata-cli",
-    version="6.1.2",
-    author="Oslo Origo",
+    version="7.0.0",
+    author="Oslo kommune",
     author_email="dataspeilet@oslo.kommune.no",
-    description="CLI for services provided by Oslo Origo",
-    license="MIT",
+    description="CLI access to public services for Oslo kommune",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/oslokommune/okdata-cli/",
-    packages=setuptools.find_namespace_packages(
-        include="okdata.cli.*", exclude=["tests*"]
-    ),
-    namespace_packages=["okdata"],
-    package_data={
-        "okdata": [
-            "cli/data/output-format/*",
-        ],
-    },
+    url="https://github.com/oslokommune/okdata-cli",
+    license_expression="MIT",
+    packages=setuptools.find_namespace_packages(include=["okdata.*"]),
+    package_data={"okdata.cli": ["data/output-format/*"]},
     install_requires=[
         "docopt",
-        "okdata-sdk>=4.1,<5",
+        "okdata-sdk>=5,<6",
         "PrettyTable",
         # TODO: Upgrade to questionary 2.x.
         "questionary>=1.10.0,<2.0.0",
@@ -42,7 +35,6 @@ setuptools.setup(
         "Programming Language :: Python :: 3.13",
         "Programming Language :: Python :: 3.14",
         "Programming Language :: Python :: 3.15",
-        "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
     python_requires=">=3.11",
